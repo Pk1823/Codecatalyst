@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinel of Resilience - Personnel Welfare Portal</title>
+    
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-accent: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.45);
+            --glass-bg: rgba(255, 255, 255, 0.92);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --card-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            color: #1e293b;
+            position: relative;
+            overflow-x: hidden;
+            /* Dynamic Animated Deep Gradient Background */
+            background: linear-gradient(-45deg, #0f172a, #1e1b4b, #31103f, #0f2e2e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            transition: background 0.8s ease;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Center Spotlight Glow specifically for the Login Section */
+        .center-login-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, rgba(168, 85, 247, 0.25) 45%, rgba(0, 0, 0, 0) 70%);
+            filter: blur(60px);
+            z-index: 0;
+            pointer-events: none;
+            animation: pulseGlow 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+        }
+
+        /* Ambient Glow Spheres in Corners */
+        .ambient-glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.6;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .glow-1 { top: -80px; left: -80px; background: #6366f1; }
+        .glow-2 { bottom: -80px; right: -80px; background: #0d9488; }
+
+        /* Top Navbar */
+        .navbar {
+            background: rgba(15, 23, 42, 0.85) !important;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            position: relative;
+            z-index: 10;
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Modern Glassmorphism Cards */
+        .card {
+            position: relative;
+            z-index: 2;
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Enhanced Login Card Header Block */
+        .login-card-header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            border-radius: 18px;
+            padding: 1.5rem;
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+        }
+
+        /* Form Controls & Colored Inputs */
+        .form-label {
+            font-weight: 700;
+            color: #334155;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group-text {
+            background-color: #f1f5f9;
+            border: 1.5px solid #cbd5e1;
+            color: #4f46e5;
+            font-size: 1.1rem;
+        }
+
+        .form-control, .form-select {
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            border: 1.5px solid #cbd5e1;
+            background-color: rgba(255, 255, 255, 0.95);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px var(--primary-glow);
+            background-color: #ffffff;
+        }
+
+        /* Gradient Action Buttons */
+        .btn-gradient-primary {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            border: none;
+            color: #ffffff;
+            font-weight: 700;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-gradient-primary:hover {
+            background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+            box-shadow: 0 10px 28px rgba(79, 70, 229, 0.55);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .btn-gradient-success {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            border: none;
+            color: #ffffff;
+            font-weight: 700;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+            transition: all 0.3s ease;
+        }
+
+        .btn-gradient-success:hover {
+            background: linear-gradient(135deg, #047857 0%, #059669 100%);
+            box-shadow: 0 10px 28px rgba(16, 185, 129, 0.45);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        /* Custom Slider Styling */
+        .form-range::-webkit-slider-thumb {
+            background: var(--primary-accent);
+            box-shadow: 0 0 12px var(--primary-glow);
+            width: 22px;
+            height: 22px;
+        }
+
+        /* Modern Table Styling */
+        .table {
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
+
+        .table thead th {
+            border: none;
+            color: #64748b;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            padding: 12px;
+        }
+
+        .table tbody tr {
+            background-color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            border-radius: 12px;
+            transition: transform 0.2s ease;
+        }
+
+        .table tbody tr:hover {
+            transform: scale(1.01);
+        }
+
+        .table td {
+            border: none;
+            padding: 16px 12px;
+        }
+
+        .table td:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
+        .table td:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
+
+        /* Badges */
+        .badge {
+            padding: 0.5em 0.8em;
+            border-radius: 8px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        /* Page Transitions */
+        .page-section {
+            display: none;
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .active-section {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Glow Effects -->
+    <div id="centerGlow" class="center-login-glow"></div>
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <!-- Main Navigation Header (Hidden during Login) -->
+    <nav id="appNavbar" class="navbar navbar-expand-lg navbar-dark py-3" style="display: none;">
+        <div class="container">
+            <span class="navbar-brand d-flex align-items-center gap-2 fs-4">
+                <i class="fa-solid fa-shield-halved text-indigo"></i> Sentinel of Resilience
+            </span>
+            <div class="d-flex align-items-center gap-3">
+                <span class="badge bg-dark border border-secondary text-light px-3 py-2 fs-6" id="userBadge">
+                    <i class="fa-regular fa-id-badge me-1"></i> ID: Guest
+                </span>
+                <button class="btn btn-outline-danger btn-sm rounded-3 px-3" onclick="logoutUser()">
+                    <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5 position-relative" style="z-index: 2;">
+
+        <!-- PAGE 1: LOGIN PAGE WITH CENTERED COLOR SPOTLIGHT -->
+        <div id="loginPage" class="page-section active-section">
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="card p-4 p-md-4 mt-3">
+                        
+                        <!-- Colorful Header Card Block -->
+                        <div class="login-card-header text-center mb-4">
+                            <div class="mb-2">
+                                <span class="p-3 bg-white bg-opacity-20 rounded-circle d-inline-block">
+                                    <i class="fa-solid fa-shield-cat fs-1 text-white"></i>
+                                </span>
+                            </div>
+                            <h3 class="fw-bold m-0">Personnel Portal</h3>
+                            <p class="small text-white-50 m-0 mt-1">AI Stress & Burnout Monitoring System (CRPF)</p>
+                        </div>
+                        
+                        <form id="loginForm" onsubmit="handleLogin(event)">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Personnel / Service ID</label>
+                                <div class="input-group">
+                                    <span class="input-group-text border-end-0"><i class="fa-solid fa-user-shield"></i></span>
+                                    <input type="text" id="username" class="form-control border-start-0 ps-2" placeholder="e.g., CRPF-2026-98" required>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label for="password" class="form-label">Security Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text border-end-0"><i class="fa-solid fa-key"></i></span>
+                                    <input type="password" id="password" class="form-control border-start-0 ps-2" placeholder="••••••••" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-gradient-primary w-100 py-3 fs-6">
+                                Access Secure Portal <i class="fa-solid fa-arrow-right ms-2"></i>
+                            </button>
+                        </form>
+                        
+                        <div class="mt-4 pt-3 border-top text-center">
+                            <small class="text-muted d-block fw-semibold">
+                                <i class="fa-solid fa-lock text-success me-1"></i> Confidential Welfare Platform • MHA Guidelines
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 2: DAILY ACTIVITY AND DESCRIPTIONS INPUT FORM -->
+        <div id="formPage" class="page-section">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card p-4 p-md-5">
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+                            <div>
+                                <h3 class="fw-bold m-0 text-dark">Welfare & Activity Self-Report</h3>
+                                <p class="text-muted small m-0">Submit operational details and personal health indicators.</p>
+                            </div>
+                            <button onclick="navigateTo('listPage')" class="btn btn-outline-primary btn-sm rounded-3">
+                                <i class="fa-solid fa-clock-rotate-left me-1"></i> History Logs
+                            </button>
+                        </div>
+
+                        <form id="activityForm" onsubmit="saveDailyEntry(event)">
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label for="dutyType" class="form-label">Deployment Type</label>
+                                    <select id="dutyType" class="form-select" required>
+                                        <option value="Active Patrol & Security">Active Patrol & Security</option>
+                                        <option value="Border Security Operations">Border Security Operations</option>
+                                        <option value="Disaster Response / Relief">Disaster Response / Relief</option>
+                                        <option value="Administrative / Desk Duty">Administrative / Desk Duty</option>
+                                        <option value="High-Alert Deployment">High-Alert Deployment</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="shiftHours" class="form-label">Shift Duration (Hours)</label>
+                                    <input type="number" id="shiftHours" class="form-control" placeholder="e.g., 8" min="1" max="24" required>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label for="activityCount" class="form-label">Operations / Patrols Completed</label>
+                                    <input type="number" id="activityCount" class="form-control" placeholder="e.g., 3" min="0" max="15" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="sleepHours" class="form-label">Sleep Duration (Last 24h)</label>
+                                    <input type="number" id="sleepHours" class="form-control" step="0.5" placeholder="e.g., 7" min="0" max="24" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-4 bg-light p-3 rounded-4 border">
+                                <label for="stressSlider" class="form-label d-flex justify-content-between align-items-center">
+                                    <span>Subjective Stress Index</span>
+                                    <span id="stressDisplay" class="badge bg-danger fs-6">5 / 10</span>
+                                </label>
+                                <input type="range" class="form-range mt-2" id="stressSlider" min="1" max="10" value="5" oninput="document.getElementById('stressDisplay').innerText = this.value + ' / 10'">
+                                <div class="d-flex justify-content-between small text-muted fw-semibold">
+                                    <span>🟢 Optimal</span>
+                                    <span>🟡 Moderate</span>
+                                    <span>🔴 High Burnout</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="moodSelect" class="form-label">Emotional State / Mood</label>
+                                <select id="moodSelect" class="form-select" required>
+                                    <option value="Excellent">😊 Excellent / Energetic</option>
+                                    <option value="Good">🙂 Good / Balanced</option>
+                                    <option value="Tired">🥱 Fatigued / Drained</option>
+                                    <option value="Stressed">😰 Highly Stressed / Anxious</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="narrativeText" class="form-label">Duty Log Narrative & Personal Notes</label>
+                                <textarea id="narrativeText" class="form-control" rows="3" placeholder="Detail any high-stress encounters, environmental stressors, or fatigue concerns experienced during duty..." required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-gradient-success w-100 py-3">
+                                <i class="fa-solid fa-paper-plane me-2"></i> Submit Self-Assessment Entry
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 3: OUTPUT LIST & SIMPLE ANALYTICS LISTING -->
+        <div id="listPage" class="page-section">
+            <div class="row">
+                <!-- Sidebar Stress Recommendation Card -->
+                <div class="col-md-4 mb-4">
+                    <div class="card p-4">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <i class="fa-solid fa-brain text-primary fs-4"></i>
+                            <h4 class="fw-bold text-dark m-0">AI Evaluation</h4>
+                        </div>
+                        <p class="text-muted small">Real-time analysis powered by welfare analytics.</p>
+                        <hr class="my-3">
+                        
+                        <div class="mb-3">
+                            <span class="text-muted d-block small mb-1 fw-bold">ASSESSED RISK LEVEL</span>
+                            <span id="riskLevelBadge" class="badge bg-secondary fs-6 w-100 py-2">NO LOGS AVAILABLE</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="text-muted d-block small mb-1 fw-bold">RECOMMENDED PROTOCOL</span>
+                            <div class="p-3 rounded-3 bg-light border">
+                                <p id="recommendationText" class="small text-muted m-0">Log daily shifts to trigger evaluation feedback.</p>
+                            </div>
+                        </div>
+                        <hr class="my-3">
+                        <button onclick="navigateTo('formPage')" class="btn btn-gradient-primary w-100 py-2 mb-2">
+                            <i class="fa-solid fa-plus me-1"></i> Log New Assessment
+                        </button>
+                        <button onclick="clearLogs()" class="btn btn-outline-danger w-100 py-2 border-0">
+                            <i class="fa-solid fa-trash-can me-1"></i> Clear Local History
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Historical Listing Area -->
+                <div class="col-md-8">
+                    <div class="card p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h3 class="fw-bold m-0 text-dark">Duty & Well-Being Records</h3>
+                            <span id="recordCountBadge" class="badge bg-primary bg-opacity-10 text-primary border border-primary">0 Records</span>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Date / Time</th>
+                                        <th>Deployment</th>
+                                        <th>Patrols</th>
+                                        <th>Sleep & Mood</th>
+                                        <th>Stress</th>
+                                        <th>Narrative</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recordsTableBody" class="small">
+                                    <!-- Dynamic Rows Inserted Here -->
+                                </tbody>
+                            </table>
+                            <div id="emptyTableMessage" class="text-center py-5 text-muted">
+                                <i class="fa-regular fa-folder-open fs-1 d-block mb-2 text-secondary"></i>
+                                No logs recorded yet. Begin by submitting your first daily assessment.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        let loggedUser = "";
+
+        // Navigation and Dynamic Background Router
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active-section');
+            });
+            document.getElementById(pageId).classList.add('active-section');
+
+            const centerGlow = document.getElementById('centerGlow');
+
+            // Header & Center Glow Visibility
+            if (pageId === 'loginPage') {
+                document.getElementById('appNavbar').style.display = 'none';
+                centerGlow.style.display = 'block'; // Display spotlight on login
+            } else {
+                document.getElementById('appNavbar').style.display = 'block';
+                centerGlow.style.display = 'none'; // Hide spotlight on inner pages
+            }
+
+            // Smooth Background Gradient Shifts per Section
+            if (pageId === 'loginPage') {
+                document.body.style.background = "linear-gradient(-45deg, #0f172a, #1e1b4b, #31103f, #0f2e2e)";
+            } else if (pageId === 'formPage') {
+                document.body.style.background = "linear-gradient(-45deg, #064e3b, #0f172a, #115e59, #022c22)";
+            } else if (pageId === 'listPage') {
+                document.body.style.background = "linear-gradient(-45deg, #1e1b4b, #0f172a, #311b92, #0f2e2e)";
+            }
+
+            if (pageId === 'listPage') {
+                loadHistoryTable();
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const inputUser = document.getElementById('username').value.trim();
+            if (inputUser) {
+                loggedUser = inputUser;
+                document.getElementById('userBadge').innerHTML = `<i class="fa-regular fa-id-badge me-1"></i> ID: ${loggedUser}`;
+                navigateTo('formPage');
+            }
+        }
+
+        function logoutUser() {
+            loggedUser = "";
+            document.getElementById('loginForm').reset();
+            navigateTo('loginPage');
+        }
+
+        function getSavedLogs() {
+            const storageKey = "sih_logs_" + loggedUser;
+            const data = localStorage.getItem(storageKey);
+            return data ? JSON.parse(data) : [];
+        }
+
+        function saveDailyEntry(event) {
+            event.preventDefault();
+
+            const entry = {
+                date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+                dutyType: document.getElementById('dutyType').value,
+                shiftHours: parseFloat(document.getElementById('shiftHours').value),
+                activityCount: parseInt(document.getElementById('activityCount').value),
+                sleepHours: parseFloat(document.getElementById('sleepHours').value),
+                stressLevel: parseInt(document.getElementById('stressSlider').value),
+                mood: document.getElementById('moodSelect').value,
+                narrative: document.getElementById('narrativeText').value.trim()
+            };
+
+            const userLogs = getSavedLogs();
+            userLogs.unshift(entry);
+
+            localStorage.setItem("sih_logs_" + loggedUser, JSON.stringify(userLogs));
+            
+            document.getElementById('activityForm').reset();
+            document.getElementById('stressDisplay').innerText = "5 / 10";
+
+            navigateTo('listPage');
+        }
+
+        function loadHistoryTable() {
+            const logs = getSavedLogs();
+            const tableBody = document.getElementById('recordsTableBody');
+            const emptyMsg = document.getElementById('emptyTableMessage');
+            const countBadge = document.getElementById('recordCountBadge');
+
+            countBadge.innerText = logs.length + " Records";
+
+            if (logs.length === 0) {
+                tableBody.innerHTML = "";
+                emptyMsg.style.display = 'block';
+                
+                document.getElementById('riskLevelBadge').innerText = "NO DATA";
+                document.getElementById('riskLevelBadge').className = "badge bg-secondary fs-6 w-100 py-2";
+                document.getElementById('recommendationText').innerText = "Submit daily entries to begin analytics.";
+                return;
+            }
+
+            emptyMsg.style.display = 'none';
+            let htmlRows = "";
+
+            logs.forEach(item => {
+                let badgeColor = "bg-success";
+                if (item.stressLevel >= 8) {
+                    badgeColor = "bg-danger";
+                } else if (item.stressLevel >= 5) {
+                    badgeColor = "bg-warning text-dark";
+                }
+
+                htmlRows += `
+                    <tr>
+                        <td class="text-muted fw-bold">${item.date}</td>
+                        <td><strong>${item.dutyType}</strong><br><small class="text-muted"><i class="fa-regular fa-clock me-1"></i>${item.shiftHours} hrs</small></td>
+                        <td><span class="badge bg-light text-dark border">${item.activityCount} Patrols</span></td>
+                        <td>${item.mood}<br><small class="text-muted"><i class="fa-solid fa-bed me-1"></i>${item.sleepHours} hrs sleep</small></td>
+                        <td><span class="badge ${badgeColor}">${item.stressLevel} / 10</span></td>
+                        <td class="text-muted">${item.narrative}</td>
+                    </tr>
+                `;
+            });
+
+            tableBody.innerHTML = htmlRows;
+
+            const primaryLog = logs[0];
+            const riskBadge = document.getElementById('riskLevelBadge');
+            const recommendation = document.getElementById('recommendationText');
+
+            if (primaryLog.stressLevel >= 8 || (primaryLog.sleepHours < 5 && primaryLog.shiftHours >= 12)) {
+                riskBadge.innerText = "🚨 HIGH RISK (BURNOUT)";
+                riskBadge.className = "badge bg-danger fs-6 w-100 py-2";
+                recommendation.innerHTML = "<strong>CRITICAL:</strong> Threshold reached. Mandatory rest rotation recommended. Peer counseling requested.";
+            } else if (primaryLog.stressLevel >= 5 || primaryLog.sleepHours < 6) {
+                riskBadge.innerText = "⏳ MODERATE RISK (FATIGUE)";
+                riskBadge.className = "badge bg-warning text-dark fs-6 w-100 py-2";
+                recommendation.innerHTML = "<strong>ELEVATED:</strong> Fatigue detected. Transition to light duty and integrate rest over next 24h.";
+            } else {
+                riskBadge.innerText = "🟢 LOW RISK (STABLE)";
+                riskBadge.className = "badge bg-success fs-6 w-100 py-2";
+                recommendation.innerHTML = "<strong>STABLE:</strong> Parameters are within optimal bounds. Maintain standard duty routines.";
+            }
+        }
+
+        function clearLogs() {
+            if (confirm("Permanently wipe your logged daily records from local storage?")) {
+                localStorage.removeItem("sih_logs_" + loggedUser);
+                loadHistoryTable();
+            }
+        }
+    </script>
+</body>
+</html>

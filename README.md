@@ -1,34 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MissionWell AI
 
-## Getting Started
+> **Predictive Wellness Monitoring for Safer, Stronger Forces**  
+> *Smart India Hackathon Problem Statement 26186 (CRPF / Police II Division / Ministry of Home Affairs)*
 
-First, run the development server:
+---
+
+## 🎖️ Overview
+
+**MissionWell AI** is an AI-powered, privacy-first personnel welfare intelligence system designed for Central Armed Police Forces (CAPFs) and Uniformed Services. It identifies early indicators of operational stress, burnout, and fatigue through non-intrusive duty rosters, leave patterns, and voluntary wellness self-assessments, enabling timely, confidential welfare support.
+
+> *"Personnel wellbeing is mission readiness."*
+
+---
+
+## 🚀 Key Features
+
+* **Government-Grade UI/UX:** Built with Next.js 16 (App Router), React 19, TypeScript, and Tailwind CSS.
+* **Role-Based Access Control (RBAC):**
+  * **Personnel Portal (`/personnel`):** Self-reporting wellness assessments, personal trend lines, and confidential support requests.
+  * **Welfare Officer Command (`/welfare`):** Sector risk distribution, active welfare alerts, interactive case management, and rotational duty planning.
+  * **Commander Overview (`/commander`):** Force-level aggregated readiness telemetry with zero individual PII exposure.
+  * **System Administration (`/admin`):** Identity policies and cryptographic audit logs.
+* **Explainable AI (XAI):** Transparent factor attribution (Deployment duration, Duty hours, Sleep deficit, Leave underutilization) powered by predictive machine learning models.
+* **Zero-Trust Privacy & DPDP Act 2023 Compliance:** Strict role visibility separation, automated 90-day purge cycles, differential mathematical salting, and non-punitive legal covenants.
+* **Judge Pitch Presentation Mode (`/presentation`):** Fullscreen interactive slide deck for live demonstrations.
+
+---
+
+## 🛠️ Technology Stack
+
+* **Frontend:** Next.js 16, React 19, TypeScript, Tailwind CSS, Lucide React, Recharts, React Hook Form, Zod, TanStack Query
+* **AI Engine:** Python, FastAPI, LightGBM (`ai-engine/`)
+
+---
+
+## 🏃 Getting Started
+
+### 1. Run the Frontend
 
 ```bash
+# Install dependencies
+npm install
+
+# Run the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 2. Run the AI Engine (Optional)
 
-## Learn More
+```bash
+cd ai-engine
+pip install -r requirements.txt
+python main.py
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🌐 Deploy to Vercel
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Click below or import your GitHub repository directly into [Vercel](https://vercel.com):
 
-## Deploy on Vercel
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FPk1823%2FCodecatalyst)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📄 License & Disclaimer
+
+MissionWell AI provides predictive welfare indicators for authorized support personnel. It does NOT provide medical diagnoses or automated disciplinary decisions.
