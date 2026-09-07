@@ -1,0 +1,152 @@
+import { PersonnelRiskAnalysis, RiskDistributionItem } from "@/types/risk";
+
+export const MOCK_RISK_DISTRIBUTION: RiskDistributionItem[] = [
+  { level: "LOW", count: 874, percentage: 70.0, color: "#10B981" },
+  { level: "MODERATE", count: 224, percentage: 18.0, color: "#F59E0B" },
+  { level: "HIGH", count: 112, percentage: 9.0, color: "#F97316" },
+  { level: "URGENT REVIEW", count: 38, percentage: 3.0, color: "#EF4444" },
+];
+
+export const MOCK_RISK_ANALYSES: Record<string, PersonnelRiskAnalysis> = {
+  "P-1024": {
+    personnelId: "P-1024",
+    anonymizedCode: "SEC-B-882",
+    rank: "Constable (GD)",
+    unit: "Bravo Company",
+    riskScore: 72,
+    riskLevel: "HIGH",
+    trend: "Worsening",
+    lastAssessmentDate: "2025-03-02",
+    modelConfidence: 94.2,
+    contributingFactors: [
+      {
+        factor: "Extended Deployment",
+        percentage: 27,
+        category: "Deployment",
+        description: "142 consecutive days in high-intensity operational zone without base rotation.",
+      },
+      {
+        factor: "Elevated Duty Hours",
+        percentage: 23,
+        category: "Operational",
+        description: "Average 68 duty hours/week over the last 4 weeks; regular 14-hour perimeter duties.",
+      },
+      {
+        factor: "Reduced Recovery",
+        percentage: 19,
+        category: "Recovery",
+        description: "Rest cycles fragmented to 5.5 hours average; night stand-to frequency high.",
+      },
+      {
+        factor: "Leave Pattern",
+        percentage: 16,
+        category: "Schedule",
+        description: "Only 12 days taken out of 60 days entitlement; last family leave 5 months ago.",
+      },
+      {
+        factor: "Voluntary Wellness Indicators",
+        percentage: 15,
+        category: "Voluntary",
+        description: "Self-reported moderate energy dips and sleep disruption in voluntary survey.",
+      },
+    ],
+    recommendedActions: [
+      "Schedule confidential, stigma-free welfare officer check-in within 48 hours.",
+      "Evaluate duty rotation to day/support role for a 10-day decompression window.",
+      "Review urgent accumulated leave application for family reunion.",
+      "Offer optional access to peer support group or battalion wellness counselor.",
+    ],
+    disclaimer: "This is a predictive welfare indicator designed for proactive support planning. It does NOT represent a medical diagnosis or disciplinary evaluation.",
+    hasActiveWelfareCase: true,
+    activeCaseId: "CASE-2025-042",
+  },
+  "P-1025": {
+    personnelId: "P-1025",
+    anonymizedCode: "SEC-A-419",
+    rank: "Head Constable",
+    unit: "Alpha Company",
+    riskScore: 84,
+    riskLevel: "URGENT REVIEW",
+    trend: "Worsening",
+    lastAssessmentDate: "2025-03-04",
+    modelConfidence: 96.0,
+    contributingFactors: [
+      {
+        factor: "Prolonged Deployment",
+        percentage: 32,
+        category: "Deployment",
+        description: "198 continuous days in forward post Srinagar with zero intermediate leave.",
+      },
+      {
+        factor: "Severe Workload & Hours",
+        percentage: 26,
+        category: "Operational",
+        description: "74 weekly hours; leading night patrols continuously for 3 consecutive weeks.",
+      },
+      {
+        factor: "Critical Sleep Deficit",
+        percentage: 22,
+        category: "Recovery",
+        description: "Sub-5 hour daily recovery intervals indicated by duty roster records.",
+      },
+      {
+        factor: "Leave Underutilization",
+        percentage: 20,
+        category: "Schedule",
+        description: "8 days leave taken YTD; high leave balance remaining without sanctioned dates.",
+      },
+    ],
+    recommendedActions: [
+      "Immediate officer consultation and mandatory operational decompression.",
+      "Fast-track 15-day home leave processing.",
+      "Assign dedicated welfare coordinator.",
+    ],
+    disclaimer: "This is a predictive welfare indicator designed for proactive support planning. It does NOT represent a medical diagnosis or disciplinary evaluation.",
+    hasActiveWelfareCase: true,
+    activeCaseId: "CASE-2025-039",
+  },
+  "P-1088": {
+    personnelId: "P-1088",
+    anonymizedCode: "SEC-E-733",
+    rank: "Constable",
+    unit: "Echo Company",
+    riskScore: 68,
+    riskLevel: "HIGH",
+    trend: "Stable",
+    lastAssessmentDate: "2025-02-28",
+    modelConfidence: 91.5,
+    contributingFactors: [
+      {
+        factor: "Terrain & Deployment Strain",
+        percentage: 30,
+        category: "Deployment",
+        description: "165 days in dense jungle ops environment Sukma with limited connectivity.",
+      },
+      {
+        factor: "Duty Shifts",
+        percentage: 25,
+        category: "Operational",
+        description: "15-hour shifts during intensive combing operations.",
+      },
+      {
+        factor: "Recovery Opportunities",
+        percentage: 25,
+        category: "Recovery",
+        description: "5.0 hours sleep average; limited recreation and sports facilities.",
+      },
+      {
+        factor: "Social Disconnection",
+        percentage: 20,
+        category: "Schedule",
+        description: "Restricted family telephone windows due to operational silence periods.",
+      },
+    ],
+    recommendedActions: [
+      "Facilitate dedicated satellite/welfare communication window with family.",
+      "Cycle squad to rear headquarters for rotational rest.",
+    ],
+    disclaimer: "This is a predictive welfare indicator designed for proactive support planning. It does NOT represent a medical diagnosis or disciplinary evaluation.",
+    hasActiveWelfareCase: true,
+    activeCaseId: "CASE-2025-045",
+  },
+};
