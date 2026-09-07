@@ -5,6 +5,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { User, UserRole } from "@/types/auth";
 import { AuthService } from "@/services/auth.service";
 
+export type ForceType = "CRPF" | "BSF" | "ITBP" | "CISF" | "ARMY" | "STATE_POLICE";
+export type LanguageType = "en" | "hi";
+
 interface ThemeContextType {
   theme: "light" | "dark";
   toggleTheme: () => void;
@@ -24,6 +27,11 @@ interface AuthContextType {
   role: UserRole;
   switchRole: (role: UserRole) => void;
   logout: () => void;
+  force: ForceType;
+  setForce: (f: ForceType) => void;
+  lang: LanguageType;
+  setLang: (l: LanguageType) => void;
+  toggleLang: () => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -31,6 +39,11 @@ const AuthContext = createContext<AuthContextType>({
   role: "WELFARE_OFFICER",
   switchRole: () => {},
   logout: () => {},
+  force: "CRPF",
+  setForce: () => {},
+  lang: "en",
+  setLang: () => {},
+  toggleLang: () => {},
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -56,6 +69,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
   const [theme, setThemeState] = useState<"light" | "dark">("light");
   const [user, setUser] = useState<User>(AuthService.getCurrentUser());
+  const [force, setForceState] = useState<ForceType>("CRPF");
+  const [lang, setLangState] = useState<LanguageType>("en");
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
   useEffect(() => {
@@ -68,6 +83,14 @@ export function Providers({ children }: { children: React.ReactNode }) {
     } else {
       document.documentElement.classList.remove("dark");
     }
+
+    // Load saved force preference
+    const savedForce = localStorage.getItem("missionwell_force") as ForceType | null;
+    if (savedForce) setForceState(savedForce);
+
+    // Load saved language
+    const savedLang = localStorage.getItem("missionwell_lang") as LanguageType | null;
+    if (savedLang) setLangState(savedLang);
 
     // Load user
     setUser(AuthService.getCurrentUser());
@@ -92,6 +115,31 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
+  };
+
+  const setForce = (f: ForceType) => {
+    setForceState(f);
+    localStorage.setItem("missionwell_force", f);
+    toast({
+      title: `Branch Context: ${f}`,
+      description: `Welfare protocol adapted for ${f} operational parameters.`,
+      type: "info",
+    });
+  };
+
+  const setLang = (l: LanguageType) => {
+    setLangState(l);
+    localStorage.setItem("missionwell_lang", l);
+  };
+
+  const toggleLang = () => {
+    const nextLang = lang === "en" ? "hi" : "en";
+    setLang(nextLang);
+    toast({
+      title: nextLang === "hi" ? "भाषा: हिन्दी" : "Language: English",
+      description: nextLang === "hi" ? "कल्याण पोर्टल हिन्दी में उपलब्ध है" : "Switched to English",
+      type: "info",
+    });
   };
 
   const switchRole = (role: UserRole) => {
@@ -120,7 +168,19 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
-        <AuthContext.Provider value={{ user, role: user.role, switchRole, logout }}>
+        <AuthContext.Provider
+          value={{
+            user,
+            role: user.role,
+            switchRole,
+            logout,
+            force,
+            setForce,
+            lang,
+            setLang,
+            toggleLang,
+          }}
+        >
           <ToastContext.Provider value={{ toast }}>
             {children}
             {/* Accessible Toast Container */}
@@ -131,7 +191,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
               {toasts.map((t) => (
                 <div
                   key={t.id}
-                  className="pointer-events-auto flex items-start gap-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 p-4 shadow-xl backdrop-blur-md transition-all animate-in fade-in slide-in-from-bottom-2"
+                  className="pointer-events-auto flex items-start gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 p-4 shadow-xl backdrop-blur-md transition-all animate-in fade-in slide-in-from-bottom-2"
                 >
                   <div
                     className={`h-2.5 w-2.5 rounded-full mt-1.5 shrink-0 ${
@@ -145,9 +205,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
                     }`}
                   />
                   <div className="flex-1">
-                    <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{t.title}</p>
+                    <p className="text-xs font-bold text-slate-900 dark:text-slate-100">{t.title}</p>
                     {t.description && (
-                      <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">{t.description}</p>
+                      <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">{t.description}</p>
                     )}
                   </div>
                   <button

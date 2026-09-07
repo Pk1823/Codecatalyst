@@ -5,6 +5,7 @@ import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { DemoBanner } from "@/components/layout/demo-banner";
 import { AICopilotDrawer } from "@/components/ai-assistant/ai-copilot-drawer";
+import { AuthorityBar } from "@/components/layout/authority-bar";
 
 export default function DashboardLayout({
   children,
@@ -23,12 +24,13 @@ export default function DashboardLayout({
         />
         <div className="flex flex-1 flex-col min-w-0">
           <Topbar onMobileMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)} />
-          <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+          <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto pb-28">
             {children}
           </main>
         </div>
       </div>
       <AICopilotDrawer />
+      <AuthorityBar />
     </div>
   );
 }

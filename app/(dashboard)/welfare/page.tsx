@@ -23,11 +23,16 @@ import { RiskDonutChart } from "@/components/charts/risk-donut-chart";
 import { StressTrendChart } from "@/components/charts/stress-trend-chart";
 import { UnitWorkloadBarChart } from "@/components/charts/unit-workload-bar-chart";
 import { MOCK_NOTIFICATIONS } from "@/lib/mock-data/notifications";
-import { useToast } from "@/components/providers";
+import { useToast, useAuth } from "@/components/providers";
+import { FORCES_METADATA } from "@/lib/force-metadata";
 
 export default function WelfareOfficerDashboard() {
   const router = useRouter();
   const { toast } = useToast();
+  const { user, force, lang } = useAuth();
+  const meta = FORCES_METADATA[force] || FORCES_METADATA.CRPF;
+  const isHi = lang === "hi";
+
   const [alerts, setAlerts] = useState(MOCK_NOTIFICATIONS.filter((n) => n.category === "Welfare"));
 
   const handleDismissAlert = (id: string) => {
@@ -42,7 +47,7 @@ export default function WelfareOfficerDashboard() {
   const handleAssignOfficer = (id: string) => {
     toast({
       title: "Officer Assigned",
-      description: "Dr. Aarti Sharma assigned as primary welfare officer.",
+      description: `${meta.sampleOfficerName} assigned as primary welfare officer.`,
       type: "success",
     });
   };
@@ -52,33 +57,39 @@ export default function WelfareOfficerDashboard() {
       {/* Header & Operational Subtitle */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-              Welfare Intelligence
+          <div className="flex items-center gap-2 flex-wrap">
+            <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-slate-100">
+              {isHi ? "कल्याण एवं चिकित्सा कमान केंद्र" : "Welfare & Psychological Support Hub"}
             </h2>
             <span className="rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 text-[10px] font-bold px-2.5 py-0.5 border border-blue-300 dark:border-blue-800">
-              Sector HQ Command
+              {meta.sampleOfficerName}
+            </span>
+            <span className="rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 text-[10px] font-mono font-bold px-2.5 py-0.5 border border-amber-300 dark:border-amber-800">
+              {force} • {meta.sampleBattalion}
             </span>
           </div>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Predictive stress detection, early welfare case tracking, and rotational care coordination.
+            {isHi
+              ? "पूर्वानुमानित तनाव पहचान, प्रारंभिक मामला प्रबंधन एवं रोटेशनल विश्राम समन्वय"
+              : "Predictive stress detection, early welfare case tracking, and rotational rest coordination"} •{" "}
+            <span className="font-semibold text-slate-700 dark:text-slate-300">{meta.primaryTheatre}</span>
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <Link
             href="/welfare/cases"
-            className="inline-flex items-center gap-2 rounded-xl bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 text-xs font-semibold shadow-md shadow-blue-900/20 transition-all hover:scale-105 active:scale-95"
+            className="inline-flex items-center gap-2 rounded-xl bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 text-xs font-bold shadow-md shadow-blue-900/20 transition-all hover:scale-105 active:scale-95"
           >
             <FolderHeart className="h-4 w-4" />
-            <span>Manage All Cases</span>
+            <span>{isHi ? "सभी मामले देखें" : "Manage All Cases"}</span>
           </Link>
           <Link
             href="/recommendations"
-            className="inline-flex items-center gap-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-200 px-4 py-2 text-xs font-semibold shadow-2xs transition-colors"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-200 px-4 py-2 text-xs font-bold shadow-2xs transition-colors"
           >
             <Sparkles className="h-4 w-4 text-amber-500" />
-            <span>AI Recommendations</span>
+            <span>{isHi ? "एआई सिफ़ारिशें" : "AI Recommendations"}</span>
           </Link>
         </div>
       </div>

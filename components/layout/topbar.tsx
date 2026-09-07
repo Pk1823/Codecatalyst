@@ -17,8 +17,11 @@ import {
   ShieldCheck,
   HelpCircle,
   Sparkles,
+  Languages,
+  Layers,
+  PhoneCall,
 } from "lucide-react";
-import { useAuth, useTheme, useToast } from "@/components/providers";
+import { useAuth, useTheme, useToast, ForceType } from "@/components/providers";
 import { UserRole } from "@/types/auth";
 import { GlobalSearchModal } from "@/components/search/global-search-modal";
 
@@ -29,37 +32,39 @@ interface TopbarProps {
 export function Topbar({ onMobileMenuToggle }: TopbarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, role, switchRole, logout } = useAuth();
+  const { user, role, switchRole, logout, force, setForce, lang, toggleLang } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { toast } = useToast();
 
   const [searchOpen, setSearchOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [roleMenuOpen, setRoleMenuOpen] = useState(false);
+  const [forceMenuOpen, setForceMenuOpen] = useState(false);
 
-  // Generate breadcrumb from pathname
+  // Generate breadcrumb from pathname with bilingual support
   const getBreadcrumb = () => {
-    if (pathname === "/") return { title: "MissionWell AI", section: "Public Portal" };
-    if (pathname === "/personnel") return { title: "Personnel Wellbeing", section: "Self-Service" };
-    if (pathname === "/personnel/wellness") return { title: "Wellness Assessment", section: "Personnel Portal" };
-    if (pathname === "/personnel/support") return { title: "Request Welfare Support", section: "Personnel Portal" };
-    if (pathname === "/personnel/privacy") return { title: "Personal Privacy Controls", section: "Personnel Portal" };
-    if (pathname === "/welfare") return { title: "Welfare Intelligence", section: "Officer Command" };
-    if (pathname === "/welfare/cases") return { title: "Active Welfare Cases", section: "Case Management" };
-    if (pathname.startsWith("/welfare/cases/")) return { title: "Case Details & Timeline", section: "Welfare Cases" };
-    if (pathname === "/analytics") return { title: "Risk Analytics", section: "Predictive Intelligence" };
-    if (pathname.startsWith("/analytics/personnel/")) return { title: "Explainable Risk Detail", section: "Risk Analytics" };
-    if (pathname === "/interventions") return { title: "Intervention Management", section: "Support Programs" };
-    if (pathname === "/recommendations") return { title: "AI Recommendations", section: "Decision Support" };
-    if (pathname === "/commander") return { title: "Force Wellness Overview", section: "Commander Dashboard" };
-    if (pathname === "/admin") return { title: "System Administration", section: "Governance" };
-    if (pathname === "/alerts") return { title: "Alert Center", section: "Notifications" };
-    if (pathname === "/reports") return { title: "Reports Generator", section: "Intelligence Reports" };
-    if (pathname === "/audit") return { title: "Audit & Compliance Log", section: "Zero-Trust Records" };
-    if (pathname === "/privacy") return { title: "Privacy Center", section: "Security & Governance" };
-    if (pathname === "/settings") return { title: "System Settings", section: "Preferences" };
-    if (pathname === "/presentation") return { title: "Hackathon Presentation", section: "Judge Pitch Deck" };
-    return { title: "MissionWell AI", section: "Intelligence Platform" };
+    const isHi = lang === "hi";
+    if (pathname === "/") return { title: "MissionWell AI", section: isHi ? "सार्वजनिक पोर्टल" : "Public Portal" };
+    if (pathname === "/personnel") return { title: isHi ? "जवान कल्याण पोर्टल" : "Personnel Wellbeing", section: isHi ? "स्व-सेवा" : "Self-Service" };
+    if (pathname === "/personnel/wellness") return { title: isHi ? "कल्याण स्व-मूल्यांकन" : "Wellness Assessment", section: isHi ? "जवान पोर्टल" : "Personnel Portal" };
+    if (pathname === "/personnel/support") return { title: isHi ? "गोपनीय सहायता अनुरोध" : "Request Welfare Support", section: isHi ? "जवान पोर्टल" : "Personnel Portal" };
+    if (pathname === "/personnel/privacy") return { title: isHi ? "व्यक्तिगत गोपनीयता नियंत्रण" : "Personal Privacy Controls", section: isHi ? "सुरक्षा नीति" : "Personnel Portal" };
+    if (pathname === "/welfare") return { title: isHi ? "कल्याण कमान केंद्र" : "Welfare Intelligence", section: isHi ? "अधिकारी कमान" : "Officer Command" };
+    if (pathname === "/welfare/cases") return { title: isHi ? "सक्रिय कल्याण मामले" : "Active Welfare Cases", section: isHi ? "मामला प्रबंधन" : "Case Management" };
+    if (pathname.startsWith("/welfare/cases/")) return { title: isHi ? "मामला विवरण एवं समयरेखा" : "Case Details & Timeline", section: isHi ? "कल्याण समीक्षा" : "Welfare Cases" };
+    if (pathname === "/analytics") return { title: isHi ? "पूर्वानुमानित जोखिम विश्लेषण" : "Risk Analytics", section: isHi ? "खुफिया डेटा" : "Predictive Intelligence" };
+    if (pathname.startsWith("/analytics/personnel/")) return { title: isHi ? "स्पष्टीकरणीय एआई विवरण" : "Explainable Risk Detail", section: isHi ? "जोखिम विश्लेषण" : "Risk Analytics" };
+    if (pathname === "/interventions") return { title: isHi ? "कल्याणकारी हस्तक्षेप" : "Intervention Management", section: isHi ? "सहायता कार्यक्रम" : "Support Programs" };
+    if (pathname === "/recommendations") return { title: isHi ? "एआई निर्णय सिफ़ारिशें" : "AI Recommendations", section: isHi ? "निर्णय समर्थन" : "Decision Support" };
+    if (pathname === "/commander") return { title: isHi ? "बल समग्र कल्याण अवलोकन" : "Force Wellness Overview", section: isHi ? "कमांडर डैशबोर्ड" : "Commander Dashboard" };
+    if (pathname === "/admin") return { title: isHi ? "प्रणाली प्रशासन" : "System Administration", section: isHi ? "शासन" : "Governance" };
+    if (pathname === "/alerts") return { title: isHi ? "चेतावनी केंद्र" : "Alert Center", section: isHi ? "अधिसूचनाएं" : "Notifications" };
+    if (pathname === "/reports") return { title: isHi ? "कल्याण रिपोर्ट जनरेटर" : "Reports Generator", section: isHi ? "खुफिया रिपोर्ट" : "Intelligence Reports" };
+    if (pathname === "/audit") return { title: isHi ? "अनुपालन एवं ऑडिट लॉग" : "Audit & Compliance Log", section: isHi ? "शून्य-विश्वास रिकॉर्ड" : "Zero-Trust Records" };
+    if (pathname === "/privacy") return { title: isHi ? "गोपनीयता एवं डीपीए केंद्र" : "Privacy Center", section: isHi ? "डीपीडीपी अधिनियम 2023" : "Security & Governance" };
+    if (pathname === "/settings") return { title: isHi ? "प्रणाली सेटिंग्स" : "System Settings", section: isHi ? "प्राथमिकताएं" : "Preferences" };
+    if (pathname === "/presentation") return { title: isHi ? "हैकथॉन प्रस्तुति डेक" : "Hackathon Presentation", section: isHi ? "न्यायाधीश पिच" : "Judge Pitch Deck" };
+    return { title: "MissionWell AI", section: "Welfare Intelligence" };
   };
 
   const breadcrumb = getBreadcrumb();
@@ -73,6 +78,11 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
     else if (newRole === "ADMIN") router.push("/admin");
   };
 
+  const handleForceSwitch = (newForce: ForceType) => {
+    setForce(newForce);
+    setForceMenuOpen(false);
+  };
+
   const handleLogout = () => {
     logout();
     setProfileOpen(false);
@@ -83,6 +93,15 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
     });
     router.push("/login");
   };
+
+  const forcesList: { id: ForceType; name: string; full: string; badgeColor: string }[] = [
+    { id: "CRPF", name: "CRPF", full: "Central Reserve Police Force", badgeColor: "bg-red-900/40 text-red-300 border-red-800" },
+    { id: "BSF", name: "BSF", full: "Border Security Force", badgeColor: "bg-amber-900/40 text-amber-300 border-amber-800" },
+    { id: "ITBP", name: "ITBP", full: "Indo-Tibetan Border Police", badgeColor: "bg-cyan-900/40 text-cyan-300 border-cyan-800" },
+    { id: "CISF", name: "CISF", full: "Central Industrial Security Force", badgeColor: "bg-blue-900/40 text-blue-300 border-blue-800" },
+    { id: "ARMY", name: "Indian Army", full: "Armed Forces Command", badgeColor: "bg-emerald-900/40 text-emerald-300 border-emerald-800" },
+    { id: "STATE_POLICE", name: "State Police", full: "State Police Welfare Wing", badgeColor: "bg-indigo-900/40 text-indigo-300 border-indigo-800" },
+  ];
 
   return (
     <>
@@ -98,28 +117,81 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
           </button>
 
           <div className="flex flex-col">
-            <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-400 dark:text-slate-500">
-              <span>MissionWell AI</span>
+            <div className="flex items-center gap-1.5 text-[10px] font-medium text-slate-400 dark:text-slate-500">
+              <span className="font-bold text-slate-600 dark:text-slate-400">
+                {force} • MHA
+              </span>
               <span>/</span>
               <span>{breadcrumb.section}</span>
             </div>
-            <h1 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+            <h1 className="text-sm sm:text-base font-black text-slate-900 dark:text-slate-100 tracking-tight">
               {breadcrumb.title}
             </h1>
           </div>
         </div>
 
-        {/* Center / Right Side: Search, Role Badge, Theme, Notifications, Profile */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        {/* Center / Right Side: Force Branch, Language Toggle, Search, Role Badge, Theme, Profile */}
+        <div className="flex items-center gap-2 sm:gap-2.5">
+          {/* Force Branch Context Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setForceMenuOpen(!forceMenuOpen)}
+              className="flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-100/80 dark:bg-slate-800/80 px-2 py-1 text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors shadow-2xs"
+              title="Select Force Branch (CRPF, BSF, ITBP, CISF, Army, Police)"
+            >
+              <Layers className="h-3.5 w-3.5 text-amber-500" />
+              <span className="font-mono text-[11px]">{force}</span>
+              <ChevronDown className="h-3 w-3 opacity-60" />
+            </button>
+
+            {forceMenuOpen && (
+              <div
+                className="absolute right-0 mt-2 w-64 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-1.5 shadow-2xl z-50 animate-in fade-in zoom-in-95"
+                onMouseLeave={() => setForceMenuOpen(false)}
+              >
+                <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Select Uniformed Service
+                </div>
+                {forcesList.map((f) => (
+                  <button
+                    key={f.id}
+                    onClick={() => handleForceSwitch(f.id)}
+                    className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs transition-colors ${
+                      force === f.id
+                        ? "bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-bold"
+                        : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                    }`}
+                  >
+                    <div className="text-left">
+                      <span className="block font-bold">{f.name}</span>
+                      <span className="text-[10px] text-slate-400">{f.full}</span>
+                    </div>
+                    {force === f.id && <span className="text-blue-500 text-xs font-bold">✓</span>}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Bilingual Language Switcher (EN / हिन्दी) */}
+          <button
+            onClick={toggleLang}
+            className="flex items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 px-2 py-1 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-750 transition-colors shadow-2xs"
+            title="Toggle Language (English / हिन्दी)"
+          >
+            <Languages className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+            <span className="text-[11px] font-mono">{lang === "en" ? "हिन्दी" : "EN"}</span>
+          </button>
+
           {/* Quick Search Button */}
           <button
             onClick={() => setSearchOpen(true)}
-            className="flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 px-3 py-1.5 text-xs text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700 transition-colors shadow-2xs"
+            className="hidden sm:flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 px-2.5 py-1 text-xs text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700 transition-colors shadow-2xs"
             title="Global Quick Search (Ctrl+K)"
           >
             <Search className="h-3.5 w-3.5" />
-            <span className="hidden lg:inline">Search records, cases, units...</span>
-            <span className="hidden sm:inline-block rounded-xs bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 text-[10px] font-mono text-slate-600 dark:text-slate-300">
+            <span className="hidden lg:inline text-[11px]">Search records, cases...</span>
+            <span className="rounded-xs bg-slate-200 dark:bg-slate-700 px-1 py-0.5 text-[9px] font-mono text-slate-600 dark:text-slate-300">
               Ctrl K
             </span>
           </button>
@@ -128,12 +200,11 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
           <div className="relative">
             <button
               onClick={() => setRoleMenuOpen(!roleMenuOpen)}
-              className="flex items-center gap-1.5 rounded-lg border border-blue-200 dark:border-blue-900/60 bg-blue-50/70 dark:bg-blue-950/40 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:text-blue-300 hover:bg-blue-100/70 transition-colors shadow-2xs"
+              className="flex items-center gap-1 rounded-lg border border-blue-200 dark:border-blue-900/60 bg-blue-50/70 dark:bg-blue-950/40 px-2.5 py-1 text-xs font-bold text-blue-700 dark:text-blue-300 hover:bg-blue-100/70 transition-colors shadow-2xs"
               title="Switch demo persona for testing"
             >
               <ShieldAlert className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-              <span className="hidden sm:inline">Role:</span>
-              <span className="truncate max-w-[110px]">{role.replace("_", " ")}</span>
+              <span className="truncate max-w-[100px]">{role.replace("_", " ")}</span>
               <ChevronDown className="h-3 w-3 opacity-70" />
             </button>
 
@@ -147,10 +218,10 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                 </div>
                 {(
                   [
-                    { r: "PERSONNEL", label: "Personnel (Ct. Piyush)", desc: "Self-assessment & confidential care" },
-                    { r: "WELFARE_OFFICER", label: "Welfare Officer (Dr. Sharma)", desc: "Case management & risk analytics" },
-                    { r: "COMMANDER", label: "Commander (Col. Singh)", desc: "Force-level anonymized overview" },
-                    { r: "ADMIN", label: "System Admin (Patel)", desc: "System audit & role policies" },
+                    { r: "PERSONNEL", label: "Personnel (Ct. Piyush)", desc: "Self-assessment & buddy support" },
+                    { r: "WELFARE_OFFICER", label: "Welfare Officer (Dr. Sharma)", desc: "Clinical case reviews & rotations" },
+                    { r: "COMMANDER", label: "Commander (Col. Singh)", desc: "Battalion readiness overview" },
+                    { r: "ADMIN", label: "System Admin (Patel)", desc: "Security audit & access policy" },
                   ] as const
                 ).map((item) => (
                   <button
@@ -173,7 +244,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-400 transition-colors"
+            className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-400 transition-colors"
             title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
             aria-label="Toggle theme"
           >
@@ -183,11 +254,11 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
           {/* Notifications Bell */}
           <Link
             href="/alerts"
-            className="relative rounded-lg p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-400 transition-colors"
+            className="relative rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-400 transition-colors"
             title="Welfare Alerts & Notifications"
           >
             <Bell className="h-4 w-4" />
-            <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
+            <span className="absolute top-1 right-1 flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
             </span>
@@ -197,21 +268,13 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
           <div className="relative">
             <button
               onClick={() => setProfileOpen(!profileOpen)}
-              className="flex items-center gap-2 rounded-lg p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-hidden"
+              className="flex items-center gap-2 rounded-lg p-1 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-hidden"
               aria-label="User profile menu"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 text-white dark:bg-blue-600 font-bold text-xs shadow-xs">
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-800 text-white dark:bg-blue-600 font-bold text-[11px] shadow-xs">
                 {user.name.charAt(0)}
               </div>
-              <div className="hidden xl:flex flex-col text-left">
-                <span className="text-xs font-semibold text-slate-900 dark:text-slate-100 leading-tight">
-                  {user.name}
-                </span>
-                <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                  {user.rank || user.role}
-                </span>
-              </div>
-              <ChevronDown className="hidden xl:block h-3.5 w-3.5 text-slate-400" />
+              <ChevronDown className="h-3 w-3 text-slate-400" />
             </button>
 
             {profileOpen && (
@@ -221,12 +284,12 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
               >
                 <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-800 mb-1">
                   <p className="text-xs font-bold text-slate-900 dark:text-slate-100">{user.name}</p>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">{user.email}</p>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">{user.email}</p>
                   <div className="mt-1 flex items-center gap-1.5">
-                    <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300">
-                      {user.role}
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300">
+                      {user.rank || user.role}
                     </span>
-                    <span className="text-[10px] text-slate-400">Demo Account</span>
+                    <span className="text-[9px] text-slate-400">{force}</span>
                   </div>
                 </div>
 
@@ -236,7 +299,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                   className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                 >
                   <Sliders className="h-3.5 w-3.5 text-slate-400" />
-                  <span>My Profile & Settings</span>
+                  <span>Profile & Settings</span>
                 </Link>
 
                 <Link
@@ -245,7 +308,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                   className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                 >
                   <ShieldCheck className="h-3.5 w-3.5 text-slate-400" />
-                  <span>Privacy Settings</span>
+                  <span>Privacy Protocol</span>
                 </Link>
 
                 <Link
@@ -254,7 +317,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                   className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                 >
                   <HelpCircle className="h-3.5 w-3.5 text-slate-400" />
-                  <span>Help & Welfare Support</span>
+                  <span>Help & Helpline</span>
                 </Link>
 
                 <div className="my-1 border-t border-slate-100 dark:border-slate-800" />
@@ -264,7 +327,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                   className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-rose-600 dark:text-rose-400 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
                 >
                   <LogOut className="h-3.5 w-3.5" />
-                  <span>Sign Out (Switch Persona)</span>
+                  <span>Sign Out</span>
                 </button>
               </div>
             )}
