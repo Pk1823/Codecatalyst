@@ -1,8 +1,0 @@
-# Exclude local data and database logs
-*.db
-*.sqlite
-*.log
-data/
-
-# Exclude private credentials
-.env
