@@ -1,5 +1,6 @@
 import { WellnessAssessmentInput, WellnessAssessmentResult, WellnessTrendPoint } from "@/types/wellness";
 import { MOCK_WELLNESS_TRENDS } from "@/lib/mock-data/wellness";
+import { AIEngineClient, TelemetryPayload } from "@/lib/ai-client";
 
 export class WellnessService {
   static async getTrends(timeframe: "7D" | "30D" | "90D" | "6M" = "7D"): Promise<WellnessTrendPoint[]> {
@@ -7,22 +8,34 @@ export class WellnessService {
   }
 
   static async submitAssessment(input: WellnessAssessmentInput, personnelId: string = "P-1024"): Promise<WellnessAssessmentResult> {
-    // Scoring logic based on ratings:
     const ratingWeights: Record<string, number> = {
-      "Very Low": 10,
-      "Low": 30,
-      "Moderate": 55,
-      "Good": 80,
-      "Very Good": 95,
+      "Very Low": 1,
+      "Low": 2,
+      "Moderate": 3,
+      "Good": 4,
+      "Very Good": 5,
     };
 
-    const energyScore = ratingWeights[input.energy] || 50;
-    const sleepScore = ratingWeights[input.sleepQuality] || 50;
-    const recoveryScore = ratingWeights[input.recovery] || 50;
-    const balanceScore = ratingWeights[input.workLifeBalance] || 50;
-    const wellbeingScore = ratingWeights[input.overallWellbeing] || 50;
+    const energyVal = ratingWeights[input.energy] || 3;
+    const sleepVal = ratingWeights[input.sleepQuality] || 3;
+    const workloadVal = ratingWeights[input.workload] || 2;
+    const fatigueVal = ratingWeights[input.emotionalFatigue] || 3;
+    const wellbeingVal = ratingWeights[input.overallWellbeing] || 3;
 
-    const avgScore = Math.round((energyScore + sleepScore + recoveryScore + balanceScore + wellbeingScore) / 5);
+    // Convert input to AI Telemetry Payload
+    const telemetry: TelemetryPayload = {
+      subject_id: personnelId,
+      consecutive_field_days: workloadVal >= 4 ? 65 : 28,
+      duty_hours_5d: workloadVal * 16.0,
+      night_shifts_5d: Math.max(0, 5 - sleepVal),
+      leave_denial_ratio: workloadVal >= 4 ? 0.40 : 0.05,
+      sleep_hrs_5d_avg: sleepVal * 1.6 + 1.0,
+      self_reported_energy: energyVal,
+      self_reported_stress: Math.min(10, Math.max(1, (6 - wellbeingVal) * 2)),
+      survey_latency_sec: 38.5,
+      delta_rhr: (6 - sleepVal) * 1.5,
+      masking_index: 0.10,
+    };
 
     let status: WellnessAssessmentResult["indicatorStatus"] = "Low Concern";
     let stress: WellnessAssessmentResult["stressLevel"] = "Low";
@@ -30,21 +43,34 @@ export class WellnessService {
     let workload: WellnessAssessmentResult["workloadStatus"] = "Optimal";
     let recovery: WellnessAssessmentResult["recoveryStatus"] = "Adequate";
     let recommendation = "Your indicators show healthy baseline balance. Maintain regular hydration and scheduled rest.";
+    let score = Math.round((energyVal + sleepVal + wellbeingVal) * 6.6);
 
-    if (avgScore < 45) {
-      status = "Elevated Attention";
-      stress = "Elevated";
-      fatigue = "High";
-      workload = "High";
-      recovery = "Reduced";
-      recommendation = "Consider taking adequate recovery time and accessing available welfare support if needed. Workload rotation may be beneficial.";
-    } else if (avgScore < 65) {
-      status = "Moderate Attention";
-      stress = "Moderate";
-      fatigue = "Moderate";
-      workload = "Elevated";
-      recovery = "Moderate";
-      recommendation = "Consider discussing duty pacing with your team coordinator and prioritizing restorative sleep windows.";
+    try {
+      const aiPrediction = await AIEngineClient.predict(telemetry);
+      if (aiPrediction?.evaluation) {
+        const evalRes = aiPrediction.evaluation;
+        if (evalRes.risk_band === "HIGH") {
+          status = "Elevated Attention";
+          stress = "Elevated";
+          fatigue = "High";
+          workload = "High";
+          recovery = "Reduced";
+          score = Math.max(25, 100 - Math.round(evalRes.confidence_scores.high * 65));
+        } else if (evalRes.risk_band === "MODERATE" || evalRes.risk_band === "POTENTIAL_MASKING") {
+          status = "Moderate Attention";
+          stress = "Moderate";
+          fatigue = "Moderate";
+          workload = "Elevated";
+          recovery = "Moderate";
+          score = Math.max(45, 100 - Math.round(evalRes.confidence_scores.moderate * 45));
+        }
+
+        if (evalRes.clinical_guidance.length > 0) {
+          recommendation = evalRes.clinical_guidance.map((g) => g.recommendation).join(" ");
+        }
+      }
+    } catch {
+      // Graceful fallback
     }
 
     const result: WellnessAssessmentResult = {
@@ -52,7 +78,7 @@ export class WellnessService {
       personnelId,
       date: new Date().toISOString().split("T")[0],
       indicatorStatus: status,
-      score: avgScore,
+      score,
       stressLevel: stress,
       fatigueLevel: fatigue,
       workloadStatus: workload,
