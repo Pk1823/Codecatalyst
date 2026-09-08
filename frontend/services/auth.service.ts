@@ -16,7 +16,6 @@ export class AuthService {
         // fallback
       }
     }
-    // Default to Welfare Officer for rich first-impression demo experience
     return MOCK_USERS.welfare;
   }
 
@@ -58,5 +57,85 @@ export class AuthService {
       default:
         return "/welfare";
     }
+  }
+
+  /**
+   * Strict Role-Based Access Control (RBAC) Matrix
+   * Prevents unauthorized access across Welfare Officers, Commanders, Soldiers, and Admins.
+   */
+  static isRouteAllowed(role: UserRole, pathname: string): { allowed: boolean; reason?: string } {
+    // Universal routes accessible to everyone
+    if (
+      pathname === "/" ||
+      pathname === "/login" ||
+      pathname === "/settings"
+    ) {
+      return { allowed: true };
+    }
+
+    if (role === "PERSONNEL") {
+      if (pathname.startsWith("/personnel")) {
+        return { allowed: true };
+      }
+      return {
+        allowed: false,
+        reason: "Access Restricted: Personnel can only access their personal self-care portal, voluntary assessments, and support requests.",
+      };
+    }
+
+    if (role === "COMMANDER") {
+      if (
+        pathname === "/commander" ||
+        pathname.startsWith("/reports") ||
+        pathname.startsWith("/privacy") ||
+        pathname.startsWith("/audit")
+      ) {
+        return { allowed: true };
+      }
+      return {
+        allowed: false,
+        reason: "Access Restricted under DPDP Act 2023: Individual clinical risk attributions and psychological cases are strictly protected from tactical commanders to prevent APAR career appraisal prejudice.",
+      };
+    }
+
+    if (role === "WELFARE_OFFICER") {
+      if (
+        pathname.startsWith("/welfare") ||
+        pathname.startsWith("/analytics") ||
+        pathname.startsWith("/alerts") ||
+        pathname.startsWith("/interventions") ||
+        pathname.startsWith("/recommendations") ||
+        pathname.startsWith("/reports") ||
+        pathname.startsWith("/privacy") ||
+        pathname.startsWith("/audit")
+      ) {
+        return { allowed: true };
+      }
+      if (pathname.startsWith("/commander")) {
+        return {
+          allowed: false,
+          reason: "Access Restricted: Commander tactical operations portal is designated for unit leadership.",
+        };
+      }
+      return { allowed: true };
+    }
+
+    if (role === "ADMIN") {
+      if (
+        pathname.startsWith("/admin") ||
+        pathname.startsWith("/audit") ||
+        pathname.startsWith("/privacy") ||
+        pathname.startsWith("/settings") ||
+        pathname.startsWith("/reports")
+      ) {
+        return { allowed: true };
+      }
+      return {
+        allowed: false,
+        reason: "Access Restricted: Direct medical/welfare casework requires authorized Welfare Officer credentials.",
+      };
+    }
+
+    return { allowed: true };
   }
 }

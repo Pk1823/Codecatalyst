@@ -5,16 +5,13 @@ import Link from "next/link";
 import {
   FolderHeart,
   Search,
-  Filter,
   Plus,
   ChevronRight,
-  User,
-  Clock,
   ShieldCheck,
-  CheckCircle2,
+  X,
 } from "lucide-react";
 import { WelfareService } from "@/services/welfare.service";
-import { WelfareCase, WelfareCaseStatus } from "@/types/welfare";
+import { WelfareCase } from "@/types/welfare";
 import { RiskBadge } from "@/components/common/risk-badge";
 import { StatusBadge } from "@/components/common/status-badge";
 import { useToast } from "@/components/providers";
@@ -27,7 +24,7 @@ export default function WelfareCasesPage() {
   const [riskFilter, setRiskFilter] = useState<string>("ALL");
   const [unitFilter, setUnitFilter] = useState<string>("ALL");
   const [page, setPage] = useState(1);
-  const pageSize = 5;
+  const pageSize = 8;
 
   // New Case Modal State
   const [newModalOpen, setNewModalOpen] = useState(false);
@@ -92,38 +89,38 @@ export default function WelfareCasesPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-xl font-bold tracking-tight text-white">
             Welfare Cases
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs text-slate-400 mt-1">
             Tracking confidential human officer reviews, support interventions, and rehabilitation progress.
           </p>
         </div>
 
         <button
           onClick={() => setNewModalOpen(true)}
-          className="inline-flex items-center gap-2 rounded-xl bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 text-xs font-semibold shadow-md shadow-blue-900/20 transition-all hover:scale-105 active:scale-95 self-start sm:self-auto"
+          className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 text-xs font-semibold shadow-sm transition-colors self-start sm:self-auto"
         >
-          <Plus className="h-4 w-4" />
+          <Plus className="h-3.5 w-3.5" />
           <span>Create Welfare Case</span>
         </button>
       </div>
 
       {/* Filter Bar */}
-      <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-xs flex flex-wrap items-center justify-between gap-3">
+      <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3.5 flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2 flex-1 min-w-[280px]">
           {/* Search */}
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
+            <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-500" />
             <input
               type="text"
-              placeholder="Search Case ID (CASE-2025-042), Personnel ID..."
+              placeholder="Search Case ID, Personnel ID, concern..."
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 pl-8 pr-3 py-1.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-hidden"
+              className="w-full rounded-lg border border-slate-800 bg-slate-950/60 pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-emerald-500"
             />
           </div>
 
@@ -134,7 +131,7 @@ export default function WelfareCasesPage() {
               setStatusFilter(e.target.value);
               setPage(1);
             }}
-            className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 px-2.5 py-1.5 text-xs text-slate-900 dark:text-slate-100 focus:outline-hidden"
+            className="rounded-lg border border-slate-800 bg-slate-950/60 px-2.5 py-1.5 text-xs text-slate-300 focus:outline-hidden focus:border-emerald-500"
           >
             <option value="ALL">All Statuses</option>
             <option value="New">New</option>
@@ -151,7 +148,7 @@ export default function WelfareCasesPage() {
               setRiskFilter(e.target.value);
               setPage(1);
             }}
-            className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 px-2.5 py-1.5 text-xs text-slate-900 dark:text-slate-100 focus:outline-hidden"
+            className="rounded-lg border border-slate-800 bg-slate-950/60 px-2.5 py-1.5 text-xs text-slate-300 focus:outline-hidden focus:border-emerald-500"
           >
             <option value="ALL">All Risk Levels</option>
             <option value="LOW">Low</option>
@@ -167,7 +164,7 @@ export default function WelfareCasesPage() {
               setUnitFilter(e.target.value);
               setPage(1);
             }}
-            className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 px-2.5 py-1.5 text-xs text-slate-900 dark:text-slate-100 focus:outline-hidden"
+            className="rounded-lg border border-slate-800 bg-slate-950/60 px-2.5 py-1.5 text-xs text-slate-300 focus:outline-hidden focus:border-emerald-500"
           >
             <option value="ALL">All Units</option>
             <option value="Alpha">Alpha Company</option>
@@ -178,16 +175,16 @@ export default function WelfareCasesPage() {
           </select>
         </div>
 
-        <span className="text-xs text-slate-400 font-medium">
+        <span className="text-xs text-slate-400 font-mono">
           Showing {paginatedCases.length} of {filtered.length} Cases
         </span>
       </div>
 
       {/* Advanced Data Table */}
-      <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs overflow-hidden">
+      <div className="rounded-xl border border-slate-800 bg-slate-900/60 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-400 uppercase tracking-wider font-semibold">
+            <thead className="bg-slate-950/40 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[11px] font-mono">
               <tr>
                 <th className="py-3 px-4">Case ID</th>
                 <th className="py-3 px-4">Personnel</th>
@@ -199,33 +196,33 @@ export default function WelfareCasesPage() {
                 <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800/70 text-slate-700 dark:text-slate-300">
+            <tbody className="divide-y divide-slate-800 text-slate-300">
               {paginatedCases.map((c) => (
                 <tr
                   key={c.id}
-                  className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                  className="hover:bg-slate-800/30 transition-colors"
                 >
-                  <td className="py-3.5 px-4 font-mono font-bold text-blue-600 dark:text-blue-400">
+                  <td className="py-3.5 px-4 font-mono font-medium text-emerald-400">
                     <Link href={`/welfare/cases/${c.id}`} className="hover:underline">
                       {c.id}
                     </Link>
                   </td>
                   <td className="py-3.5 px-4">
-                    <span className="font-semibold text-slate-900 dark:text-slate-100 block">
+                    <span className="font-medium text-white block">
                       {c.personnelId}
                     </span>
-                    <span className="text-[10px] text-slate-400 font-mono">
+                    <span className="text-[10px] text-slate-500 font-mono">
                       {c.anonymizedCode}
                     </span>
                   </td>
-                  <td className="py-3.5 px-4 font-medium">{c.unit}</td>
+                  <td className="py-3.5 px-4 text-slate-400">{c.unit}</td>
                   <td className="py-3.5 px-4">
                     <RiskBadge level={c.riskLevel} size="sm" />
                   </td>
-                  <td className="py-3.5 px-4 max-w-[220px] truncate" title={c.primaryConcern}>
+                  <td className="py-3.5 px-4 max-w-[220px] truncate text-slate-200" title={c.primaryConcern}>
                     {c.primaryConcern}
                   </td>
-                  <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">
+                  <td className="py-3.5 px-4 text-slate-400">
                     {c.assignedOfficer}
                   </td>
                   <td className="py-3.5 px-4">
@@ -234,7 +231,7 @@ export default function WelfareCasesPage() {
                   <td className="py-3.5 px-4 text-right">
                     <Link
                       href={`/welfare/cases/${c.id}`}
-                      className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline"
+                      className="inline-flex items-center gap-1 text-xs font-medium text-emerald-400 hover:text-emerald-300 hover:underline"
                     >
                       <span>Open Detail</span>
                       <ChevronRight className="h-3.5 w-3.5" />
@@ -247,22 +244,22 @@ export default function WelfareCasesPage() {
         </div>
 
         {/* Pagination Bar */}
-        <div className="px-4 py-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
-          <span>
+        <div className="px-4 py-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+          <span className="font-mono">
             Page {page} of {totalPages}
           </span>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setPage((p) => Math.max(p - 1, 1))}
               disabled={page === 1}
-              className="px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-40 hover:bg-slate-100 dark:hover:bg-slate-800"
+              className="px-3 py-1 rounded border border-slate-800 disabled:opacity-30 hover:bg-slate-800 text-slate-300 transition-colors"
             >
               Previous
             </button>
             <button
               onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
               disabled={page === totalPages}
-              className="px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-40 hover:bg-slate-100 dark:hover:bg-slate-800"
+              className="px-3 py-1 rounded border border-slate-800 disabled:opacity-30 hover:bg-slate-800 text-slate-300 transition-colors"
             >
               Next
             </button>
@@ -273,31 +270,31 @@ export default function WelfareCasesPage() {
       {/* Modal: Create Welfare Case */}
       {newModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs"
           onClick={() => setNewModalOpen(false)}
         >
           <div
-            className="w-full max-w-lg rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95"
+            className="w-full max-w-lg rounded-xl bg-slate-900 border border-slate-800 p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div className="flex items-center gap-2">
-                <FolderHeart className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
+                <FolderHeart className="h-5 w-5 text-emerald-400" />
+                <h3 className="text-base font-semibold text-white">
                   Create New Welfare Case
                 </h3>
               </div>
               <button
                 onClick={() => setNewModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                className="text-slate-400 hover:text-white"
               >
-                ✕
+                <X className="h-4 w-4" />
               </button>
             </div>
 
             <form onSubmit={handleCreateCaseSubmit} className="space-y-4 text-xs">
               <div>
-                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block font-medium text-slate-300 mb-1">
                   Target Personnel ID
                 </label>
                 <input
@@ -306,18 +303,18 @@ export default function WelfareCasesPage() {
                   value={newPersonnelId}
                   onChange={(e) => setNewPersonnelId(e.target.value)}
                   placeholder="e.g. P-1025"
-                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-2.5 text-slate-900 dark:text-slate-100 focus:outline-hidden"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-950 p-2.5 text-white focus:outline-hidden focus:border-emerald-500 font-mono"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block font-medium text-slate-300 mb-1">
                   Support Category
                 </label>
                 <select
                   value={newSupportType}
                   onChange={(e) => setNewSupportType(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-2.5 text-slate-900 dark:text-slate-100 focus:outline-hidden"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-950 p-2.5 text-white focus:outline-hidden focus:border-emerald-500"
                 >
                   <option value="Workload Adjustment">Workload Adjustment</option>
                   <option value="Recovery Support">Recovery Support</option>
@@ -328,7 +325,7 @@ export default function WelfareCasesPage() {
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block font-medium text-slate-300 mb-1">
                   Urgency Priority
                 </label>
                 <div className="grid grid-cols-3 gap-2">
@@ -337,10 +334,10 @@ export default function WelfareCasesPage() {
                       key={pr}
                       type="button"
                       onClick={() => setNewPriority(pr)}
-                      className={`p-2 rounded-lg border text-center font-bold ${
+                      className={`p-2 rounded-lg border text-center font-medium transition-colors ${
                         newPriority === pr
-                          ? "border-blue-600 bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300"
-                          : "border-slate-200 dark:border-slate-700 text-slate-600"
+                          ? "border-emerald-500 bg-emerald-500/10 text-emerald-400"
+                          : "border-slate-800 text-slate-400 hover:border-slate-700"
                       }`}
                     >
                       {pr}
@@ -350,7 +347,7 @@ export default function WelfareCasesPage() {
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block font-medium text-slate-300 mb-1">
                   Clinical / Case Background Remarks
                 </label>
                 <textarea
@@ -359,7 +356,7 @@ export default function WelfareCasesPage() {
                   placeholder="Observations regarding operational duty hours, sleep rhythm, or self-reported stress..."
                   value={newDesc}
                   onChange={(e) => setNewDesc(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-2.5 text-slate-900 dark:text-slate-100 focus:outline-hidden"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-950 p-2.5 text-white focus:outline-hidden focus:border-emerald-500"
                 />
               </div>
 
@@ -367,13 +364,13 @@ export default function WelfareCasesPage() {
                 <button
                   type="button"
                   onClick={() => setNewModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold"
+                  className="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-lg bg-blue-700 hover:bg-blue-600 text-white font-bold"
+                  className="px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold shadow-sm transition-colors"
                 >
                   Create Case
                 </button>

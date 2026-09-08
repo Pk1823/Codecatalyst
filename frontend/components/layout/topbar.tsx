@@ -9,20 +9,17 @@ import {
   Bell,
   Sun,
   Moon,
-  User as UserIcon,
-  ShieldAlert,
   ChevronDown,
   LogOut,
   Sliders,
   ShieldCheck,
   HelpCircle,
-  Sparkles,
   Languages,
   Layers,
-  PhoneCall,
+  ChevronLeft,
+  Lock,
 } from "lucide-react";
 import { useAuth, useTheme, useToast, ForceType } from "@/components/providers";
-import { UserRole } from "@/types/auth";
 import { GlobalSearchModal } from "@/components/search/global-search-modal";
 
 interface TopbarProps {
@@ -32,13 +29,12 @@ interface TopbarProps {
 export function Topbar({ onMobileMenuToggle }: TopbarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, role, switchRole, logout, force, setForce, lang, toggleLang } = useAuth();
+  const { user, role, logout, force, setForce, lang, toggleLang } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { toast } = useToast();
 
   const [searchOpen, setSearchOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-  const [roleMenuOpen, setRoleMenuOpen] = useState(false);
   const [forceMenuOpen, setForceMenuOpen] = useState(false);
 
   // Generate breadcrumb from pathname with bilingual support
@@ -63,20 +59,10 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
     if (pathname === "/audit") return { title: isHi ? "अनुपालन एवं ऑडिट लॉग" : "Audit & Compliance Log", section: isHi ? "शून्य-विश्वास रिकॉर्ड" : "Zero-Trust Records" };
     if (pathname === "/privacy") return { title: isHi ? "गोपनीयता एवं डीपीए केंद्र" : "Privacy Center", section: isHi ? "डीपीडीपी अधिनियम 2023" : "Security & Governance" };
     if (pathname === "/settings") return { title: isHi ? "प्रणाली सेटिंग्स" : "System Settings", section: isHi ? "प्राथमिकताएं" : "Preferences" };
-    if (pathname === "/presentation") return { title: isHi ? "हैकथॉन प्रस्तुति डेक" : "Hackathon Presentation", section: isHi ? "न्यायाधीश पिच" : "Judge Pitch Deck" };
     return { title: "MissionWell AI", section: "Welfare Intelligence" };
   };
 
   const breadcrumb = getBreadcrumb();
-
-  const handleRoleSwitch = (newRole: UserRole) => {
-    switchRole(newRole);
-    setRoleMenuOpen(false);
-    if (newRole === "PERSONNEL") router.push("/personnel");
-    else if (newRole === "WELFARE_OFFICER") router.push("/welfare");
-    else if (newRole === "COMMANDER") router.push("/commander");
-    else if (newRole === "ADMIN") router.push("/admin");
-  };
 
   const handleForceSwitch = (newForce: ForceType) => {
     setForce(newForce);
@@ -88,68 +74,78 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
     setProfileOpen(false);
     toast({
       title: "Logged Out",
-      description: "Returning to secure sign-in portal.",
+      description: "Session terminated. Return via authorized sign-in.",
       type: "info",
     });
     router.push("/login");
   };
 
-  const forcesList: { id: ForceType; name: string; full: string; badgeColor: string }[] = [
-    { id: "CRPF", name: "CRPF", full: "Central Reserve Police Force", badgeColor: "bg-red-900/40 text-red-300 border-red-800" },
-    { id: "BSF", name: "BSF", full: "Border Security Force", badgeColor: "bg-amber-900/40 text-amber-300 border-amber-800" },
-    { id: "ITBP", name: "ITBP", full: "Indo-Tibetan Border Police", badgeColor: "bg-cyan-900/40 text-cyan-300 border-cyan-800" },
-    { id: "CISF", name: "CISF", full: "Central Industrial Security Force", badgeColor: "bg-blue-900/40 text-blue-300 border-blue-800" },
-    { id: "ARMY", name: "Indian Army", full: "Armed Forces Command", badgeColor: "bg-emerald-900/40 text-emerald-300 border-emerald-800" },
-    { id: "STATE_POLICE", name: "State Police", full: "State Police Welfare Wing", badgeColor: "bg-indigo-900/40 text-indigo-300 border-indigo-800" },
+  const forcesList: { id: ForceType; name: string; full: string }[] = [
+    { id: "CRPF", name: "CRPF", full: "Central Reserve Police Force" },
+    { id: "BSF", name: "BSF", full: "Border Security Force" },
+    { id: "ITBP", name: "ITBP", full: "Indo-Tibetan Border Police" },
+    { id: "CISF", name: "CISF", full: "Central Industrial Security Force" },
+    { id: "ARMY", name: "Indian Army", full: "Armed Forces Command" },
+    { id: "STATE_POLICE", name: "State Police", full: "State Police Welfare Wing" },
   ];
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 px-4 backdrop-blur-md transition-colors">
-        {/* Left Side: Mobile Hamburger & Breadcrumb */}
-        <div className="flex items-center gap-3">
+      <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-slate-800 bg-[#090D16]/90 px-4 sm:px-6 backdrop-blur-md transition-colors">
+        {/* Left Side: Mobile Hamburger, Back Button & Breadcrumb */}
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={onMobileMenuToggle}
-            className="md:hidden rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-hidden"
+            className="md:hidden rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white focus:outline-none transition-colors"
             aria-label="Open mobile menu"
           >
             <Menu className="h-5 w-5" />
           </button>
 
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1.5 text-[10px] font-medium text-slate-400 dark:text-slate-500">
-              <span className="font-bold text-slate-600 dark:text-slate-400">
-                {force} • MHA
+          {/* Navigation Back Button */}
+          <button
+            onClick={() => router.back()}
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-800 bg-[#0F172A] text-slate-300 hover:bg-slate-800 hover:text-white transition-colors text-xs font-medium"
+            title="Go back to previous screen"
+          >
+            <ChevronLeft className="h-4 w-4 text-emerald-400" />
+            <span className="hidden sm:inline">Back</span>
+          </button>
+
+          <div className="flex flex-col ml-1">
+            <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-400">
+              <span className="font-semibold text-emerald-400 font-mono">
+                {force}
               </span>
-              <span>/</span>
-              <span>{breadcrumb.section}</span>
+              <span className="text-slate-600">/</span>
+              <span className="text-slate-400">{breadcrumb.section}</span>
             </div>
-            <h1 className="text-sm sm:text-base font-black text-slate-900 dark:text-slate-100 tracking-tight">
+            <h1 className="text-sm sm:text-base font-bold text-[#F8FAFC] tracking-tight truncate max-w-[200px] sm:max-w-none">
               {breadcrumb.title}
             </h1>
           </div>
         </div>
 
-        {/* Center / Right Side: Force Branch, Language Toggle, Search, Role Badge, Theme, Profile */}
+        {/* Right Side: Controls */}
         <div className="flex items-center gap-2 sm:gap-2.5">
           {/* Force Branch Context Dropdown */}
           <div className="relative">
             <button
               onClick={() => setForceMenuOpen(!forceMenuOpen)}
-              className="flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-100/80 dark:bg-slate-800/80 px-2 py-1 text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors shadow-2xs"
+              className="flex items-center gap-1.5 rounded-lg border border-slate-800 bg-[#0F172A] px-2.5 py-1.5 text-xs font-medium text-slate-200 hover:bg-slate-800 hover:border-slate-700 transition-all shadow-xs"
               title="Select Force Branch (CRPF, BSF, ITBP, CISF, Army, Police)"
             >
-              <Layers className="h-3.5 w-3.5 text-amber-500" />
-              <span className="font-mono text-[11px]">{force}</span>
-              <ChevronDown className="h-3 w-3 opacity-60" />
+              <Layers className="h-3.5 w-3.5 text-emerald-400" />
+              <span className="font-mono text-[11px] font-semibold">{force}</span>
+              <ChevronDown className="h-3 w-3 text-slate-400" />
             </button>
 
             {forceMenuOpen && (
               <div
-                className="absolute right-0 mt-2 w-64 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-1.5 shadow-2xl z-50 animate-in fade-in zoom-in-95"
+                className="absolute right-0 mt-2 w-64 rounded-xl border border-slate-800 bg-[#0F172A] p-1.5 shadow-2xl z-50 animate-in fade-in zoom-in-95"
                 onMouseLeave={() => setForceMenuOpen(false)}
               >
-                <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <div className="px-2.5 py-1 text-[10px] font-mono font-semibold uppercase tracking-wider text-slate-400">
                   Select Uniformed Service
                 </div>
                 {forcesList.map((f) => (
@@ -158,15 +154,15 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                     onClick={() => handleForceSwitch(f.id)}
                     className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs transition-colors ${
                       force === f.id
-                        ? "bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-bold"
-                        : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                        ? "bg-slate-800 text-emerald-400 font-semibold"
+                        : "text-slate-300 hover:bg-slate-800/60 hover:text-white"
                     }`}
                   >
                     <div className="text-left">
-                      <span className="block font-bold">{f.name}</span>
+                      <span className="block font-semibold">{f.name}</span>
                       <span className="text-[10px] text-slate-400">{f.full}</span>
                     </div>
-                    {force === f.id && <span className="text-blue-500 text-xs font-bold">✓</span>}
+                    {force === f.id && <span className="text-emerald-400 text-xs font-bold font-mono">✓</span>}
                   </button>
                 ))}
               </div>
@@ -176,75 +172,30 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
           {/* Bilingual Language Switcher (EN / हिन्दी) */}
           <button
             onClick={toggleLang}
-            className="flex items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 px-2 py-1 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-750 transition-colors shadow-2xs"
+            className="flex items-center gap-1 rounded-lg border border-slate-800 bg-[#0F172A] px-2.5 py-1.5 text-xs font-medium text-slate-200 hover:bg-slate-800 hover:border-slate-700 transition-all shadow-xs"
             title="Toggle Language (English / हिन्दी)"
           >
-            <Languages className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-            <span className="text-[11px] font-mono">{lang === "en" ? "हिन्दी" : "EN"}</span>
+            <Languages className="h-3.5 w-3.5 text-slate-400" />
+            <span className="text-[11px] font-mono font-semibold">{lang === "en" ? "हिन्दी" : "EN"}</span>
           </button>
 
           {/* Quick Search Button */}
           <button
             onClick={() => setSearchOpen(true)}
-            className="hidden sm:flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 px-2.5 py-1 text-xs text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700 transition-colors shadow-2xs"
+            className="hidden sm:flex items-center gap-2 rounded-lg border border-slate-800 bg-[#0F172A] px-3 py-1.5 text-xs text-slate-400 hover:border-slate-700 hover:text-slate-200 transition-all shadow-xs"
             title="Global Quick Search (Ctrl+K)"
           >
-            <Search className="h-3.5 w-3.5" />
-            <span className="hidden lg:inline text-[11px]">Search records, cases...</span>
-            <span className="rounded-xs bg-slate-200 dark:bg-slate-700 px-1 py-0.5 text-[9px] font-mono text-slate-600 dark:text-slate-300">
+            <Search className="h-3.5 w-3.5 text-slate-400" />
+            <span className="hidden lg:inline text-[11px]">Search records...</span>
+            <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[9px] font-mono text-slate-300 border border-slate-700">
               Ctrl K
             </span>
           </button>
 
-          {/* Demo Persona Switcher */}
-          <div className="relative">
-            <button
-              onClick={() => setRoleMenuOpen(!roleMenuOpen)}
-              className="flex items-center gap-1 rounded-lg border border-blue-200 dark:border-blue-900/60 bg-blue-50/70 dark:bg-blue-950/40 px-2.5 py-1 text-xs font-bold text-blue-700 dark:text-blue-300 hover:bg-blue-100/70 transition-colors shadow-2xs"
-              title="Switch demo persona for testing"
-            >
-              <ShieldAlert className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-              <span className="truncate max-w-[100px]">{role.replace("_", " ")}</span>
-              <ChevronDown className="h-3 w-3 opacity-70" />
-            </button>
-
-            {roleMenuOpen && (
-              <div
-                className="absolute right-0 mt-2 w-56 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-1.5 shadow-xl z-50 animate-in fade-in zoom-in-95"
-                onMouseLeave={() => setRoleMenuOpen(false)}
-              >
-                <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                  Switch Demo Persona
-                </div>
-                {(
-                  [
-                    { r: "PERSONNEL", label: "Personnel (Ct. Piyush)", desc: "Self-assessment & buddy support" },
-                    { r: "WELFARE_OFFICER", label: "Welfare Officer (Dr. Sharma)", desc: "Clinical case reviews & rotations" },
-                    { r: "COMMANDER", label: "Commander (Col. Singh)", desc: "Battalion readiness overview" },
-                    { r: "ADMIN", label: "System Admin (Patel)", desc: "Security audit & access policy" },
-                  ] as const
-                ).map((item) => (
-                  <button
-                    key={item.r}
-                    onClick={() => handleRoleSwitch(item.r)}
-                    className={`w-full flex flex-col text-left px-2.5 py-2 rounded-lg text-xs transition-colors ${
-                      role === item.r
-                        ? "bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-semibold"
-                        : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-                    }`}
-                  >
-                    <span>{item.label}</span>
-                    <span className="text-[10px] text-slate-400 mt-0.5">{item.desc}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-400 transition-colors"
+            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors"
             title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
             aria-label="Toggle theme"
           >
@@ -254,49 +205,53 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
           {/* Notifications Bell */}
           <Link
             href="/alerts"
-            className="relative rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-400 transition-colors"
+            className="relative rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors"
             title="Welfare Alerts & Notifications"
           >
             <Bell className="h-4 w-4" />
-            <span className="absolute top-1 right-1 flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+            <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
           </Link>
 
-          {/* User Profile Dropdown */}
+          {/* User Profile & Secure Sign Out */}
           <div className="relative">
             <button
               onClick={() => setProfileOpen(!profileOpen)}
-              className="flex items-center gap-2 rounded-lg p-1 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-hidden"
+              className="flex items-center gap-2 rounded-lg p-1 px-2 border border-slate-800 bg-[#0F172A] hover:bg-slate-800 transition-colors focus:outline-none"
               aria-label="User profile menu"
             >
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-800 text-white dark:bg-blue-600 font-bold text-[11px] shadow-xs">
+              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-600 text-[#090D16] font-mono font-bold text-xs shadow-xs">
                 {user.name.charAt(0)}
+              </div>
+              <div className="hidden md:flex flex-col text-left leading-none">
+                <span className="text-xs font-semibold text-[#F8FAFC] truncate max-w-[90px]">{user.name}</span>
+                <span className="text-[9px] text-emerald-400 font-mono uppercase mt-0.5">{role.replace("_", " ")}</span>
               </div>
               <ChevronDown className="h-3 w-3 text-slate-400" />
             </button>
 
             {profileOpen && (
               <div
-                className="absolute right-0 mt-2 w-56 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-1.5 shadow-xl z-50 animate-in fade-in zoom-in-95"
+                className="absolute right-0 mt-2 w-60 rounded-xl border border-slate-800 bg-[#0F172A] p-1.5 shadow-2xl z-50 animate-in fade-in zoom-in-95"
                 onMouseLeave={() => setProfileOpen(false)}
               >
-                <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-800 mb-1">
-                  <p className="text-xs font-bold text-slate-900 dark:text-slate-100">{user.name}</p>
-                  <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">{user.email}</p>
+                <div className="px-3 py-2 border-b border-slate-800 mb-1">
+                  <p className="text-xs font-bold text-[#F8FAFC]">{user.name}</p>
+                  <p className="text-[10px] text-slate-400 font-mono truncate">{user.email}</p>
                   <div className="mt-1 flex items-center gap-1.5">
-                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300">
-                      {user.rank || user.role}
+                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-800 text-emerald-400 border border-slate-700 uppercase">
+                      {user.role}
                     </span>
-                    <span className="text-[9px] text-slate-400">{force}</span>
+                    <span className="text-[9px] text-slate-400 font-mono">{force}</span>
                   </div>
                 </div>
 
                 <Link
                   href="/settings"
                   onClick={() => setProfileOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-300 rounded-lg hover:bg-slate-800 hover:text-white transition-colors"
                 >
                   <Sliders className="h-3.5 w-3.5 text-slate-400" />
                   <span>Profile & Settings</span>
@@ -305,7 +260,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                 <Link
                   href="/privacy"
                   onClick={() => setProfileOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-300 rounded-lg hover:bg-slate-800 hover:text-white transition-colors"
                 >
                   <ShieldCheck className="h-3.5 w-3.5 text-slate-400" />
                   <span>Privacy Protocol</span>
@@ -314,20 +269,20 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                 <Link
                   href="/personnel/support"
                   onClick={() => setProfileOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-300 rounded-lg hover:bg-slate-800 hover:text-white transition-colors"
                 >
                   <HelpCircle className="h-3.5 w-3.5 text-slate-400" />
                   <span>Help & Helpline</span>
                 </Link>
 
-                <div className="my-1 border-t border-slate-100 dark:border-slate-800" />
+                <div className="my-1 border-t border-slate-800" />
 
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-rose-600 dark:text-rose-400 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-rose-400 rounded-lg hover:bg-rose-950/40 hover:text-rose-300 transition-colors"
                 >
                   <LogOut className="h-3.5 w-3.5" />
-                  <span>Sign Out</span>
+                  <span>Sign Out (Switch Account)</span>
                 </button>
               </div>
             )}
