@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🇮🇳 MissionWell AI (Sentinel of Resilience)
+# MissionWell AI (Sentinel of Resilience)
 ### **Predictive Wellness Monitoring for Safer, Stronger Forces**
 *Smart India Hackathon • Problem Statement 26186 • Ministry of Home Affairs (Police II Division) / CRPF*
 
