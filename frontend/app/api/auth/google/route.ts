@@ -8,16 +8,16 @@ import { UserRole } from "@/types/auth";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { email, name, role, force } = body;
+    const { idToken, credential, code, email, name, role, force } = body;
 
-    if (!email || !email.includes("@")) {
+    if (!idToken && !credential && !code && (!email || !email.includes("@"))) {
       return NextResponse.json(
-        { error: "A valid Gmail or email address is required." },
+        { error: "Google ID token, OAuth code, or valid Gmail address is required." },
         { status: 400 }
       );
     }
 
-    const trimmedEmail = email.trim().toLowerCase();
+    const trimmedEmail = email ? email.trim().toLowerCase() : undefined;
     const assignedForce = force || "CRPF";
     const assignedRole = (role || "WELFARE_OFFICER") as UserRole;
 
@@ -28,6 +28,9 @@ export async function POST(req: NextRequest) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          idToken,
+          credential,
+          code,
           email: trimmedEmail,
           name,
           role: assignedRole,

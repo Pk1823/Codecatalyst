@@ -100,9 +100,61 @@ export class AuthService {
     const user: User = data.user;
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+      localStorage.setItem("user", JSON.stringify(user));
+      if (data.token) localStorage.setItem("token", data.token);
       window.dispatchEvent(new Event("missionwell_auth_changed"));
     }
     return user;
+  }
+
+  /**
+   * Authenticate using Google OAuth 2.0 ID Token or One-Tap Credential
+   */
+  static async loginWithGoogleOAuthToken(
+    idTokenOrCredential: string,
+    role?: UserRole,
+    force?: string
+  ): Promise<User> {
+    const res = await fetch("/api/auth/google", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        idToken: idTokenOrCredential,
+        credential: idTokenOrCredential,
+        role: role || "WELFARE_OFFICER",
+        force: force || "CRPF",
+      }),
+    });
+
+    const data = await res.json();
+    if (!res.ok || !data.success || !data.user) {
+      throw new Error(data.error || "Google ID Token authentication failed.");
+    }
+
+    const user: User = data.user;
+    if (typeof window !== "undefined") {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+      localStorage.setItem("user", JSON.stringify(user));
+      if (data.token) localStorage.setItem("token", data.token);
+      window.dispatchEvent(new Event("missionwell_auth_changed"));
+    }
+    return user;
+  }
+
+  /**
+   * Fetch official Google OAuth 2.0 Consent URL
+   */
+  static async getGoogleOAuthUrl(role?: UserRole, force?: string): Promise<string> {
+    const res = await fetch(
+      `/api/auth/google/url?role=${encodeURIComponent(role || "WELFARE_OFFICER")}&force=${encodeURIComponent(
+        force || "CRPF"
+      )}`
+    );
+    const data = await res.json();
+    if (!res.ok || !data.url) {
+      throw new Error(data.error || "Failed to retrieve Google OAuth authorization URL");
+    }
+    return data.url;
   }
 
   /**
@@ -169,7 +221,8 @@ export class AuthService {
     if (
       pathname === "/" ||
       pathname === "/login" ||
-      pathname === "/settings"
+      pathname === "/settings" ||
+      pathname.startsWith("/auth")
     ) {
       return { allowed: true };
     }

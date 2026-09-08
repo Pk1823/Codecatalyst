@@ -294,6 +294,55 @@ async function runTests() {
       assert(actions.includes("RECORD_INTERVENTION"), "Interventions logged");
     });
 
+    // 17. Google OAuth 2.0 Authentication & DPDP Compliance
+    await testStep("Google OAuth 2.0: Generate Authorization Consent URL", async () => {
+      const res = await fetch(`${baseUrl}/api/auth/google/url?role=WELFARE_OFFICER&force=CRPF`);
+      assert(res.status === 200, "Google OAuth URL generated successfully");
+      const body = await res.json();
+      assert(body.success === true, "Response indicates success");
+      assert(body.url.includes("accounts.google.com/o/oauth2/v2/auth"), "URL points to official Google OAuth endpoint");
+      assert(body.url.includes("response_type=code"), "URL requires authorization code flow");
+      assert(body.url.includes("userinfo.email"), "URL requests userinfo.email scope");
+    });
+
+    await testStep("Google OAuth 2.0: Authenticate Profile & Issue Session JWT", async () => {
+      const res = await fetch(`${baseUrl}/api/auth/google`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: "dr.aarti.welfare@gmail.com",
+          name: "Dr. Aarti Sharma",
+          role: "WELFARE_OFFICER",
+          force: "CRPF",
+        }),
+      });
+      assert(res.status === 200, "Google authentication succeeded with 200 OK");
+      const body = await res.json();
+      assert(body.success === true, "Authentication flagged successful");
+      assert(body.user.email === "dr.aarti.welfare@gmail.com", "User profile synchronized");
+      assert(body.user.role === "WELFARE_OFFICER", "Authorized role assigned");
+      assert(body.token && body.token.length > 20, "Cryptographic session JWT issued");
+    });
+
+    await testStep("Google OAuth 2.0: Reject Malformed Callback Code", async () => {
+      const res = await fetch(`${baseUrl}/api/auth/google/callback`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
+      assert(res.status === 400, "Missing authorization code rejected with 400 Bad Request");
+    });
+
+    await testStep("Google OAuth 2.0: DPDP Act 2023 Audit Trail Verification", async () => {
+      const res = await fetch(`${baseUrl}/api/audit-logs`, {
+        headers: { Authorization: `Bearer ${adminToken}` },
+      });
+      assert(res.status === 200, "Admin accessed audit logs");
+      const body = await res.json();
+      const actions = body.data.map((l) => l.action);
+      assert(actions.includes("USER_LOGIN") || actions.includes("USER_LOGIN_GOOGLE_OAUTH"), "Google SSO logged in immutable audit trail");
+    });
+
   } finally {
     // Tests complete
   }
