@@ -50,8 +50,8 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   // Google / Custom Email State
-  const [googleEmail, setGoogleEmail] = useState("dr.aarti.welfare@gmail.com");
-  const [googleName, setGoogleName] = useState("Dr. Aarti Sharma");
+  const [googleEmail, setGoogleEmail] = useState("recmit2024@gmail.com");
+  const [googleName, setGoogleName] = useState("Officer Recmit");
   const [isGoogleModalOpen, setIsGoogleModalOpen] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -185,10 +185,22 @@ export default function LoginPage() {
     try {
       setIsSubmitting(true);
       setErrorMsg("");
-      const authUrl = await AuthService.getGoogleOAuthUrl(selectedRole, selectedForce);
-      window.location.href = authUrl;
+      const oauthData = await AuthService.getGoogleOAuthUrl(selectedRole, selectedForce);
+      if (oauthData.isConfigured) {
+        window.location.href = oauthData.url;
+      } else {
+        setIsGoogleModalOpen(true);
+        toast({
+          title: isHi ? "Google प्रमाणीकरण संवाद" : "Google Authentication Dialog",
+          description: isHi
+            ? "खाता चयन एवं सहमति संवाद खोला गया है"
+            : "Opening Google OAuth Account Chooser & Consent dialog (Sandbox mode active)",
+          type: "info",
+        });
+      }
     } catch (err: any) {
       setErrorMsg(err?.message || "Could not initialize official Google OAuth consent flow.");
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -720,6 +732,7 @@ export default function LoginPage() {
                 {/* Instant Gmail Switchers */}
                 <div className="flex flex-wrap gap-1.5 pt-1">
                   {[
+                    { email: "recmit2024@gmail.com", role: "WELFARE_OFFICER" as UserRole, label: "recmit2024 (Gmail)" },
                     { email: "dr.aarti.welfare@gmail.com", role: "WELFARE_OFFICER" as UserRole, label: "Aarti (Gmail)" },
                     { email: "col.vikram.tactical@gmail.com", role: "COMMANDER" as UserRole, label: "Vikram (Gmail)" },
                     { email: "ct.piyush.jawan@gmail.com", role: "PERSONNEL" as UserRole, label: "Piyush (Gmail)" },

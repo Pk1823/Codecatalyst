@@ -144,7 +144,10 @@ export class AuthService {
   /**
    * Fetch official Google OAuth 2.0 Consent URL
    */
-  static async getGoogleOAuthUrl(role?: UserRole, force?: string): Promise<string> {
+  static async getGoogleOAuthUrl(
+    role?: UserRole,
+    force?: string
+  ): Promise<{ url: string; isConfigured: boolean }> {
     const res = await fetch(
       `/api/auth/google/url?role=${encodeURIComponent(role || "WELFARE_OFFICER")}&force=${encodeURIComponent(
         force || "CRPF"
@@ -154,7 +157,7 @@ export class AuthService {
     if (!res.ok || !data.url) {
       throw new Error(data.error || "Failed to retrieve Google OAuth authorization URL");
     }
-    return data.url;
+    return { url: data.url, isConfigured: !!data.isConfigured };
   }
 
   /**
