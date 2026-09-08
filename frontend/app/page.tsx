@@ -45,9 +45,6 @@ export default function LandingPage() {
               <span className="font-bold text-base tracking-tight text-[#F8FAFC]">
                 MissionWell <span className="text-emerald-400 font-mono text-xs">AI</span>
               </span>
-              <span className="rounded bg-slate-800 px-1.5 py-0.2 text-[9px] font-mono font-semibold text-slate-300 border border-slate-700">
-                DEFENSE
-              </span>
             </div>
           </Link>
 
