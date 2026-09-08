@@ -40,29 +40,29 @@ export default function CommanderDashboardPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#F8FAFC]">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-[#F8FAFC]">
               {isHi ? "बल समग्र कल्याण एवं तत्परता अवलोकन" : "Force Wellness & Readiness Command"}
             </h2>
-            <span className="rounded bg-slate-800 text-slate-300 text-[10px] font-mono font-medium px-2 py-0.5 border border-slate-700">
+            <span className="rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-mono font-medium px-2 py-0.5 border border-slate-200 dark:border-slate-700">
               {meta.sampleCommanderName}
             </span>
-            <span className="rounded bg-slate-800 text-emerald-400 text-[10px] font-mono font-semibold px-2 py-0.5 border border-slate-700">
+            <span className="rounded bg-emerald-50 dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 text-[10px] font-mono font-semibold px-2 py-0.5 border border-emerald-200 dark:border-slate-700">
               {meta.sampleBattalion}
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             {isHi ? "बटालियन एवं कंपनी-वार सामरिक कल्याण नियंत्रण कक्ष" : "Battalion & Company-Level Tactical Welfare Briefing"} •{" "}
-            <span className="font-mono text-slate-300">{meta.primaryTheatre}</span>
+            <span className="font-mono text-slate-700 dark:text-slate-300">{meta.primaryTheatre}</span>
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5 rounded-lg bg-[#0F172A] px-3 py-2 border border-slate-800">
-          <Lock className="h-4 w-4 text-emerald-400 shrink-0" />
+        <div className="flex items-center gap-2.5 rounded-lg bg-white dark:bg-[#0F172A] px-3 py-2 border border-slate-200/80 dark:border-slate-800 shadow-xs">
+          <Lock className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
           <div className="text-left">
-            <span className="block text-[11px] font-medium text-slate-200">
+            <span className="block text-[11px] font-medium text-slate-800 dark:text-slate-200">
               {isHi ? "डीपीडीपी 2023 गोपनीयता सुरक्षित" : "DPDP Act 2023 Compliant"}
             </span>
-            <span className="text-[10px] text-slate-400 font-mono">
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
               {isHi ? "व्यक्तिगत पहचान पूरी तरह से अज्ञात (Masked)" : "Masked aggregate unit data only"}
             </span>
           </div>
@@ -115,17 +115,17 @@ export default function CommanderDashboardPage() {
       </div>
 
       {/* Battalion Company Roll-Call Stress Heat Matrix */}
-      <div className="rounded-xl border border-slate-800 bg-[#0F172A]/90 p-5 shadow-xs space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+      <div className="rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0F172A]/90 p-5 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
           <div>
-            <h3 className="text-sm font-bold text-[#F8FAFC]">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-[#F8FAFC]">
               {isHi ? "कंपनी-वार रोल-कॉल तनाव एवं तत्परता स्थिति" : "Company-Wise Roll-Call & Operational Stress Grid"}
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               {meta.sampleBattalion} • {isHi ? "रोटेशनल आराम एवं अवकाश संतुलन की निगरानी" : "Monitor fatigue accumulation across deployment sectors"}
             </p>
           </div>
-          <span className="text-[11px] font-mono text-slate-400 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-md">
+          <span className="text-[11px] font-mono text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-md">
             {isHi ? "5 सक्रिय कंपनियां" : "5 Active Deployments"}
           </span>
         </div>
@@ -140,31 +140,31 @@ export default function CommanderDashboardPage() {
                 onClick={() => setSelectedCoy(coy.name)}
                 className={`p-3.5 rounded-lg border transition-all cursor-pointer ${
                   selectedCoy === coy.name
-                    ? "border-emerald-500 bg-slate-900 ring-1 ring-emerald-500/50"
-                    : "border-slate-800 bg-[#090D16] hover:bg-slate-850"
+                    ? "border-emerald-500 bg-emerald-50/40 dark:bg-slate-900 ring-1 ring-emerald-500/50"
+                    : "border-slate-200/80 dark:border-slate-800 bg-slate-50/70 hover:bg-slate-100/80 dark:bg-[#090D16] dark:hover:bg-slate-850"
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-semibold text-white">{coy.name}</span>
+                  <span className="text-xs font-semibold text-slate-900 dark:text-white">{coy.name}</span>
                   <span
                     className={`text-[9px] font-mono font-medium px-1.5 py-0.5 rounded border ${
                       isSevere
-                        ? "bg-rose-950/50 text-rose-300 border-rose-800/60"
+                        ? "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/50 dark:text-rose-300 dark:border-rose-800/60"
                         : isElevated
-                        ? "bg-amber-950/50 text-amber-300 border-amber-800/60"
-                        : "bg-emerald-950/50 text-emerald-300 border-emerald-800/60"
+                        ? "bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-800/60"
+                        : "bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800/60"
                     }`}
                   >
                     {coy.stress}
                   </span>
                 </div>
-                <div className="text-[11px] text-slate-300 font-mono">
+                <div className="text-[11px] text-slate-700 dark:text-slate-300 font-mono">
                   {coy.strength} {isHi ? "सैनिक" : "Personnel"}
                 </div>
-                <div className="text-[10px] text-slate-400 mt-1 truncate">
+                <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 truncate">
                   {coy.location}
                 </div>
-                <div className="mt-2 text-[9px] font-mono font-medium text-emerald-400">
+                <div className="mt-2 text-[9px] font-mono font-medium text-emerald-600 dark:text-emerald-400">
                   ● {coy.status}
                 </div>
               </div>
@@ -174,15 +174,15 @@ export default function CommanderDashboardPage() {
       </div>
 
       {/* Tactical Advisory Panel */}
-      <div className="rounded-xl border border-slate-800 bg-[#0F172A]/90 p-5 shadow-xs space-y-3">
+      <div className="rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0F172A]/90 p-5 shadow-xs space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Zap className="h-4 w-4 text-emerald-400" />
-            <h3 className="text-sm font-bold text-[#F8FAFC]">
+            <Zap className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            <h3 className="text-sm font-bold text-slate-900 dark:text-[#F8FAFC]">
               {isHi ? "सामरिक कल्याण सिफ़ारिशें एवं कमान सलाह" : "Tactical Welfare Advisories"}
             </h3>
           </div>
-          <span className="text-[10px] font-mono text-slate-400">
+          <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400">
             {isHi ? "संचालन डेटा आधारित" : "Operational Decision Support"}
           </span>
         </div>
@@ -191,15 +191,15 @@ export default function CommanderDashboardPage() {
           {MOCK_EXECUTIVE_INSIGHTS.map((insight) => (
             <div
               key={insight.id}
-              className="p-3.5 rounded-lg border border-slate-800 bg-[#090D16] space-y-1"
+              className="p-3.5 rounded-lg border border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-[#090D16] space-y-1"
             >
-              <span className="text-[10px] font-mono font-medium uppercase text-emerald-400">
+              <span className="text-[10px] font-mono font-medium uppercase text-emerald-600 dark:text-emerald-400">
                 ● {insight.category}
               </span>
-              <h4 className="text-xs font-semibold text-white">
+              <h4 className="text-xs font-semibold text-slate-900 dark:text-white">
                 {insight.title}
               </h4>
-              <p className="text-[11px] text-slate-400 leading-snug">
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-snug">
                 {insight.description}
               </p>
             </div>

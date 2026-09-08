@@ -91,12 +91,12 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-slate-800 bg-[#090D16]/90 px-4 sm:px-6 backdrop-blur-md transition-colors">
+      <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-[#090D16]/90 px-4 sm:px-6 backdrop-blur-md transition-colors">
         {/* Left Side: Mobile Hamburger, Back Button & Breadcrumb */}
         <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={onMobileMenuToggle}
-            className="md:hidden rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white focus:outline-none transition-colors"
+            className="md:hidden rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white focus:outline-hidden transition-colors"
             aria-label="Open mobile menu"
           >
             <Menu className="h-5 w-5" />
@@ -105,22 +105,22 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
           {/* Navigation Back Button */}
           <button
             onClick={() => router.back()}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-800 bg-[#0F172A] text-slate-300 hover:bg-slate-800 hover:text-white transition-colors text-xs font-medium"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors text-xs font-medium shadow-xs"
             title="Go back to previous screen"
           >
-            <ChevronLeft className="h-4 w-4 text-emerald-400" />
+            <ChevronLeft className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             <span className="hidden sm:inline">Back</span>
           </button>
 
           <div className="flex flex-col ml-1">
-            <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-400">
-              <span className="font-semibold text-emerald-400 font-mono">
+            <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-500 dark:text-slate-400">
+              <span className="font-semibold text-emerald-600 dark:text-emerald-400 font-mono">
                 {force}
               </span>
-              <span className="text-slate-600">/</span>
-              <span className="text-slate-400">{breadcrumb.section}</span>
+              <span className="text-slate-300 dark:text-slate-600">/</span>
+              <span className="text-slate-600 dark:text-slate-400">{breadcrumb.section}</span>
             </div>
-            <h1 className="text-sm sm:text-base font-bold text-[#F8FAFC] tracking-tight truncate max-w-[200px] sm:max-w-none">
+            <h1 className="text-sm sm:text-base font-bold text-slate-900 dark:text-[#F8FAFC] tracking-tight truncate max-w-[200px] sm:max-w-none">
               {breadcrumb.title}
             </h1>
           </div>
@@ -132,20 +132,20 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
           <div className="relative">
             <button
               onClick={() => setForceMenuOpen(!forceMenuOpen)}
-              className="flex items-center gap-1.5 rounded-lg border border-slate-800 bg-[#0F172A] px-2.5 py-1.5 text-xs font-medium text-slate-200 hover:bg-slate-800 hover:border-slate-700 transition-all shadow-xs"
+              className="flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] px-2.5 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-all shadow-xs"
               title="Select Force Branch (CRPF, BSF, ITBP, CISF, Army, Police)"
             >
-              <Layers className="h-3.5 w-3.5 text-emerald-400" />
+              <Layers className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
               <span className="font-mono text-[11px] font-semibold">{force}</span>
               <ChevronDown className="h-3 w-3 text-slate-400" />
             </button>
 
             {forceMenuOpen && (
               <div
-                className="absolute right-0 mt-2 w-64 rounded-xl border border-slate-800 bg-[#0F172A] p-1.5 shadow-2xl z-50 animate-in fade-in zoom-in-95"
+                className="absolute right-0 mt-2 w-64 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-1.5 shadow-xl z-50 animate-in fade-in zoom-in-95"
                 onMouseLeave={() => setForceMenuOpen(false)}
               >
-                <div className="px-2.5 py-1 text-[10px] font-mono font-semibold uppercase tracking-wider text-slate-400">
+                <div className="px-2.5 py-1 text-[10px] font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Select Uniformed Service
                 </div>
                 {forcesList.map((f) => (
@@ -154,15 +154,15 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                     onClick={() => handleForceSwitch(f.id)}
                     className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs transition-colors ${
                       force === f.id
-                        ? "bg-slate-800 text-emerald-400 font-semibold"
-                        : "text-slate-300 hover:bg-slate-800/60 hover:text-white"
+                        ? "bg-emerald-50 dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 font-semibold"
+                        : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
                     <div className="text-left">
                       <span className="block font-semibold">{f.name}</span>
-                      <span className="text-[10px] text-slate-400">{f.full}</span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400">{f.full}</span>
                     </div>
-                    {force === f.id && <span className="text-emerald-400 text-xs font-bold font-mono">✓</span>}
+                    {force === f.id && <span className="text-emerald-600 dark:text-emerald-400 text-xs font-bold font-mono">✓</span>}
                   </button>
                 ))}
               </div>
@@ -172,7 +172,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
           {/* Bilingual Language Switcher (EN / हिन्दी) */}
           <button
             onClick={toggleLang}
-            className="flex items-center gap-1 rounded-lg border border-slate-800 bg-[#0F172A] px-2.5 py-1.5 text-xs font-medium text-slate-200 hover:bg-slate-800 hover:border-slate-700 transition-all shadow-xs"
+            className="flex items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] px-2.5 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-all shadow-xs"
             title="Toggle Language (English / हिन्दी)"
           >
             <Languages className="h-3.5 w-3.5 text-slate-400" />
@@ -182,30 +182,40 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
           {/* Quick Search Button */}
           <button
             onClick={() => setSearchOpen(true)}
-            className="hidden sm:flex items-center gap-2 rounded-lg border border-slate-800 bg-[#0F172A] px-3 py-1.5 text-xs text-slate-400 hover:border-slate-700 hover:text-slate-200 transition-all shadow-xs"
+            className="hidden sm:flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] px-3 py-1.5 text-xs text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700 hover:text-slate-900 dark:hover:text-slate-200 transition-all shadow-xs"
             title="Global Quick Search (Ctrl+K)"
           >
             <Search className="h-3.5 w-3.5 text-slate-400" />
             <span className="hidden lg:inline text-[11px]">Search records...</span>
-            <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[9px] font-mono text-slate-300 border border-slate-700">
+            <span className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[9px] font-mono text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
               Ctrl K
             </span>
           </button>
 
-          {/* Theme Toggle */}
+          {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors"
-            title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            className="flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] px-2.5 py-1.5 text-xs text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-all shadow-xs"
+            title={theme === "dark" ? "Dark mode active — click for light mode" : "Light mode active — click for dark mode"}
             aria-label="Toggle theme"
           >
-            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            {theme === "dark" ? (
+              <>
+                <Sun className="h-3.5 w-3.5 text-amber-400 transition-transform rotate-0" />
+                <span className="hidden md:inline font-mono text-[10px] font-medium text-slate-300">Dark</span>
+              </>
+            ) : (
+              <>
+                <Moon className="h-3.5 w-3.5 text-blue-600 transition-transform -rotate-12" />
+                <span className="hidden md:inline font-mono text-[10px] font-medium text-slate-700">Light</span>
+              </>
+            )}
           </button>
 
           {/* Notifications Bell */}
           <Link
             href="/alerts"
-            className="relative rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors"
+            className="relative rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition-colors"
             title="Welfare Alerts & Notifications"
           >
             <Bell className="h-4 w-4" />
@@ -219,39 +229,39 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
           <div className="relative">
             <button
               onClick={() => setProfileOpen(!profileOpen)}
-              className="flex items-center gap-2 rounded-lg p-1 px-2 border border-slate-800 bg-[#0F172A] hover:bg-slate-800 transition-colors focus:outline-none"
+              className="flex items-center gap-2 rounded-lg p-1 px-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors focus:outline-hidden shadow-xs"
               aria-label="User profile menu"
             >
-              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-600 text-[#090D16] font-mono font-bold text-xs shadow-xs">
+              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-600 text-white font-mono font-bold text-xs shadow-xs">
                 {user.name.charAt(0)}
               </div>
               <div className="hidden md:flex flex-col text-left leading-none">
-                <span className="text-xs font-semibold text-[#F8FAFC] truncate max-w-[90px]">{user.name}</span>
-                <span className="text-[9px] text-emerald-400 font-mono uppercase mt-0.5">{role.replace("_", " ")}</span>
+                <span className="text-xs font-semibold text-slate-900 dark:text-[#F8FAFC] truncate max-w-[90px]">{user.name}</span>
+                <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-mono uppercase mt-0.5">{role.replace("_", " ")}</span>
               </div>
               <ChevronDown className="h-3 w-3 text-slate-400" />
             </button>
 
             {profileOpen && (
               <div
-                className="absolute right-0 mt-2 w-60 rounded-xl border border-slate-800 bg-[#0F172A] p-1.5 shadow-2xl z-50 animate-in fade-in zoom-in-95"
+                className="absolute right-0 mt-2 w-60 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-1.5 shadow-xl z-50 animate-in fade-in zoom-in-95"
                 onMouseLeave={() => setProfileOpen(false)}
               >
-                <div className="px-3 py-2 border-b border-slate-800 mb-1">
-                  <p className="text-xs font-bold text-[#F8FAFC]">{user.name}</p>
-                  <p className="text-[10px] text-slate-400 font-mono truncate">{user.email}</p>
+                <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-800 mb-1">
+                  <p className="text-xs font-bold text-slate-900 dark:text-[#F8FAFC]">{user.name}</p>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono truncate">{user.email}</p>
                   <div className="mt-1 flex items-center gap-1.5">
-                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-800 text-emerald-400 border border-slate-700 uppercase">
+                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 uppercase">
                       {user.role}
                     </span>
-                    <span className="text-[9px] text-slate-400 font-mono">{force}</span>
+                    <span className="text-[9px] text-slate-500 dark:text-slate-400 font-mono">{force}</span>
                   </div>
                 </div>
 
                 <Link
                   href="/settings"
                   onClick={() => setProfileOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-300 rounded-lg hover:bg-slate-800 hover:text-white transition-colors"
+                  className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors"
                 >
                   <Sliders className="h-3.5 w-3.5 text-slate-400" />
                   <span>Profile & Settings</span>
@@ -260,7 +270,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                 <Link
                   href="/privacy"
                   onClick={() => setProfileOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-300 rounded-lg hover:bg-slate-800 hover:text-white transition-colors"
+                  className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors"
                 >
                   <ShieldCheck className="h-3.5 w-3.5 text-slate-400" />
                   <span>Privacy Protocol</span>
@@ -269,17 +279,17 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                 <Link
                   href="/personnel/support"
                   onClick={() => setProfileOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-300 rounded-lg hover:bg-slate-800 hover:text-white transition-colors"
+                  className="flex items-center gap-2.5 px-3 py-2 text-xs text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors"
                 >
                   <HelpCircle className="h-3.5 w-3.5 text-slate-400" />
                   <span>Help & Helpline</span>
                 </Link>
 
-                <div className="my-1 border-t border-slate-800" />
+                <div className="my-1 border-t border-slate-100 dark:border-slate-800" />
 
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-rose-400 rounded-lg hover:bg-rose-950/40 hover:text-rose-300 transition-colors"
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-rose-600 dark:text-rose-400 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-700 dark:hover:text-rose-300 transition-colors"
                 >
                   <LogOut className="h-3.5 w-3.5" />
                   <span>Sign Out (Switch Account)</span>

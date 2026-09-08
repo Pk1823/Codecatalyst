@@ -8,14 +8,18 @@ import { AuthService } from "@/services/auth.service";
 export type ForceType = "CRPF" | "BSF" | "ITBP" | "CISF" | "ARMY" | "STATE_POLICE";
 export type LanguageType = "en" | "hi";
 
+export type ThemeMode = "light" | "dark" | "system";
+
 interface ThemeContextType {
-  theme: "light" | "dark";
+  theme: ThemeMode;
+  resolvedTheme: "light" | "dark";
   toggleTheme: () => void;
-  setTheme: (t: "light" | "dark") => void;
+  setTheme: (t: ThemeMode) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: "light",
+  theme: "dark",
+  resolvedTheme: "dark",
   toggleTheme: () => {},
   setTheme: () => {},
 });
@@ -67,22 +71,48 @@ export const useToast = () => useContext(ToastContext);
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
-  const [theme, setThemeState] = useState<"light" | "dark">("light");
+  const [theme, setThemeState] = useState<ThemeMode>("dark");
+  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("dark");
   const [user, setUser] = useState<User>(AuthService.getCurrentUser());
   const [force, setForceState] = useState<ForceType>("CRPF");
   const [lang, setLangState] = useState<LanguageType>("en");
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
-  useEffect(() => {
-    // Load theme preference
-    const savedTheme = localStorage.getItem("missionwell_theme") as "light" | "dark" | null;
-    const initialTheme = savedTheme || "light";
-    setThemeState(initialTheme);
-    if (initialTheme === "dark") {
+  const applyTheme = (mode: ThemeMode) => {
+    let effective: "light" | "dark" = "dark";
+    if (mode === "system") {
+      effective = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    } else {
+      effective = mode;
+    }
+
+    setResolvedTheme(effective);
+    if (effective === "dark") {
       document.documentElement.classList.add("dark");
+      document.documentElement.setAttribute("data-theme", "dark");
+      document.documentElement.style.colorScheme = "dark";
     } else {
       document.documentElement.classList.remove("dark");
+      document.documentElement.setAttribute("data-theme", "light");
+      document.documentElement.style.colorScheme = "light";
     }
+  };
+
+  useEffect(() => {
+    // Load theme preference
+    const savedTheme = localStorage.getItem("missionwell_theme") as ThemeMode | null;
+    const initialTheme: ThemeMode = savedTheme || "dark";
+    setThemeState(initialTheme);
+    applyTheme(initialTheme);
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleSystemThemeChange = () => {
+      const current = localStorage.getItem("missionwell_theme") as ThemeMode | null;
+      if (current === "system") {
+        applyTheme("system");
+      }
+    };
+    mediaQuery.addEventListener("change", handleSystemThemeChange);
 
     // Load saved force preference
     const savedForce = localStorage.getItem("missionwell_force") as ForceType | null;
@@ -100,21 +130,20 @@ export function Providers({ children }: { children: React.ReactNode }) {
     };
 
     window.addEventListener("missionwell_auth_changed", handleAuthChange);
-    return () => window.removeEventListener("missionwell_auth_changed", handleAuthChange);
+    return () => {
+      mediaQuery.removeEventListener("change", handleSystemThemeChange);
+      window.removeEventListener("missionwell_auth_changed", handleAuthChange);
+    };
   }, []);
 
-  const setTheme = (newTheme: "light" | "dark") => {
+  const setTheme = (newTheme: ThemeMode) => {
     setThemeState(newTheme);
     localStorage.setItem("missionwell_theme", newTheme);
-    if (newTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    applyTheme(newTheme);
   };
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
   };
 
   const setForce = (f: ForceType) => {
@@ -167,7 +196,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
+      <ThemeContext.Provider value={{ theme, resolvedTheme, toggleTheme, setTheme }}>
         <AuthContext.Provider
           value={{
             user,

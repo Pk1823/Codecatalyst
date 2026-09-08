@@ -86,42 +86,42 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   const getRoleLabel = () => {
     switch (role) {
       case "PERSONNEL":
-        return { label: "Jawan / Soldier", color: "text-blue-400 bg-blue-500/10 border-blue-500/20" };
+        return { label: "Jawan / Soldier", color: "text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/20" };
       case "COMMANDER":
-        return { label: "Tactical Commander", color: "text-amber-400 bg-amber-500/10 border-amber-500/20" };
+        return { label: "Tactical Commander", color: "text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20" };
       case "ADMIN":
-        return { label: "System Administrator", color: "text-purple-400 bg-purple-500/10 border-purple-500/20" };
+        return { label: "System Administrator", color: "text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-purple-500/10 border-purple-200 dark:border-purple-500/20" };
       default:
-        return { label: "Welfare Officer", color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" };
+        return { label: "Welfare Officer", color: "text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20" };
     }
   };
 
   const roleInfo = getRoleLabel();
 
   const sidebarContent = (
-    <div className="flex h-full flex-col justify-between overflow-y-auto bg-[#090D16] text-slate-100 border-r border-slate-800/80 transition-all duration-300">
+    <div className="flex h-full flex-col justify-between overflow-y-auto bg-white dark:bg-[#090D16] text-slate-800 dark:text-slate-100 border-r border-slate-200 dark:border-slate-800/80 transition-all duration-300">
       {/* Brand Header */}
       <div>
-        <div className="flex h-16 items-center justify-between px-4 border-b border-slate-800/80">
+        <div className="flex h-16 items-center justify-between px-4 border-b border-slate-200 dark:border-slate-800/80">
           <Link
             href="/"
             onClick={onMobileClose}
-            className="flex items-center gap-3 overflow-hidden group focus:outline-none"
+            className="flex items-center gap-3 overflow-hidden group focus:outline-hidden"
           >
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-[#090D16] font-bold">
-              <Shield className="h-4 w-4 text-[#090D16]" />
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-white font-bold shadow-xs">
+              <Shield className="h-4 w-4 text-white" />
             </div>
             {!collapsed && (
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-bold text-sm tracking-tight text-[#F8FAFC]">
-                    MissionWell <span className="text-emerald-400 font-mono text-xs">AI</span>
+                  <span className="font-bold text-sm tracking-tight text-slate-900 dark:text-[#F8FAFC]">
+                    MissionWell <span className="text-emerald-600 dark:text-emerald-400 font-mono text-xs">AI</span>
                   </span>
-                  <span className="rounded bg-slate-800 px-1.5 py-0.2 text-[9px] font-mono font-semibold text-slate-300 border border-slate-700">
+                  <span className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.2 text-[9px] font-mono font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                     {force}
                   </span>
                 </div>
-                <span className="text-[9px] uppercase font-semibold tracking-wider text-slate-400">
+                <span className="text-[9px] uppercase font-semibold tracking-wider text-slate-500 dark:text-slate-400">
                   {isHi ? "सशस्त्र बल कल्याण खुफिया" : "Welfare Intelligence"}
                 </span>
               </div>
@@ -129,7 +129,7 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
           </Link>
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="hidden md:flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors"
+            className="hidden md:flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
@@ -163,21 +163,23 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
                 className={cn(
                   "group flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium transition-all duration-150 relative",
                   isActive
-                    ? "bg-slate-800/90 text-white font-semibold border-l-2 border-emerald-500 shadow-xs"
-                    : "text-slate-300 hover:bg-slate-800/50 hover:text-white",
+                    ? "bg-emerald-50 text-emerald-800 font-semibold border-l-2 border-emerald-600 shadow-xs dark:bg-slate-800/90 dark:text-white dark:border-emerald-500"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800/50 dark:hover:text-white",
                   collapsed && "justify-center px-2 border-l-0"
                 )}
               >
                 <Icon
                   className={cn(
                     "h-4 w-4 shrink-0 transition-colors",
-                    isActive ? "text-emerald-400" : "text-slate-400 group-hover:text-slate-200"
+                    isActive
+                      ? "text-emerald-600 dark:text-emerald-400"
+                      : "text-slate-400 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200"
                   )}
                 />
                 {!collapsed && (
                   <div className="flex-1 min-w-0">
                     <span className="truncate block leading-tight">{item.name}</span>
-                    <span className="text-[9px] text-slate-400 group-hover:text-slate-300 block truncate leading-none mt-0.5 font-mono">
+                    <span className="text-[9px] text-slate-400 group-hover:text-slate-600 dark:text-slate-400 dark:group-hover:text-slate-300 block truncate leading-none mt-0.5 font-mono">
                       {item.sub}
                     </span>
                   </div>
@@ -189,14 +191,14 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
       </div>
 
       {/* Force Welfare Helpline & Telemetry Status */}
-      <div className="p-3 border-t border-slate-800/80 bg-[#090D16] space-y-2">
+      <div className="p-3 border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-[#090D16] space-y-2">
         {!collapsed ? (
           <>
-            <div className="rounded-lg bg-[#0F172A] border border-slate-800 p-2.5 text-[10px] text-slate-300 flex items-center gap-2.5">
-              <PhoneCall className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+            <div className="rounded-lg bg-white dark:bg-[#0F172A] border border-slate-200 dark:border-slate-800 p-2.5 text-[10px] text-slate-700 dark:text-slate-300 flex items-center gap-2.5 shadow-xs">
+              <PhoneCall className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
               <div>
-                <span className="font-semibold block text-slate-200">24x7 Force Helpline</span>
-                <span className="text-emerald-400 font-mono text-[11px] font-medium">14416 / 1800-599-0019</span>
+                <span className="font-semibold block text-slate-800 dark:text-slate-200">24x7 Force Helpline</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-mono text-[11px] font-medium">14416 / 1800-599-0019</span>
               </div>
             </div>
 

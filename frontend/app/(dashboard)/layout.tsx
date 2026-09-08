@@ -13,7 +13,7 @@ export default function DashboardLayout({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#090D16] text-slate-100 flex flex-col transition-colors font-sans">
+    <div className="min-h-screen bg-slate-50/80 dark:bg-[#090D16] text-slate-900 dark:text-slate-100 flex flex-col transition-colors duration-200 font-sans">
       <div className="flex flex-1 relative">
         <Sidebar
           mobileOpen={mobileMenuOpen}

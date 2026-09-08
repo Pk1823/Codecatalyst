@@ -21,8 +21,11 @@ import {
   Sparkles,
   Mail,
   CheckCircle2,
+  Sun,
+  Moon,
+  Laptop,
 } from "lucide-react";
-import { useAuth, ForceType, useToast } from "@/components/providers";
+import { useAuth, ForceType, useToast, useTheme } from "@/components/providers";
 import { UserRole } from "@/types/auth";
 import { FORCES_METADATA } from "@/lib/force-metadata";
 import { AuthService } from "@/services/auth.service";
@@ -32,6 +35,7 @@ type AuthTab = "credentials" | "google" | "personas";
 export default function LoginPage() {
   const router = useRouter();
   const { switchRole, force, setForce, lang, toggleLang } = useAuth();
+  const { theme, resolvedTheme, setTheme } = useTheme();
   const { toast } = useToast();
 
   const [authTab, setAuthTab] = useState<AuthTab>("credentials");
@@ -218,38 +222,61 @@ export default function LoginPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#090D16] text-slate-100 flex flex-col justify-between p-4 sm:p-6 font-sans">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#090D16] text-slate-900 dark:text-slate-100 flex flex-col justify-between p-4 sm:p-6 font-sans transition-colors duration-200">
       {/* Top Bar */}
       <header className="max-w-2xl w-full mx-auto flex items-center justify-between py-2">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"
         >
-          <ChevronLeft className="h-4 w-4 text-emerald-400" />
+          <ChevronLeft className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
           <span>{isHi ? "मुख्य पृष्ठ" : "Back to Home"}</span>
         </Link>
 
-        <button
-          onClick={toggleLang}
-          className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-[#0F172A] border border-slate-800 text-xs font-mono font-medium text-slate-300 hover:bg-slate-800 transition-colors"
-        >
-          <Languages className="h-3.5 w-3.5 text-slate-400" />
-          <span>{isHi ? "EN" : "हिन्दी"}</span>
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Quick Theme Switcher */}
+          <button
+            type="button"
+            onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-[#0F172A] border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shadow-xs transition-colors"
+            title={`Active: ${resolvedTheme}. Click to switch theme.`}
+            aria-label="Toggle theme appearance"
+          >
+            {resolvedTheme === "dark" ? (
+              <>
+                <Sun className="h-3.5 w-3.5 text-amber-400" />
+                <span className="hidden sm:inline">Light</span>
+              </>
+            ) : (
+              <>
+                <Moon className="h-3.5 w-3.5 text-blue-500" />
+                <span className="hidden sm:inline">Dark</span>
+              </>
+            )}
+          </button>
+
+          <button
+            onClick={toggleLang}
+            className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-[#0F172A] border border-slate-200 dark:border-slate-800 text-xs font-mono font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 shadow-xs transition-colors"
+          >
+            <Languages className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
+            <span>{isHi ? "EN" : "हिन्दी"}</span>
+          </button>
+        </div>
       </header>
 
       {/* Main Centered Sign-In Card */}
       <div className="max-w-2xl w-full mx-auto my-auto py-4">
-        <div className="rounded-xl border border-slate-800 bg-[#0F172A] p-6 sm:p-8 shadow-2xl space-y-6">
+        <div className="rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-6 sm:p-8 shadow-xl dark:shadow-2xl space-y-6">
           {/* Header */}
           <div className="text-center space-y-2">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-[#090D16] mx-auto font-bold shadow-lg shadow-emerald-900/30">
-              <Shield className="h-6 w-6 text-[#090D16]" />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white mx-auto font-bold shadow-lg shadow-emerald-500/20 dark:shadow-emerald-900/30">
+              <Shield className="h-6 w-6 text-white" />
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-[#F8FAFC] tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-[#F8FAFC] tracking-tight">
               {isHi ? "सुरक्षित आधिकारिक लॉगिन" : "Authorized Defense & Welfare Sign In"}
             </h1>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               {isHi
                 ? "सशस्त्र बल कल्याण एवं तत्परता खुफिया कमान • डेटाबेस प्रमाणित"
                 : "Predictive Personnel Stress & Welfare Monitoring System • Database Verified"}
@@ -257,7 +284,7 @@ export default function LoginPage() {
           </div>
 
           {/* Authentication Mode Tabs */}
-          <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-[#090D16] border border-slate-800 text-xs font-semibold">
+          <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-[#090D16] border border-slate-200 dark:border-slate-800 text-xs font-semibold">
             <button
               type="button"
               onClick={() => {
@@ -266,8 +293,8 @@ export default function LoginPage() {
               }}
               className={`py-2 px-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
                 authTab === "credentials"
-                  ? "bg-emerald-600 text-[#090D16] font-bold shadow-xs"
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-emerald-600 text-white font-bold shadow-xs"
+                  : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
               }`}
             >
               <KeyRound className="h-3.5 w-3.5" />
@@ -282,8 +309,8 @@ export default function LoginPage() {
               }}
               className={`py-2 px-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
                 authTab === "google"
-                  ? "bg-emerald-600 text-[#090D16] font-bold shadow-xs"
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-emerald-600 text-white font-bold shadow-xs"
+                  : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
               }`}
             >
               <Mail className="h-3.5 w-3.5" />
@@ -298,18 +325,18 @@ export default function LoginPage() {
               }}
               className={`py-2 px-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
                 authTab === "personas"
-                  ? "bg-emerald-600 text-[#090D16] font-bold shadow-xs"
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-emerald-600 text-white font-bold shadow-xs"
+                  : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
               }`}
             >
-              <Sparkles className="h-3.5 w-3.5 text-amber-300" />
+              <Sparkles className="h-3.5 w-3.5 text-amber-500 dark:text-amber-300" />
               <span className="truncate">{isHi ? "1-क्लिक टेस्ट" : "1-Click Persona"}</span>
             </button>
           </div>
 
           {/* Error Message */}
           {errorMsg && (
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs">
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs">
               <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{errorMsg}</span>
             </div>
@@ -317,7 +344,7 @@ export default function LoginPage() {
 
           {/* Force Branch Selector (Available on all tabs) */}
           <div className="space-y-1.5">
-            <label className="block text-[11px] font-mono font-medium uppercase tracking-wider text-slate-400">
+            <label className="block text-[11px] font-mono font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
               {isHi ? "1. सेवा शाखा चुनें" : "1. Select Uniformed Service Branch"}
             </label>
             <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
@@ -337,8 +364,8 @@ export default function LoginPage() {
                   onClick={() => handleForceChange(f.id)}
                   className={`py-1.5 px-2 rounded-lg text-xs font-mono font-medium border transition-all text-center ${
                     selectedForce === f.id
-                      ? "bg-emerald-600 text-[#090D16] font-bold border-emerald-500 shadow-xs"
-                      : "bg-[#090D16] border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-white"
+                      ? "bg-emerald-600 text-white font-bold border-emerald-500 shadow-xs"
+                      : "bg-slate-50 dark:bg-[#090D16] border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
                   }`}
                 >
                   {f.label}
@@ -352,7 +379,7 @@ export default function LoginPage() {
             <form onSubmit={handleSignInWithCredentials} className="space-y-5">
               {/* Role Selection */}
               <div className="space-y-1.5">
-                <label className="block text-[11px] font-mono font-medium uppercase tracking-wider text-slate-400">
+                <label className="block text-[11px] font-mono font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   {isHi ? "2. प्राधिकृत भूमिका चुनें" : "2. Select Authorization Level"}
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -367,12 +394,12 @@ export default function LoginPage() {
                         className={`p-3 rounded-lg border text-left transition-all flex items-center gap-2.5 ${
                           isSelected
                             ? "border-emerald-500 bg-emerald-500/10 ring-1 ring-emerald-500/40"
-                            : "border-slate-800 bg-[#090D16] hover:bg-slate-800/60"
+                            : "border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090D16] hover:bg-slate-100 dark:hover:bg-slate-800/60"
                         }`}
                       >
                         <div
                           className={`p-2 rounded-md shrink-0 ${
-                            isSelected ? "bg-emerald-500 text-[#090D16]" : "bg-slate-800 text-slate-400"
+                            isSelected ? "bg-emerald-500 text-white" : "bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400"
                           }`}
                         >
                           <RIcon className="h-4 w-4" />
@@ -380,12 +407,12 @@ export default function LoginPage() {
                         <div className="min-w-0">
                           <p
                             className={`text-xs font-bold truncate ${
-                              isSelected ? "text-emerald-300" : "text-white"
+                              isSelected ? "text-emerald-700 dark:text-emerald-300" : "text-slate-900 dark:text-white"
                             }`}
                           >
                             {r.title}
                           </p>
-                          <p className="text-[10px] text-slate-400 font-mono truncate mt-0.5">
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono truncate mt-0.5">
                             {r.badge}
                           </p>
                         </div>
@@ -396,10 +423,10 @@ export default function LoginPage() {
               </div>
 
               {/* Quick Fill Demo Credentials */}
-              <div className="p-2.5 rounded-lg border border-slate-800 bg-[#090D16]/60">
-                <div className="flex items-center justify-between text-[11px] text-slate-400 mb-2">
+              <div className="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090D16]/60">
+                <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 mb-2">
                   <span className="font-mono">{isHi ? "त्वरित डेटाबेस परीक्षण क्रेडेंशियल्स:" : "Quick Database Test Credentials:"}</span>
-                  <span className="text-emerald-400 font-mono text-[10px]">Pass: demo123</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-mono text-[10px]">Pass: demo123</span>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
                   <button
@@ -409,7 +436,7 @@ export default function LoginPage() {
                       setServiceId("MED-DIR-0881");
                       setPassword("demo123");
                     }}
-                    className="px-2 py-1 rounded-md bg-slate-800/70 border border-slate-700 text-[10px] text-slate-300 hover:text-emerald-300 hover:border-emerald-500 truncate"
+                    className="px-2 py-1 rounded-md bg-white dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 text-[10px] text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-300 hover:border-emerald-500 truncate shadow-2xs"
                   >
                     Dr. Aarti (Welfare)
                   </button>
@@ -420,7 +447,7 @@ export default function LoginPage() {
                       setServiceId("CMD-SECTOR-01");
                       setPassword("demo123");
                     }}
-                    className="px-2 py-1 rounded-md bg-slate-800/70 border border-slate-700 text-[10px] text-slate-300 hover:text-emerald-300 hover:border-emerald-500 truncate"
+                    className="px-2 py-1 rounded-md bg-white dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 text-[10px] text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-300 hover:border-emerald-500 truncate shadow-2xs"
                   >
                     Col. Vikram (Cmd)
                   </button>
@@ -431,7 +458,7 @@ export default function LoginPage() {
                       setServiceId("CRPF-GD-2021-04128");
                       setPassword("demo123");
                     }}
-                    className="px-2 py-1 rounded-md bg-slate-800/70 border border-slate-700 text-[10px] text-slate-300 hover:text-emerald-300 hover:border-emerald-500 truncate"
+                    className="px-2 py-1 rounded-md bg-white dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 text-[10px] text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-300 hover:border-emerald-500 truncate shadow-2xs"
                   >
                     Ct. Rawat (Jawan)
                   </button>
@@ -442,7 +469,7 @@ export default function LoginPage() {
                       setServiceId("NIC-SYS-9940");
                       setPassword("demo123");
                     }}
-                    className="px-2 py-1 rounded-md bg-slate-800/70 border border-slate-700 text-[10px] text-slate-300 hover:text-emerald-300 hover:border-emerald-500 truncate"
+                    className="px-2 py-1 rounded-md bg-white dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 text-[10px] text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-300 hover:border-emerald-500 truncate shadow-2xs"
                   >
                     Sh. Patel (Admin)
                   </button>
@@ -452,43 +479,43 @@ export default function LoginPage() {
               {/* Credentials Input Fields */}
               <div className="space-y-3 pt-1">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5 font-mono">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 font-mono">
                     {isHi ? "आधिकारिक सर्विस नंबर / ईमेल" : "Service Number / Official Email"}
                   </label>
                   <div className="relative">
-                    <Building2 className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
+                    <Building2 className="absolute left-3 top-2.5 h-4 w-4 text-slate-400 dark:text-slate-500" />
                     <input
                       type="text"
                       value={serviceId}
                       onChange={(e) => setServiceId(e.target.value)}
                       required
                       placeholder="e.g. CRPF-GD-2021-04128 or rawat.piyush@crpf.gov.in"
-                      className="w-full rounded-lg border border-slate-800 bg-[#090D16] pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-emerald-500 font-mono"
+                      className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090D16] pl-9 pr-3 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:border-emerald-500 font-mono shadow-2xs"
                     />
                   </div>
                 </div>
 
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-xs font-semibold text-slate-300 font-mono">
+                    <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 font-mono">
                       {isHi ? "सुरक्षा पासवर्ड / पिन" : "Security Password / Passcode"}
                     </label>
                     <span className="text-[10px] text-slate-500 font-mono">Default: demo123</span>
                   </div>
                   <div className="relative">
-                    <KeyRound className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
+                    <KeyRound className="absolute left-3 top-2.5 h-4 w-4 text-slate-400 dark:text-slate-500" />
                     <input
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       placeholder="••••••••••••"
-                      className="w-full rounded-lg border border-slate-800 bg-[#090D16] pl-9 pr-10 py-2 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-emerald-500 font-mono"
+                      className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090D16] pl-9 pr-10 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:border-emerald-500 font-mono shadow-2xs"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-2.5 text-slate-500 hover:text-slate-300"
+                      className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
                     >
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
@@ -497,8 +524,8 @@ export default function LoginPage() {
               </div>
 
               {/* Security Notice */}
-              <div className="p-2.5 rounded-lg border border-slate-800 bg-[#090D16] flex items-center gap-2 text-[11px] text-slate-400">
-                <Lock className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+              <div className="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090D16] flex items-center gap-2 text-[11px] text-slate-600 dark:text-slate-400">
+                <Lock className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                 <span>Zero-trust role boundary. All session access verified via encrypted database JWT.</span>
               </div>
 
@@ -506,7 +533,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full flex items-center justify-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-[#090D16] py-2.5 text-xs font-bold transition-all disabled:opacity-50 shadow-md shadow-emerald-950"
+                className="w-full flex items-center justify-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 text-xs font-bold transition-all disabled:opacity-50 shadow-md shadow-emerald-500/20"
               >
                 <span>
                   {isSubmitting
@@ -525,7 +552,7 @@ export default function LoginPage() {
             <div className="space-y-5">
               {/* Role Selection */}
               <div className="space-y-1.5">
-                <label className="block text-[11px] font-mono font-medium uppercase tracking-wider text-slate-400">
+                <label className="block text-[11px] font-mono font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   {isHi ? "2. खाते की भूमिका निर्धारित करें" : "2. Assign Authorization Level for Gmail Account"}
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -540,12 +567,12 @@ export default function LoginPage() {
                         className={`p-3 rounded-lg border text-left transition-all flex items-center gap-2.5 ${
                           isSelected
                             ? "border-emerald-500 bg-emerald-500/10 ring-1 ring-emerald-500/40"
-                            : "border-slate-800 bg-[#090D16] hover:bg-slate-800/60"
+                            : "border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090D16] hover:bg-slate-100 dark:hover:bg-slate-800/60"
                         }`}
                       >
                         <div
                           className={`p-2 rounded-md shrink-0 ${
-                            isSelected ? "bg-emerald-500 text-[#090D16]" : "bg-slate-800 text-slate-400"
+                            isSelected ? "bg-emerald-500 text-white" : "bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400"
                           }`}
                         >
                           <RIcon className="h-4 w-4" />
@@ -553,12 +580,12 @@ export default function LoginPage() {
                         <div className="min-w-0">
                           <p
                             className={`text-xs font-bold truncate ${
-                              isSelected ? "text-emerald-300" : "text-white"
+                              isSelected ? "text-emerald-700 dark:text-emerald-300" : "text-slate-900 dark:text-white"
                             }`}
                           >
                             {r.title}
                           </p>
-                          <p className="text-[10px] text-slate-400 font-mono truncate mt-0.5">
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono truncate mt-0.5">
                             {r.badge}
                           </p>
                         </div>
@@ -573,7 +600,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={() => handleSignInWithGoogle()}
                 disabled={isSubmitting}
-                className="w-full flex items-center justify-center gap-3 rounded-xl bg-white hover:bg-slate-100 text-slate-900 py-3 text-xs sm:text-sm font-semibold transition-all shadow-md hover:shadow-lg disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-3 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 dark:border-transparent text-slate-800 py-3 text-xs sm:text-sm font-semibold transition-all shadow-xs hover:shadow-md disabled:opacity-50"
               >
                 <svg className="h-4 w-4" viewBox="0 0 24 24">
                   <path
@@ -601,34 +628,34 @@ export default function LoginPage() {
               </button>
 
               <div className="relative flex py-1 items-center">
-                <div className="grow border-t border-slate-800"></div>
+                <div className="grow border-t border-slate-200 dark:border-slate-800"></div>
                 <span className="shrink mx-4 text-[10px] text-slate-500 uppercase font-mono">
                   {isHi ? "या कोई भी Gmail / अन्य खाता दर्ज करें" : "Or enter any Gmail / Other account"}
                 </span>
-                <div className="grow border-t border-slate-800"></div>
+                <div className="grow border-t border-slate-200 dark:border-slate-800"></div>
               </div>
 
               {/* Custom Gmail / Email Input */}
               <div className="space-y-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5 font-mono">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 font-mono">
                     {isHi ? "Gmail अथवा ईमेल पता" : "Gmail or Other Account Address"}
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
+                    <Mail className="absolute left-3 top-2.5 h-4 w-4 text-slate-400 dark:text-slate-500" />
                     <input
                       type="email"
                       value={googleEmail}
                       onChange={(e) => setGoogleEmail(e.target.value)}
                       required
                       placeholder="e.g. officer.sharma@gmail.com or personal@gmail.com"
-                      className="w-full rounded-lg border border-slate-800 bg-[#090D16] pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-emerald-500 font-mono"
+                      className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090D16] pl-9 pr-3 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:border-emerald-500 font-mono shadow-2xs"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5 font-mono">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 font-mono">
                     {isHi ? "अधिकारी / कार्मिक का नाम (वैकल्पिक)" : "Personnel Full Name (Optional)"}
                   </label>
                   <input
@@ -636,7 +663,7 @@ export default function LoginPage() {
                     value={googleName}
                     onChange={(e) => setGoogleName(e.target.value)}
                     placeholder="e.g. Dr. Aarti Sharma"
-                    className="w-full rounded-lg border border-slate-800 bg-[#090D16] px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-emerald-500 font-mono"
+                    className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090D16] px-3 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:border-emerald-500 font-mono shadow-2xs"
                   />
                 </div>
 
@@ -657,8 +684,8 @@ export default function LoginPage() {
                       }}
                       className={`px-2 py-1 rounded text-[10px] font-mono border transition-all ${
                         googleEmail === preset.email
-                          ? "bg-emerald-950/60 border-emerald-500 text-emerald-300"
-                          : "bg-slate-900 border-slate-800 text-slate-400 hover:text-white"
+                          ? "bg-emerald-50 dark:bg-emerald-950/60 border-emerald-500 text-emerald-700 dark:text-emerald-300 font-semibold"
+                          : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white shadow-2xs"
                       }`}
                     >
                       {preset.label}
@@ -672,7 +699,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={() => handleSignInWithGoogle()}
                 disabled={isSubmitting}
-                className="w-full flex items-center justify-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-[#090D16] py-2.5 text-xs font-bold transition-all disabled:opacity-50 shadow-md shadow-emerald-950"
+                className="w-full flex items-center justify-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 text-xs font-bold transition-all disabled:opacity-50 shadow-md shadow-emerald-500/20"
               >
                 <span>
                   {isSubmitting
@@ -693,7 +720,7 @@ export default function LoginPage() {
           {/* TAB 3: 1-CLICK EVALUATION PERSONAS */}
           {authTab === "personas" && (
             <div className="space-y-4">
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 {isHi
                   ? "परीक्षण एवं मूल्यांकन हेतु 1-क्लिक में किसी भी भूमिका के रूप में सीधा प्रवेश करें:"
                   : "Instant evaluator sandbox: Select any official role below to immediately access that portal view:"}
@@ -707,7 +734,7 @@ export default function LoginPage() {
                     name: meta.sampleOfficerName,
                     desc: isHi ? "सक्रिय मामले, तनाव स्कोर व रोटेशन सुझाव" : "Case triage, clinical distress radar & rotation care",
                     icon: UserCheck,
-                    color: "text-emerald-400 border-emerald-800/40 bg-emerald-950/30",
+                    color: "text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/40 bg-emerald-50 dark:bg-emerald-950/30",
                   },
                   {
                     role: "COMMANDER" as UserRole,
@@ -715,7 +742,7 @@ export default function LoginPage() {
                     name: meta.sampleCommanderName,
                     desc: isHi ? "कंपनी-वार रोल-कॉल दबाव एवं हीटमैप" : "Anonymized unit stress heatmap & tactical readiness",
                     icon: Activity,
-                    color: "text-blue-400 border-blue-800/40 bg-blue-950/30",
+                    color: "text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800/40 bg-blue-50 dark:bg-blue-950/30",
                   },
                   {
                     role: "PERSONNEL" as UserRole,
@@ -723,7 +750,7 @@ export default function LoginPage() {
                     name: meta.samplePersonnelName,
                     desc: isHi ? "स्व-मूल्यांकन, बडी-पेयर वॉच व विश्राम सहायता" : "Confidential check-ins, sleep insights & support",
                     icon: HeartPulse,
-                    color: "text-purple-400 border-purple-800/40 bg-purple-950/30",
+                    color: "text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-800/40 bg-purple-50 dark:bg-purple-950/30",
                   },
                   {
                     role: "ADMIN" as UserRole,
@@ -731,7 +758,7 @@ export default function LoginPage() {
                     name: "Sh. R.K. Patel (NIC IT Cell)",
                     desc: isHi ? "डीपीडीपी 2023 शून्य-विश्वास ऑडिट लॉग" : "Zero-trust cryptologs, model governance & RBAC",
                     icon: Sliders,
-                    color: "text-amber-400 border-amber-800/40 bg-amber-950/30",
+                    color: "text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800/40 bg-amber-50 dark:bg-amber-950/30",
                   },
                 ].map((demo) => {
                   const DIcon = demo.icon;
@@ -741,20 +768,20 @@ export default function LoginPage() {
                       type="button"
                       disabled={isSubmitting}
                       onClick={() => handleSignInWithPersona(demo.role)}
-                      className="p-3.5 rounded-xl border border-slate-800 bg-[#090D16] hover:border-emerald-500 hover:bg-emerald-950/20 text-left transition-all flex items-start gap-3 group disabled:opacity-50"
+                      className="p-3.5 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-[#090D16] hover:border-emerald-500 hover:bg-emerald-50/60 dark:hover:bg-emerald-950/20 text-left transition-all flex items-start gap-3 group disabled:opacity-50 shadow-2xs"
                     >
                       <div className={`p-2 rounded-lg border shrink-0 ${demo.color} group-hover:border-emerald-400`}>
                         <DIcon className="h-4 w-4" />
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between">
-                          <p className="text-xs font-bold text-white group-hover:text-emerald-300 truncate">
+                          <p className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-300 truncate">
                             {demo.title}
                           </p>
-                          <ArrowRight className="h-3 w-3 text-slate-500 group-hover:text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <ArrowRight className="h-3 w-3 text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
-                        <p className="text-[11px] text-emerald-400 font-mono truncate mt-0.5">{demo.name}</p>
-                        <p className="text-[10px] text-slate-400 mt-1 leading-relaxed line-clamp-2">
+                        <p className="text-[11px] text-emerald-700 dark:text-emerald-400 font-mono truncate mt-0.5">{demo.name}</p>
+                        <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed line-clamp-2">
                           {demo.desc}
                         </p>
                       </div>
@@ -769,7 +796,7 @@ export default function LoginPage() {
 
       {/* Footer */}
       <footer className="max-w-2xl w-full mx-auto text-center py-2 text-[11px] text-slate-500 font-mono flex items-center justify-between">
-        <span>24x7 Force Helpline: <strong className="text-slate-300 font-medium">14416 / 1800-599-0019</strong></span>
+        <span>24x7 Force Helpline: <strong className="text-slate-700 dark:text-slate-300 font-medium">14416 / 1800-599-0019</strong></span>
         <span>DPDP Act 2023 Compliant • Zero-Trust Guardrails</span>
       </footer>
     </div>

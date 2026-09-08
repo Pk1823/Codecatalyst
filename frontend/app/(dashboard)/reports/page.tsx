@@ -110,18 +110,18 @@ export default function ReportsPage() {
   return (
     <div className="space-y-6">
       {/* Header & Controls */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200/80 dark:border-slate-800 pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-xl font-bold tracking-tight text-white">
+            <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
               Welfare Intelligence & Official Reports
             </h2>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
               <ShieldCheck className="h-3 w-3" />
               DPDP 2023 Compliant
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Official executive briefings, non-punitive workload manifests, and predictive fatigue audits for CRPF & CAPF command.
           </p>
         </div>
@@ -129,18 +129,18 @@ export default function ReportsPage() {
         {/* Global Quick Download Actions */}
         <div className="flex flex-wrap items-center gap-2">
           {liveReportData?.data.unitBreakdown && liveReportData.data.unitBreakdown.length > 0 && (
-            <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1 text-xs">
-              <Building2 className="h-3.5 w-3.5 text-slate-400" />
+            <div className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1 text-xs shadow-xs">
+              <Building2 className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
               <select
                 value={selectedUnit}
                 onChange={(e) => setSelectedUnit(e.target.value)}
-                className="bg-transparent text-slate-300 text-xs focus:outline-hidden"
+                className="bg-transparent text-slate-700 dark:text-slate-300 text-xs focus:outline-hidden"
               >
-                <option value="" className="bg-slate-900 text-slate-300">
+                <option value="" className="bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300">
                   All Battalions / Units
                 </option>
                 {liveReportData.data.unitBreakdown.map((u) => (
-                  <option key={u.id} value={u.id} className="bg-slate-900 text-slate-300">
+                  <option key={u.id} value={u.id} className="bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300">
                     {u.name}
                   </option>
                 ))}
@@ -151,12 +151,12 @@ export default function ReportsPage() {
           <button
             onClick={() => handleDownload("rep-05", "csv", "Sector Monthly Executive Briefing")}
             disabled={downloading !== null}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-800 text-slate-200 text-xs font-medium shadow-xs transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-medium shadow-xs transition-colors disabled:opacity-50"
           >
             {downloading?.id === "rep-05" && downloading?.format === "csv" ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin text-emerald-400" />
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-emerald-600 dark:text-emerald-400" />
             ) : (
-              <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-400" />
+              <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
             )}
             <span>Export Master CSV</span>
           </button>
@@ -178,28 +178,28 @@ export default function ReportsPage() {
 
       {/* Live System Summary Strip */}
       {liveReportData && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-900/40 border border-slate-800/80 rounded-xl p-3.5 text-xs">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white dark:bg-slate-900/40 border border-slate-200/80 dark:border-slate-800/80 rounded-xl p-3.5 text-xs shadow-xs">
           <div>
-            <span className="text-[10px] text-slate-400 uppercase font-mono">Monitored Units</span>
-            <div className="text-base font-bold text-white mt-0.5">
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono">Monitored Units</span>
+            <div className="text-base font-bold text-slate-900 dark:text-white mt-0.5">
               {liveReportData.data.overview.totalUnits} Battalions
             </div>
           </div>
           <div>
-            <span className="text-[10px] text-slate-400 uppercase font-mono">Active Casework</span>
-            <div className="text-base font-bold text-amber-400 mt-0.5">
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono">Active Casework</span>
+            <div className="text-base font-bold text-amber-600 dark:text-amber-400 mt-0.5">
               {liveReportData.data.overview.casesActive} Active Cases
             </div>
           </div>
           <div>
-            <span className="text-[10px] text-slate-400 uppercase font-mono">Resolution Rate</span>
-            <div className="text-base font-bold text-emerald-400 mt-0.5">
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono">Resolution Rate</span>
+            <div className="text-base font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
               {liveReportData.data.overview.resolutionRatePercent}% Closed
             </div>
           </div>
           <div>
-            <span className="text-[10px] text-slate-400 uppercase font-mono">Avg Duty Trajectory</span>
-            <div className="text-base font-bold text-blue-400 mt-0.5">
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono">Avg Duty Trajectory</span>
+            <div className="text-base font-bold text-blue-600 dark:text-blue-400 mt-0.5">
               {liveReportData.data.workloadAverages.avgWeeklyHours}h / week
             </div>
           </div>
@@ -215,11 +215,11 @@ export default function ReportsPage() {
           return (
             <div
               key={r.id}
-              className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 flex flex-col justify-between space-y-4 hover:border-slate-700 transition-colors"
+              className="rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/60 p-5 flex flex-col justify-between space-y-4 hover:border-slate-300 dark:hover:border-slate-700 shadow-xs transition-colors"
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-semibold">
                     {r.category}
                   </span>
                   <span className="text-[10px] text-slate-500 font-mono">
@@ -227,19 +227,19 @@ export default function ReportsPage() {
                   </span>
                 </div>
 
-                <h3 className="text-sm font-semibold text-white">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
                   {r.title}
                 </h3>
 
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                   {r.description}
                 </p>
               </div>
 
-              <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
                 <button
                   onClick={() => setPreviewReport(r)}
-                  className="inline-flex items-center gap-1 text-xs font-medium text-slate-400 hover:text-white transition-colors"
+                  className="inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"
                 >
                   <Eye className="h-3.5 w-3.5" />
                   <span>Preview</span>
@@ -251,12 +251,12 @@ export default function ReportsPage() {
                     onClick={() => handleDownload(r.id, "csv", r.title)}
                     disabled={downloading !== null}
                     title="Download CSV dataset"
-                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-medium shadow-xs transition-colors disabled:opacity-40"
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-medium shadow-xs transition-colors disabled:opacity-40"
                   >
                     {isCsvDownloading ? (
-                      <Loader2 className="h-3.5 w-3.5 animate-spin text-emerald-400" />
+                      <Loader2 className="h-3.5 w-3.5 animate-spin text-emerald-600 dark:text-emerald-400" />
                     ) : (
-                      <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-400" />
+                      <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                     )}
                     <span>CSV</span>
                   </button>
@@ -289,43 +289,43 @@ export default function ReportsPage() {
           onClick={() => setPreviewReport(null)}
         >
           <div
-            className="w-full max-w-xl rounded-xl bg-slate-900 border border-slate-800 p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95"
+            className="w-full max-w-xl rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] uppercase font-mono text-emerald-400">
+                  <span className="text-[10px] uppercase font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
                     Official Document Preview
                   </span>
-                  <span className="text-[10px] uppercase font-mono px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                  <span className="text-[10px] uppercase font-mono px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
                     Restricted
                   </span>
                 </div>
-                <h3 className="text-base font-semibold text-white mt-0.5">
+                <h3 className="text-base font-semibold text-slate-900 dark:text-white mt-0.5">
                   {previewReport.title}
                 </h3>
               </div>
-              <button onClick={() => setPreviewReport(null)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setPreviewReport(null)} className="text-slate-400 hover:text-slate-700 dark:hover:text-white">
                 <X className="h-4 w-4" />
               </button>
             </div>
 
             {/* Simulated Document Preview Page */}
-            <div className="rounded-lg border border-slate-800 bg-slate-950 p-5 text-xs text-slate-300 space-y-3 font-mono">
-              <div className="border-b border-slate-800 pb-2 flex justify-between text-[10px] text-slate-400 font-medium">
+            <div className="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-5 text-xs text-slate-700 dark:text-slate-300 space-y-3 font-mono shadow-inner">
+              <div className="border-b border-slate-200 dark:border-slate-800 pb-2 flex justify-between text-[10px] text-slate-500 dark:text-slate-400 font-medium">
                 <span>GOVERNMENT OF INDIA • MINISTRY OF HOME AFFAIRS</span>
-                <span className="text-emerald-400 font-bold">NON-PUNITIVE MEDICAL</span>
+                <span className="text-emerald-700 dark:text-emerald-400 font-bold">NON-PUNITIVE MEDICAL</span>
               </div>
               <div className="text-center py-2">
-                <p className="font-bold text-sm text-white font-sans">
+                <p className="font-bold text-sm text-slate-900 dark:text-white font-sans">
                   {previewReport.title.toUpperCase()}
                 </p>
-                <p className="text-[11px] text-slate-400 font-sans mt-0.5">
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-sans mt-0.5">
                   CRPF Sector HQ Operations • Welfare & Medical Directorate
                 </p>
               </div>
-              <div className="space-y-1 text-[11px] text-slate-400">
+              <div className="space-y-1 text-[11px] text-slate-600 dark:text-slate-400">
                 <p>• Report ID: {previewReport.id.toUpperCase()}</p>
                 <p>• Period Covered: Active 30-Day Operational Cycle</p>
                 <p>
@@ -341,32 +341,32 @@ export default function ReportsPage() {
                   {liveReportData ? `${liveReportData.data.overview.resolutionRatePercent}%` : "81.4%"}
                 </p>
               </div>
-              <div className="p-3 bg-slate-900 rounded border border-slate-800 text-[11px] font-sans text-slate-300">
-                <strong className="text-white">Statutory Statement:</strong> Prepared in strict accordance with the Digital Personal Data Protection (DPDP) Act 2023. Aggregated risk indices and self-reported wellness data are protected from Annual Confidential Report (ACR) prejudice.
+              <div className="p-3 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800 text-[11px] font-sans text-slate-700 dark:text-slate-300 shadow-xs">
+                <strong className="text-slate-900 dark:text-white">Statutory Statement:</strong> Prepared in strict accordance with the Digital Personal Data Protection (DPDP) Act 2023. Aggregated risk indices and self-reported wellness data are protected from Annual Confidential Report (ACR) prejudice.
               </div>
             </div>
 
             <div className="pt-2 flex flex-wrap justify-end gap-2">
               <button
                 onClick={() => setPreviewReport(null)}
-                className="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 text-xs font-medium"
+                className="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-medium"
               >
                 Close
               </button>
 
               <button
                 onClick={() => handleDownload(previewReport.id, "json", previewReport.title)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-medium transition-colors shadow-xs"
               >
-                <FileText className="h-3.5 w-3.5 text-blue-400" />
+                <FileText className="h-3.5 w-3.5 text-blue-500 dark:text-blue-400" />
                 <span>JSON</span>
               </button>
 
               <button
                 onClick={() => handleDownload(previewReport.id, "csv", previewReport.title)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-medium transition-colors shadow-xs"
               >
-                <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-400" />
+                <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                 <span>Download CSV</span>
               </button>
 

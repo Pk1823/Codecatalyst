@@ -17,31 +17,31 @@ export function RiskBadge({ level, size = "md", className, showIcon = true }: Ri
     LOW: {
       label: "LOW",
       icon: CheckCircle2,
-      style: "bg-emerald-950/40 text-emerald-300 border-emerald-800/60",
-      dot: "bg-emerald-400",
+      style: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60",
+      dot: "bg-emerald-500",
     },
     MODERATE: {
       label: "MODERATE",
       icon: AlertCircle,
-      style: "bg-amber-950/40 text-amber-300 border-amber-800/60",
-      dot: "bg-amber-400",
+      style: "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60",
+      dot: "bg-amber-500",
     },
     HIGH: {
       label: "HIGH",
       icon: AlertTriangle,
-      style: "bg-orange-950/40 text-orange-300 border-orange-800/60",
-      dot: "bg-orange-400",
+      style: "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/40 dark:text-orange-300 dark:border-orange-800/60",
+      dot: "bg-orange-500",
     },
     "URGENT REVIEW": {
       label: "URGENT REVIEW",
       icon: AlertOctagon,
-      style: "bg-rose-950/40 text-rose-300 border-rose-800/60",
-      dot: "bg-rose-400",
+      style: "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/60",
+      dot: "bg-rose-500",
     },
   }[norm] || {
     label: norm,
     icon: AlertCircle,
-    style: "bg-slate-800/60 text-slate-300 border-slate-700",
+    style: "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800/60 dark:text-slate-300 dark:border-slate-700",
     dot: "bg-slate-400",
   };
 
