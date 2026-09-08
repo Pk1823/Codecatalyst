@@ -1,0 +1,413 @@
+// MISSIONWELL AI — Relational Database Schema
+// Predictive Personnel Stress and Welfare Monitoring System
+// Ministry of Home Affairs / CRPF, Police II Division
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// 1. User & Identity Management (Real RBAC)
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  serviceId     String         @unique // e.g., CRPF-GD-2021-04128
+  passwordHash  String
+  name          String
+  role          String         // PERSONNEL, WELFARE_OFFICER, COMMANDER, ADMIN
+  rank          String?
+  force         String         @default("CRPF") // CRPF, BSF, ITBP, CISF, ARMY
+  department    String?
+  unitId        String?
+  isActive      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  unit          Unit?          @relation(fields: [unitId], references: [id])
+  personnel     Personnel?
+  assignedCases WelfareCase[]  @relation("AssignedWelfareOfficer")
+  auditLogs     AuditLog[]
+  notifications Notification[]
+
+  @@index([role])
+  @@index([serviceId])
+}
+
+// 2. Military / Paramilitary Operational Unit
+model Unit {
+  id                 String         @id @default(cuid())
+  name               String         @unique // e.g. 114 Bn - Alpha Coy
+  force              String         @default("CRPF")
+  location           String
+  theatre            String         @default("Northern Command / CI Grid")
+  commandingOfficer  String?
+  stressLevel        String         @default("Optimal")
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  users              User[]
+  personnel          Personnel[]
+  earlyWarnings      EarlyWarning[]
+
+  @@index([force])
+}
+
+// 3. Personnel Core Record (Anonymized & Non-Punitive Protected)
+model Personnel {
+  id                  String               @id // e.g. P-1024
+  userId              String?              @unique
+  serviceNumber       String               @unique
+  name                String
+  rank                String
+  force               String               @default("CRPF")
+  gender              String               @default("MALE")
+  bloodGroup          String               @default("O+")
+  dateOfJoining       DateTime
+  unitId              String
+  baseLocation        String
+  activeDeployDays    Int                  @default(0)
+  currentDutyStatus   String               @default("Active Duty") // Active Duty, Stand-Down, On Leave, Medical Review
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+
+  user                User?                @relation(fields: [userId], references: [id])
+  unit                Unit                 @relation(fields: [unitId], references: [id])
+  deployments         Deployment[]
+  dutySchedules       DutySchedule[]
+  leaveRecords        LeaveRecord[]
+  trainingRecords     TrainingRecord[]
+  workloadRecords     WorkloadRecord[]
+  wellnessAssessments WellnessAssessment[]
+  riskPredictions     RiskPrediction[]
+  earlyWarnings       EarlyWarning[]
+  welfareCases        WelfareCase[]
+  recommendations     Recommendation[]
+  consents            Consent[]
+
+  @@index([unitId])
+  @@index([force])
+}
+
+// 4. Deployment History & Hard-Area Stationing
+model Deployment {
+  id               String    @id @default(cuid())
+  personnelId      String
+  location         String
+  terrain          String    // High Altitude, Counter-Insurgency, Border Outpost, Urban
+  startDate        DateTime
+  endDate          DateTime?
+  isCurrent        Boolean   @default(true)
+  consecutiveDays  Int       @default(0)
+  stressWeight     Float     @default(1.0)
+  createdAt        DateTime  @default(now())
+
+  personnel        Personnel @relation(fields: [personnelId], references: [id], onDelete: Cascade)
+
+  @@index([personnelId])
+}
+
+// 5. Duty Schedule & Shift Records
+model DutySchedule {
+  id           String    @id @default(cuid())
+  personnelId  String
+  date         DateTime
+  shiftType    String    // Day Sentry, Night Watch, Convoy Escort, Standby, Patrol
+  hours        Float
+  nightShift   Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+
+  personnel    Personnel @relation(fields: [personnelId], references: [id], onDelete: Cascade)
+
+  @@index([personnelId, date])
+}
+
+// 6. Leave Records & Underutilization Tracking
+model LeaveRecord {
+  id             String    @id @default(cuid())
+  personnelId    String
+  leaveType      String    // Earned Leave, Casual Leave, Furlough, Medical Leave
+  daysRequested  Int
+  startDate      DateTime
+  endDate        DateTime
+  status         String    @default("APPROVED") // APPROVED, DENIED, CANCELLED, COMPLETED
+  denialReason   String?
+  createdAt      DateTime  @default(now())
+
+  personnel      Personnel @relation(fields: [personnelId], references: [id], onDelete: Cascade)
+
+  @@index([personnelId])
+}
+
+// 7. Training & Resilience Courses
+model TrainingRecord {
+  id            String    @id @default(cuid())
+  personnelId   String
+  courseName    String    // Tactical Survival, Stress Resilience, Yoga & Mental Fitness
+  completedDate DateTime
+  grade         String    @default("Pass")
+  createdAt     DateTime  @default(now())
+
+  personnel     Personnel @relation(fields: [personnelId], references: [id], onDelete: Cascade)
+
+  @@index([personnelId])
+}
+
+// 8. Synthesized 5-Day / 30-Day Operational Workload
+model WorkloadRecord {
+  id                 String    @id @default(cuid())
+  personnelId        String
+  periodStart        DateTime
+  periodEnd          DateTime
+  dutyHours5d        Float     @default(40.0)
+  nightShifts5d      Int       @default(1)
+  sleepHoursAvg      Float     @default(6.5)
+  leaveDaysUnavailed Int       @default(30)
+  deltaRestingHR     Float     @default(0.0)
+  surveyLatencySec   Float     @default(45.0)
+  createdAt          DateTime  @default(now())
+
+  personnel          Personnel @relation(fields: [personnelId], references: [id], onDelete: Cascade)
+
+  @@index([personnelId])
+}
+
+// 9. Voluntary Wellness Assessment (Non-punitive, strictly voluntary)
+model WellnessAssessment {
+  id                         String             @id @default(cuid())
+  personnelId                String
+  score                      Float              // 0 - 100 overall composite wellbeing
+  indicatorStatus            String             // Low Concern, Moderate Attention, Elevated Attention
+  stressLevel                String             // Low, Moderate, Elevated
+  fatigueLevel               String             // Low, Moderate, High
+  workloadStatus             String             // Optimal, Elevated, High
+  recoveryStatus             String             // Adequate, Moderate, Reduced
+  recommendation             String
+  voluntaryConsent           Boolean            @default(true)
+  voluntaryConsentTimestamp  DateTime           @default(now())
+  additionalNotes            String?
+  createdAt                  DateTime           @default(now())
+
+  personnel                  Personnel          @relation(fields: [personnelId], references: [id], onDelete: Cascade)
+  responses                  WellnessResponse[]
+  prediction                 RiskPrediction?
+
+  @@index([personnelId])
+  @@index([createdAt])
+}
+
+// 10. Granular Assessment Response Items
+model WellnessResponse {
+  id           String             @id @default(cuid())
+  assessmentId String
+  category     String             // energy, sleepQuality, workload, recovery, emotionalFatigue, workLifeBalance, overallWellbeing
+  questionKey  String
+  rating       String             // Very Low, Low, Moderate, Good, Very Good
+  numericValue Float              // 10, 30, 55, 80, 95
+  createdAt    DateTime           @default(now())
+
+  assessment   WellnessAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+
+  @@index([assessmentId])
+}
+
+// 11. Machine Learning Risk Prediction
+model RiskPrediction {
+  id                 String              @id @default(cuid())
+  personnelId        String
+  assessmentId       String?             @unique
+  riskScore          Float               // 0 - 100
+  riskLevel          String              // LOW, MODERATE, HIGH
+  alertPriority      String              @default("ROUTINE") // ROUTINE, DISCREET_CHECK, URGENT
+  maskingDetected    Boolean             @default(false)
+  maskingConfidence  Float               @default(0.0)
+  modelVersion       String              @default("v1.2.0-sentinel-rf")
+  createdAt          DateTime            @default(now())
+
+  personnel          Personnel           @relation(fields: [personnelId], references: [id], onDelete: Cascade)
+  assessment         WellnessAssessment? @relation(fields: [assessmentId], references: [id])
+  factors            RiskFactor[]
+  recommendations    Recommendation[]
+
+  @@index([personnelId])
+  @@index([riskLevel])
+}
+
+// 12. Explainable AI (SHAP) Factor Attribution
+model RiskFactor {
+  id                 String         @id @default(cuid())
+  predictionId       String
+  featureName        String
+  featureValue       Float
+  contributionWeight Float          // e.g. 27.0%
+  description        String
+  createdAt          DateTime       @default(now())
+
+  prediction         RiskPrediction @relation(fields: [predictionId], references: [id], onDelete: Cascade)
+
+  @@index([predictionId])
+}
+
+// 13. Rule-Based Early Warning Triggers
+model EarlyWarning {
+  id                String    @id @default(cuid())
+  personnelId       String
+  unitId            String?
+  severity          String    // LOW, MODERATE, HIGH, CRITICAL
+  reason            String
+  triggerCondition  String    // e.g. HIGH_HOURS_LOW_SLEEP, EXTENDED_DEPLOYMENT_LEAVE_STARVED
+  status            String    @default("NEW") // NEW, REVIEWING, ACTION_REQUIRED, RESOLVED
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  personnel         Personnel @relation(fields: [personnelId], references: [id], onDelete: Cascade)
+  unit              Unit?     @relation(fields: [unitId], references: [id])
+
+  @@index([personnelId])
+  @@index([status])
+  @@index([severity])
+}
+
+// 14. Welfare Case Management (Assigned to Welfare Officers)
+model WelfareCase {
+  id                 String          @id @default(cuid())
+  personnelId        String
+  officerId          String?
+  title              String
+  reason             String
+  priority           String          @default("Moderate") // Low, Moderate, High, Critical
+  status             String          @default("NEW") // NEW, REVIEWING, SUPPORT_PLANNED, FOLLOW_UP, CLOSED
+  riskScore          Float           @default(50.0)
+  notesCount         Int             @default(0)
+  interventionsCount Int             @default(0)
+  followUpDate       DateTime?
+  resolvedAt         DateTime?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+
+  personnel          Personnel       @relation(fields: [personnelId], references: [id], onDelete: Cascade)
+  assignedOfficer    User?           @relation("AssignedWelfareOfficer", fields: [officerId], references: [id])
+  caseNotes          CaseNote[]
+  supportActions     SupportAction[]
+
+  @@index([personnelId])
+  @@index([status])
+  @@index([officerId])
+}
+
+// 15. Confidential Clinical Case Notes
+model CaseNote {
+  id             String      @id @default(cuid())
+  caseId         String
+  authorId       String
+  authorName     String
+  text           String
+  isConfidential Boolean     @default(true)
+  createdAt      DateTime    @default(now())
+
+  welfareCase    WelfareCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+}
+
+// 16. Support Action & Intervention Execution
+model SupportAction {
+  id             String      @id @default(cuid())
+  caseId         String
+  actionType     String      // Duty Pacing, Rest Stand-Down, Counselor Referral, Family Leave, Peer Check-In
+  title          String
+  description    String
+  officerName    String
+  status         String      @default("Planned") // Planned, In_Progress, Completed, Follow_Up_Scheduled
+  scheduledDate  DateTime?
+  completedDate  DateTime?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  welfareCase    WelfareCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+}
+
+// 17. Automated Supportive Recommendations
+model Recommendation {
+  id           String          @id @default(cuid())
+  predictionId String?
+  personnelId  String
+  category     String          // Rest & Recovery, Duty Adjustment, Peer Support, Leave Clearance, Clinical Consultation
+  title        String
+  description  String
+  priority     String          @default("Moderate") // Low, Moderate, High
+  status       String          @default("Active") // Active, Acknowledged, Implemented, Dismissed
+  createdAt    DateTime        @default(now())
+
+  prediction   RiskPrediction? @relation(fields: [predictionId], references: [id])
+  personnel    Personnel       @relation(fields: [personnelId], references: [id], onDelete: Cascade)
+
+  @@index([personnelId])
+  @@index([status])
+}
+
+// 18. In-App Notifications
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  type      String   @default("info") // info, warning, alert, case, recommendation
+  category  String   @default("Welfare")
+  read      Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+}
+
+// 19. Voluntary Consent & DPDP Privacy Ledger
+model Consent {
+  id          String    @id @default(cuid())
+  personnelId String
+  consentType String    @default("VOLUNTARY_WELLNESS_ASSESSMENT")
+  granted     Boolean   @default(true)
+  version     String    @default("1.0")
+  timestamp   DateTime  @default(now())
+
+  personnel   Personnel @relation(fields: [personnelId], references: [id], onDelete: Cascade)
+
+  @@index([personnelId])
+}
+
+// 20. Immutable Audit Trail (DPDP Compliance & Security)
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  actorName  String
+  actorRole  String
+  action     String   // LOGIN, LOGOUT, SUBMIT_ASSESSMENT, PREDICT_RISK, CREATE_CASE, UPDATE_CASE_STATUS, ADD_CASE_NOTE, RECORD_INTERVENTION, VIEW_AGGREGATED_DATA
+  resource   String   // Personnel, WelfareCase, Assessment, System
+  resourceId String?
+  metadata   String?  // JSON context string
+  timestamp  DateTime @default(now())
+
+  actor      User?    @relation(fields: [actorId], references: [id])
+
+  @@index([actorRole])
+  @@index([action])
+  @@index([timestamp])
+}
+
+// 21. Model Versioning & ML Governance
+model ModelVersion {
+  id              String   @id @default(cuid())
+  version         String   @unique // e.g. v1.2.0-sentinel-rf
+  modelType       String   // LightGBM / Tree SHAP Explainer
+  trainingDataset String   @default("Synthetic Demo Data (N=5,000)")
+  status          String   @default("PRODUCTION") // PRODUCTION, STAGING, ARCHIVED
+  description     String
+  createdAt       DateTime @default(now())
+}

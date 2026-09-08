@@ -1,0 +1,24 @@
+services:
+  # 1. MissionWell AI Backend API Service
+  - type: web
+    name: missionwell-backend
+    runtime: node
+    rootDir: backend
+    region: singapore
+    plan: free
+    buildCommand: npm install && npx prisma generate && npx prisma db push && npm run db:seed && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: AUTH_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        value: file:./dev.db
+      - key: CORS_ORIGIN
+        value: "*"
+      - key: ML_SERVICE_URL
+        value: http://localhost:8000

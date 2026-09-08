@@ -37,10 +37,111 @@ export class AuthService {
     return selectedUser;
   }
 
+  /**
+   * Authenticate against backend/database using Service ID or Email + Password
+   */
+  static async loginWithCredentials(
+    identifier: string,
+    password: string,
+    role?: UserRole,
+    force?: string
+  ): Promise<User> {
+    const isEmail = identifier.includes("@");
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        role,
+        serviceId: !isEmail ? identifier.trim() : undefined,
+        email: isEmail ? identifier.trim() : undefined,
+        password: password.trim(),
+        isQuickDemo: false,
+      }),
+    });
+
+    const data = await res.json();
+    if (!res.ok || !data.success || !data.user) {
+      throw new Error(data.error || "Authentication failed: Please verify your credentials.");
+    }
+
+    const user: User = data.user;
+    if (typeof window !== "undefined") {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+      window.dispatchEvent(new Event("missionwell_auth_changed"));
+    }
+    return user;
+  }
+
+  /**
+   * Authenticate or Auto-Register using Gmail / Google or other custom account
+   */
+  static async loginWithGoogle(
+    email: string,
+    name?: string,
+    role?: UserRole,
+    force?: string
+  ): Promise<User> {
+    const res = await fetch("/api/auth/google", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: email.trim(),
+        name: name?.trim(),
+        role: role || "WELFARE_OFFICER",
+        force: force || "CRPF",
+      }),
+    });
+
+    const data = await res.json();
+    if (!res.ok || !data.success || !data.user) {
+      throw new Error(data.error || "Google sign-in failed. Please try again.");
+    }
+
+    const user: User = data.user;
+    if (typeof window !== "undefined") {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+      window.dispatchEvent(new Event("missionwell_auth_changed"));
+    }
+    return user;
+  }
+
+  /**
+   * 1-Click Evaluation Persona sign-in connected to database & session cookie
+   */
+  static async loginWithPersona(role: UserRole, force?: string): Promise<User> {
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          role,
+          isQuickDemo: true,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.user) {
+          const user: User = data.user;
+          if (typeof window !== "undefined") {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+            window.dispatchEvent(new Event("missionwell_auth_changed"));
+          }
+          return user;
+        }
+      }
+    } catch (e) {
+      console.warn("Persona database login notice, using fallback:", e);
+    }
+
+    return this.login(role);
+  }
+
   static logout(): void {
     if (typeof window !== "undefined") {
       localStorage.removeItem(STORAGE_KEY);
       window.dispatchEvent(new Event("missionwell_auth_changed"));
+      fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
     }
   }
 

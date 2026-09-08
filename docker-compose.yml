@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  # 1. Relational Database: PostgreSQL
+  postgres:
+    image: postgres:16-alpine
+    container_name: missionwell-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: missionwell
+      POSTGRES_PASSWORD: missionwell_secure_pass
+      POSTGRES_DB: missionwelldb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U missionwell -d missionwelldb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 2. Machine Learning & SHAP Explainability Microservice
+  ml-service:
+    build:
+      context: ./ml-service
+      dockerfile: Dockerfile
+    container_name: missionwell-ml-service
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  # 3. Core Node.js / Express REST API Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: missionwell-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - DATABASE_URL=postgresql://missionwell:missionwell_secure_pass@postgres:5432/missionwelldb?schema=public
+      - AUTH_SECRET=missionwell-defense-jwt-secret-key-super-secure-32chars
+      - ML_SERVICE_URL=http://ml-service:8000
+      - CORS_ORIGIN=http://localhost:3000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ml-service:
+        condition: service_started
+
+  # 4. Next.js 15+ Modern Web Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: missionwell-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=postgresql://missionwell:missionwell_secure_pass@postgres:5432/missionwelldb?schema=public
+      - AUTH_SECRET=missionwell-defense-jwt-secret-key-super-secure-32chars
+      - NEXT_PUBLIC_API_URL=http://backend:5000
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+    driver: local
