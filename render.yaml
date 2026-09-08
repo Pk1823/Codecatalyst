@@ -29,7 +29,7 @@ services:
     rootDir: backend
     plan: free
     region: oregon
-    buildCommand: npm install && npx prisma generate && npm run build
+    buildCommand: npm install --include=dev && npx prisma generate && npm run build
     startCommand: node dist/server.js
     healthCheckPath: /health
     envVars:
@@ -56,7 +56,7 @@ services:
     rootDir: frontend
     plan: free
     region: oregon
-    buildCommand: npm install && npx prisma generate && npm run build
+    buildCommand: npm install --include=dev && npx prisma generate && npm run build
     startCommand: npm start
     healthCheckPath: /
     envVars:
