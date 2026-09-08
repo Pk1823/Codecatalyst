@@ -46,7 +46,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // Health Check
-app.get("/health", (req: Request, res: Response) => {
+app.get(["/health", "/api/health"], (req: Request, res: Response) => {
   res.json({
     status: "healthy",
     service: "MISSIONWELL AI - Backend API",
