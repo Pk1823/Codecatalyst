@@ -12,9 +12,25 @@ const PORT = process.env.PORT || 5000;
 const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:3000";
 
 // Security & Parsing Middleware
+const allowedOrigins = [
+  CORS_ORIGIN,
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+];
+
 app.use(
   cors({
-    origin: [CORS_ORIGIN, "http://127.0.0.1:3000"],
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (
+        allowedOrigins.includes(origin) ||
+        origin.endsWith(".onrender.com") ||
+        origin.endsWith(".vercel.app")
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, true); // Allow all for evaluation/demo deployments
+    },
     credentials: true,
   })
 );

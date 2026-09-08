@@ -259,6 +259,25 @@ npm run dev
 
 ---
 
+## Deploy to Render (Cloud Hosting)
+
+The platform includes a pre-configured **Render Blueprint** ([`render.yaml`](render.yaml)) and multi-stage Dockerfiles for 1-click automated deployment to [Render](https://render.com).
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Pk1823/Codecatalyst)
+
+### Option 1: 1-Click Render Blueprint (Recommended)
+1. Navigate to [dashboard.render.com](https://dashboard.render.com) and click **"New +" ➔ "Blueprint"**.
+2. Connect your GitHub repository: `https://github.com/Pk1823/Codecatalyst.git`.
+3. Render automatically detects [`render.yaml`](render.yaml) and provisions:
+   * **`missionwell-ai-engine`**: Python 3.11 FastAPI microservice with LightGBM & SHAP.
+   * **`missionwell-backend`**: Node.js Express REST API with Prisma ORM.
+   * **`missionwell-frontend`**: Next.js 16 App Router web portal.
+4. Click **"Apply"** to deploy all services concurrently.
+
+Detailed documentation is available in the [**Render Cloud Deployment Guide**](docs/RENDER_DEPLOYMENT.md).
+
+---
+
 ## Automated Integration & Security Test Suite
 
 The repository includes a comprehensive 23-step automated test suite covering RBAC, DPDP Act 2023 compliance, Machine Learning inference, report downloads, and Google OAuth 2.0:
