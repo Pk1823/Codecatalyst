@@ -56,7 +56,15 @@ export interface AIPredictionResponse {
   };
 }
 
-const AI_ENGINE_URL = process.env.NEXT_PUBLIC_AI_ENGINE_URL || "http://localhost:8000";
+function getAiEngineUrl(): string {
+  const raw = (process.env.AI_ENGINE_URL || process.env.NEXT_PUBLIC_AI_ENGINE_URL || "http://localhost:8000").trim();
+  if (raw.startsWith("http://") || raw.startsWith("https://")) {
+    return raw.replace(/\/$/, "");
+  }
+  return `http://${raw}`.replace(/\/$/, "");
+}
+
+const AI_ENGINE_URL = getAiEngineUrl();
 
 export class AIEngineClient {
   /**

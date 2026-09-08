@@ -64,13 +64,13 @@ app.use(notFoundHandler);
 app.use(globalErrorHandler);
 
 if (process.env.NODE_ENV !== "test") {
-  app.listen(PORT, () => {
+  app.listen(Number(PORT), "0.0.0.0", () => {
     console.log(`====================================================`);
     console.log(`MISSIONWELL AI — Backend Service Running`);
     console.log(`Organization : Ministry of Home Affairs / CRPF`);
-    console.log(`Port         : http://localhost:${PORT}`);
-    console.log(`Health       : http://localhost:${PORT}/health`);
-    console.log(`API Base     : http://localhost:${PORT}/api`);
+    console.log(`Port         : http://0.0.0.0:${PORT}`);
+    console.log(`Health       : http://0.0.0.0:${PORT}/health`);
+    console.log(`API Base     : http://0.0.0.0:${PORT}/api`);
     console.log(`====================================================`);
   });
 }
