@@ -5,16 +5,21 @@ import { Providers } from "@/components/providers";
 export const metadata: Metadata = {
   title: "MissionWell AI — Predictive Wellness Monitoring for Safer, Stronger Forces",
   description:
-    "AI-powered, privacy-first platform that helps identify early indicators of stress, fatigue, burnout, and workload pressure for Central Armed Police Forces and Uniformed Services. Smart India Hackathon Problem Statement 26186.",
+    "AI-powered, privacy-first platform that helps identify early indicators of stress, fatigue, burnout, and workload pressure for Central Armed Police Forces and Uniformed Services.",
   keywords: [
     "MissionWell AI",
     "Predictive Wellness",
     "Force Readiness",
     "CRPF Welfare",
     "CAPF Stress Monitoring",
-    "Smart India Hackathon",
+    "Operational Resilience",
     "Personnel Wellbeing",
   ],
+  icons: {
+    icon: "/server-icon.svg",
+    shortcut: "/server-icon.svg",
+    apple: "/server-icon.svg",
+  },
 };
 
 export default function RootLayout({

@@ -19,13 +19,14 @@ import {
   PhoneCall,
   Award,
 } from "lucide-react";
-import { useAuth } from "@/components/providers";
+import { useAuth, useToast } from "@/components/providers";
 import { FORCES_METADATA } from "@/lib/force-metadata";
 import { StatCard } from "@/components/common/stat-card";
 import { WellnessTrendChart } from "@/components/charts/wellness-trend-chart";
 
 export default function PersonnelDashboard() {
   const { user, force, lang } = useAuth();
+  const { toast } = useToast();
   const meta = FORCES_METADATA[force] || FORCES_METADATA.CRPF;
   const isHi = lang === "hi";
 
@@ -34,6 +35,22 @@ export default function PersonnelDashboard() {
 
   const handleBuddyReport = () => {
     setBuddyStatus("reported");
+    toast({
+      title: isHi ? "बडी रिपोर्ट दर्ज की गई" : "Buddy Welfare Alert Dispatched",
+      description: isHi
+        ? "कल्याण अधिकारी को आपके साथी के विश्राम हेतु गोपनीय सूचना भेज दी गई है।"
+        : "Confidential rest recommendation sent to Welfare Officer for Ct. Arvind Minz.",
+      type: "success",
+    });
+  };
+
+  const handleBuddyGood = () => {
+    setBuddyStatus("optimal");
+    toast({
+      title: isHi ? "बडी स्थिति पुष्ट" : "Buddy Watch Confirmed",
+      description: isHi ? "साथी की स्थिति सामान्य दर्ज की गई।" : "Buddy status recorded as optimal.",
+      type: "info",
+    });
   };
 
   return (
@@ -113,7 +130,7 @@ export default function PersonnelDashboard() {
             ) : (
               <>
                 <button
-                  onClick={() => setBuddyStatus("optimal")}
+                  onClick={handleBuddyGood}
                   className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
                 >
                   ✓ {isHi ? "मेरा साथी ठीक है" : "My Buddy is Good"}

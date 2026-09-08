@@ -2,7 +2,7 @@
 
 # MissionWell AI (Sentinel of Resilience)
 ### **Predictive Wellness Monitoring & Operational Readiness for Safer, Stronger Forces**
-*Smart India Hackathon • Problem Statement 26186 • Ministry of Home Affairs (Police II Division) / CRPF*
+*Ministry of Home Affairs (Police II Division) • Central Armed Police Forces (CRPF, BSF, ITBP, CISF, SSB, AR)*
 
 [![Next.js 16](https://img.shields.io/badge/Next.js-16.3.4-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![React 19](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
@@ -345,7 +345,7 @@ For rapid evaluation without manual database seeding or Google Cloud credentials
 
 * **Project:** MissionWell AI (Sentinel of Resilience)
 * **Team:** Codecatalyst
-* **Smart India Hackathon Problem Statement:** 26186
+* **Deployment Scope:** Central Armed Police Forces (CRPF, BSF, ITBP, CISF, SSB, AR) & Armed Forces Welfare Divisions
 * **Organization:** Central Reserve Police Force (CRPF) / Police II Division, Ministry of Home Affairs (MHA), Government of India
 * **Repository:** [https://github.com/Pk1823/Codecatalyst.git](https://github.com/Pk1823/Codecatalyst.git)
 

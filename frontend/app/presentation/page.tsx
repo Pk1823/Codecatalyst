@@ -119,6 +119,19 @@ export default function PresentationPage() {
 
       {/* 3. Hero Section: Executive Mandate & Doctrine */}
       <section className="relative overflow-hidden border-b border-slate-800/80 py-12 sm:py-16 lg:py-20">
+        {/* Cinematic Tactical Background Layer */}
+        <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
+          <img
+            src="/hero-bg.jpg"
+            alt="Tactical Command Operational Backdrop"
+            className="w-full h-full object-cover object-center opacity-20 select-none scale-105"
+            style={{
+              maskImage: "radial-gradient(ellipse 90% 80% at 50% 30%, black 35%, transparent 85%)",
+              WebkitMaskImage: "radial-gradient(ellipse 90% 80% at 50% 30%, black 35%, transparent 85%)",
+            }}
+          />
+        </div>
+
         {/* Ambient atmospheric gradients */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[450px] bg-gradient-to-b from-blue-700/15 via-teal-500/10 to-transparent blur-3xl pointer-events-none -z-10" />
         <div className="absolute top-1/3 right-10 w-80 h-80 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none -z-10" />

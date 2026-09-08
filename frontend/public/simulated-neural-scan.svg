@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <radialGradient id="neuralGlow" cx="45%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#043831" stop-opacity="0.85" />
+      <stop offset="60%" stop-color="#061f1c" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#020d0b" stop-opacity="1" />
+    </radialGradient>
+
+    <linearGradient id="streamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0" />
+      <stop offset="50%" stop-color="#10b981" stop-opacity="1" />
+      <stop offset="100%" stop-color="#34d399" stop-opacity="0" />
+    </linearGradient>
+
+    <filter id="glowN" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <style>
+      @keyframes pulseNode {
+        0%, 100% { transform: scale(1); opacity: 0.5; }
+        50% { transform: scale(1.6); opacity: 1; }
+      }
+      .node-pulse { transform-origin: center; animation: pulseNode 2.4s ease-in-out infinite; }
+      .node-d1 { animation-delay: 0.4s; }
+      .node-d2 { animation-delay: 0.8s; }
+      .node-d3 { animation-delay: 1.2s; }
+      .node-d4 { animation-delay: 1.6s; }
+
+      @keyframes waveStream {
+        0% { stroke-dashoffset: 400; }
+        100% { stroke-dashoffset: 0; }
+      }
+      .synapse-line {
+        stroke-dasharray: 20 10;
+        animation: waveStream 6s linear infinite;
+      }
+
+      @keyframes scanVertical {
+        0%, 100% { transform: translateY(0px); opacity: 0.3; }
+        50% { transform: translateY(340px); opacity: 0.9; }
+      }
+      .neural-scanbar {
+        animation: scanVertical 4s ease-in-out infinite;
+      }
+    </style>
+  </defs>
+
+  <rect width="800" height="500" rx="16" fill="url(#neuralGlow)" stroke="#059669" stroke-opacity="0.3" stroke-width="1.5" />
+
+  <!-- Corner accents -->
+  <path d="M 20 40 L 20 20 L 40 20" fill="none" stroke="#10b981" stroke-width="2.5" filter="url(#glowN)" />
+  <path d="M 760 20 L 780 20 L 780 40" fill="none" stroke="#10b981" stroke-width="2.5" filter="url(#glowN)" />
+  <path d="M 20 460 L 20 480 L 40 480" fill="none" stroke="#10b981" stroke-width="2.5" filter="url(#glowN)" />
+  <path d="M 760 480 L 780 480 L 780 460" fill="none" stroke="#10b981" stroke-width="2.5" filter="url(#glowN)" />
+
+  <!-- Header -->
+  <text x="35" y="45" fill="#34d399" font-family="monospace" font-size="12" font-weight="bold" letter-spacing="1">
+    AI NEURAL ANTI-MASKING ANALYSIS • CORTICAL STRESS MAPPING
+  </text>
+  <rect x="620" y="30" width="145" height="22" rx="4" fill="#042f2e" stroke="#10b981" stroke-opacity="0.4" />
+  <text x="632" y="45" fill="#6ee7b7" font-family="monospace" font-size="10" font-weight="bold">● LIVE INFERENCE</text>
+
+  <!-- Left: Stylized Brain & Synaptic Network Nodes -->
+  <g transform="translate(60, 80)">
+    <!-- Neural Node Connecting Lines -->
+    <path d="M 120 180 L 170 120 L 240 110 L 290 150 L 310 220 L 270 290 L 190 310 L 130 260 Z"
+          fill="none" stroke="#059669" stroke-opacity="0.3" stroke-width="1" />
+    <path d="M 170 120 L 220 180 L 290 150 M 220 180 L 270 290 M 170 120 L 190 310 M 240 110 L 220 180 L 130 260"
+          fill="none" stroke="#10b981" stroke-opacity="0.4" stroke-width="1.2" class="synapse-line" />
+    <path d="M 220 180 L 310 220" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="4 4" />
+
+    <!-- Nodes -->
+    <circle cx="170" cy="120" r="6" fill="#10b981" class="node-pulse node-d1" filter="url(#glowN)" />
+    <circle cx="240" cy="110" r="5" fill="#34d399" class="node-pulse node-d2" />
+    <circle cx="290" cy="150" r="7" fill="#38bdf8" class="node-pulse node-d3" filter="url(#glowN)" />
+    <circle cx="220" cy="180" r="9" fill="#10b981" class="node-pulse" filter="url(#glowN)" />
+    <!-- Alert Node: Prefrontal Fatigue/Masking Anomaly -->
+    <circle cx="310" cy="220" r="8" fill="#ef4444" class="node-pulse node-d4" filter="url(#glowN)" />
+    <circle cx="270" cy="290" r="6" fill="#34d399" class="node-pulse node-d1" />
+    <circle cx="190" cy="310" r="5" fill="#10b981" class="node-pulse node-d2" />
+    <circle cx="130" cy="260" r="6" fill="#38bdf8" class="node-pulse node-d3" />
+    <circle cx="120" cy="180" r="5" fill="#10b981" class="node-pulse node-d4" />
+
+    <!-- Node Callout -->
+    <rect x="330" y="200" width="130" height="40" rx="4" fill="#450a0a" stroke="#ef4444" stroke-width="1" />
+    <text x="338" y="216" fill="#fca5a5" font-family="monospace" font-size="9" font-weight="bold">FATIGUE SUPPRESSION</text>
+    <text x="338" y="230" fill="#fecaca" font-family="monospace" font-size="8">ANOMALY WEIGHT: 0.88</text>
+  </g>
+
+  <!-- Right: Cognitive Stress Breakdown Bars -->
+  <g transform="translate(510, 100)">
+    <rect x="0" y="0" width="250" height="340" rx="8" fill="#04201d" fill-opacity="0.8" stroke="#059669" stroke-opacity="0.3" />
+    <text x="18" y="28" fill="#a7f3d0" font-family="monospace" font-size="11" font-weight="bold">SHAP ATTRIBUTION</text>
+
+    <!-- Bar 1: Deployment Strain -->
+    <text x="18" y="65" fill="#94a3b8" font-family="monospace" font-size="9">Consecutive Field Duty (78d)</text>
+    <rect x="18" y="73" width="214" height="12" rx="3" fill="#064e3b" />
+    <rect x="18" y="73" width="180" height="12" rx="3" fill="#ef4444" />
+    <text x="204" y="83" fill="#ffffff" font-family="monospace" font-size="8" font-weight="bold">+42%</text>
+
+    <!-- Bar 2: Sleep Fragmentation -->
+    <text x="18" y="115" fill="#94a3b8" font-family="monospace" font-size="9">Sleep Deficit (3.4h/night)</text>
+    <rect x="18" y="123" width="214" height="12" rx="3" fill="#064e3b" />
+    <rect x="18" y="123" width="145" height="12" rx="3" fill="#f97316" />
+    <text x="169" y="133" fill="#ffffff" font-family="monospace" font-size="8" font-weight="bold">+28%</text>
+
+    <!-- Bar 3: Combat Sector Tension -->
+    <text x="18" y="165" fill="#94a3b8" font-family="monospace" font-size="9">High Altitude / Threat Index</text>
+    <rect x="18" y="173" width="214" height="12" rx="3" fill="#064e3b" />
+    <rect x="18" y="173" width="110" height="12" rx="3" fill="#eab308" />
+    <text x="134" y="183" fill="#000000" font-family="monospace" font-size="8" font-weight="bold">+18%</text>
+
+    <!-- Bar 4: Verbal Masking Offset -->
+    <text x="18" y="215" fill="#94a3b8" font-family="monospace" font-size="9">Self-Report: "Fit for Patrol"</text>
+    <rect x="18" y="223" width="214" height="12" rx="3" fill="#064e3b" />
+    <rect x="18" y="223" width="40" height="12" rx="3" fill="#10b981" />
+    <text x="64" y="233" fill="#34d399" font-family="monospace" font-size="8" font-weight="bold">-12% (Mask)</text>
+
+    <!-- Final Diagnosis Box -->
+    <rect x="18" y="260" width="214" height="60" rx="6" fill="#1e1b4b" stroke="#6366f1" stroke-opacity="0.5" />
+    <text x="28" y="280" fill="#c7d2fe" font-family="monospace" font-size="9" font-weight="bold">AI TRIAGE VERDICT:</text>
+    <text x="28" y="296" fill="#a5b4fc" font-family="monospace" font-size="11" font-weight="bold">STAND-DOWN REST (48H)</text>
+    <text x="28" y="310" fill="#818cf8" font-family="monospace" font-size="8">CONFIDENTIAL • ZERO ACR RECORD</text>
+  </g>
+
+  <!-- Animated Scanner Bar -->
+  <g class="neural-scanbar" pointer-events="none">
+    <line x1="40" y1="80" x2="760" y2="80" stroke="#10b981" stroke-opacity="0.3" stroke-width="2" filter="url(#glowN)" />
+  </g>
+</svg>

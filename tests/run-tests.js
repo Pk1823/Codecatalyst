@@ -4,7 +4,7 @@
  */
 
 const http = require("http");
-const PORT = 5000;
+const PORT = process.env.PORT || 5001;
 let server;
 
 function assert(condition, message) {
@@ -22,7 +22,7 @@ async function runTests() {
   console.log(" Organization: Ministry of Home Affairs | CRPF Police II Div");
   console.log("================================================================\n");
 
-  const baseUrl = `http://localhost:5000`;
+  const baseUrl = `http://localhost:${PORT}`;
 
   let passedCount = 0;
   let totalCount = 0;

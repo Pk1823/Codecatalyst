@@ -4,11 +4,16 @@ import React, { useState, useEffect } from "react";
 import {
   Lock,
   Search,
+  Download,
+  ShieldCheck,
+  CheckCircle2,
 } from "lucide-react";
 import { NotificationService } from "@/services/notification.service";
 import { AuditLogEntry } from "@/types/notifications";
+import { useToast } from "@/components/providers";
 
 export default function AuditLogPage() {
+  const { toast } = useToast();
   const [logs, setLogs] = useState<AuditLogEntry[]>([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
@@ -30,48 +35,84 @@ export default function AuditLogPage() {
     return matchesSearch && matchesStatus;
   });
 
+  const handleExportCSV = () => {
+    const headers = ["Timestamp", "User", "Role", "Action", "Resource", "IP Address", "Status"];
+    const rows = filtered.map((l) => [
+      `"${l.timestamp}"`,
+      `"${l.user}"`,
+      `"${l.role}"`,
+      `"${l.action}"`,
+      `"${l.resource}"`,
+      `"${l.ipAddress}"`,
+      `"${l.status}"`,
+    ]);
+    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `missionwell_audit_trail_${new Date().toISOString().split("T")[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast({
+      title: "Audit Ledger Exported",
+      description: "Cryptographic CSV log generated successfully.",
+      type: "success",
+    });
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-xl font-bold tracking-tight text-white">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
               Audit & Compliance Trail
             </h2>
-            <span className="rounded bg-emerald-500/10 text-emerald-400 text-xs font-mono px-2 py-0.5 border border-emerald-500/20">
-              Immutable Log
+            <span className="rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 text-xs font-mono px-2 py-0.5 border border-emerald-200 dark:border-emerald-900">
+              Immutable Ledger
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Cryptographically recorded access ledger ensuring strict privacy compliance with DPDP Act 2023.
           </p>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-mono text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
-          <Lock className="h-3.5 w-3.5 text-emerald-400" />
-          <span>Hash Chain Integrity: Verified</span>
+        <div className="flex items-center gap-2.5">
+          <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-xs">
+            <Lock className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+            <span>Hash Chain Integrity: Verified</span>
+          </div>
+          <button
+            onClick={handleExportCSV}
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-xs transition-colors"
+          >
+            <Download className="h-3.5 w-3.5" />
+            <span>Export Audit Log</span>
+          </button>
         </div>
       </div>
 
       {/* Filter Bar */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-3.5 flex flex-wrap items-center justify-between gap-3 shadow-xs">
         <div className="flex flex-wrap items-center gap-2 flex-1 min-w-[280px]">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-500" />
+            <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
             <input
               type="text"
               placeholder="Search user, action, resource..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-lg border border-slate-800 bg-slate-950/60 pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-emerald-500 font-mono"
+              className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 pl-8 pr-3 py-1.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:border-emerald-500 font-mono"
             />
           </div>
 
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="rounded-lg border border-slate-800 bg-slate-950/60 px-2.5 py-1.5 text-xs text-slate-300 focus:outline-hidden focus:border-emerald-500"
+            className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-200 focus:outline-hidden focus:border-emerald-500"
           >
             <option value="ALL">All Event Statuses</option>
             <option value="Authorized">Authorized</option>
@@ -80,58 +121,58 @@ export default function AuditLogPage() {
           </select>
         </div>
 
-        <span className="text-xs text-slate-400 font-mono">
+        <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
           {filtered.length} Audit Events Recorded
         </span>
       </div>
 
       {/* Audit Data Table */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/60 overflow-hidden">
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-mono">
-            <thead className="bg-slate-950/40 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[11px]">
+            <thead className="bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[11px]">
               <tr>
-                <th className="py-3 px-4">Timestamp</th>
-                <th className="py-3 px-4">Actor</th>
-                <th className="py-3 px-4">Role</th>
-                <th className="py-3 px-4">Action</th>
-                <th className="py-3 px-4">Resource Target</th>
-                <th className="py-3 px-4">IP Subnet</th>
-                <th className="py-3 px-4 text-right">Status</th>
+                <th className="py-3 px-4 font-sans font-medium">Timestamp</th>
+                <th className="py-3 px-4 font-sans font-medium">Actor</th>
+                <th className="py-3 px-4 font-sans font-medium">Role</th>
+                <th className="py-3 px-4 font-sans font-medium">Action</th>
+                <th className="py-3 px-4 font-sans font-medium">Resource Target</th>
+                <th className="py-3 px-4 font-sans font-medium">IP Subnet</th>
+                <th className="py-3 px-4 text-right font-sans font-medium">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800 text-slate-300">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
               {filtered.map((entry) => (
                 <tr
                   key={entry.id}
-                  className="hover:bg-slate-800/30 transition-colors"
+                  className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
                 >
-                  <td className="py-3 px-4 text-[11px] text-slate-500 whitespace-nowrap">
+                  <td className="py-3 px-4 text-[11px] text-slate-500 dark:text-slate-400 whitespace-nowrap">
                     {entry.timestamp}
                   </td>
-                  <td className="py-3 px-4 font-medium text-white font-sans">
+                  <td className="py-3 px-4 font-semibold text-slate-900 dark:text-white font-sans">
                     {entry.user}
                   </td>
-                  <td className="py-3 px-4 text-slate-400 text-[11px] font-sans">
+                  <td className="py-3 px-4 text-slate-600 dark:text-slate-300 text-[11px] font-sans">
                     {entry.role}
                   </td>
-                  <td className="py-3 px-4 text-slate-300 font-sans">
+                  <td className="py-3 px-4 text-slate-800 dark:text-slate-200 font-sans">
                     {entry.action}
                   </td>
-                  <td className="py-3 px-4 text-emerald-400 max-w-[200px] truncate" title={entry.resource}>
+                  <td className="py-3 px-4 text-emerald-600 dark:text-emerald-400 max-w-[200px] truncate font-semibold" title={entry.resource}>
                     {entry.resource}
                   </td>
-                  <td className="py-3 px-4 text-slate-500 text-[11px]">
+                  <td className="py-3 px-4 text-slate-500 dark:text-slate-400 text-[11px]">
                     {entry.ipAddress}
                   </td>
                   <td className="py-3 px-4 text-right font-sans">
                     <span
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono ${
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-semibold ${
                         entry.status === "Authorized"
-                          ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                          ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900"
                           : entry.status === "Blocked"
-                          ? "bg-rose-500/10 text-rose-400 border border-rose-500/20"
-                          : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                          ? "bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-900"
+                          : "bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900"
                       }`}
                     >
                       {entry.status}

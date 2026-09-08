@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#1E293B" />
+      <stop offset="70%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#080D1A" />
+    </radialGradient>
+
+    <!-- Emerald Shield Glow -->
+    <linearGradient id="shieldBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399" />
+      <stop offset="50%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+
+    <!-- Tricolor Ring Gradient -->
+    <linearGradient id="tricolorAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF9933" />
+      <stop offset="50%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#138808" />
+    </linearGradient>
+
+    <!-- Server Blade Gradient -->
+    <linearGradient id="bladeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+
+    <!-- Active Pulse Gradient -->
+    <linearGradient id="pulseGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="50%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+
+    <!-- Filter for Glow Effect -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Outer Cyber Hex Armor -->
+  <path d="M60 6 L104 28 L104 78 L60 114 L16 78 L16 28 Z"
+        fill="url(#bgGrad)"
+        stroke="url(#shieldBorder)"
+        stroke-width="3"
+        stroke-linejoin="round" />
+
+  <!-- Tricolor Micro Indicator Notch at Top -->
+  <path d="M50 10 L70 10" stroke="url(#tricolorAccent)" stroke-width="2.5" stroke-linecap="round" />
+
+  <!-- Inner Defense Grid Lines -->
+  <path d="M28 34 L92 34 M28 86 L92 86" stroke="#334155" stroke-width="1" stroke-dasharray="3 3" opacity="0.4" />
+
+  <!-- SERVER CHASSIS RACK -->
+  <!-- Server Blade 1 (Top - Web Tier / Next.js) -->
+  <rect x="30" y="32" width="60" height="13" rx="3" fill="url(#bladeGrad)" stroke="#475569" stroke-width="1" />
+  <circle cx="36" cy="38.5" r="2" fill="#10B981" filter="url(#glow)" />
+  <circle cx="43" cy="38.5" r="1.5" fill="#38BDF8" />
+  <line x1="52" y1="38.5" x2="84" y2="38.5" stroke="#64748B" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="2 4" />
+
+  <!-- Server Blade 2 (Middle - REST API Tier / Node.js) -->
+  <rect x="30" y="48" width="60" height="13" rx="3" fill="url(#bladeGrad)" stroke="#475569" stroke-width="1" />
+  <circle cx="36" cy="54.5" r="2" fill="#10B981" filter="url(#glow)" />
+  <circle cx="43" cy="54.5" r="1.5" fill="#F59E0B" />
+  <line x1="52" y1="54.5" x2="84" y2="54.5" stroke="#64748B" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="2 4" />
+
+  <!-- Server Blade 3 (Bottom - AI Inference Engine / FastAPI) -->
+  <rect x="30" y="64" width="60" height="13" rx="3" fill="url(#bladeGrad)" stroke="#475569" stroke-width="1" />
+  <circle cx="36" cy="70.5" r="2" fill="#10B981" filter="url(#glow)" />
+  <circle cx="43" cy="70.5" r="1.5" fill="#A855F7" />
+  <line x1="52" y1="70.5" x2="84" y2="70.5" stroke="#64748B" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="2 4" />
+
+  <!-- FOREGROUND: RESILIENCE NEURAL LIFELINE PULSE -->
+  <path d="M22 84 L38 84 L46 72 L52 96 L60 76 L66 88 L72 82 L78 84 L98 84"
+        fill="none"
+        stroke="url(#pulseGrad)"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        filter="url(#glow)" />
+
+  <!-- Center Defense Sentinel Node / Star -->
+  <circle cx="60" cy="100" r="3.5" fill="#10B981" filter="url(#glow)" />
+  <circle cx="60" cy="100" r="1.5" fill="#FFFFFF" />
+</svg>

@@ -18,20 +18,39 @@ const hasAiEngine = fs.existsSync(path.join(ROOT_DIR, "ai-engine", "main.py"));
 const mlDir = hasAiEngine ? "ai-engine" : "ml-service";
 const mlScript = hasAiEngine ? "main.py" : "server.py";
 
+const venvPython = isWin
+  ? path.join(ROOT_DIR, mlDir, "venv", "Scripts", "python.exe")
+  : path.join(ROOT_DIR, mlDir, "venv", "bin", "python");
+
+let pythonCmd = "python";
+if (fs.existsSync(venvPython)) {
+  pythonCmd = venvPython;
+} else if (!isWin) {
+  try {
+    const { execSync } = require("child_process");
+    execSync("python --version", { stdio: "ignore" });
+    pythonCmd = "python";
+  } catch {
+    pythonCmd = "python3";
+  }
+}
+
+const backendPort = parseInt(process.env.BACKEND_PORT || process.env.PORT || "5001", 10);
+
 const SERVICES = [
   {
     name: "ML-ENGINE",
     color: "\x1b[35m", // Magenta
     port: 8000,
     checkPath: "/health",
-    cmd: "python",
+    cmd: pythonCmd,
     args: [mlScript],
     cwd: path.join(ROOT_DIR, mlDir),
   },
   {
     name: "BACKEND",
     color: "\x1b[36m", // Cyan
-    port: 5000,
+    port: backendPort,
     checkPath: "/health",
     cmd: isWin ? "cmd.exe" : "npm",
     args: isWin ? ["/c", "npm", "run", "dev"] : ["run", "dev"],
@@ -108,7 +127,7 @@ async function startAll() {
   console.log("\n=================================================================");
   console.log(" ALL SERVICES ONLINE & INTEGRATED");
   console.log(" Frontend Portal : http://localhost:3000");
-  console.log(" Backend API     : http://localhost:5000");
+  console.log(` Backend API     : http://localhost:${backendPort}`);
   console.log(" ML Inference    : http://localhost:8000");
   console.log(" Sign-In Page    : http://localhost:3000/login");
   console.log("=================================================================\n");
