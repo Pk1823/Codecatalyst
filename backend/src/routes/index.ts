@@ -15,7 +15,7 @@ router.use("/personnel", personnelRoutes);
 router.use("/wellness", wellnessRoutes);
 router.use("/risk", riskRoutes);
 router.use("/welfare", welfareRoutes);
-router.use("/alerts", alertRoutes);
+router.use(alertRoutes);
 router.use(reportRoutes);
 router.use(auditRoutes);
 

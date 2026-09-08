@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import apiRouter from "./routes";
+import { notFoundHandler, globalErrorHandler } from "./middleware/error.middleware";
 
 dotenv.config();
 
@@ -42,14 +43,9 @@ app.get("/health", (req: Request, res: Response) => {
 // API Routes
 app.use("/api", apiRouter);
 
-// Global Error Handler
-app.use((err: any, req: Request, res: Response, next: any) => {
-  console.error("[GLOBAL_ERROR]:", err);
-  res.status(err.status || 500).json({
-    error: err.message || "Internal server error",
-    code: err.code || "INTERNAL_ERROR",
-  });
-});
+// 404 and Error Handling
+app.use(notFoundHandler);
+app.use(globalErrorHandler);
 
 if (process.env.NODE_ENV !== "test") {
   app.listen(PORT, () => {
