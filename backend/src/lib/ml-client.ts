@@ -42,7 +42,13 @@ export interface RiskPredictionResult {
 }
 
 export class MLClient {
-  private static ML_SERVICE_URL = process.env.ML_SERVICE_URL || "http://localhost:8000";
+  private static get ML_SERVICE_URL(): string {
+    const raw = (process.env.ML_SERVICE_URL || "http://localhost:8000").trim();
+    if (raw.startsWith("http://") || raw.startsWith("https://")) {
+      return raw.replace(/\/$/, "");
+    }
+    return `http://${raw}`.replace(/\/$/, "");
+  }
 
   static async evaluate(
     personnelId: string,

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getBackendUrl } from "@/lib/utils";
 
 export async function GET(req: NextRequest) {
   try {
@@ -10,7 +11,7 @@ export async function GET(req: NextRequest) {
       `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/auth/callback`;
 
     // 1. Try querying backend port 5000
-    const backendUrl = process.env.BACKEND_URL || "http://localhost:5000";
+    const backendUrl = getBackendUrl();
     try {
       const backendRes = await fetch(
         `${backendUrl}/api/auth/google/url?role=${encodeURIComponent(role)}&force=${encodeURIComponent(

@@ -37,3 +37,11 @@ export function getRiskColorClass(level: "LOW" | "MODERATE" | "HIGH" | "URGENT R
       return "text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800";
   }
 }
+
+export function getBackendUrl(): string {
+  const raw = (process.env.BACKEND_URL || "http://localhost:5000").trim();
+  if (raw.startsWith("http://") || raw.startsWith("https://")) {
+    return raw.replace(/\/$/, "");
+  }
+  return `http://${raw}`.replace(/\/$/, "");
+}

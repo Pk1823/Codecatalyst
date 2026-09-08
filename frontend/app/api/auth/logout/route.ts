@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession, SESSION_COOKIE_NAME } from "@/lib/auth/jwt";
 import { AuditService } from "@/services/audit.service";
+import { getBackendUrl } from "@/lib/utils";
 
 export async function POST(req: NextRequest) {
   try {
@@ -17,7 +18,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const backendUrl = process.env.BACKEND_URL || "http://localhost:5000";
+    const backendUrl = getBackendUrl();
     try {
       const cookieHeader = req.headers.get("cookie");
       await fetch(`${backendUrl}/api/auth/logout`, {

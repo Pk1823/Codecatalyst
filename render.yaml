@@ -1,24 +1,73 @@
+# Render Infrastructure as Code (Blueprint Specification)
+# Docs: https://render.com/docs/blueprint-spec
+
 services:
-  # 1. MissionWell AI Backend API Service
+  # ================================================================
+  # 1. Python ML Microservice (FastAPI + LightGBM + SHAP)
+  # ================================================================
+  - type: web
+    name: missionwell-ai-engine
+    runtime: python
+    rootDir: ai-engine
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: NODE_ENV
+        value: production
+
+  # ================================================================
+  # 2. Node.js Express REST API Backend (Prisma, SQLite/Postgres)
+  # ================================================================
   - type: web
     name: missionwell-backend
     runtime: node
     rootDir: backend
-    region: singapore
     plan: free
-    buildCommand: npm install && npx prisma generate && npx prisma db push && npm run db:seed && npm run build
-    startCommand: npm start
+    region: oregon
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: node dist/server.js
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 5000
+      - key: DATABASE_URL
+        value: file:./dev.db
+      - key: AUTH_SECRET
+        generateValue: true
+      - key: ML_SERVICE_URL
+        fromService:
+          type: web
+          name: missionwell-ai-engine
+          property: hostport
+      - key: CORS_ORIGIN
+        value: "*"
+
+  # ================================================================
+  # 3. Next.js 16 Web Frontend Portal (React 19, Tailwind CSS)
+  # ================================================================
+  - type: web
+    name: missionwell-frontend
+    runtime: node
+    rootDir: frontend
+    plan: free
+    region: oregon
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
       - key: AUTH_SECRET
         generateValue: true
       - key: DATABASE_URL
         value: file:./dev.db
-      - key: CORS_ORIGIN
-        value: "*"
-      - key: ML_SERVICE_URL
-        value: http://localhost:8000
+      - key: BACKEND_URL
+        fromService:
+          type: web
+          name: missionwell-backend
+          property: hostport
