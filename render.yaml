@@ -43,12 +43,9 @@ services:
         fromService:
           type: web
           name: missionwell-ai-engine
-          property: host
+          property: hostport
       - key: CORS_ORIGIN
-        fromService:
-          type: web
-          name: missionwell-frontend
-          property: host
+        value: "*"
 
   # ================================================================
   # 3. Next.js 16 Web Frontend Portal (React 19, Tailwind CSS)
@@ -73,9 +70,4 @@ services:
         fromService:
           type: web
           name: missionwell-backend
-          property: host
-      - key: NEXT_PUBLIC_API_URL
-        fromService:
-          type: web
-          name: missionwell-backend
-          property: host
+          property: hostport

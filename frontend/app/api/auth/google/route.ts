@@ -4,6 +4,7 @@ import { hashPassword } from "@/lib/auth/password";
 import { signSessionToken, SESSION_COOKIE_NAME, SESSION_COOKIE_OPTIONS } from "@/lib/auth/jwt";
 import { AuditService } from "@/services/audit.service";
 import { UserRole } from "@/types/auth";
+import { getBackendUrl } from "@/lib/utils";
 
 export async function POST(req: NextRequest) {
   try {
@@ -22,7 +23,7 @@ export async function POST(req: NextRequest) {
     const assignedRole = (role || "WELFARE_OFFICER") as UserRole;
 
     // 1. Primary: Forward to backend port 5000 if reachable
-    const backendUrl = process.env.BACKEND_URL || "http://localhost:5000";
+    const backendUrl = getBackendUrl();
     try {
       const backendRes = await fetch(`${backendUrl}/api/auth/google`, {
         method: "POST",
