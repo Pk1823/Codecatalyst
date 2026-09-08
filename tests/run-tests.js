@@ -248,6 +248,38 @@ async function runTests() {
       assert(body.metadata.dataset === "Synthetic Demo Data", "Dataset clearly labeled as Synthetic Demo Data");
     });
 
+    await testStep("End-to-End: Commander Downloads Official Welfare Report in CSV Format", async () => {
+      const res = await fetch(`${baseUrl}/api/reports/download?reportId=rep-01&format=csv`, {
+        headers: { Authorization: `Bearer ${commanderToken}` },
+      });
+      assert(res.status === 200, "Commander received 200 OK for CSV report download");
+      const contentType = res.headers.get("content-type") || "";
+      assert(contentType.includes("text/csv"), `Content-Type is text/csv (got ${contentType})`);
+      const disposition = res.headers.get("content-disposition") || "";
+      assert(disposition.includes("attachment") && disposition.includes(".csv"), "Content-Disposition has attachment with .csv");
+      const csvText = await res.text();
+      assert(csvText.includes("Unit ID") && csvText.includes("Personnel Count"), "CSV content contains expected headers and units");
+    });
+
+    await testStep("End-to-End: Welfare Officer Downloads Official Welfare Report in Printable HTML/PDF Format", async () => {
+      const res = await fetch(`${baseUrl}/api/reports/download?reportId=rep-05&format=html`, {
+        headers: { Authorization: `Bearer ${welfareToken}` },
+      });
+      assert(res.status === 200, "Welfare Officer received 200 OK for HTML/PDF report download");
+      const contentType = res.headers.get("content-type") || "";
+      assert(contentType.includes("text/html"), `Content-Type is text/html (got ${contentType})`);
+      const htmlText = await res.text();
+      assert(htmlText.includes("GOVERNMENT OF INDIA") && htmlText.includes("MISSIONWELL AI"), "HTML report contains official MHA header and branding");
+      assert(htmlText.includes("window.print()"), "Print trigger is embedded for instant PDF export");
+    });
+
+    await testStep("Security RBAC: Personnel Role is Strictly Forbidden from Downloading Operational Reports", async () => {
+      const res = await fetch(`${baseUrl}/api/reports/download?reportId=rep-01&format=csv`, {
+        headers: { Authorization: `Bearer ${personnelToken}` },
+      });
+      assert(res.status === 403, `Personnel report download rejected with 403 Forbidden (got ${res.status})`);
+    });
+
     await testStep("End-to-End: Admin Verifies Immutable Audit Trail", async () => {
       const res = await fetch(`${baseUrl}/api/audit-logs`, {
         headers: { Authorization: `Bearer ${adminToken}` },

@@ -12,4 +12,11 @@ router.get(
   ReportController.getReport
 );
 
+router.get(
+  "/reports/download",
+  authenticate,
+  authorizeRoles(["WELFARE_OFFICER", "COMMANDER", "ADMIN"]),
+  ReportController.downloadReport
+);
+
 export default router;
