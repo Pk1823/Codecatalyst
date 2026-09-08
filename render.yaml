@@ -63,7 +63,10 @@ services:
       - key: NODE_ENV
         value: production
       - key: AUTH_SECRET
-        generateValue: true
+        fromService:
+          type: web
+          name: missionwell-backend
+          envVarKey: AUTH_SECRET
       - key: DATABASE_URL
         value: file:./dev.db
       - key: BACKEND_URL
