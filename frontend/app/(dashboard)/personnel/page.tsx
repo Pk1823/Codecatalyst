@@ -14,9 +14,8 @@ import {
   ArrowRight,
   HandHelping,
   FileHeart,
-  Users,
-  CheckCircle2,
   PhoneCall,
+  CheckCircle2,
   Award,
   Sparkles,
   Smile,
@@ -35,7 +34,6 @@ export default function PersonnelDashboard() {
   const meta = FORCES_METADATA[force] || FORCES_METADATA.CRPF;
   const isHi = lang === "hi";
 
-  const [buddyStatus, setBuddyStatus] = useState<"optimal" | "alert" | "reported">("optimal");
   const [sainikRequestSent, setSainikRequestSent] = useState(false);
   const [isQuickCheckinOpen, setIsQuickCheckinOpen] = useState(false);
   const [quickEnergy, setQuickEnergy] = useState(4);
@@ -63,36 +61,6 @@ export default function PersonnelDashboard() {
       }
     } catch (e) {}
   }, [isHi]);
-
-  const handleBuddyReport = async () => {
-    setBuddyStatus("reported");
-    try {
-      await WelfareService.createSupportRequestCase({
-        personnelId: "P-1088",
-        supportType: "Buddy Welfare Alert",
-        priority: "High",
-        description: "Buddy Mutual Check-in: Ct. Arvind Minz observed exhibiting continuous operational fatigue and distress.",
-        preferredContact: "Welfare Coordinator",
-      });
-    } catch {}
-
-    toast({
-      title: isHi ? "बडी रिपोर्ट दर्ज की गई" : "Buddy Welfare Alert Dispatched",
-      description: isHi
-        ? "कल्याण अधिकारी को आपके साथी के विश्राम हेतु गोपनीय सूचना भेज दी गई है।"
-        : "Confidential rest recommendation sent to Welfare Officer for Ct. Arvind Minz.",
-      type: "success",
-    });
-  };
-
-  const handleBuddyGood = () => {
-    setBuddyStatus("optimal");
-    toast({
-      title: isHi ? "बडी स्थिति पुष्ट" : "Buddy Status Confirmed",
-      description: isHi ? "साथी की स्थिति सामान्य दर्ज की गई।" : "Buddy status recorded as optimal.",
-      type: "info",
-    });
-  };
 
   const handleSainikAudienceRequest = async () => {
     setSainikRequestSent(true);
@@ -192,58 +160,6 @@ export default function PersonnelDashboard() {
             <HandHelping className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             <span>{isHi ? "गोपनीय सहायता अनुरोध" : "Confidential Support"}</span>
           </Link>
-        </div>
-      </div>
-
-      {/* Military Buddy-Pair System Quick Action Banner */}
-      <div className="rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0F172A]/90 p-4 sm:p-5 shadow-xs">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-start gap-3.5">
-            <div className="p-2 rounded-lg bg-emerald-50 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-emerald-200/60 dark:border-slate-700 shrink-0 mt-0.5">
-              <Users className="h-5 w-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-sm font-bold text-slate-900 dark:text-[#F8FAFC]">
-                  {isHi ? "बडी-पेयर कल्याण निगरानी" : "Buddy-Pair Mutual Welfare System"}
-                </h3>
-                <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 border border-slate-200 dark:border-slate-700">
-                  PAIR #B-1088
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                {isHi ? "आपका अधिकृत साथी (Buddy):" : "Your assigned buddy:"}{" "}
-                <strong className="text-slate-800 dark:text-slate-200">Ct. Arvind Minz</strong> (Forward Patrol, Post Dantewada).{" "}
-                {isHi
-                  ? "यदि आपका साथी थका हुआ या तनाव में दिखे, तो बिना किसी संकोच के सूचित करें।"
-                  : "Look out for each other. Report if your partner shows severe fatigue, family distress, or sleeplessness."}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            {buddyStatus === "reported" ? (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-xs font-mono font-medium border border-emerald-200 dark:border-emerald-800/60">
-                <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                <span>{isHi ? "कल्याण अधिकारी को सूचित कर दिया गया" : "Notified Welfare Officer"}</span>
-              </span>
-            ) : (
-              <>
-                <button
-                  onClick={handleBuddyGood}
-                  className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
-                >
-                  ✓ {isHi ? "मेरा साथी ठीक है" : "My Buddy is Good"}
-                </button>
-                <button
-                  onClick={handleBuddyReport}
-                  className="px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 dark:bg-slate-800 dark:hover:bg-slate-700 border border-amber-300 dark:border-amber-500/30 text-amber-800 dark:text-amber-300 text-xs font-semibold shadow-xs transition-colors"
-                >
-                  ! {isHi ? "साथी को सहायता चाहिए" : "Buddy Needs Rest"}
-                </button>
-              </>
-            )}
-          </div>
         </div>
       </div>
 

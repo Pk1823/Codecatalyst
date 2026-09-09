@@ -10,7 +10,6 @@ import {
   CheckCircle2,
   ArrowRight,
   ArrowLeft,
-  Info,
   HandHelping,
 } from "lucide-react";
 import { WELLNESS_STEPS } from "@/lib/mock-data/wellness";
@@ -192,15 +191,6 @@ export default function WellnessAssessmentPage() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      {/* Voluntary Participation Notice */}
-      <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-4 flex items-center gap-3 shadow-xs">
-        <Info className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-        <div className="text-xs text-slate-600 dark:text-slate-300">
-          <span className="font-semibold text-slate-900 dark:text-white">Participation is voluntary.</span> Your inputs help
-          welfare officers proactively optimize rest rotations and supportive counseling.
-        </div>
-      </div>
-
       {/* Main Assessment Container */}
       <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-6 sm:p-8 shadow-md">
         {/* Progress Bar & Header */}

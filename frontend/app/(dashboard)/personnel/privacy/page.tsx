@@ -2,11 +2,9 @@
 
 import React, { useState } from "react";
 import {
-  ShieldCheck,
   CheckCircle2,
   XCircle,
   History,
-  Lock,
 } from "lucide-react";
 import { useToast } from "@/components/providers";
 
@@ -27,150 +25,115 @@ export default function PersonnelPrivacyPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-3xl mx-auto space-y-5">
       {/* Header */}
       <div>
         <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#F8FAFC]">
           Personal Privacy & Consent Controls
         </h1>
-
+        <p className="text-xs text-slate-400 mt-1">
+          DPDP 2023 protected. Manage your voluntary data preferences.
+        </p>
       </div>
 
-      {/* Collects vs NOT Collects Comparison Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* What MissionWell Collects */}
-        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-5 space-y-4">
-          <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
-            <CheckCircle2 className="h-4 w-4 shrink-0" />
-            <span>What MissionWell Collects</span>
-          </div>
-
-
-          <div className="space-y-2 text-xs">
-            {[
-              { title: "Authorized HR indicators", desc: "Rank, posting history, battalion assignment, and service duration" },
-              { title: "Duty patterns & rosters", desc: "Roster hours, continuous night watch duration, and rotation cadence" },
-              { title: "Leave patterns", desc: "Accumulated annual leave balance, sanction history, and elapsed days since last leave" },
-              { title: "Voluntary wellness data", desc: "Self-assessed energy, sleep quality, and recovery responses provided with your consent" },
-            ].map((item, idx) => (
-              <div key={idx} className="p-3 rounded-lg bg-[#0F172A] border border-slate-800">
-                <span className="font-semibold text-slate-200 block">{item.title}</span>
-                <span className="text-[11px] text-slate-400">{item.desc}</span>
-              </div>
-            ))}
-          </div>
+      {/* Crisp 2-Point Scope Notice */}
+      <div className="rounded-xl border border-slate-800 bg-[#0F172A] px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div className="flex items-center gap-2 text-emerald-400">
+          <CheckCircle2 className="h-4 w-4 shrink-0" />
+          <span className="text-slate-300">
+            <strong className="text-emerald-400 font-semibold">Included:</strong> Duty rosters & voluntary vitals only
+          </span>
         </div>
-
-        {/* What MissionWell does NOT Collect */}
-        <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-5 space-y-4">
-          <div className="flex items-center gap-2 text-rose-400 font-bold text-sm">
-            <XCircle className="h-4 w-4 shrink-0" />
-            <span>What MissionWell Does NOT Collect</span>
-          </div>
-
-
-          <div className="space-y-2 text-xs">
-            {[
-              { title: "Private messages & emails", desc: "Zero access to SMS, WhatsApp, personal email, or private messaging apps" },
-              { title: "Social media activity", desc: "No scraping or observation of external personal social media profiles" },
-              { title: "Microphone & camera audio/video", desc: "No background audio recording, listening, or camera surveillance" },
-              { title: "Contacts & personal address book", desc: "Personal device contact lists remain strictly untouched" },
-              { title: "Unauthorized real-time GPS tracking", desc: "No off-duty geo-tracking or personal movement profiling" },
-            ].map((item, idx) => (
-              <div key={idx} className="p-3 rounded-lg bg-[#0F172A] border border-slate-800">
-                <span className="font-semibold text-slate-200 block">{item.title}</span>
-                <span className="text-[11px] text-slate-400">{item.desc}</span>
-              </div>
-            ))}
-          </div>
+        <div className="flex items-center gap-2 text-slate-400">
+          <XCircle className="h-4 w-4 shrink-0 text-slate-500" />
+          <span className="text-slate-400">
+            <strong className="text-slate-300 font-semibold">Excluded:</strong> No messages, calls, or private GPS
+          </span>
         </div>
       </div>
 
-      {/* Consent Toggles Card */}
-      <div className="rounded-xl border border-slate-800 bg-[#0F172A] p-6 space-y-5">
+      {/* Active Consent Preferences */}
+      <div className="rounded-xl border border-slate-800 bg-[#0F172A] p-5 space-y-3.5">
         <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-          <div>
-            <h3 className="text-sm font-bold text-[#F8FAFC]">
-              Active Consent Preferences
-            </h3>
-
-          </div>
-          <span className="rounded-md bg-emerald-500/10 text-emerald-400 text-[11px] font-mono font-semibold px-2.5 py-1 border border-emerald-500/20">
+          <h2 className="text-sm font-bold text-[#F8FAFC]">
+            Consent Preferences
+          </h2>
+          <span className="rounded bg-slate-800 text-emerald-400 text-[10px] font-mono font-semibold px-2 py-0.5 border border-slate-700">
             DPDP 2023 Compliant
           </span>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2">
           {/* Toggle 1: Wellness Data */}
-          <div className="flex items-center justify-between p-3.5 rounded-lg border border-slate-800 bg-[#090D16]">
+          <div className="flex items-center justify-between p-3 rounded-lg border border-slate-800/80 bg-[#090D16]">
             <div>
               <p className="text-xs font-semibold text-slate-200">
-                Voluntary Self-Assessment Wellness Data
+                Voluntary Wellness Self-Assessment
               </p>
               <p className="text-[11px] text-slate-400">
-                Allows welfare officers to consider your 7-step self-reported scores for duty pacing.
+                Used confidentially for fatigue forecasting and rest pacing.
               </p>
             </div>
             <button
-              onClick={() => handleToggle(setWellnessDataConsent, wellnessDataConsent, "Self-Assessment Data")}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+              onClick={() => handleToggle(setWellnessDataConsent, wellnessDataConsent, "Self-Assessment")}
+              className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors shrink-0 ml-4 ${
                 wellnessDataConsent ? "bg-emerald-500" : "bg-slate-700"
               }`}
               aria-label="Toggle wellness data consent"
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-[#090D16] transition-transform ${
-                  wellnessDataConsent ? "translate-x-6" : "translate-x-1"
+                className={`inline-block h-3.5 w-3.5 transform rounded-full bg-[#090D16] transition-transform ${
+                  wellnessDataConsent ? "translate-x-5" : "translate-x-1"
                 }`}
               />
             </button>
           </div>
 
-          {/* Toggle 2: Optional Wellness Data */}
-          <div className="flex items-center justify-between p-3.5 rounded-lg border border-slate-800 bg-[#090D16]">
+          {/* Toggle 2: Optional Biometric */}
+          <div className="flex items-center justify-between p-3 rounded-lg border border-slate-800/80 bg-[#090D16]">
             <div>
               <p className="text-xs font-semibold text-slate-200">
-                Optional Biometric & Wearable Rest Data (When Authorized)
+                Smart-Band Rest Telemetry (Optional)
               </p>
               <p className="text-[11px] text-slate-400">
-                Permits authorized battalion smart-band sleep interval feeds where available.
+                Syncs sleep interval readings when authorized wearable is active.
               </p>
             </div>
             <button
-              onClick={() => handleToggle(setOptionalDataConsent, optionalDataConsent, "Optional Biometric Data")}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+              onClick={() => handleToggle(setOptionalDataConsent, optionalDataConsent, "Smart-Band Data")}
+              className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors shrink-0 ml-4 ${
                 optionalDataConsent ? "bg-emerald-500" : "bg-slate-700"
               }`}
               aria-label="Toggle biometric data consent"
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-[#090D16] transition-transform ${
-                  optionalDataConsent ? "translate-x-6" : "translate-x-1"
+                className={`inline-block h-3.5 w-3.5 transform rounded-full bg-[#090D16] transition-transform ${
+                  optionalDataConsent ? "translate-x-5" : "translate-x-1"
                 }`}
               />
             </button>
           </div>
 
-          {/* Toggle 3: Analytics Participation */}
-          <div className="flex items-center justify-between p-3.5 rounded-lg border border-slate-800 bg-[#090D16]">
+          {/* Toggle 3: Analytics */}
+          <div className="flex items-center justify-between p-3 rounded-lg border border-slate-800/80 bg-[#090D16]">
             <div>
               <p className="text-xs font-semibold text-slate-200">
-                Anonymized Aggregated Analytics Participation
+                Anonymized Unit Readiness Analytics
               </p>
               <p className="text-[11px] text-slate-400">
-                Includes your sanitized fatigue trends in anonymized unit-level health comparisons.
+                Aggregates sanitized statistics without exposing personal identifiers.
               </p>
             </div>
             <button
-              onClick={() => handleToggle(setAnalyticsConsent, analyticsConsent, "Analytics Participation")}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+              onClick={() => handleToggle(setAnalyticsConsent, analyticsConsent, "Anonymized Analytics")}
+              className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors shrink-0 ml-4 ${
                 analyticsConsent ? "bg-emerald-500" : "bg-slate-700"
               }`}
               aria-label="Toggle analytics consent"
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-[#090D16] transition-transform ${
-                  analyticsConsent ? "translate-x-6" : "translate-x-1"
+                className={`inline-block h-3.5 w-3.5 transform rounded-full bg-[#090D16] transition-transform ${
+                  analyticsConsent ? "translate-x-5" : "translate-x-1"
                 }`}
               />
             </button>
@@ -178,14 +141,14 @@ export default function PersonnelPrivacyPage() {
         </div>
       </div>
 
-      {/* Consent History Log */}
-      <div className="rounded-xl border border-slate-800 bg-[#0F172A] p-6">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-          <div className="flex items-center gap-2">
-            <History className="h-4 w-4 text-slate-400" />
-            <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-slate-300">
-              Consent Audit History
-            </h3>
+      {/* Compact Consent History Log */}
+      <div className="rounded-xl border border-slate-800 bg-[#0F172A] p-4">
+        <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-2.5">
+          <div className="flex items-center gap-1.5">
+            <History className="h-3.5 w-3.5 text-slate-400" />
+            <h2 className="text-[11px] font-bold uppercase tracking-wider font-mono text-slate-300">
+              Audit History
+            </h2>
           </div>
           <span className="text-[10px] font-mono text-slate-500">Cryptographically Recorded</span>
         </div>
@@ -193,37 +156,29 @@ export default function PersonnelPrivacyPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-slate-800 text-slate-400 font-mono text-[11px]">
-                <th className="py-2">Timestamp</th>
-                <th className="py-2">Consent Item</th>
-                <th className="py-2">State</th>
-                <th className="py-2">Authorized Channel</th>
+              <tr className="border-b border-slate-800 text-slate-400 font-mono text-[10px]">
+                <th className="py-1.5">Timestamp</th>
+                <th className="py-1.5">Item</th>
+                <th className="py-1.5">State</th>
+                <th className="py-1.5">Channel</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 text-slate-300">
+            <tbody className="divide-y divide-slate-800/60 text-slate-300 text-[11px]">
               <tr>
-                <td className="py-2.5 font-mono text-[11px] text-slate-400">2025-03-08 10:30</td>
-                <td>Voluntary Assessment Responses</td>
+                <td className="py-2 font-mono text-[10px] text-slate-400">2025-03-08 10:30</td>
+                <td>Self-Assessment Telemetry</td>
                 <td>
-                  <span className="text-emerald-400 font-semibold font-mono text-[11px]">Granted</span>
+                  <span className="text-emerald-400 font-medium font-mono text-[10px]">Granted</span>
                 </td>
-                <td className="text-slate-400">Personal Portal (Self-Service)</td>
+                <td className="text-slate-400">Self-Service</td>
               </tr>
               <tr>
-                <td className="py-2.5 font-mono text-[11px] text-slate-400">2025-02-15 08:45</td>
-                <td>Anonymized Aggregate Analytics</td>
+                <td className="py-2 font-mono text-[10px] text-slate-400">2025-02-15 08:45</td>
+                <td>Anonymized Readiness Trends</td>
                 <td>
-                  <span className="text-emerald-400 font-semibold font-mono text-[11px]">Granted</span>
+                  <span className="text-emerald-400 font-medium font-mono text-[10px]">Granted</span>
                 </td>
-                <td className="text-slate-400">Initial Portal Onboarding</td>
-              </tr>
-              <tr>
-                <td className="py-2.5 font-mono text-[11px] text-slate-400">2025-01-10 14:12</td>
-                <td>Automated Purge of Expired Assessments (&gt;90d)</td>
-                <td>
-                  <span className="text-slate-400 font-semibold font-mono text-[11px]">System Purge</span>
-                </td>
-                <td className="text-slate-400">Automated Compliance Guard</td>
+                <td className="text-slate-400">Onboarding</td>
               </tr>
             </tbody>
           </table>
