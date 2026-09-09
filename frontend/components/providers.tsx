@@ -125,18 +125,19 @@ export function Providers({ children }: { children: React.ReactNode }) {
     const savedLang = localStorage.getItem("missionwell_lang") as LanguageType | null;
     if (savedLang) setLangState(savedLang);
 
-    // Load user
+    // Load user from storage
     setUser(AuthService.getCurrentUser());
 
     // Sync active authenticated session if available
     fetch("/api/auth/session")
-      .then((r) => r.json())
+      .then((res) => res.json())
       .then((data) => {
         if (data?.authenticated && data?.user) {
           const freshUser = data.user;
           setUser(freshUser);
           localStorage.setItem("missionwell_auth_user", JSON.stringify(freshUser));
           localStorage.setItem("user", JSON.stringify(freshUser));
+          if (freshUser.force) setForceState(freshUser.force);
           window.dispatchEvent(new Event("missionwell_auth_changed"));
         }
       })

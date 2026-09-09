@@ -36,6 +36,44 @@ export class AuthController {
   }
 
   /**
+   * POST /api/auth/signup
+   * Register a new real user account
+   */
+  static async signup(req: Request, res: Response): Promise<void> {
+    try {
+      const { name, email, password, role, force, serviceId, rank, department, baseLocation, bloodGroup, gender, avatarUrl } = req.body;
+      const ipAddress = req.ip || req.socket.remoteAddress;
+
+      const { token, user } = await AuthService.signup({
+        name,
+        email,
+        password,
+        role,
+        force,
+        serviceId,
+        rank,
+        department,
+        baseLocation,
+        bloodGroup,
+        gender,
+        avatarUrl,
+        ipAddress,
+      });
+
+      res.cookie(SESSION_COOKIE_NAME, token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      res.status(201).json({ success: true, user, token });
+    } catch (error: any) {
+      res.status(400).json({ error: error.message || "Registration failed" });
+    }
+  }
+
+  /**
    * GET /api/auth/google/url
    * Generate official Google OAuth 2.0 consent URL
    */

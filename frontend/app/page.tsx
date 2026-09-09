@@ -220,17 +220,6 @@ export default function LandingPage() {
         <div className="absolute top-1/3 left-1/4 w-[400px] h-[260px] bg-teal-500/10 dark:bg-cyan-600/15 blur-[130px] pointer-events-none z-0" />
 
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 space-y-8">
-          {/* Top Pill / Badge */}
-          <div className="flex flex-wrap items-center justify-center gap-4 text-center">
-            <div className="inline-flex items-center gap-2 text-slate-800 dark:text-slate-200 text-xs font-mono font-bold uppercase tracking-wide">
-              <span className="h-2 w-2 rounded-full bg-slate-400 dark:bg-slate-500 animate-pulse" />
-              <span>{isHi ? "सशस्त्र बल मानसिक स्वास्थ्य एवं कल्याण प्रणाली" : "Operational Resilience & Personnel Welfare Intelligence"}</span>
-            </div>
-            <div className="inline-flex items-center gap-1.5 text-slate-800 dark:text-slate-200 text-xs font-mono font-bold uppercase tracking-wide">
-              <ShieldCheck className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
-              <span>DPDP Act 2023 Compliant</span>
-            </div>
-          </div>
 
           {/* Value Prop Headline */}
           <div className="text-center max-w-4xl mx-auto space-y-4">

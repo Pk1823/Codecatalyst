@@ -1,6 +1,22 @@
 import { User, UserRole } from "@/types/auth";
 import { MOCK_USERS } from "@/lib/mock-data/users";
 
+export interface SignupData {
+  name: string;
+  email: string;
+  password: string;
+  role?: UserRole;
+  force?: string;
+  serviceId?: string;
+  rank?: string;
+  department?: string;
+  unitName?: string;
+  baseLocation?: string;
+  bloodGroup?: string;
+  gender?: string;
+  avatarUrl?: string;
+}
+
 const STORAGE_KEY = "missionwell_auth_user";
 
 export class AuthService {
@@ -21,6 +37,31 @@ export class AuthService {
 
   static getCurrentRole(): UserRole {
     return this.getCurrentUser().role;
+  }
+
+  /**
+   * Register a new real user account
+   */
+  static async signup(data: SignupData): Promise<User> {
+    const res = await fetch("/api/auth/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    const resData = await res.json();
+    if (!res.ok || !resData.success || !resData.user) {
+      throw new Error(resData.error || "Account registration failed. Please check your details.");
+    }
+
+    const user: User = resData.user;
+    if (typeof window !== "undefined") {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+      localStorage.setItem("user", JSON.stringify(user));
+      if (resData.token) localStorage.setItem("token", resData.token);
+      window.dispatchEvent(new Event("missionwell_auth_changed"));
+    }
+    return user;
   }
 
   static login(role: UserRole): User {
