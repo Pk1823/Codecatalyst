@@ -14,7 +14,6 @@ import {
   ArrowRight,
   HandHelping,
   FileHeart,
-  PhoneCall,
   CheckCircle2,
   Award,
   Sparkles,
@@ -345,32 +344,6 @@ export default function PersonnelDashboard() {
             </Link>
           </div>
         </div>
-      </div>
-
-      {/* Welfare Advisory Banner */}
-      <div className="rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0F172A]/90 p-4 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-emerald-50 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-emerald-200/60 dark:border-slate-700 shrink-0">
-            <PhoneCall className="h-5 w-5" />
-          </div>
-          <div>
-            <h4 className="text-xs font-semibold text-slate-800 dark:text-slate-200">
-              {meta.helplineName} (24x7 Toll-Free: <span className="font-mono text-emerald-600 dark:text-emerald-400">{meta.helpline}</span>)
-            </h4>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              {isHi
-                ? "आपका 142 दिनों का निरंतर फॉरवर्ड पोस्ट कार्यकाल पूरा हो चुका है। आप रोटेशनल अवकाश व विश्राम के पात्र हैं।"
-                : "You have completed 142 continuous forward outpost days. You are eligible for rotational decompression leave."}
-            </p>
-          </div>
-        </div>
-        <Link
-          href="/personnel/support"
-          className="shrink-0 text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 flex items-center gap-1"
-        >
-          <span>{isHi ? "अवकाश समीक्षा का अनुरोध करें" : "Request Decompression Review"}</span>
-          <ArrowRight className="h-3.5 w-3.5" />
-        </Link>
       </div>
 
       {/* Quick 1-Click Daily Vitals Check-in Modal */}
