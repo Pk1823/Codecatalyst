@@ -116,15 +116,16 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-50 dark:bg-[#090D16] text-slate-900 dark:text-slate-100 selection:bg-blue-500/20 selection:text-blue-700 dark:selection:text-blue-300 flex flex-col font-sans transition-colors duration-200">
+    <div className="relative min-h-screen bg-slate-50/30 dark:bg-[#090D16]/40 text-slate-900 dark:text-slate-100 selection:bg-blue-500/20 selection:text-blue-700 dark:selection:text-blue-300 flex flex-col font-sans transition-colors duration-200">
       {/* Sticky Fixed Tactical Backdrop Image across whole Home Page */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
         <img
           src="/hero-bg.jpg"
           alt="Himalayan Defense Command & Biometric Telemetry Operational Backdrop"
-          className="w-full h-full object-cover object-center opacity-30 dark:opacity-50 transition-opacity duration-700 select-none scale-100"
+          className="w-full h-full object-cover object-center opacity-65 dark:opacity-85 transition-opacity duration-700 select-none scale-100"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-50/90 via-slate-50/75 to-slate-50/95 dark:from-[#090D16]/90 dark:via-[#090D16]/75 dark:to-[#090D16]/95" />
+        {/* Soft, translucent overlay that lets the background image show through fully while maintaining crisp text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-50/50 via-slate-50/25 to-slate-50/60 dark:from-[#090D16]/65 dark:via-[#090D16]/40 dark:to-[#090D16]/75" />
       </div>
 
       {/* 1. National Tricolor Strip */}
@@ -294,13 +295,13 @@ export default function LandingPage() {
       </section>
 
       {/* 4. Abstract Interactive Anti-Masking AI Simulator */}
-      <section id="simulator" className="relative py-14 bg-slate-50/60 dark:bg-[#090D16] border-b border-slate-200 dark:border-slate-800/80 overflow-hidden">
+      <section id="simulator" className="relative py-14 bg-slate-50/20 dark:bg-[#090D16]/30 backdrop-blur-xs border-b border-slate-200/60 dark:border-slate-800/60 overflow-hidden z-10">
         <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 space-y-6">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
               {isHi ? "लाइव एंटी-मास्किंग एआई परीक्षण" : "Anti-Masking AI Engine"}
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-600 dark:text-slate-300 font-medium">
               {isHi ? "वास्तविक ड्यूटी डेटा और रिपोर्ट के अंतर का लाइव विश्लेषण" : "Detects covert fatigue when operational strain is masked under service ethos."}
             </p>
 
@@ -308,19 +309,19 @@ export default function LandingPage() {
             <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
               <button
                 onClick={() => handleScenarioPreset("bastar")}
-                className="px-3 py-1 text-xs font-mono rounded-lg border border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition-colors"
+                className="px-3 py-1 text-xs font-mono rounded-lg border border-blue-500/40 bg-blue-500/15 text-blue-600 dark:text-blue-400 hover:bg-blue-500/25 transition-colors shadow-xs"
               >
                 Bastar (High Masking)
               </button>
               <button
                 onClick={() => handleScenarioPreset("siachen")}
-                className="px-3 py-1 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-blue-500/40 transition-colors"
+                className="px-3 py-1 text-xs font-mono rounded-lg border border-slate-200/80 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-300 hover:border-blue-500/40 transition-colors shadow-xs"
               >
                 Siachen (Altitude Stress)
               </button>
               <button
                 onClick={() => handleScenarioPreset("routine")}
-                className="px-3 py-1 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-blue-500/40 transition-colors"
+                className="px-3 py-1 text-xs font-mono rounded-lg border border-slate-200/80 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-300 hover:border-blue-500/40 transition-colors shadow-xs"
               >
                 Peacetime (Normal)
               </button>
@@ -328,7 +329,7 @@ export default function LandingPage() {
           </div>
 
           {/* Abstract Interactive Console Card */}
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-6 shadow-xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div className="rounded-2xl border border-white/60 dark:border-slate-800/80 bg-white/85 dark:bg-[#0F172A]/85 backdrop-blur-xl p-6 shadow-2xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             {/* Left: 2 Sliders + 1 Toggle */}
             <div className="space-y-4">
               <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
@@ -467,7 +468,7 @@ export default function LandingPage() {
       </section>
 
       {/* 5. Judge's 1-Click Persona Quick Launcher */}
-      <section className="py-14 bg-slate-50/70 dark:bg-[#090D16] border-b border-slate-200 dark:border-slate-800/80">
+      <section className="py-14 bg-slate-50/20 dark:bg-[#090D16]/30 backdrop-blur-xs border-b border-slate-200/60 dark:border-slate-800/60 z-10">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <span className="text-xs font-mono font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">
@@ -476,18 +477,17 @@ export default function LandingPage() {
             <h3 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
               Instant 1-Click Persona Portals
             </h3>
-
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Card 1: Welfare Officer */}
             <div
               onClick={() => handleQuickLaunchRole("WELFARE_OFFICER")}
-              className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:border-blue-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
+              className="p-5 rounded-2xl border border-white/60 dark:border-slate-800/80 bg-white/85 dark:bg-[#0F172A]/85 backdrop-blur-xl hover:border-blue-500 hover:shadow-2xl transition-all cursor-pointer group flex flex-col justify-between shadow-lg"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
+                  <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-slate-700 group-hover:scale-105 transition-transform">
                     <HeartPulse className="h-5 w-5" />
                   </div>
                   <span className="text-[10px] font-mono font-bold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-slate-800 px-2 py-0.5 rounded border border-blue-200 dark:border-slate-700">
@@ -497,7 +497,7 @@ export default function LandingPage() {
                 <h4 className="text-base font-bold text-slate-900 dark:text-white">
                   Welfare Officer Hub
                 </h4>
-                <p className="text-xs text-slate-600 dark:text-slate-400">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                   Manage individual risk dossiers, clinical interventions, and proactive duty pacing rotas.
                 </p>
               </div>
@@ -510,11 +510,11 @@ export default function LandingPage() {
             {/* Card 2: Tactical Commander */}
             <div
               onClick={() => handleQuickLaunchRole("COMMANDER")}
-              className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:border-blue-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
+              className="p-5 rounded-2xl border border-white/60 dark:border-slate-800/80 bg-white/85 dark:bg-[#0F172A]/85 backdrop-blur-xl hover:border-blue-500 hover:shadow-2xl transition-all cursor-pointer group flex flex-col justify-between shadow-lg"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
+                  <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-slate-700 group-hover:scale-105 transition-transform">
                     <Activity className="h-5 w-5" />
                   </div>
                   <span className="text-[10px] font-mono font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
@@ -524,7 +524,7 @@ export default function LandingPage() {
                 <h4 className="text-base font-bold text-slate-900 dark:text-white">
                   Tactical Commander
                 </h4>
-                <p className="text-xs text-slate-600 dark:text-slate-400">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                   Battalion-level stress heatmaps, operational readiness metrics, and PII-masked unit telemetry.
                 </p>
               </div>
@@ -537,11 +537,11 @@ export default function LandingPage() {
             {/* Card 3: Jawan / Soldier */}
             <div
               onClick={() => handleQuickLaunchRole("PERSONNEL")}
-              className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:border-blue-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
+              className="p-5 rounded-2xl border border-white/60 dark:border-slate-800/80 bg-white/85 dark:bg-[#0F172A]/85 backdrop-blur-xl hover:border-blue-500 hover:shadow-2xl transition-all cursor-pointer group flex flex-col justify-between shadow-lg"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
+                  <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-slate-700 group-hover:scale-105 transition-transform">
                     <UserCheck className="h-5 w-5" />
                   </div>
                   <span className="text-[10px] font-mono font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
@@ -551,7 +551,7 @@ export default function LandingPage() {
                 <h4 className="text-base font-bold text-slate-900 dark:text-white">
                   Jawan / Soldier Portal
                 </h4>
-                <p className="text-xs text-slate-600 dark:text-slate-400">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                   7-step confidential self-assessment, buddy watch, and direct support intake with zero stigma.
                 </p>
               </div>
@@ -564,11 +564,11 @@ export default function LandingPage() {
             {/* Card 4: System Admin */}
             <div
               onClick={() => handleQuickLaunchRole("ADMIN")}
-              className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:border-blue-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
+              className="p-5 rounded-2xl border border-white/60 dark:border-slate-800/80 bg-white/85 dark:bg-[#0F172A]/85 backdrop-blur-xl hover:border-blue-500 hover:shadow-2xl transition-all cursor-pointer group flex flex-col justify-between shadow-lg"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
+                  <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-slate-700 group-hover:scale-105 transition-transform">
                     <ShieldCheck className="h-5 w-5" />
                   </div>
                   <span className="text-[10px] font-mono font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
@@ -578,7 +578,7 @@ export default function LandingPage() {
                 <h4 className="text-base font-bold text-slate-900 dark:text-white">
                   System Admin
                 </h4>
-                <p className="text-xs text-slate-600 dark:text-slate-400">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                   Cryptographic access ledger, DPDP Act 2023 compliance auditing, and system health status.
                 </p>
               </div>
@@ -592,7 +592,7 @@ export default function LandingPage() {
       </section>
 
       {/* 6. Section 1: How It Works in 3 Simple Steps */}
-      <section id="how-it-works" className="py-20 bg-white dark:bg-[#090D16] border-b border-slate-200 dark:border-slate-800/80">
+      <section id="how-it-works" className="py-20 bg-slate-50/20 dark:bg-[#090D16]/30 backdrop-blur-xs border-b border-slate-200/60 dark:border-slate-800/60 z-10">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2">
             <h2 className="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
@@ -601,12 +601,11 @@ export default function LandingPage() {
             <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
               {isHi ? "3 सरल चरणों में समय पर मानवीय सहायता" : "From Early Warning to Proactive Welfare"}
             </h3>
-
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Step 1 */}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-[#0F172A] p-6 flex flex-col justify-between shadow-xs hover:shadow-md transition-all">
+            <div className="rounded-2xl border border-white/60 dark:border-slate-800/80 bg-white/85 dark:bg-[#0F172A]/85 backdrop-blur-xl p-6 flex flex-col justify-between shadow-lg hover:shadow-2xl hover:border-blue-500/50 transition-all">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-xs font-bold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-slate-800 px-2.5 py-1 rounded border border-blue-200 dark:border-slate-700">
@@ -617,19 +616,19 @@ export default function LandingPage() {
                 <h4 className="text-base font-bold text-slate-900 dark:text-white">
                   {isHi ? "स्वैच्छिक व बडी चेक-इन" : "Voluntary & Buddy Check-in"}
                 </h4>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                   {isHi
                     ? "जवान 7-चरण त्वरित स्व-मूल्यांकन करते हैं या उनका बडी साथी (जोड़ीदार) बिना किसी डर के विश्राम की अनुशंसा कर सकता है।"
                     : "Jawans submit quick voluntary self-checks, or their assigned buddy flags when peer rest, family leave, or decompression is needed."}
                 </p>
               </div>
-              <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+              <div className="mt-6 pt-4 border-t border-slate-200/80 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-300 font-mono font-semibold">
                 ✓ Confidential & non-punitive
               </div>
             </div>
 
             {/* Step 2 */}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-[#0F172A] p-6 flex flex-col justify-between shadow-xs hover:shadow-md transition-all">
+            <div className="rounded-2xl border border-white/60 dark:border-slate-800/80 bg-white/85 dark:bg-[#0F172A]/85 backdrop-blur-xl p-6 flex flex-col justify-between shadow-lg hover:shadow-2xl hover:border-blue-500/50 transition-all">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-xs font-bold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-slate-800 px-2.5 py-1 rounded border border-blue-200 dark:border-slate-700">
@@ -640,19 +639,19 @@ export default function LandingPage() {
                 <h4 className="text-base font-bold text-slate-900 dark:text-white">
                   {isHi ? "एंटी-मास्किंग एआई विश्लेषण" : "Anti-Masking AI Triage"}
                 </h4>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                   {isHi
                     ? "एआई मॉडल लंबे कठिन दिनों (जैसे 120+ दिन फॉरवर्ड ड्यूटी) और अनिद्रा के संकेतों का पारदर्शी विश्लेषण करता है।"
                     : "The explainable LightGBM AI detects fatigue patterns even when jawans attempt to downplay distress due to military toughness ethos."}
                 </p>
               </div>
-              <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+              <div className="mt-6 pt-4 border-t border-slate-200/80 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-300 font-mono font-semibold">
                 ✓ Transparent SHAP explainability
               </div>
             </div>
 
             {/* Step 3 */}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-[#0F172A] p-6 flex flex-col justify-between shadow-xs hover:shadow-md transition-all">
+            <div className="rounded-2xl border border-white/60 dark:border-slate-800/80 bg-white/85 dark:bg-[#0F172A]/85 backdrop-blur-xl p-6 flex flex-col justify-between shadow-lg hover:shadow-2xl hover:border-blue-500/50 transition-all">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-xs font-bold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-slate-800 px-2.5 py-1 rounded border border-blue-200 dark:border-slate-700">
@@ -663,13 +662,13 @@ export default function LandingPage() {
                 <h4 className="text-base font-bold text-slate-900 dark:text-white">
                   {isHi ? "सक्रिय विश्राम व रोटेशन" : "Proactive Rest & Rotation"}
                 </h4>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                   {isHi
                     ? "कल्याण अधिकारी व कमांडर तनाव बढ़ने से पूर्व ही जवान को रोटेशनल लीव या डीकंप्रेशन विश्राम प्रदान करते हैं।"
                     : "Welfare Officers dispatch rotational leave, counseling, or outpost decompression before burnout becomes acute."}
                 </p>
               </div>
-              <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+              <div className="mt-6 pt-4 border-t border-slate-200/80 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-300 font-mono font-semibold">
                 ✓ Non-punitive duty rotation
               </div>
             </div>
@@ -678,7 +677,7 @@ export default function LandingPage() {
       </section>
 
       {/* 7. Section 2: Key Capabilities (4 Core Pillars) */}
-      <section id="features" className="py-20 bg-slate-50/50 dark:bg-[#090D16] border-b border-slate-200 dark:border-slate-800/80">
+      <section id="features" className="py-20 bg-slate-50/20 dark:bg-[#090D16]/30 backdrop-blur-xs border-b border-slate-200/60 dark:border-slate-800/60 z-10">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2">
             <h2 className="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
@@ -687,13 +686,12 @@ export default function LandingPage() {
             <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
               {isHi ? "सैन्य एवं पुलिस संस्कृति के अनुकूल" : "Engineered for Armed Forces & Police Culture"}
             </h3>
-
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Pillar 1: Anti-Masking */}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 flex items-center gap-3.5 shadow-xs hover:border-blue-500/60 transition-all">
-              <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 shrink-0">
+            <div className="rounded-2xl border border-white/60 dark:border-slate-800/80 bg-white/85 dark:bg-[#0F172A]/85 backdrop-blur-xl p-5 flex items-center gap-3.5 shadow-md hover:border-blue-500/60 hover:shadow-xl transition-all">
+              <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-slate-700 shrink-0">
                 <Brain className="h-5 w-5" />
               </div>
               <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">
@@ -702,8 +700,8 @@ export default function LandingPage() {
             </div>
 
             {/* Pillar 2: Buddy-Pair */}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 flex items-center gap-3.5 shadow-xs hover:border-blue-500/60 transition-all">
-              <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 shrink-0">
+            <div className="rounded-2xl border border-white/60 dark:border-slate-800/80 bg-white/85 dark:bg-[#0F172A]/85 backdrop-blur-xl p-5 flex items-center gap-3.5 shadow-md hover:border-blue-500/60 hover:shadow-xl transition-all">
+              <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-slate-700 shrink-0">
                 <Users className="h-5 w-5" />
               </div>
               <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">
@@ -712,8 +710,8 @@ export default function LandingPage() {
             </div>
 
             {/* Pillar 3: DPDP Zero Prejudice */}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 flex items-center gap-3.5 shadow-xs hover:border-blue-500/60 transition-all">
-              <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 shrink-0">
+            <div className="rounded-2xl border border-white/60 dark:border-slate-800/80 bg-white/85 dark:bg-[#0F172A]/85 backdrop-blur-xl p-5 flex items-center gap-3.5 shadow-md hover:border-blue-500/60 hover:shadow-xl transition-all">
+              <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-slate-700 shrink-0">
                 <Lock className="h-5 w-5" />
               </div>
               <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">
@@ -722,8 +720,8 @@ export default function LandingPage() {
             </div>
 
             {/* Pillar 4: Force Adaptation */}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 flex items-center gap-3.5 shadow-xs hover:border-blue-500/60 transition-all">
-              <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 shrink-0">
+            <div className="rounded-2xl border border-white/60 dark:border-slate-800/80 bg-white/85 dark:bg-[#0F172A]/85 backdrop-blur-xl p-5 flex items-center gap-3.5 shadow-md hover:border-blue-500/60 hover:shadow-xl transition-all">
+              <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-slate-700 shrink-0">
                 <Layers className="h-5 w-5" />
               </div>
               <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">
@@ -734,18 +732,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-
       {/* 9. Final Call to Action */}
-      <section className="relative py-20 bg-slate-50/70 dark:bg-[#090D16] text-center border-b border-slate-200 dark:border-slate-800/80 overflow-hidden">
-        {/* Backdrop Glow & Panoramic Silhouette */}
-        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-          <img
-            src="/hero-bg.jpg"
-            alt="Mission Readiness Operational Backdrop"
-            className="w-full h-full object-cover object-bottom opacity-20 dark:opacity-35 transition-opacity duration-700 select-none scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-50/95 via-slate-50/80 to-slate-50/95 dark:from-[#090D16]/95 dark:via-[#090D16]/85 dark:to-[#090D16]/95" />
-        </div>
+      <section className="relative py-20 bg-slate-50/20 dark:bg-[#090D16]/30 backdrop-blur-xs text-center border-b border-slate-200/60 dark:border-slate-800/60 overflow-hidden z-10">
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 space-y-5">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white mx-auto shadow-lg shadow-blue-600/25">
             <Shield className="h-6 w-6" />
@@ -762,7 +750,6 @@ export default function LandingPage() {
               <span>{isHi ? "पोर्टल में प्रवेश करें" : "Access MissionWell Portal"}</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
-
           </div>
         </div>
       </section>
