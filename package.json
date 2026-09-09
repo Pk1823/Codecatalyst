@@ -18,6 +18,7 @@
     "build": "npm run build:frontend",
     "db:seed": "npm --prefix backend run db:seed",
     "test": "node tests/run-tests.js",
+    "fetch:data": "./ai-engine/venv/bin/python scripts/fetch_kaggle_dataset.py",
     "lint": "npm --prefix frontend run lint"
   }
 }

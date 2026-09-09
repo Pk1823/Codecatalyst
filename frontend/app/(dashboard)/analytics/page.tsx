@@ -43,6 +43,8 @@ export default function AnalyticsOverviewPage() {
   const [modelInfo, setModelInfo] = useState<ModelTelemetryInfo | null>(null);
   const [isAiOnline, setIsAiOnline] = useState(true);
   const [showTechMetrics, setShowTechMetrics] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 15;
 
   // Dynamic Personnel State
   const [personnelList, setPersonnelList] = useState<PersonnelRecord[]>(() => [...MOCK_PERSONNEL]);
@@ -190,6 +192,9 @@ export default function AnalyticsOverviewPage() {
     const matchesUnit = selectedUnit === "ALL" || p.unit.toLowerCase().includes(selectedUnit.toLowerCase());
     return matchesSearch && matchesUnit;
   });
+
+  const totalPages = Math.ceil(filtered.length / pageSize) || 1;
+  const paginatedPersonnel = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const highRiskCount = enrichedPersonnel.filter((p) => p.risk.riskLevel === "HIGH" || p.risk.riskLevel === "URGENT REVIEW").length;
   const avgRiskScore = Math.round(
@@ -406,27 +411,31 @@ export default function AnalyticsOverviewPage() {
                 type="text"
                 placeholder="Search ID, name, code..."
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setCurrentPage(1);
+                }}
                 className="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090D16] pl-8 pr-3 py-1.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:border-emerald-500 font-mono shadow-2xs"
               />
             </div>
 
             <select
               value={selectedUnit}
-              onChange={(e) => setSelectedUnit(e.target.value)}
+              onChange={(e) => {
+                setSelectedUnit(e.target.value);
+                setCurrentPage(1);
+              }}
               className="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090D16] px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-300 focus:outline-hidden focus:border-emerald-500 font-mono shadow-2xs"
             >
-              <option value="ALL">All Units</option>
-              <option value="Alpha">Alpha Company</option>
-              <option value="Bravo">Bravo Company</option>
-              <option value="Charlie">Charlie Company</option>
-              <option value="Delta">Delta Company</option>
-              <option value="Echo">Echo Company</option>
+              <option value="ALL">All Units / Depts ({filtered.length})</option>
+              {Array.from(new Set(personnelList.map((p) => p.unit))).filter(Boolean).sort().map((u) => (
+                <option key={u} value={u}>{u}</option>
+              ))}
             </select>
 
             <button
               onClick={handleExportCSV}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090D16] px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shadow-2xs"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090D16] px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shadow-2xs cursor-pointer"
               title="Download filtered roster as CSV"
             >
               <Download className="h-3.5 w-3.5 text-slate-500" />
@@ -435,7 +444,7 @@ export default function AnalyticsOverviewPage() {
 
             <button
               onClick={() => setIsEnrollOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 text-xs font-semibold shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 text-xs font-semibold shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
             >
               <UserPlus className="h-3.5 w-3.5" />
               <span>Enroll Personnel</span>
@@ -449,7 +458,7 @@ export default function AnalyticsOverviewPage() {
               <tr>
                 <th className="py-2.5 px-3">Personnel ID</th>
                 <th className="py-2.5 px-3">Name / Rank</th>
-                <th className="py-2.5 px-3">Unit</th>
+                <th className="py-2.5 px-3">Department / Unit</th>
                 <th className="py-2.5 px-3">Deployment</th>
                 <th className="py-2.5 px-3">Weekly Duty</th>
                 <th className="py-2.5 px-3">AI Welfare Risk</th>
@@ -458,7 +467,7 @@ export default function AnalyticsOverviewPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              {filtered.map((p) => (
+              {paginatedPersonnel.map((p) => (
                 <tr
                   key={p.id}
                   className="hover:bg-slate-50/80 dark:hover:bg-slate-800/30 transition-colors"
@@ -485,7 +494,7 @@ export default function AnalyticsOverviewPage() {
                     <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => setTriagePersonnel(p)}
-                        className="inline-flex items-center gap-1 text-[11px] font-medium text-sky-600 dark:text-sky-400 hover:underline px-2 py-1 rounded bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-900"
+                        className="inline-flex items-center gap-1 text-[11px] font-medium text-sky-600 dark:text-sky-400 hover:underline px-2 py-1 rounded bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-900 cursor-pointer"
                         title="Initiate Welfare Case"
                       >
                         <FolderHeart className="h-3 w-3" />
@@ -504,6 +513,36 @@ export default function AnalyticsOverviewPage() {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Table Footer & Pagination */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400 font-mono">
+          <div>
+            Showing <strong className="text-slate-900 dark:text-white">{filtered.length > 0 ? (currentPage - 1) * pageSize + 1 : 0}</strong> to{" "}
+            <strong className="text-slate-900 dark:text-white">{Math.min(currentPage * pageSize, filtered.length)}</strong> of{" "}
+            <strong className="text-slate-900 dark:text-white">{filtered.length}</strong> live Kaggle personnel records
+          </div>
+          {totalPages > 1 && (
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#090D16] text-xs font-medium text-slate-700 dark:text-slate-300 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-850 transition-colors cursor-pointer"
+              >
+                Previous
+              </button>
+              <span className="px-2 py-1 text-xs">
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#090D16] text-xs font-medium text-slate-700 dark:text-slate-300 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-850 transition-colors cursor-pointer"
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
