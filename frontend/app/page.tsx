@@ -306,19 +306,19 @@ export default function LandingPage() {
             <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
               <button
                 onClick={() => handleScenarioPreset("bastar")}
-                className="px-3 py-1 text-xs font-mono rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/20 transition-colors"
+                className="px-3 py-1 text-xs font-mono rounded-lg border border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition-colors"
               >
                 Bastar (High Masking)
               </button>
               <button
                 onClick={() => handleScenarioPreset("siachen")}
-                className="px-3 py-1 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-emerald-500/40 transition-colors"
+                className="px-3 py-1 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-blue-500/40 transition-colors"
               >
                 Siachen (Altitude Stress)
               </button>
               <button
                 onClick={() => handleScenarioPreset("routine")}
-                className="px-3 py-1 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-emerald-500/40 transition-colors"
+                className="px-3 py-1 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-blue-500/40 transition-colors"
               >
                 Peacetime (Normal)
               </button>
@@ -333,7 +333,7 @@ export default function LandingPage() {
                 <span className="text-xs font-mono uppercase font-bold text-slate-700 dark:text-slate-300">
                   Telemetry Inputs
                 </span>
-                <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                <span className="text-[10px] font-mono text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">
                   Live Sensor Feed
                 </span>
               </div>
@@ -342,7 +342,7 @@ export default function LandingPage() {
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-600 dark:text-slate-400">Continuous Forward Deployment:</span>
-                  <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                  <span className="font-mono font-bold text-blue-600 dark:text-blue-400">
                     {consecutiveDays} Days
                   </span>
                 </div>
@@ -353,7 +353,7 @@ export default function LandingPage() {
                   step="1"
                   value={consecutiveDays}
                   onChange={(e) => setConsecutiveDays(parseInt(e.target.value))}
-                  className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                  className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-600"
                 />
               </div>
 
@@ -372,7 +372,7 @@ export default function LandingPage() {
                   step="0.1"
                   value={sleepHours}
                   onChange={(e) => setSleepHours(parseFloat(e.target.value))}
-                  className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                  className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-600"
                 />
               </div>
 
@@ -384,7 +384,7 @@ export default function LandingPage() {
                     onClick={() => setSelfReportVal(1)}
                     className={`py-2 px-3 rounded-lg border text-center font-medium transition-all ${
                       selfReportVal <= 2
-                        ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-bold"
+                        ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-300 font-bold"
                         : "border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-400"
                     }`}
                   >
@@ -394,7 +394,7 @@ export default function LandingPage() {
                     onClick={() => setSelfReportVal(3)}
                     className={`py-2 px-3 rounded-lg border text-center font-medium transition-all ${
                       selfReportVal === 3
-                        ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-bold"
+                        ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-300 font-bold"
                         : "border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-400"
                     }`}
                   >
@@ -411,7 +411,7 @@ export default function LandingPage() {
                   AI Composite Risk Output
                 </span>
                 <div className="flex items-baseline justify-center gap-1 mt-1">
-                  <span className="text-4xl sm:text-5xl font-extrabold font-mono text-emerald-500">
+                  <span className="text-4xl sm:text-5xl font-extrabold font-mono text-blue-600 dark:text-blue-400">
                     {simResults.score}
                   </span>
                   <span className="text-xs font-mono text-slate-500">/ 100</span>
@@ -434,7 +434,7 @@ export default function LandingPage() {
                     </p>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium">
+                  <div className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-medium">
                     <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
                     <span>Telemetry correlates with self-assessment</span>
                   </div>
@@ -448,7 +448,7 @@ export default function LandingPage() {
                   <span className="font-bold text-slate-700 dark:text-slate-300">+{simResults.daysStrainImpact}%</span>
                 </div>
                 <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1 overflow-hidden">
-                  <div className="bg-emerald-500 h-full rounded-full transition-all duration-300" style={{ width: `${simResults.daysStrainImpact}%` }} />
+                  <div className="bg-blue-600 h-full rounded-full transition-all duration-300" style={{ width: `${simResults.daysStrainImpact}%` }} />
                 </div>
 
                 <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
@@ -456,7 +456,7 @@ export default function LandingPage() {
                   <span className="font-bold text-slate-700 dark:text-slate-300">+{simResults.sleepDeficitImpact}%</span>
                 </div>
                 <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1 overflow-hidden">
-                  <div className="bg-emerald-500/70 h-full rounded-full transition-all duration-300" style={{ width: `${simResults.sleepDeficitImpact}%` }} />
+                  <div className="bg-blue-500/70 h-full rounded-full transition-all duration-300" style={{ width: `${simResults.sleepDeficitImpact}%` }} />
                 </div>
               </div>
             </div>
