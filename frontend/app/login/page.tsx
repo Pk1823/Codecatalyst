@@ -37,6 +37,11 @@ export default function PersonnelLoginPage() {
   const [signupPassword, setSignupPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  // Sign In State for existing users
+  const [signinIdentifier, setSigninIdentifier] = useState("");
+  const [signinPassword, setSigninPassword] = useState("");
+  const [showSigninPassword, setShowSigninPassword] = useState(false);
+
   // Google SSO State
   const [googleClientId, setGoogleClientId] = useState<string>("");
   const [isGoogleConfigured, setIsGoogleConfigured] = useState<boolean>(true);
@@ -67,6 +72,49 @@ export default function PersonnelLoginPage() {
     }
     loadGoogleConfig();
   }, []);
+
+  // Sign In Handler with Service ID / Email + Password for existing users
+  const handleSignInSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg("");
+    setSuccessMsg("");
+
+    const identifier = signinIdentifier.trim();
+    if (!identifier) {
+      setErrorMsg(isHi ? "कृपया सर्विस ID अथवा ईमेल दर्ज करें।" : "Please enter Service ID or Email.");
+      return;
+    }
+    if (!signinPassword) {
+      setErrorMsg(isHi ? "कृपया पासवर्ड दर्ज करें।" : "Please enter password.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      setForce(selectedForce);
+      const user = await AuthService.loginWithCredentials(
+        identifier,
+        signinPassword.trim(),
+        "PERSONNEL",
+        selectedForce
+      );
+
+      const targetRole = (user.role as UserRole) || "PERSONNEL";
+      switchRole(targetRole);
+
+      toast({
+        title: isHi ? "लॉगिन सफल" : "Signed In",
+        description: `${isHi ? "स्वागत है" : "Welcome back"}, ${user.name}`,
+        type: "success",
+      });
+
+      router.push(AuthService.getRedirectPathForRole(targetRole));
+    } catch (err: any) {
+      setErrorMsg(err?.message || (isHi ? "अमान्य आईडी या पासवर्ड। कृपया पुनः प्रयास करें।" : "Invalid Service ID or password. Please try again."));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   // Google Login & Sign Up Handler
   const handleGoogleSuccess = async (
@@ -315,7 +363,7 @@ export default function PersonnelLoginPage() {
           </div>
 
           {/* ========================================================= */}
-          {/* SIGN IN VIEW: Clean & Minimal                             */}
+          {/* SIGN IN VIEW: Google + Service ID / Password Form        */}
           {/* ========================================================= */}
           {authMode === "signin" && (
             <div className="space-y-3 pt-1 animate-in fade-in duration-200">
@@ -337,6 +385,61 @@ export default function PersonnelLoginPage() {
                 />
               </div>
 
+              {/* Minimal Divider */}
+              <div className="relative flex items-center justify-center my-1">
+                <div className="w-full border-t border-slate-200 dark:border-slate-800" />
+                <span className="absolute bg-white dark:bg-[#0C1222] px-2 text-[10px] uppercase font-mono text-slate-400">
+                  {isHi ? "या आईडी एवं पासवर्ड से" : "or with Service ID & Password"}
+                </span>
+              </div>
+
+              {/* ID & Password Sign In Form for existing users */}
+              <form onSubmit={handleSignInSubmit} className="space-y-2.5">
+                <div>
+                  <input
+                    type="text"
+                    value={signinIdentifier}
+                    onChange={(e) => setSigninIdentifier(e.target.value)}
+                    placeholder={isHi ? "सर्विस ID अथवा ईमेल (उदा. P-1024)" : "Service ID or Email (e.g. P-1024)"}
+                    required
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
+                  />
+                </div>
+
+                <div className="relative">
+                  <input
+                    type={showSigninPassword ? "text" : "password"}
+                    value={signinPassword}
+                    onChange={(e) => setSigninPassword(e.target.value)}
+                    placeholder={isHi ? "पासवर्ड" : "Password"}
+                    required
+                    className="w-full pl-3 pr-8 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowSigninPassword(!showSigninPassword)}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                  >
+                    {showSigninPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                  </button>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-xs shadow-sm transition-all"
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center justify-center gap-1.5">
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      <span>{isHi ? "सत्यापित किया जा रहा है..." : "Signing in..."}</span>
+                    </span>
+                  ) : (
+                    <span>{isHi ? "आईडी से लॉगिन करें" : "Sign In with ID & Password"}</span>
+                  )}
+                </button>
+              </form>
+
               {/* Demo accounts modal link */}
               <div className="text-center pt-1">
                 <button
@@ -344,7 +447,7 @@ export default function PersonnelLoginPage() {
                   onClick={() => setIsGoogleModalOpen(true)}
                   className="text-xs text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-emerald-400 transition-colors"
                 >
-                  {isHi ? "डेमो खाते / स्विच करें" : "Use pre-configured demo accounts"}
+                  {isHi ? "डेमो खाते / त्वरित प्रवेश" : "Use pre-configured demo accounts"}
                 </button>
               </div>
 

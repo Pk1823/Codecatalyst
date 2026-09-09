@@ -39,6 +39,11 @@ export default function AdminLoginPage() {
   const [officerPassword, setOfficerPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  // Sign In State for existing officers/admins
+  const [signinIdentifier, setSigninIdentifier] = useState("");
+  const [signinPassword, setSigninPassword] = useState("");
+  const [showSigninPassword, setShowSigninPassword] = useState(false);
+
   // Google SSO State
   const [googleClientId, setGoogleClientId] = useState<string>("");
   const [isGoogleConfigured, setIsGoogleConfigured] = useState<boolean>(true);
@@ -69,6 +74,49 @@ export default function AdminLoginPage() {
     }
     loadGoogleConfig();
   }, []);
+
+  // Sign In Handler with Service ID / Email + Password for Officers & Admins
+  const handleOfficerSignInSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg("");
+    setSuccessMsg("");
+
+    const identifier = signinIdentifier.trim();
+    if (!identifier) {
+      setErrorMsg(isHi ? "कृपया सर्विस ID अथवा ईमेल दर्ज करें।" : "Please enter Service ID or Email.");
+      return;
+    }
+    if (!signinPassword) {
+      setErrorMsg(isHi ? "कृपया पासवर्ड दर्ज करें।" : "Please enter password.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      setForce(selectedForce);
+      const user = await AuthService.loginWithCredentials(
+        identifier,
+        signinPassword.trim(),
+        selectedRole,
+        selectedForce
+      );
+
+      const targetRole = (user.role as UserRole) || selectedRole;
+      switchRole(targetRole);
+
+      toast({
+        title: isHi ? "कमांड प्रवेश सफल" : "Clearance Granted",
+        description: `${isHi ? "लॉगिन हुआ:" : "Welcome back"}, ${user.name}`,
+        type: "success",
+      });
+
+      router.push(AuthService.getRedirectPathForRole(targetRole));
+    } catch (err: any) {
+      setErrorMsg(err?.message || (isHi ? "अमान्य आईडी या पासवर्ड। कृपया पुनः प्रयास करें।" : "Invalid Service ID or password. Please try again."));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   // Google Sign In & Sign Up Handler
   const handleGoogleSuccess = async (
@@ -344,7 +392,7 @@ export default function AdminLoginPage() {
           </div>
 
           {/* ========================================================= */}
-          {/* SIGN IN VIEW                                              */}
+          {/* SIGN IN VIEW: Google + Service ID / Password Form        */}
           {/* ========================================================= */}
           {authMode === "signin" && (
             <div className="space-y-3 pt-1 animate-in fade-in duration-200">
@@ -365,6 +413,61 @@ export default function AdminLoginPage() {
                   width="320"
                 />
               </div>
+
+              {/* Minimal Divider */}
+              <div className="relative flex items-center justify-center my-1">
+                <div className="w-full border-t border-slate-800" />
+                <span className="absolute bg-[#0B132B] px-2 text-[10px] uppercase font-mono text-slate-400">
+                  {isHi ? "या आईडी एवं पासवर्ड से" : "or with Service ID & Password"}
+                </span>
+              </div>
+
+              {/* ID & Password Form */}
+              <form onSubmit={handleOfficerSignInSubmit} className="space-y-2.5">
+                <div>
+                  <input
+                    type="text"
+                    value={signinIdentifier}
+                    onChange={(e) => setSigninIdentifier(e.target.value)}
+                    placeholder={isHi ? "सर्विस ID अथवा ईमेल (उदा. MED-DIR-0881)" : "Service ID or Email (e.g. MED-DIR-0881)"}
+                    required
+                    className="w-full px-3 py-2 rounded-xl border border-slate-800 bg-slate-900/80 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
+                  />
+                </div>
+
+                <div className="relative">
+                  <input
+                    type={showSigninPassword ? "text" : "password"}
+                    value={signinPassword}
+                    onChange={(e) => setSigninPassword(e.target.value)}
+                    placeholder={isHi ? "पासवर्ड" : "Password"}
+                    required
+                    className="w-full pl-3 pr-8 py-2 rounded-xl border border-slate-800 bg-slate-900/80 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowSigninPassword(!showSigninPassword)}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                  >
+                    {showSigninPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                  </button>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-xs shadow-sm transition-all"
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center justify-center gap-1.5">
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      <span>{isHi ? "सत्यापित किया जा रहा है..." : "Authenticating..."}</span>
+                    </span>
+                  ) : (
+                    <span>{isHi ? "आईडी से लॉगिन करें" : "Sign In with ID & Password"}</span>
+                  )}
+                </button>
+              </form>
 
               {/* Demo accounts link */}
               <div className="text-center pt-1">
