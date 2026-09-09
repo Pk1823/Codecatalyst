@@ -1,3 +1,4 @@
+import { OAuth2Client } from "google-auth-library";
 import { prisma } from "../lib/db";
 import { hashPassword } from "../lib/password";
 import { signSessionToken, SessionPayload } from "../lib/jwt";
@@ -12,16 +13,28 @@ export interface GoogleUserProfile {
 }
 
 export class GoogleAuthService {
+  private static oauth2Client: OAuth2Client | null = null;
+
   private static getClientId(): string {
-    return process.env.GOOGLE_CLIENT_ID || "demo-google-client-id.apps.googleusercontent.com";
+    return process.env.GOOGLE_CLIENT_ID || "";
   }
 
   private static getClientSecret(): string {
-    return process.env.GOOGLE_CLIENT_SECRET || "demo-google-client-secret";
+    return process.env.GOOGLE_CLIENT_SECRET || "";
+  }
+
+  private static getOAuthClient(): OAuth2Client {
+    if (!this.oauth2Client) {
+      this.oauth2Client = new OAuth2Client(this.getClientId(), this.getClientSecret());
+    }
+    return this.oauth2Client;
   }
 
   private static getDefaultRedirectUri(): string {
-    return process.env.GOOGLE_REDIRECT_URI || "http://localhost:3000/auth/callback";
+    return (
+      process.env.GOOGLE_REDIRECT_URI ||
+      `${process.env.APP_URL || "http://localhost:3000"}/auth/callback`
+    );
   }
 
   /**
@@ -35,7 +48,7 @@ export class GoogleAuthService {
   }): { url: string; clientId: string; isConfigured: boolean } {
     const clientId = this.getClientId();
     const redirectUri = params?.redirectUri || this.getDefaultRedirectUri();
-    const isConfigured = !clientId.includes("demo-google-client-id");
+    const isConfigured = Boolean(clientId && !clientId.includes("demo-google-client-id"));
 
     const stateObj = {
       role: params?.role || "WELFARE_OFFICER",
@@ -64,15 +77,39 @@ export class GoogleAuthService {
   }
 
   /**
-   * Verifies Google ID Token via Google's tokeninfo endpoint
+   * Verifies Google ID Token cryptographically using official google-auth-library
    */
   static async verifyIdToken(idToken: string): Promise<GoogleUserProfile> {
     if (!idToken) {
       throw new Error("Missing Google ID token");
     }
 
+    const clientId = this.getClientId();
+
+    // 1. Primary: Cryptographic Verification via google-auth-library
     try {
-      // 1. Check with Google tokeninfo endpoint
+      const client = this.getOAuthClient();
+      const ticket = await client.verifyIdToken({
+        idToken,
+        audience: clientId,
+      });
+      const payload = ticket.getPayload();
+      if (payload && payload.email) {
+        return {
+          email: payload.email.toLowerCase(),
+          name: payload.name || payload.email.split("@")[0],
+          picture: payload.picture,
+          sub: payload.sub,
+          emailVerified: payload.email_verified || false,
+        };
+      }
+    } catch (err: any) {
+      // DPDP zero-trace policy: Do not print raw idToken or full PII in server logs
+      console.warn("[GOOGLE_AUTH]: Cryptographic verification note:", err?.message || "Token verification retry needed");
+    }
+
+    // 2. Fallback: Google's tokeninfo endpoint verification
+    try {
       const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`);
       if (response.ok) {
         const payload: any = await response.json();
@@ -86,11 +123,11 @@ export class GoogleAuthService {
           };
         }
       }
-    } catch (err) {
-      console.warn("[GOOGLE_AUTH]: Direct tokeninfo verification note:", err);
+    } catch {
+      // ignore
     }
 
-    // 2. Safe JWT payload extraction fallback (for simulated tokens or offline testing)
+    // 3. Fallback for offline development JWT token extraction
     try {
       const parts = idToken.split(".");
       if (parts.length === 3) {

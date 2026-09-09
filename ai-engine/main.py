@@ -124,6 +124,8 @@ class EvaluationResult(BaseModel):
     masking_flag: bool
     top_drivers: List[TopDriver]
     clinical_guidance: List[ClinicalGuidance]
+    ai_narrative: Optional[str] = None
+    gemini_active: Optional[bool] = False
 
 
 class PredictionResponse(BaseModel):
@@ -152,6 +154,7 @@ class ModelInfoResponse(BaseModel):
     target_accuracy_range: str
     calibration_status: str
     shap_explainer_active: bool
+    gemini_active: Optional[bool] = False
     feature_importances: Dict[str, float]
     dpdp_compliant: bool
 
@@ -160,6 +163,7 @@ class HealthResponse(BaseModel):
     status: str
     service: str
     model_loaded: bool
+    gemini_active: Optional[bool] = False
     accuracy: Optional[float] = None
 
 
@@ -183,15 +187,18 @@ async def health_check():
     try:
         pred = get_predictor()
         is_loaded = pred is not None and getattr(pred, 'model', None) is not None
+        gemini_active = pred.gemini_service.is_active() if is_loaded and hasattr(pred, 'gemini_service') else False
         acc = pred.metadata.get("accuracy", 0.7787) if is_loaded else None
     except Exception:
         is_loaded = False
+        gemini_active = False
         acc = None
 
     return HealthResponse(
         status="healthy" if is_loaded else "degraded",
         service="ai-engine",
         model_loaded=is_loaded,
+        gemini_active=gemini_active,
         accuracy=acc
     )
 

@@ -7,3 +7,5 @@ shap
 joblib
 pandas
 numpy
+google-genai
+python-dotenv

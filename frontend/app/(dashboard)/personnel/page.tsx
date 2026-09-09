@@ -383,7 +383,7 @@ export default function PersonnelDashboard() {
                   </span>
                 </div>
                 <div className="h-2 w-full rounded-full bg-slate-100 dark:bg-slate-900 overflow-hidden">
-                  <div className="h-full bg-emerald-500 rounded-full w-[65%]" />
+                  <div className="h-full bg-amber-500 rounded-full w-[73%]" />
                 </div>
               </div>
 

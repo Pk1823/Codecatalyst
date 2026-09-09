@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import shap
 from typing import Dict, Any, List, Optional
+from src.gemini_service import GeminiService
 
 FEATURE_COLUMNS = [
     'consecutive_field_days',
@@ -72,6 +73,7 @@ class StressPredictor:
 
         # Initialize TreeExplainer for fast exact Tree SHAP attributions
         self.explainer = shap.TreeExplainer(self.model)
+        self.gemini_service = GeminiService()
 
     def get_model_info(self) -> Dict[str, Any]:
         """
@@ -89,6 +91,7 @@ class StressPredictor:
             "target_accuracy_range": "70% - 85%",
             "calibration_status": "Calibrated Dual-Threshold with Anti-Masking Heuristic",
             "shap_explainer_active": True,
+            "gemini_active": self.gemini_service.is_active(),
             "feature_importances": self.feature_importances,
             "dpdp_compliant": True
         }
@@ -151,13 +154,32 @@ class StressPredictor:
             top_drivers=top_drivers
         )
 
+        # Step 5: Gemini AI Synthesis (Narrative & Enhanced Welfare Recommendations)
+        ai_narrative = self.gemini_service.synthesize_risk_narrative(
+            telemetry=telemetry_dict,
+            risk_band=risk_band,
+            alert_priority=alert_priority,
+            top_drivers=top_drivers,
+            masking_detected=masking_detected
+        )
+
+        enhanced_guidance = self.gemini_service.generate_enhanced_guidance(
+            telemetry=telemetry_dict,
+            risk_band=risk_band,
+            top_drivers=top_drivers,
+            masking_detected=masking_detected,
+            rule_guidance=guidance
+        )
+
         return {
             "risk_band": risk_band,
             "alert_priority": alert_priority,
             "confidence_scores": confidence_scores,
             "masking_flag": bool(masking_detected),
             "top_drivers": top_drivers,
-            "clinical_guidance": guidance
+            "clinical_guidance": enhanced_guidance,
+            "ai_narrative": ai_narrative,
+            "gemini_active": self.gemini_service.is_active()
         }
 
     def predict_batch(self, items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:

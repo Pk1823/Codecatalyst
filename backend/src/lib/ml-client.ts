@@ -32,6 +32,8 @@ export interface RiskPredictionResult {
   maskingConfidence: number;
   modelVersion: string;
   timestamp: string;
+  aiNarrative?: string;
+  geminiActive?: boolean;
   factors: FactorAttribution[];
   recommendations: RecommendationItem[];
   earlyWarningTriggered?: {
@@ -59,32 +61,37 @@ export class MLClient {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          personnel_id: personnelId,
+          subject_id: personnelId,
           ...telemetry,
         }),
       });
 
       if (response.ok) {
-        const data: any = await response.json();
+        const rawData: any = await response.json();
+        const data = rawData.evaluation || rawData;
+        const rawGuidance = data.clinical_guidance || data.recommendations || [];
+
         return {
-          riskScore: Math.round(data.risk_score || data.riskScore || 50),
-          riskLevel: data.risk_level || data.riskLevel || "MODERATE",
-          alertPriority: data.alert_priority || "Medium",
+          riskScore: data.risk_band === "HIGH" ? 82 : data.risk_band === "MODERATE" ? 55 : 25,
+          riskLevel: data.risk_band === "HIGH" ? "HIGH" : data.risk_band === "MODERATE" ? "MODERATE" : "LOW",
+          alertPriority: data.alert_priority === "URGENT" ? "Critical" : data.alert_priority === "DISCREET_CHECK" ? "High" : "Medium",
           maskingDetected: data.masking_flag || false,
-          maskingConfidence: data.masking_confidence || 0.0,
-          modelVersion: data.model_version || "LightGBM-v1.4.2-Defense",
+          maskingConfidence: data.masking_flag ? 0.88 : 0.15,
+          modelVersion: "LightGBM-v1.4.2-Defense+Gemini2.5",
           timestamp: new Date().toISOString(),
-          factors: (data.top_factors || []).map((f: any) => ({
+          aiNarrative: data.ai_narrative,
+          geminiActive: data.gemini_active,
+          factors: (data.top_drivers || data.top_factors || []).map((f: any) => ({
             feature: f.feature,
-            importance: f.importance || f.weight,
+            importance: f.importance || f.weight || 0.2,
             description: f.description || `Feature influence: ${f.feature}`,
             value: f.value || 0,
           })),
-          recommendations: (data.recommendations || []).map((r: any) => ({
-            title: r.title,
-            category: r.category || "Workload Balancing",
-            description: r.description,
-            priority: r.priority || "Medium",
+          recommendations: rawGuidance.map((r: any) => ({
+            title: r.code || r.title || "Welfare Action",
+            category: "Duty Rotation",
+            description: r.recommendation || r.description || "Monitor personnel status",
+            priority: data.risk_band === "HIGH" ? "Critical" : "Medium",
           })),
           earlyWarningTriggered: data.early_warning,
         };

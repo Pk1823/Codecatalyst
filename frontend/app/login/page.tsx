@@ -39,6 +39,7 @@ import {
   ShieldAlert,
   Wifi,
 } from "lucide-react";
+import { GoogleLogin } from "@react-oauth/google";
 import { useAuth, ForceType, useToast, useTheme } from "@/components/providers";
 import { UserRole } from "@/types/auth";
 import { FORCES_METADATA } from "@/lib/force-metadata";
@@ -1051,85 +1052,72 @@ export default function LoginPage() {
                 </p>
               </div>
 
-              {/* Official Google Identity Services & OAuth Action Section */}
-              <div className="space-y-3.5">
-                {/* 1. Official Google Identity Services (GSI) One-Tap / Button if Configured */}
-                {isGoogleConfigured ? (
-                  <div className="p-4 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-blue-500/50 dark:border-blue-500/40 shadow-lg space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-[11px] font-mono font-bold text-slate-800 dark:text-slate-200">
-                          {isHi ? "आधिकारिक Google Identity Services सक्रिय" : "Official Google Identity Services Active"}
-                        </span>
+              {/* Primary Google Action: Official Material 3 Google Sign-In Button */}
+              <div className="space-y-3">
+                <div className="flex justify-center p-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                  <GoogleLogin
+                    onSuccess={async (credentialResponse) => {
+                      if (credentialResponse.credential) {
+                        try {
+                          setIsSubmitting(true);
+                          setErrorMsg("");
+                          const user = await AuthService.loginWithGoogleOAuthToken(
+                            credentialResponse.credential,
+                            selectedRole,
+                            selectedForce
+                          );
+                          const targetRole = (user?.role as UserRole) || selectedRole;
+                          switchRole(targetRole);
+                          toast({
+                            title: isHi ? "Google OAuth 2.0 प्रमाणीकरण सफल" : "Google OAuth 2.0 Successful",
+                            description: `Logged in as ${user.name || user.email} (${targetRole.replace("_", " ")})`,
+                            type: "success",
+                          });
+                          router.push(AuthService.getRedirectPathForRole(targetRole));
+                        } catch (err: any) {
+                          setErrorMsg(err?.message || "Google ID Token verification failed.");
+                        } finally {
+                          setIsSubmitting(false);
+                        }
+                      }
+                    }}
+                    onError={() => {
+                      setErrorMsg("Google OAuth Login Failed or Canceled.");
+                    }}
+                    useOneTap
+                    shape="pill"
+                    size="large"
+                    theme={resolvedTheme === "dark" ? "filled_black" : "outline"}
+                    text="continue_with"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsGoogleModalOpen(true)}
+                  disabled={isSubmitting}
+                  className="w-full flex items-center justify-between px-5 py-3.5 rounded-2xl bg-white hover:bg-slate-50 dark:bg-[#0F172A] dark:hover:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 text-slate-800 dark:text-white transition-all shadow-xs hover:shadow-md group active:scale-[0.99]"
+                >
+                  <div className="flex items-center gap-3.5">
+                    <div className="p-1.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/60 dark:border-slate-700">
+                      <GoogleGIcon className="w-5 h-5" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-xs sm:text-sm font-bold tracking-tight text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        {isHi ? "Google खाता चुनें (सहमति संवाद)" : "Interactive Account Chooser & Consent"}
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => setShowGoogleConfig(!showGoogleConfig)}
-                        className="text-[10px] font-mono text-blue-600 dark:text-blue-400 hover:underline"
-                      >
-                        {showGoogleConfig ? (isHi ? "सेटिंग्स छुपाएं" : "Hide Settings") : (isHi ? "ID बदलें" : "Change Client ID")}
-                      </button>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400">
+                        {isHi ? "सुरक्षित रोल एवं बल आवंटन चुनें" : "Select Role, Force & Account Parameters"}
+                      </div>
                     </div>
-
-                    <div className="flex flex-col items-center justify-center pt-1 pb-1">
-                      <div id="official-google-gsi-container" className="flex justify-center w-full min-h-[44px]" />
-                    </div>
-
-                    <p className="text-[10px] text-center text-slate-500 dark:text-slate-400">
-                      {isHi
-                        ? "Google खाते का आधिकारिक नाम, ईमेल एवं प्रोफ़ाइल चित्र स्वतः आयात होगा।"
-                        : "Official Google name, verified email, and profile avatar fetched automatically."}
-                    </p>
                   </div>
-                ) : null}
-
-                {/* 2. Google Cloud Client ID Setup Panel (if not configured or toggled open) */}
-                {(!isGoogleConfigured || showGoogleConfig) && (
-                  <div className="p-4 rounded-2xl bg-blue-50/70 dark:bg-[#091328]/80 border border-blue-200/80 dark:border-blue-800/80 space-y-3">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <div className="p-1 rounded-lg bg-blue-500 text-white">
-                          <GoogleGIcon className="w-3.5 h-3.5" />
-                        </div>
-                        <div>
-                          <div className="text-xs font-bold text-slate-900 dark:text-white">
-                            {isHi ? "लाइव Google प्रमाणीकरण सेटअप" : "Connect Live Official Google Account"}
-                          </div>
-                          <div className="text-[10px] text-slate-500 dark:text-slate-400">
-                            {isHi ? "Google Cloud Web Client ID दर्ज करें" : "Enter Google Cloud Web Client ID for live OAuth 2.0"}
-                          </div>
-                        </div>
-                      </div>
-                      {isGoogleConfigured && (
-                        <button
-                          type="button"
-                          onClick={() => setShowGoogleConfig(false)}
-                          className="text-[10px] text-slate-400 hover:text-slate-200"
-                        >
-                          ✕
-                        </button>
-                      )}
-                    </div>
-
-                    <div className="space-y-2">
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          value={configInputId}
-                          onChange={(e) => setConfigInputId(e.target.value)}
-                          placeholder="e.g. 123456789-abcdef.apps.googleusercontent.com"
-                          className="flex-1 px-3 py-2 rounded-xl text-xs font-mono border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#090D16] text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
-                        />
-                        <button
-                          type="button"
-                          onClick={handleSaveGoogleClientId}
-                          disabled={isSavingConfig || !configInputId.trim()}
-                          className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all disabled:opacity-50 flex items-center gap-1.5 shrink-0"
-                        >
-                          {isSavingConfig ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
-                          <span>{isHi ? "सक्रिय करें" : "Activate"}</span>
-                        </button>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200/60 dark:border-blue-800/50">
+                      OAuth 2.0
+                    </span>
+                    <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all" />
+                  </div>
+                </button>
                       </div>
 
                       <details className="text-[10px] text-slate-500 dark:text-slate-400 cursor-pointer pt-0.5">

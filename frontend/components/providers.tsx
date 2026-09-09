@@ -2,8 +2,11 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { User, UserRole } from "@/types/auth";
 import { AuthService } from "@/services/auth.service";
+
+const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "996298582246-13mn1si480vso7nkl6gn97nqctb8eq11.apps.googleusercontent.com";
 
 export type ForceType = "CRPF" | "BSF" | "ITBP" | "CISF" | "ARMY" | "STATE_POLICE";
 export type LanguageType = "en" | "hi";
@@ -195,63 +198,65 @@ export function Providers({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeContext.Provider value={{ theme, resolvedTheme, toggleTheme, setTheme }}>
-        <AuthContext.Provider
-          value={{
-            user,
-            role: user.role,
-            switchRole,
-            logout,
-            force,
-            setForce,
-            lang,
-            setLang,
-            toggleLang,
-          }}
-        >
-          <ToastContext.Provider value={{ toast }}>
-            {children}
-            {/* Accessible Toast Container */}
-            <div
-              aria-live="polite"
-              className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"
-            >
-              {toasts.map((t) => (
-                <div
-                  key={t.id}
-                  className="pointer-events-auto flex items-start gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 p-4 shadow-xl backdrop-blur-md transition-all animate-in fade-in slide-in-from-bottom-2"
-                >
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeContext.Provider value={{ theme, resolvedTheme, toggleTheme, setTheme }}>
+          <AuthContext.Provider
+            value={{
+              user,
+              role: user.role,
+              switchRole,
+              logout,
+              force,
+              setForce,
+              lang,
+              setLang,
+              toggleLang,
+            }}
+          >
+            <ToastContext.Provider value={{ toast }}>
+              {children}
+              {/* Accessible Toast Container */}
+              <div
+                aria-live="polite"
+                className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"
+              >
+                {toasts.map((t) => (
                   <div
-                    className={`h-2.5 w-2.5 rounded-full mt-1.5 shrink-0 ${
-                      t.type === "success"
-                        ? "bg-emerald-500"
-                        : t.type === "warning"
-                        ? "bg-amber-500"
-                        : t.type === "error"
-                        ? "bg-rose-500"
-                        : "bg-blue-600"
-                    }`}
-                  />
-                  <div className="flex-1">
-                    <p className="text-xs font-bold text-slate-900 dark:text-slate-100">{t.title}</p>
-                    {t.description && (
-                      <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">{t.description}</p>
-                    )}
-                  </div>
-                  <button
-                    onClick={() => setToasts((prev) => prev.filter((x) => x.id !== t.id))}
-                    className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs px-1"
-                    aria-label="Close notification"
+                    key={t.id}
+                    className="pointer-events-auto flex items-start gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 p-4 shadow-xl backdrop-blur-md transition-all animate-in fade-in slide-in-from-bottom-2"
                   >
-                    ✕
-                  </button>
-                </div>
-              ))}
-            </div>
-          </ToastContext.Provider>
-        </AuthContext.Provider>
-      </ThemeContext.Provider>
-    </QueryClientProvider>
+                    <div
+                      className={`h-2.5 w-2.5 rounded-full mt-1.5 shrink-0 ${
+                        t.type === "success"
+                          ? "bg-emerald-500"
+                          : t.type === "warning"
+                          ? "bg-amber-500"
+                          : t.type === "error"
+                          ? "bg-rose-500"
+                          : "bg-blue-600"
+                      }`}
+                    />
+                    <div className="flex-1">
+                      <p className="text-xs font-bold text-slate-900 dark:text-slate-100">{t.title}</p>
+                      {t.description && (
+                        <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">{t.description}</p>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => setToasts((prev) => prev.filter((x) => x.id !== t.id))}
+                      className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs px-1"
+                      aria-label="Close notification"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </ToastContext.Provider>
+          </AuthContext.Provider>
+        </ThemeContext.Provider>
+      </QueryClientProvider>
+    </GoogleOAuthProvider>
   );
 }
