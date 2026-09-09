@@ -116,9 +116,19 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#090D16] text-slate-900 dark:text-slate-100 selection:bg-blue-500/20 selection:text-blue-700 dark:selection:text-blue-300 flex flex-col font-sans transition-colors duration-200">
+    <div className="relative min-h-screen bg-slate-50 dark:bg-[#090D16] text-slate-900 dark:text-slate-100 selection:bg-blue-500/20 selection:text-blue-700 dark:selection:text-blue-300 flex flex-col font-sans transition-colors duration-200">
+      {/* Sticky Fixed Tactical Backdrop Image across whole Home Page */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
+        <img
+          src="/hero-bg.jpg"
+          alt="Himalayan Defense Command & Biometric Telemetry Operational Backdrop"
+          className="w-full h-full object-cover object-center opacity-30 dark:opacity-50 transition-opacity duration-700 select-none scale-100"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-50/90 via-slate-50/75 to-slate-50/95 dark:from-[#090D16]/90 dark:via-[#090D16]/75 dark:to-[#090D16]/95" />
+      </div>
+
       {/* 1. National Tricolor Strip */}
-      <div className="h-1.5 w-full flex shrink-0">
+      <div className="relative z-10 h-1.5 w-full flex shrink-0">
         <div className="h-full w-1/3 bg-[#FF9933]" />
         <div className="h-full w-1/3 bg-white" />
         <div className="h-full w-1/3 bg-[#138808]" />
@@ -204,18 +214,7 @@ export default function LandingPage() {
       </header>
 
       {/* 3. Hero Section - Perfectly Balanced & User Friendly Full Viewport */}
-      <section className="relative min-h-[85vh] lg:min-h-[calc(100vh-68px)] flex flex-col items-center justify-center border-b border-slate-200 dark:border-slate-800/80 overflow-hidden bg-slate-900/5 dark:bg-[#090D16] py-14 lg:py-20">
-        {/* Breathtaking Defense Operational Command & Himalayan Sunrise Backdrop */}
-        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-          <img
-            src="/hero-bg.jpg"
-            alt="Himalayan Defense Command & Biometric Telemetry Operational Backdrop"
-            className="w-full h-full object-cover object-center sm:object-[center_35%] opacity-40 dark:opacity-75 transition-opacity duration-700 select-none scale-100"
-          />
-          {/* Subtle Ambient Vignette & Smooth Bottom Color Blending */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-50/85 via-slate-50/40 to-slate-50 dark:from-[#090D16]/85 dark:via-[#090D16]/50 dark:to-[#090D16]" />
-          <div className="absolute inset-0 bg-radial-at-c from-transparent via-transparent to-slate-50/60 dark:to-[#090D16]/80" />
-        </div>
+      <section className="relative min-h-[85vh] lg:min-h-[calc(100vh-68px)] flex flex-col items-center justify-center border-b border-slate-200 dark:border-slate-800/80 overflow-hidden py-14 lg:py-20 z-10">
 
         {/* Ambient Emerald Glow */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-blue-500/10 dark:bg-blue-600/15 blur-[150px] pointer-events-none z-0 animate-pulse-ring" />
