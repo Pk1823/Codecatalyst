@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -172,6 +172,13 @@ export default function LoginPage() {
     "ALL" | "WELFARE" | "COMMAND" | "PERSONNEL" | "ADMIN"
   >("ALL");
 
+  // Official Google OAuth & Identity Services (GSI) State
+  const [googleClientId, setGoogleClientId] = useState<string>("");
+  const [isGoogleConfigured, setIsGoogleConfigured] = useState<boolean>(false);
+  const [showGoogleConfig, setShowGoogleConfig] = useState<boolean>(false);
+  const [configInputId, setConfigInputId] = useState<string>("");
+  const [isSavingConfig, setIsSavingConfig] = useState<boolean>(false);
+
   // Holographic Defense Authorization HUD State
   const [authSequence, setAuthSequence] = useState<GoogleAuthSequence>({
     isActive: false,
@@ -274,6 +281,131 @@ export default function LoginPage() {
   React.useEffect(() => {
     return () => clearAuthTimers();
   }, []);
+
+  // Fetch initial Google configuration and load GSI SDK
+  useEffect(() => {
+    async function loadGoogleConfig() {
+      const config = await AuthService.getGoogleConfig();
+      const localId = typeof window !== "undefined" ? localStorage.getItem("missionwell_google_client_id") : null;
+      const activeId = localId || config.clientId || "";
+      setGoogleClientId(activeId);
+      setConfigInputId(activeId);
+      setIsGoogleConfigured(Boolean(activeId && !activeId.includes("demo-google-client-id")));
+    }
+    loadGoogleConfig();
+
+    if (typeof window !== "undefined" && !document.getElementById("google-gsi-script")) {
+      const script = document.createElement("script");
+      script.id = "google-gsi-script";
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+  }, []);
+
+  // Render official Google Identity Services button
+  const renderGoogleOfficialButton = useCallback(() => {
+    if (typeof window === "undefined" || !(window as any).google?.accounts?.id) return;
+    const activeId =
+      googleClientId ||
+      (typeof window !== "undefined" ? localStorage.getItem("missionwell_google_client_id") : null);
+    if (!activeId || activeId.includes("demo-google-client-id")) return;
+
+    try {
+      (window as any).google.accounts.id.initialize({
+        client_id: activeId,
+        callback: async (response: any) => {
+          if (response?.credential) {
+            try {
+              setIsSubmitting(true);
+              const user = await AuthService.loginWithGoogleOAuthToken(
+                response.credential,
+                selectedRole,
+                selectedForce
+              );
+              switchRole(selectedRole);
+              triggerGoogleAuthSequence(
+                user.email,
+                user.name || "Officer",
+                selectedRole,
+                selectedForce,
+                response.credential
+              );
+            } catch (err: any) {
+              setErrorMsg(err.message || "Failed to authenticate official Google account.");
+              toast({
+                title: "Google Authentication Failed",
+                description: err.message || "Could not verify Google ID token with identity servers.",
+                type: "error",
+              });
+            } finally {
+              setIsSubmitting(false);
+            }
+          }
+        },
+        auto_select: false,
+        cancel_on_tap_outside: true,
+      });
+
+      const container = document.getElementById("official-google-gsi-container");
+      if (container) {
+        container.innerHTML = "";
+        (window as any).google.accounts.id.renderButton(container, {
+          theme: resolvedTheme === "dark" ? "filled_black" : "outline",
+          size: "large",
+          type: "standard",
+          shape: "pill",
+          text: "continue_with",
+          width: 360,
+          logo_alignment: "left",
+        });
+      }
+    } catch (e) {
+      console.warn("[GSI_BUTTON_RENDER_ERR]:", e);
+    }
+  }, [googleClientId, selectedRole, selectedForce, resolvedTheme]);
+
+  useEffect(() => {
+    if (authTab === "google" && isGoogleConfigured) {
+      const timer = setTimeout(() => {
+        renderGoogleOfficialButton();
+      }, 350);
+      return () => clearTimeout(timer);
+    }
+  }, [authTab, isGoogleConfigured, renderGoogleOfficialButton]);
+
+  const handleSaveGoogleClientId = async () => {
+    if (!configInputId.trim()) return;
+    setIsSavingConfig(true);
+    try {
+      const trimmed = configInputId.trim();
+      await AuthService.saveGoogleClientId(trimmed);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("missionwell_google_client_id", trimmed);
+      }
+      setGoogleClientId(trimmed);
+      const configured = !trimmed.includes("demo-google-client-id");
+      setIsGoogleConfigured(configured);
+      setShowGoogleConfig(false);
+      toast({
+        title: isHi ? "Google Client ID सक्रिय हुआ" : "Official Google OAuth Activated",
+        description: isHi
+          ? "आधिकारिक Google Identity Services लाइव प्रमाणीकरण के लिए तैयार है।"
+          : "Official Google Identity Services initialized for live Google Account authentication.",
+        type: "success",
+      });
+      setTimeout(() => renderGoogleOfficialButton(), 400);
+    } catch (err: any) {
+      toast({
+        title: "Configuration Error",
+        description: err.message || "Could not save Client ID",
+        type: "error",
+      });
+    } finally {
+      setIsSavingConfig(false);
+    }
+  };
 
   const triggerGoogleAuthSequence = async (
     emailToUse: string,
@@ -419,16 +551,23 @@ export default function LoginPage() {
     try {
       setIsSubmitting(true);
       setErrorMsg("");
-      const oauthData = await AuthService.getGoogleOAuthUrl(selectedRole, selectedForce);
+      const activeClientId =
+        googleClientId ||
+        (typeof window !== "undefined" ? localStorage.getItem("missionwell_google_client_id") : null);
+      const oauthData = await AuthService.getGoogleOAuthUrl(
+        selectedRole,
+        selectedForce,
+        activeClientId || undefined
+      );
       if (oauthData.isConfigured) {
         window.location.href = oauthData.url;
       } else {
-        setIsGoogleModalOpen(true);
+        setShowGoogleConfig(true);
         toast({
-          title: isHi ? "Google प्रमाणीकरण संवाद" : "Google Authentication Dialog",
+          title: isHi ? "Google Cloud क्लाइंट ID आवश्यक" : "Google Cloud Client ID Required",
           description: isHi
-            ? "खाता चयन एवं सहमति संवाद खोला गया है"
-            : "Opening Google OAuth Account Chooser & Consent dialog (Sandbox mode active)",
+            ? "सीधे Google से लाइव लॉगिन के लिए कृपया अपना Google Client ID दर्ज करें।"
+            : "Enter your Google Cloud Client ID to launch direct live Google authentication.",
           type: "info",
         });
       }
@@ -912,45 +1051,127 @@ export default function LoginPage() {
                 </p>
               </div>
 
-              {/* Primary Google Action: Official Material 3 Google Sign-In Button */}
-              <div className="space-y-2">
-                <button
-                  type="button"
-                  onClick={() => setIsGoogleModalOpen(true)}
-                  disabled={isSubmitting || authSequence.isActive}
-                  className="w-full flex items-center justify-between px-5 py-3.5 rounded-2xl bg-white hover:bg-slate-50 dark:bg-[#0F172A] dark:hover:bg-slate-800/90 border-2 border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 text-slate-800 dark:text-white transition-all shadow-sm hover:shadow-lg group active:scale-[0.99]"
-                >
-                  <div className="flex items-center gap-3.5">
-                    <div className="p-1.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/60 dark:border-slate-700">
-                      <GoogleGIcon className="w-5 h-5" />
+              {/* Official Google Identity Services & OAuth Action Section */}
+              <div className="space-y-3.5">
+                {/* 1. Official Google Identity Services (GSI) One-Tap / Button if Configured */}
+                {isGoogleConfigured ? (
+                  <div className="p-4 rounded-2xl bg-white dark:bg-[#0F172A] border-2 border-blue-500/50 dark:border-blue-500/40 shadow-lg space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-[11px] font-mono font-bold text-slate-800 dark:text-slate-200">
+                          {isHi ? "आधिकारिक Google Identity Services सक्रिय" : "Official Google Identity Services Active"}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setShowGoogleConfig(!showGoogleConfig)}
+                        className="text-[10px] font-mono text-blue-600 dark:text-blue-400 hover:underline"
+                      >
+                        {showGoogleConfig ? (isHi ? "सेटिंग्स छुपाएं" : "Hide Settings") : (isHi ? "ID बदलें" : "Change Client ID")}
+                      </button>
                     </div>
-                    <div className="text-left">
-                      <div className="text-xs sm:text-sm font-bold tracking-tight text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                        {isHi ? "Google खाते से साइन इन करें" : "Sign in with Google"}
+
+                    <div className="flex flex-col items-center justify-center pt-1 pb-1">
+                      <div id="official-google-gsi-container" className="flex justify-center w-full min-h-[44px]" />
+                    </div>
+
+                    <p className="text-[10px] text-center text-slate-500 dark:text-slate-400">
+                      {isHi
+                        ? "Google खाते का आधिकारिक नाम, ईमेल एवं प्रोफ़ाइल चित्र स्वतः आयात होगा।"
+                        : "Official Google name, verified email, and profile avatar fetched automatically."}
+                    </p>
+                  </div>
+                ) : null}
+
+                {/* 2. Google Cloud Client ID Setup Panel (if not configured or toggled open) */}
+                {(!isGoogleConfigured || showGoogleConfig) && (
+                  <div className="p-4 rounded-2xl bg-blue-50/70 dark:bg-[#091328]/80 border border-blue-200/80 dark:border-blue-800/80 space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <div className="p-1 rounded-lg bg-blue-500 text-white">
+                          <GoogleGIcon className="w-3.5 h-3.5" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-bold text-slate-900 dark:text-white">
+                            {isHi ? "लाइव Google प्रमाणीकरण सेटअप" : "Connect Live Official Google Account"}
+                          </div>
+                          <div className="text-[10px] text-slate-500 dark:text-slate-400">
+                            {isHi ? "Google Cloud Web Client ID दर्ज करें" : "Enter Google Cloud Web Client ID for live OAuth 2.0"}
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-[10px] text-slate-500 dark:text-slate-400">
-                        {isHi ? "खाता चयन एवं सहमति संवाद खोलें" : "Launch Google Account Chooser & Consent"}
+                      {isGoogleConfigured && (
+                        <button
+                          type="button"
+                          onClick={() => setShowGoogleConfig(false)}
+                          className="text-[10px] text-slate-400 hover:text-slate-200"
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="space-y-2">
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={configInputId}
+                          onChange={(e) => setConfigInputId(e.target.value)}
+                          placeholder="e.g. 123456789-abcdef.apps.googleusercontent.com"
+                          className="flex-1 px-3 py-2 rounded-xl text-xs font-mono border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#090D16] text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleSaveGoogleClientId}
+                          disabled={isSavingConfig || !configInputId.trim()}
+                          className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all disabled:opacity-50 flex items-center gap-1.5 shrink-0"
+                        >
+                          {isSavingConfig ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
+                          <span>{isHi ? "सक्रिय करें" : "Activate"}</span>
+                        </button>
                       </div>
+
+                      <details className="text-[10px] text-slate-500 dark:text-slate-400 cursor-pointer pt-0.5">
+                        <summary className="hover:text-blue-600 dark:hover:text-blue-400 font-medium">
+                          {isHi ? "Google Cloud Console सेटअप निर्देश देखें" : "View Google Cloud Console Setup Steps (30 seconds)"}
+                        </summary>
+                        <div className="mt-2 p-2.5 rounded-xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/70 dark:border-slate-800 space-y-1 font-mono text-[9px] leading-relaxed">
+                          <div>1. Go to: <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noreferrer" className="text-blue-600 dark:text-blue-400 underline">console.cloud.google.com/apis/credentials</a></div>
+                          <div>2. Create Credentials → OAuth Client ID (Web Application)</div>
+                          <div>3. Authorized JS origin: <code className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-emerald-600 dark:text-emerald-400">http://localhost:3000</code></div>
+                          <div>4. Authorized redirect URI: <code className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-emerald-600 dark:text-emerald-400">http://localhost:3000/auth/callback</code></div>
+                          <div>5. Copy Client ID, paste above, and click Activate!</div>
+                        </div>
+                      </details>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200/60 dark:border-blue-800/50">
-                      OAuth 2.0
-                    </span>
-                    <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all" />
-                  </div>
-                </button>
+                )}
 
                 {/* Direct Google OAuth Redirect button */}
                 <button
                   type="button"
                   onClick={handleLaunchGoogleOAuth}
                   disabled={isSubmitting || authSequence.isActive}
+                  className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl border border-blue-200 dark:border-blue-900/60 hover:border-blue-400 dark:hover:border-blue-700 bg-blue-50/50 hover:bg-blue-50 dark:bg-blue-950/20 dark:hover:bg-blue-950/40 text-blue-700 dark:text-blue-300 text-xs font-semibold transition-all group"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <ExternalLink className="h-3.5 w-3.5 text-blue-500 shrink-0" />
+                    <span>{isHi ? "सीधा Google OAuth सहमति पृष्ठ खोलें" : "Direct Official Google OAuth Redirect"}</span>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-blue-400 group-hover:translate-x-0.5 transition-transform" />
+                </button>
+
+                {/* Modal / Chooser fallback button */}
+                <button
+                  type="button"
+                  onClick={() => setIsGoogleModalOpen(true)}
+                  disabled={isSubmitting || authSequence.isActive}
                   className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl border border-dashed border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/40 text-slate-600 dark:text-slate-400 text-xs transition-colors"
                 >
-                  <ExternalLink className="h-3.5 w-3.5 text-blue-500" />
+                  <UserCheck className="h-3.5 w-3.5 text-slate-400" />
                   <span>
-                    {isHi ? "सीधा Google OAuth सहमति पृष्ठ खोलें" : "Direct Official Google OAuth Redirect (Google Cloud)"}
+                    {isHi ? "खाता चयन संवाद या कस्टम Gmail खोलें" : "Open Google Account Chooser & Fast-Lane Modal"}
                   </span>
                 </button>
               </div>
@@ -1528,6 +1749,9 @@ export default function LoginPage() {
         onSuccess={handleGoogleModalSuccess}
         initialRole={selectedRole}
         initialForce={selectedForce}
+        googleClientId={googleClientId}
+        isGoogleConfigured={isGoogleConfigured}
+        onConfigureClientId={handleSaveGoogleClientId}
       />
     </div>
   );

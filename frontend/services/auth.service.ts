@@ -146,18 +146,56 @@ export class AuthService {
    */
   static async getGoogleOAuthUrl(
     role?: UserRole,
-    force?: string
-  ): Promise<{ url: string; isConfigured: boolean }> {
-    const res = await fetch(
-      `/api/auth/google/url?role=${encodeURIComponent(role || "WELFARE_OFFICER")}&force=${encodeURIComponent(
-        force || "CRPF"
-      )}`
-    );
+    force?: string,
+    customClientId?: string
+  ): Promise<{ url: string; isConfigured: boolean; clientId?: string }> {
+    const params = new URLSearchParams({
+      role: role || "WELFARE_OFFICER",
+      force: force || "CRPF",
+    });
+    if (customClientId) {
+      params.set("clientId", customClientId);
+    }
+    const res = await fetch(`/api/auth/google/url?${params.toString()}`);
     const data = await res.json();
     if (!res.ok || !data.url) {
       throw new Error(data.error || "Failed to retrieve Google OAuth authorization URL");
     }
-    return { url: data.url, isConfigured: !!data.isConfigured };
+    return {
+      url: data.url,
+      isConfigured: !!data.isConfigured,
+      clientId: data.clientId,
+    };
+  }
+
+  /**
+   * Fetch runtime Google OAuth Client ID configuration
+   */
+  static async getGoogleConfig(): Promise<{ clientId: string; isConfigured: boolean }> {
+    try {
+      const res = await fetch("/api/auth/google/config");
+      if (res.ok) {
+        const data = await res.json();
+        return { clientId: data.clientId || "", isConfigured: !!data.isConfigured };
+      }
+    } catch {}
+    return { clientId: "", isConfigured: false };
+  }
+
+  /**
+   * Save official Google Client ID to runtime and .env.local
+   */
+  static async saveGoogleClientId(clientId: string): Promise<boolean> {
+    try {
+      const res = await fetch("/api/auth/google/config", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clientId }),
+      });
+      return res.ok;
+    } catch {
+      return false;
+    }
   }
 
   /**

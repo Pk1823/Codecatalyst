@@ -18,6 +18,7 @@ export interface SessionPayload {
   personnelId?: string;
   rank?: string;
   unitId?: string;
+  avatarUrl?: string;
 }
 
 export async function signSessionToken(payload: SessionPayload): Promise<string> {

@@ -6,6 +6,7 @@ export async function GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams;
     const role = searchParams.get("role") || "WELFARE_OFFICER";
     const force = searchParams.get("force") || "CRPF";
+    const customClientId = searchParams.get("clientId");
     const redirectUri =
       searchParams.get("redirectUri") ||
       `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/auth/callback`;
@@ -28,6 +29,7 @@ export async function GET(req: NextRequest) {
 
     // 2. Local Google OAuth URL generation
     const clientId =
+      customClientId ||
       process.env.GOOGLE_CLIENT_ID ||
       process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
       "demo-google-client-id.apps.googleusercontent.com";

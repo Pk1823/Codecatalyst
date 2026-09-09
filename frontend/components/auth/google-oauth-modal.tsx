@@ -87,6 +87,9 @@ interface GoogleOAuthModalProps {
   onSuccess: (user: any, token: string) => void;
   initialRole?: string;
   initialForce?: string;
+  googleClientId?: string;
+  isGoogleConfigured?: boolean;
+  onConfigureClientId?: (clientId: string) => void;
 }
 
 export function GoogleOAuthModal({
@@ -95,6 +98,9 @@ export function GoogleOAuthModal({
   onSuccess,
   initialRole = "WELFARE_OFFICER",
   initialForce = "CRPF",
+  googleClientId,
+  isGoogleConfigured,
+  onConfigureClientId,
 }: GoogleOAuthModalProps) {
   const [step, setStep] = useState<"chooser" | "consent">("chooser");
   const [selectedAccount, setSelectedAccount] = useState<GoogleAccount | null>(null);
@@ -145,6 +151,7 @@ export function GoogleOAuthModal({
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("missionwell_auth_user", JSON.stringify(data.user));
       window.dispatchEvent(new Event("missionwell_auth_changed"));
 
       onSuccess(data.user, data.token);
@@ -160,21 +167,24 @@ export function GoogleOAuthModal({
     setIsLoading(true);
     setErrorMessage("");
     setInfoMessage("");
+    const activeClientId =
+      googleClientId ||
+      (typeof window !== "undefined" ? localStorage.getItem("missionwell_google_client_id") : null);
+
     try {
       const res = await fetch(
         `/api/auth/google/url?role=${encodeURIComponent(customRole)}&force=${encodeURIComponent(
           customForce
-        )}`
+        )}${activeClientId ? `&clientId=${encodeURIComponent(activeClientId)}` : ""}`
       );
       const data = await res.json();
       if (data.isConfigured && data.url) {
         window.location.href = data.url;
       } else {
+        setShowCustomInput(true);
         setInfoMessage(
-          "Google Cloud client ID is operating in evaluator sandbox mode. Continuing with the official in-app Google OAuth consent workflow."
+          "Enter your Google Account email below, or configure a Google Cloud Client ID for direct redirect."
         );
-        setSelectedAccount(PRECONFIGURED_GOOGLE_ACCOUNTS[4]); // Officer Recmit
-        setStep("consent");
         setIsLoading(false);
       }
     } catch (err: any) {

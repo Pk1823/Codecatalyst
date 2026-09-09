@@ -38,10 +38,11 @@ function CallbackContent() {
             role: role || "WELFARE_OFFICER",
           };
           localStorage.setItem("user", JSON.stringify(userData));
+          localStorage.setItem("missionwell_auth_user", JSON.stringify(userData));
           window.dispatchEvent(new Event("missionwell_auth_changed"));
 
           setStatus("success");
-          setStepMessage("Authentication complete. Routing to Command Terminal...");
+          setStepMessage(`Authentication complete for ${userData.name}. Routing to Command Deck...`);
 
           const targetPath = AuthService.getRedirectPathForRole(role || "WELFARE_OFFICER");
           setTimeout(() => {
@@ -52,7 +53,7 @@ function CallbackContent() {
 
         // Case 2: Code exchange required
         if (code) {
-          setStepMessage("Exchanging OAuth authorization code with Identity Provider...");
+          setStepMessage("Exchanging OAuth authorization code with Google Identity Provider...");
           const res = await fetch("/api/auth/google/callback", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -70,10 +71,24 @@ function CallbackContent() {
 
           localStorage.setItem("token", data.token);
           localStorage.setItem("user", JSON.stringify(data.user));
+          localStorage.setItem("missionwell_auth_user", JSON.stringify(data.user));
+          if (typeof window !== "undefined") {
+            sessionStorage.setItem(
+              "google_sso_welcome",
+              JSON.stringify({
+                email: data.user.email,
+                name: data.user.name,
+                role: data.user.role,
+                force: data.user.force,
+                avatarUrl: data.user.avatarUrl,
+                time: Date.now(),
+              })
+            );
+          }
           window.dispatchEvent(new Event("missionwell_auth_changed"));
 
           setStatus("success");
-          setStepMessage("Identity verified. Initializing encrypted defense profile...");
+          setStepMessage(`Official Google Account Verified: ${data.user.name} (${data.user.email}). Establishing secure session...`);
 
           const userRole = data.user?.role || "WELFARE_OFFICER";
           const targetPath = AuthService.getRedirectPathForRole(userRole);

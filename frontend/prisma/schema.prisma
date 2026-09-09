@@ -23,6 +23,7 @@ model User {
   force         String         @default("CRPF") // CRPF, BSF, ITBP, CISF, ARMY
   department    String?
   unitId        String?
+  avatarUrl     String?
   isActive      Boolean        @default(true)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt

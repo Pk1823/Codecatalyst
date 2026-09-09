@@ -446,9 +446,17 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
               className="flex items-center gap-1.5 px-1.5 py-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors focus:outline-hidden"
               aria-label="User profile and persona switch menu"
             >
-              <div className="flex h-5 w-5 items-center justify-center rounded-sm text-slate-900 dark:text-white font-mono font-bold text-xs">
-                {user.name.charAt(0)}
-              </div>
+              {user.avatarUrl ? (
+                <img
+                  src={user.avatarUrl}
+                  alt={user.name}
+                  className="h-6 w-6 rounded-full object-cover border border-emerald-500/40 shadow-xs shrink-0"
+                />
+              ) : (
+                <div className="flex h-5 w-5 items-center justify-center rounded-sm text-slate-900 dark:text-white font-mono font-bold text-xs">
+                  {user.name.charAt(0)}
+                </div>
+              )}
               <div className="hidden md:flex flex-col text-left leading-none">
                 <span className="text-xs font-semibold text-slate-900 dark:text-white truncate max-w-[100px]">{user.name}</span>
                 <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-mono uppercase mt-0.5">{role.replace("_", " ")}</span>
@@ -463,14 +471,29 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
               >
                 {/* Active Session Info */}
                 <div className="px-2.5 py-2 border-b border-slate-100 dark:border-slate-800 mb-1.5">
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs font-bold text-slate-900 dark:text-white truncate">{user.name}</p>
-                    <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-mono font-bold bg-emerald-50 dark:bg-emerald-950/40 px-1.5 py-0.5 rounded border border-emerald-500/20">
-                      ONLINE
-                    </span>
+                  <div className="flex items-center gap-2.5">
+                    {user.avatarUrl ? (
+                      <img
+                        src={user.avatarUrl}
+                        alt={user.name}
+                        className="h-8 w-8 rounded-full object-cover border border-emerald-500/40 shadow-xs shrink-0"
+                      />
+                    ) : (
+                      <div className="h-8 w-8 rounded-full bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-500/30 flex items-center justify-center text-emerald-800 dark:text-emerald-300 font-bold text-xs shrink-0">
+                        {user.name.charAt(0)}
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs font-bold text-slate-900 dark:text-white truncate">{user.name}</p>
+                        <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-mono font-bold bg-emerald-50 dark:bg-emerald-950/40 px-1.5 py-0.5 rounded border border-emerald-500/20">
+                          ONLINE
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono truncate mt-0.5">{user.email}</p>
+                    </div>
                   </div>
-                  <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono truncate mt-0.5">{user.email}</p>
-                  <div className="mt-1.5 flex items-center gap-1.5">
+                  <div className="mt-2 flex items-center gap-1.5">
                     <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border uppercase ${roleBadge.color}`}>
                       {roleBadge.label}
                     </span>
