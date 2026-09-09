@@ -25,12 +25,14 @@ export async function GET() {
         id: user.id,
         name: user.name,
         email: user.email,
+        avatarUrl: user.avatarUrl,
         serviceId: user.serviceId,
         role: user.role,
         rank: user.rank,
         force: user.force,
         department: user.department,
         personnelId: user.personnel?.id,
+        isGoogleAccount: user.email.includes("@gmail.com") || Boolean(user.avatarUrl),
       },
     });
   } catch (error) {

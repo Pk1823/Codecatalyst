@@ -258,28 +258,72 @@ export async function POST(req: NextRequest) {
         },
         include: { personnel: true },
       });
+    }
 
-      if (assignedRole === "PERSONNEL") {
-        const pId = `P-${Math.floor(2000 + Math.random() * 7000)}`;
-        await prisma.personnel
-          .create({
-            data: {
-              id: pId,
-              userId: user.id,
-              serviceNumber: user.serviceId,
-              name: user.name,
-              rank: user.rank || "Constable (GD)",
-              force: user.force,
-              gender: "MALE",
-              bloodGroup: "B+",
-              dateOfJoining: new Date("2021-03-15"),
-              unitId: "unit-114-alpha",
-              baseLocation: "Srinagar Base Camp",
-              activeDeployDays: 14,
-              currentDutyStatus: "Active Duty",
+    // Ensure user has a linked personnel record so their complete dataset is available
+    if (!user.personnel) {
+      const pId = `P-${Math.floor(2000 + Math.random() * 7000)}`;
+      try {
+        const createdPersonnel = await prisma.personnel.create({
+          data: {
+            id: pId,
+            userId: user.id,
+            serviceNumber: user.serviceId,
+            name: user.name,
+            rank: user.rank || (assignedRole === "WELFARE_OFFICER" ? "Chief Medical Officer" : "Constable (GD)"),
+            force: user.force,
+            gender: "MALE",
+            bloodGroup: "B+",
+            dateOfJoining: new Date("2021-03-15"),
+            unitId: "unit-114-alpha",
+            baseLocation: "Srinagar Base Camp",
+            activeDeployDays: 18,
+            currentDutyStatus: "Active Duty",
+            deployments: {
+              create: [
+                {
+                  location: "Forward Sector Picket 4",
+                  terrain: "Counter-Insurgency Grid",
+                  startDate: new Date(Date.now() - 32 * 86400000),
+                  isCurrent: true,
+                  consecutiveDays: 32,
+                  stressWeight: 1.2,
+                },
+              ],
             },
-          })
-          .catch(() => {});
+            workloadRecords: {
+              create: [
+                {
+                  periodStart: new Date(Date.now() - 5 * 86400000),
+                  periodEnd: new Date(),
+                  dutyHours5d: 46.5,
+                  nightShifts5d: 2,
+                  sleepHoursAvg: 6.2,
+                  leaveDaysUnavailed: 28,
+                  deltaRestingHR: 4.2,
+                },
+              ],
+            },
+            wellnessAssessments: {
+              create: [
+                {
+                  score: 74.0,
+                  indicatorStatus: "Moderate Attention",
+                  stressLevel: "Moderate",
+                  fatigueLevel: "Moderate",
+                  workloadStatus: "Elevated",
+                  recoveryStatus: "Adequate",
+                  recommendation: "Operational pacing maintained. Continuous monitoring enabled.",
+                  voluntaryConsent: true,
+                  additionalNotes: "Auto-synced with verified Google Identity account credentials.",
+                },
+              ],
+            },
+          },
+        });
+        user.personnel = createdPersonnel;
+      } catch (err) {
+        console.warn("Personnel link note:", err);
       }
     }
 

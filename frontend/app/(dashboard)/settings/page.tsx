@@ -12,15 +12,18 @@ import {
   Save,
   CheckCircle2,
   Sparkles,
+  Layers,
 } from "lucide-react";
 import { useAuth, useTheme, useToast } from "@/components/providers";
+import { GoogleAccountDatasetModal } from "@/components/profile/google-account-dataset-modal";
 
 export default function SettingsPage() {
-  const { user } = useAuth();
+  const { user, role, force, lang } = useAuth();
   const { theme, resolvedTheme, setTheme } = useTheme();
   const { toast } = useToast();
 
-  const [activeTab, setActiveTab] = useState<"profile" | "appearance" | "notifications" | "privacy" | "security">("profile");
+  const [activeTab, setActiveTab] = useState<"profile" | "googleDataset" | "appearance" | "notifications" | "privacy" | "security">("profile");
+  const [datasetModalOpen, setDatasetModalOpen] = useState(false);
 
   // Local state for settings controls
   const [name, setName] = useState(user.name);
@@ -54,6 +57,7 @@ export default function SettingsPage() {
       <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2 text-xs">
         {[
           { id: "profile", label: "My Profile", icon: User },
+          { id: "googleDataset", label: "Google Account & Dataset", icon: Layers },
           { id: "appearance", label: "Appearance & Theme", icon: Sun },
           { id: "notifications", label: "Notifications", icon: Bell },
           { id: "privacy", label: "Privacy Directives", icon: ShieldCheck },
@@ -129,14 +133,83 @@ export default function SettingsPage() {
               />
             </div>
 
-            <button
-              type="submit"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold shadow-xs transition-colors"
-            >
-              <Save className="h-3.5 w-3.5" />
-              <span>Save Profile Changes</span>
-            </button>
+            <div className="flex items-center gap-3 pt-2">
+              <button
+                type="submit"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold shadow-xs transition-colors"
+              >
+                <Save className="h-3.5 w-3.5" />
+                <span>Save Profile Changes</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setDatasetModalOpen(true)}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-blue-300 dark:border-blue-800 bg-blue-50/80 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-semibold shadow-xs hover:bg-blue-100 dark:hover:bg-blue-900/60 transition-colors"
+              >
+                <Layers className="h-3.5 w-3.5" />
+                <span>View Google Dataset & CRUD</span>
+              </button>
+            </div>
           </form>
+        )}
+
+        {activeTab === "googleDataset" && (
+          <div className="space-y-5 text-xs">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-xl border border-blue-200 dark:border-blue-900/60 bg-blue-50/40 dark:bg-blue-950/20">
+              <div className="flex items-center gap-3">
+                <div className="h-12 w-12 rounded-full overflow-hidden border-2 border-blue-500/60 shrink-0">
+                  <img
+                    src={user.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=0D8ABC&color=fff`}
+                    alt={user.name}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h4 className="font-bold text-sm text-slate-900 dark:text-white">{user.name}</h4>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300">
+                      Google Verified
+                    </span>
+                  </div>
+                  <p className="text-slate-500 dark:text-slate-400 font-mono text-[11px]">{user.email}</p>
+                  <p className="text-slate-400 text-[10px] font-mono mt-0.5">Service ID: {user.serviceId} • Role: {role}</p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setDatasetModalOpen(true)}
+                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold flex items-center gap-1.5 shadow-xs transition-colors shrink-0"
+              >
+                <Layers className="h-3.5 w-3.5" />
+                <span>Open Interactive Dataset Manager</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="p-3.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/40 space-y-1">
+                <span className="font-bold text-slate-900 dark:text-white block">Operational Deployments</span>
+                <p className="text-slate-500 dark:text-slate-400 text-[11px]">
+                  Stationings, terrain classification, and consecutive deployment day trackers.
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/40 space-y-1">
+                <span className="font-bold text-slate-900 dark:text-white block">Wellness & Telemetry</span>
+                <p className="text-slate-500 dark:text-slate-400 text-[11px]">
+                  Voluntary assessments, stress scores, sleep telemetry, and AI pacing recommendations.
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/40 space-y-1">
+                <span className="font-bold text-slate-900 dark:text-white block">Authorized CRUD Actions</span>
+                <p className="text-slate-500 dark:text-slate-400 text-[11px]">
+                  Only authorized Welfare Officers and Admins can add or remove clinical and deployment details.
+                </p>
+              </div>
+            </div>
+          </div>
         )}
 
         {activeTab === "appearance" && (
@@ -345,6 +418,12 @@ export default function SettingsPage() {
           </div>
         )}
       </div>
+
+      {/* Google Account & Comprehensive Person Dataset Modal */}
+      <GoogleAccountDatasetModal
+        isOpen={datasetModalOpen}
+        onClose={() => setDatasetModalOpen(false)}
+      />
     </div>
   );
 }

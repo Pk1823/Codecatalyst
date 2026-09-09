@@ -224,8 +224,17 @@ export class GoogleAuthService {
       include: { personnel: true },
     });
 
-    // Auto-provision if user does not exist
-    if (!user) {
+    // Auto-provision or update if user already exists
+    if (user) {
+      user = await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          name: profile.name || user.name,
+          avatarUrl: profile.picture || user.avatarUrl,
+        },
+        include: { personnel: true },
+      });
+    } else {
       const defaultPasswordHash = await hashPassword(`google-auth-${Date.now()}`);
       const serviceIdNumber = Math.floor(10000 + Math.random() * 90000);
       const generatedServiceId = `${assignedForce}-EXT-${serviceIdNumber}`;
@@ -240,6 +249,7 @@ export class GoogleAuthService {
         data: {
           email: trimmedEmail,
           name: displayName,
+          avatarUrl: profile.picture,
           serviceId: generatedServiceId,
           passwordHash: defaultPasswordHash,
           role: assignedRole,
@@ -263,30 +273,33 @@ export class GoogleAuthService {
         },
         include: { personnel: true },
       });
+    }
 
-      // If personnel, create matching personnel record
-      if (assignedRole === "PERSONNEL") {
-        const pId = `P-${Math.floor(2000 + Math.random() * 7000)}`;
-        await prisma.personnel
-          .create({
-            data: {
-              id: pId,
-              userId: user.id,
-              serviceNumber: user.serviceId,
-              name: user.name,
-              rank: user.rank || "Constable (GD)",
-              force: user.force,
-              gender: "MALE",
-              bloodGroup: "B+",
-              dateOfJoining: new Date("2021-03-15"),
-              unitId: "unit-114-alpha",
-              baseLocation: "Srinagar Base Camp",
-              activeDeployDays: 14,
-              currentDutyStatus: "Active Duty",
-            },
-          })
-          .catch((err) => console.warn("Personnel record creation note:", err));
-      }
+    // Ensure user has a linked personnel record so their complete dataset is available
+    if (!user.personnel) {
+      const pId = `P-${Math.floor(2000 + Math.random() * 7000)}`;
+      await prisma.personnel
+        .create({
+          data: {
+            id: pId,
+            userId: user.id,
+            serviceNumber: user.serviceId,
+            name: user.name,
+            rank: user.rank || "Constable (GD)",
+            force: user.force,
+            gender: "MALE",
+            bloodGroup: "B+",
+            dateOfJoining: new Date("2021-03-15"),
+            unitId: "unit-114-alpha",
+            baseLocation: "Srinagar Base Camp",
+            activeDeployDays: 14,
+            currentDutyStatus: "Active Duty",
+          },
+        })
+        .then((createdPersonnel) => {
+          user.personnel = createdPersonnel;
+        })
+        .catch((err) => console.warn("Personnel record creation note:", err));
     }
 
     const payload: SessionPayload = {
