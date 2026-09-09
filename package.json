@@ -15,7 +15,7 @@
     "dev:ai": "python ai-engine/main.py",
     "build:frontend": "npm --prefix frontend run build",
     "build:backend": "npm --prefix backend run build",
-    "build": "npm run build:backend && npm run build:frontend",
+    "build": "npm run build:frontend",
     "db:seed": "npm --prefix backend run db:seed",
     "test": "node tests/run-tests.js",
     "lint": "npm --prefix frontend run lint"

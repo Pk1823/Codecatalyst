@@ -34,6 +34,18 @@ export default function WelfareOfficerDashboard() {
 
   const [alerts, setAlerts] = useState(MOCK_NOTIFICATIONS.filter((n) => n.category === "Welfare"));
 
+  React.useEffect(() => {
+    try {
+      const customStr = localStorage.getItem("missionwell_custom_alerts");
+      if (customStr) {
+        const customAlerts = JSON.parse(customStr);
+        setAlerts((prev) => [...customAlerts, ...prev]);
+      }
+    } catch (e) {
+      console.error("Failed to parse custom alerts", e);
+    }
+  }, []);
+
   const handleDismissAlert = (id: string) => {
     setAlerts((prev) => prev.filter((a) => a.id !== id));
     toast({

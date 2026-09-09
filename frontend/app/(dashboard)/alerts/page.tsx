@@ -17,6 +17,22 @@ export default function AlertCenterPage() {
   const [notifications, setNotifications] = useState<WelfareAlertItem[]>(MOCK_NOTIFICATIONS);
   const [category, setCategory] = useState<NotificationCategory>("All");
 
+  React.useEffect(() => {
+    try {
+      const customStr = localStorage.getItem("missionwell_custom_alerts");
+      if (customStr) {
+        const customAlerts = JSON.parse(customStr);
+        setNotifications((prev) => {
+          // Remove duplicates if any (just in case)
+          const newAlerts = customAlerts.filter((ca: any) => !prev.some((p) => p.id === ca.id));
+          return [...newAlerts, ...prev];
+        });
+      }
+    } catch (e) {
+      console.error("Failed to parse custom alerts", e);
+    }
+  }, []);
+
   const handleMarkAsRead = (id: string) => {
     setNotifications((prev) =>
       prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))

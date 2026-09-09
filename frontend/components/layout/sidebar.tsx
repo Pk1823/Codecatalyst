@@ -194,18 +194,7 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
       <div className="p-3 border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-[#090D16] space-y-2">
         {!collapsed ? (
           <>
-            {/* Executive Presentation Deck Button */}
-            <Link
-              href="/presentation"
-              onClick={onMobileClose}
-              className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg border border-teal-500/30 bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 hover:bg-teal-100 dark:hover:bg-teal-900/60 text-xs font-semibold shadow-xs transition-colors"
-            >
-              <div className="flex items-center gap-2">
-                <Presentation className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
-                <span className="font-mono text-[11px]">Judge Pitch Deck</span>
-              </div>
-              <ChevronRight className="h-3 w-3 text-teal-500" />
-            </Link>
+
 
             <div className="rounded-lg bg-white dark:bg-[#0F172A] border border-slate-200 dark:border-slate-800 p-2.5 text-[10px] text-slate-700 dark:text-slate-300 flex items-center gap-2.5 shadow-xs">
               <PhoneCall className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />

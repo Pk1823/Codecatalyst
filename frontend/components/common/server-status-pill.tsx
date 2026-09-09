@@ -46,17 +46,17 @@ export function ServerStatusPill({ variant = "compact", className = "" }: Server
   if (variant === "minimal") {
     return (
       <div
-        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono border backdrop-blur-md transition-all ${
+        className={`inline-flex items-center gap-1.5 px-1 py-1 text-[11px] font-mono transition-all font-bold ${
           backendOnline
-            ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30"
-            : "bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/30"
+            ? "text-emerald-700 dark:text-emerald-400"
+            : "text-amber-700 dark:text-amber-400"
         } ${className}`}
       >
         <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-current opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-current"></span>
         </span>
-        <span className="font-semibold">Core Mesh 5001 • ML 8000</span>
+        <span>Core Mesh 5001 • ML 8000</span>
       </div>
     );
   }
