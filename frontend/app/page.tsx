@@ -291,76 +291,59 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 4. Interactive Live Anti-Masking AI Stress Simulator */}
-      <section id="simulator" className="relative py-20 bg-slate-50/60 dark:bg-[#090D16] border-b border-slate-200 dark:border-slate-800/80 overflow-hidden">
-        {/* Digital Defense Mesh Topography Backdrop */}
-        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-          <img
-            src="/tactical-aurora-bg.jpg"
-            alt="Digital Defense Topography Backdrop"
-            className="w-full h-full object-cover object-center opacity-[0.08] dark:opacity-[0.22] transition-opacity duration-700 select-none scale-100"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-slate-50/80 to-slate-50 dark:from-[#090D16] dark:via-[#090D16]/80 dark:to-[#090D16]" />
-        </div>
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-          <div className="text-center max-w-3xl mx-auto space-y-3">
-            <div className="inline-flex items-center gap-2 text-blue-700 dark:text-blue-400 text-xs font-mono font-bold uppercase tracking-wide">
-              <Brain className="h-3.5 w-3.5" />
-              <span>INTERACTIVE MACHINE LEARNING ENGINE DEMO</span>
-            </div>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              {isHi ? "लाइव एंटी-मास्किंग एआई परीक्षण कंसोल" : "Live Anti-Masking AI Triage Simulator"}
+      {/* 4. Abstract Interactive Anti-Masking AI Simulator */}
+      <section id="simulator" className="relative py-14 bg-slate-50/60 dark:bg-[#090D16] border-b border-slate-200 dark:border-slate-800/80 overflow-hidden">
+        <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 space-y-6">
+          <div className="text-center max-w-xl mx-auto space-y-2">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+              {isHi ? "लाइव एंटी-मास्किंग एआई परीक्षण" : "Anti-Masking AI Engine"}
             </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              {isHi ? "वास्तविक ड्यूटी डेटा और रिपोर्ट के अंतर का लाइव विश्लेषण" : "Detects covert fatigue when operational strain is masked under service ethos."}
+            </p>
 
-
-            {/* Quick Presets */}
-            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-              <span className="text-xs font-mono text-slate-500 dark:text-slate-400">Quick Scenarios:</span>
+            {/* Scenarios Preset Pills */}
+            <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
               <button
                 onClick={() => handleScenarioPreset("bastar")}
-                className="px-2.5 py-1 text-xs font-mono font-medium rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                className="px-3 py-1 text-xs font-mono rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/20 transition-colors"
               >
-                Bastar Sector (High Masking)
+                Bastar (High Masking)
               </button>
               <button
                 onClick={() => handleScenarioPreset("siachen")}
-                className="px-2.5 py-1 text-xs font-mono font-medium rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                className="px-3 py-1 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-emerald-500/40 transition-colors"
               >
-                Siachen (-35°C Altitude)
+                Siachen (Altitude Stress)
               </button>
               <button
                 onClick={() => handleScenarioPreset("routine")}
-                className="px-2.5 py-1 text-xs font-mono font-medium rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                className="px-3 py-1 text-xs font-mono rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-emerald-500/40 transition-colors"
               >
-                Routine Peacetime Unit
+                Peacetime (Normal)
               </button>
             </div>
           </div>
 
-          {/* Interactive Console Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            {/* Left Column: Sliders & Telemetry Inputs (7 Cols) */}
-            <div className="lg:col-span-7 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-[#0F172A] p-6 shadow-md space-y-6">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
-                <div className="flex items-center gap-2">
-                  <Sliders className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase font-mono">
-                    Operational Telemetry Parameters
-                  </h3>
-                </div>
-                <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
-                  Target Force: <strong className="text-blue-600 dark:text-blue-400">{selectedForce}</strong>
+          {/* Abstract Interactive Console Card */}
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-6 shadow-xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            {/* Left: 2 Sliders + 1 Toggle */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                <span className="text-xs font-mono uppercase font-bold text-slate-700 dark:text-slate-300">
+                  Telemetry Inputs
+                </span>
+                <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                  Live Sensor Feed
                 </span>
               </div>
 
-              {/* Slider 1: Consecutive Outpost Days */}
-              <div className="space-y-2">
+              {/* Slider 1: Consecutive Days */}
+              <div className="space-y-1.5">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-medium text-slate-700 dark:text-slate-300">
-                    1. Consecutive Forward Deployment Days:
-                  </span>
-                  <span className="font-mono font-bold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-slate-800 px-2.5 py-0.5 rounded border border-blue-200 dark:border-slate-700">
-                    {consecutiveDays} Days continuous
+                  <span className="text-slate-600 dark:text-slate-400">Continuous Forward Deployment:</span>
+                  <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                    {consecutiveDays} Days
                   </span>
                 </div>
                 <input
@@ -370,23 +353,16 @@ export default function LandingPage() {
                   step="1"
                   value={consecutiveDays}
                   onChange={(e) => setConsecutiveDays(parseInt(e.target.value))}
-                  className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                  className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
                 />
-                <div className="flex justify-between text-[10px] font-mono text-slate-500 dark:text-slate-400">
-                  <span>10d (Base standard)</span>
-                  <span>90d (Fatigue threshold)</span>
-                  <span>180d (Critical fatigue)</span>
-                </div>
               </div>
 
               {/* Slider 2: Sleep Average */}
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-medium text-slate-700 dark:text-slate-300">
-                    2. Rolling 5-Day Average Sleep:
-                  </span>
-                  <span className="font-mono font-bold px-2.5 py-0.5 rounded border text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700">
-                    {sleepHours} Hours / night
+                  <span className="text-slate-600 dark:text-slate-400">Night Sleep Average:</span>
+                  <span className="font-mono font-bold text-slate-800 dark:text-slate-200">
+                    {sleepHours} hrs
                   </span>
                 </div>
                 <input
@@ -396,204 +372,95 @@ export default function LandingPage() {
                   step="0.1"
                   value={sleepHours}
                   onChange={(e) => setSleepHours(parseFloat(e.target.value))}
-                  className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                  className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
                 />
-                <div className="flex justify-between text-[10px] font-mono text-slate-500 dark:text-slate-400">
-                  <span>2.5 hrs (Severe deprivation)</span>
-                  <span>5.0 hrs (Marginal)</span>
-                  <span>8.0 hrs (Restful)</span>
-                </div>
               </div>
 
-              {/* Slider 3: Jawan Masked Self-Report */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-medium text-slate-700 dark:text-slate-300">
-                    3. Jawan Self-Reported Response (Ethos Masking):
-                  </span>
-                  <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400">
-                    {selfReportVal === 1
-                      ? "Level 1: 'All Normal / Fit' (Masked)"
-                      : selfReportVal === 2
-                      ? "Level 2: 'Moderate Duty Load'"
-                      : "Level 3: 'Heavy Strain Admitted'"}
-                  </span>
-                </div>
-                <div className="grid grid-cols-3 gap-2 text-xs">
+              {/* Ethos Masking Pill Toggle */}
+              <div className="space-y-1.5 pt-1">
+                <span className="text-xs text-slate-600 dark:text-slate-400 block">Jawan Self-Report (Ethos):</span>
+                <div className="grid grid-cols-2 gap-2 text-xs">
                   <button
                     onClick={() => setSelfReportVal(1)}
-                    className={`py-2 px-3 rounded-lg border text-center transition-all ${
-                      selfReportVal === 1
-                        ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 font-bold"
-                        : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400"
+                    className={`py-2 px-3 rounded-lg border text-center font-medium transition-all ${
+                      selfReportVal <= 2
+                        ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-bold"
+                        : "border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-400"
                     }`}
                   >
-                    1. &quot;All Normal&quot; (Masked)
-                  </button>
-                  <button
-                    onClick={() => setSelfReportVal(2)}
-                    className={`py-2 px-3 rounded-lg border text-center transition-all ${
-                      selfReportVal === 2
-                        ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 font-bold"
-                        : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400"
-                    }`}
-                  >
-                    2. &quot;Manageable&quot;
+                    Reported &quot;Fit / All Good&quot;
                   </button>
                   <button
                     onClick={() => setSelfReportVal(3)}
-                    className={`py-2 px-3 rounded-lg border text-center transition-all ${
+                    className={`py-2 px-3 rounded-lg border text-center font-medium transition-all ${
                       selfReportVal === 3
-                        ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 font-bold"
-                        : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400"
+                        ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-bold"
+                        : "border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-400"
                     }`}
                   >
-                    3. &quot;Severe Fatigue&quot;
+                    Reported &quot;Fatigued&quot;
                   </button>
                 </div>
               </div>
-
-              {/* Slider 4: Sector Tension Level */}
-              <div className="space-y-2">
-                <span className="text-xs font-medium text-slate-700 dark:text-slate-300 block">
-                  4. Operational Theatre Tension Level:
-                </span>
-                <div className="grid grid-cols-3 gap-2 text-xs">
-                  {(["routine", "elevated", "active"] as const).map((lvl) => (
-                    <button
-                      key={lvl}
-                      onClick={() => setSectorTension(lvl)}
-                      className={`py-2 px-3 rounded-lg border capitalize text-center transition-all ${
-                        sectorTension === lvl
-                          ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 font-bold"
-                          : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400"
-                      }`}
-                    >
-                      {lvl === "routine" ? "Routine Standby" : lvl === "elevated" ? "Heightened Alert" : "Active Ops / Combat"}
-                    </button>
-                  ))}
-                </div>
-              </div>
             </div>
 
-            {/* Right Column: Live AI Evaluation & Risk Triage (5 Cols) */}
-            <div className="lg:col-span-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-6 shadow-xl space-y-5 relative overflow-hidden">
-              {/* Top Status */}
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-                <div className="flex items-center gap-2">
-                  <Activity className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900 dark:text-white">
-                    Model Inference Output
-                  </span>
-                </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-slate-700">
-                  SHAP Explainer Live
+            {/* Right: Abstract AI Gauge & Divergence Output */}
+            <div className="rounded-xl border border-slate-100 dark:border-slate-800/80 bg-slate-50/70 dark:bg-[#090D16] p-5 text-center space-y-4">
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  AI Composite Risk Output
                 </span>
-              </div>
-
-              {/* Stress Score Gauge */}
-              <div className="rounded-xl border border-slate-100 dark:border-slate-800/80 bg-slate-50/70 dark:bg-slate-900/60 p-4 text-center space-y-2">
-                <span className="text-[11px] font-mono font-medium text-slate-500 dark:text-slate-400 uppercase">
-                  Composite Stress Risk Score
-                </span>
-                <div className="flex items-baseline justify-center gap-1.5">
-                  <span className={`text-4xl sm:text-5xl font-extrabold font-mono transition-colors text-slate-800 dark:text-slate-200`}>
+                <div className="flex items-baseline justify-center gap-1 mt-1">
+                  <span className="text-4xl sm:text-5xl font-extrabold font-mono text-emerald-500">
                     {simResults.score}
                   </span>
-                  <span className="text-sm font-mono text-slate-500">/ 100</span>
+                  <span className="text-xs font-mono text-slate-500">/ 100</span>
                 </div>
-
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold font-mono uppercase">
-                  {simResults.riskBand === "HIGH" && (
-                    <span className="text-slate-900 dark:text-slate-100 bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 px-2.5 py-0.5 rounded-full">
-                      CRITICAL RISK • Stand-down Required
-                    </span>
-                  )}
-                  {simResults.riskBand === "MODERATE" && (
-                    <span className="text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 px-2.5 py-0.5 rounded-full">
-                      ELEVATED STRAIN • Rotational Watch
-                    </span>
-                  )}
-                  {simResults.riskBand === "LOW" && (
-                    <span className="text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2.5 py-0.5 rounded-full">
-                      STABLE READINESS • Routine Duty
-                    </span>
-                  )}
-                </div>
+                <span className="inline-block text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded-full mt-2 bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
+                  {simResults.riskBand === "HIGH" ? "CRITICAL RISK" : simResults.riskBand === "MODERATE" ? "ELEVATED STRAIN" : "STABLE"}
+                </span>
               </div>
 
-              {/* Anti-Masking Trigger Banner */}
-              {simResults.isMaskingTriggered ? (
-                <div className="p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs space-y-1.5">
-                  <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-slate-100">
-                    <AlertTriangle className="h-4 w-4 shrink-0 text-slate-700 dark:text-slate-300 animate-pulse" />
-                    <span>ANTI-MASKING DISCREPANCY DETECTED ({simResults.maskingConfidence}%)</span>
+              {/* Abstract Anti-masking Alert */}
+              <div className="p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] text-left text-xs">
+                {simResults.isMaskingTriggered ? (
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-bold text-xs">
+                      <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
+                      <span>Divergence Detected ({simResults.maskingConfidence}%)</span>
+                    </div>
+                    <p className="text-[11px] text-slate-600 dark:text-slate-400">
+                      Jawan reported normal condition, but telemetry exposes severe cumulative duty deficit.
+                    </p>
                   </div>
-                  <p className="text-[11px] text-slate-700 dark:text-slate-300 leading-relaxed">
-                    Jawan reported normal condition, but telemetry reveals <strong>{consecutiveDays} consecutive watch days</strong> and <strong>{sleepHours}h average sleep</strong>. Fatigue pattern masked by military toughness ethos.
-                  </p>
-                </div>
-              ) : (
-                <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 text-xs space-y-1">
-                  <div className="flex items-center gap-2 font-semibold text-slate-700 dark:text-slate-300">
-                    <CheckCircle2 className="h-4 w-4 text-slate-600 dark:text-slate-400" />
-                    <span>Telemetry & Self-Report Consistent</span>
+                ) : (
+                  <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium">
+                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
+                    <span>Telemetry correlates with self-assessment</span>
                   </div>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                    No anti-masking divergence identified. Self-assessment correlates with operational hours.
-                  </p>
-                </div>
-              )}
-
-              {/* SHAP Feature Contribution Bars */}
-              <div className="space-y-2 text-xs">
-                <span className="font-mono font-semibold text-slate-700 dark:text-slate-300 block">
-                  Top SHAP Explainability Attribution Drivers:
-                </span>
-                <div className="space-y-1.5 text-[11px] font-mono">
-                  <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
-                    <span>Continuous Deployment Days</span>
-                    <span className="font-bold text-slate-900 dark:text-slate-200">+{simResults.daysStrainImpact}%</span>
-                  </div>
-                  <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-blue-500 h-full rounded-full" style={{ width: `${simResults.daysStrainImpact}%` }} />
-                  </div>
-
-                  <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
-                    <span>Sleep Deficit / Shift Irregularity</span>
-                    <span className="font-bold text-slate-900 dark:text-slate-200">+{simResults.sleepDeficitImpact}%</span>
-                  </div>
-                  <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-blue-500/80 h-full rounded-full" style={{ width: `${simResults.sleepDeficitImpact}%` }} />
-                  </div>
-
-                  <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
-                    <span>Active Combat Sector Load</span>
-                    <span className="font-bold text-slate-900 dark:text-slate-200">+{simResults.sectorImpact}%</span>
-                  </div>
-                  <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-slate-500 dark:bg-slate-600 h-full rounded-full" style={{ width: `${simResults.sectorImpact}%` }} />
-                  </div>
-                </div>
+                )}
               </div>
 
-              {/* Automated Non-Punitive Welfare Recommendation */}
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-blue-600 dark:text-blue-400 block mb-1">
-                  Automated Non-Punitive Triage Recommendation:
-                </span>
-                <p className="text-slate-800 dark:text-slate-200 font-medium">
-                  {simResults.score >= 70
-                    ? "Mandatory 48-Hour Outpost Stand-Down & Peer Buddy Decompression. Zero ACR/APAR Career Penalty."
-                    : simResults.score >= 45
-                    ? "Schedule Rotational Rest Interval & Voluntary Peer Check-in within 5 days."
-                    : "Maintain routine wellness cadence and scheduled rest rotations."}
-                </p>
+              {/* 2 Abstract SHAP Micro-Bars */}
+              <div className="space-y-1.5 text-left text-xs font-mono pt-1">
+                <div className="flex items-center justify-between text-[11px] text-slate-500">
+                  <span>Continuous Outpost Load</span>
+                  <span className="font-bold text-slate-700 dark:text-slate-300">+{simResults.daysStrainImpact}%</span>
+                </div>
+                <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1 overflow-hidden">
+                  <div className="bg-emerald-500 h-full rounded-full transition-all duration-300" style={{ width: `${simResults.daysStrainImpact}%` }} />
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+                  <span>Sleep Deficit Impact</span>
+                  <span className="font-bold text-slate-700 dark:text-slate-300">+{simResults.sleepDeficitImpact}%</span>
+                </div>
+                <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1 overflow-hidden">
+                  <div className="bg-emerald-500/70 h-full rounded-full transition-all duration-300" style={{ width: `${simResults.sleepDeficitImpact}%` }} />
+                </div>
               </div>
             </div>
           </div>
-
-
         </div>
       </section>
 
