@@ -54,7 +54,7 @@ export default function WellnessAssessmentPage() {
   const formValues = watch();
   const currentStep = WELLNESS_STEPS[currentStepIndex];
 
-  const handleSelectOption = (value: WellnessRating) => {
+  const handleSelectOption = (value: string) => {
     setValue(currentStep.id, value);
   };
 
