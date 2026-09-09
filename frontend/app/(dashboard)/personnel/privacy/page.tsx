@@ -25,8 +25,18 @@ export default function PersonnelPrivacyPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto space-y-5">
-      {/* Header */}
+    <div className="relative max-w-4xl mx-auto space-y-6 text-slate-100">
+      {/* Tactical Command Backdrop Image */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
+        <img
+          src="/tactical-command-bg.jpg"
+          alt="Tactical Command Operational Backdrop"
+          className="w-full h-full object-cover object-center opacity-15 dark:opacity-30 scale-100 transition-opacity"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-slate-950/70 to-slate-950/95" />
+      </div>
+
+      <div className="relative z-10 space-y-6">
       <div>
         <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#F8FAFC]">
           Personal Privacy & Consent Controls
@@ -182,6 +192,7 @@ export default function PersonnelPrivacyPage() {
               </tr>
             </tbody>
           </table>
+        </div>
         </div>
       </div>
     </div>
