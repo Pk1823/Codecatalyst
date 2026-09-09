@@ -179,9 +179,6 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
                 {!collapsed && (
                   <div className="flex-1 min-w-0">
                     <span className="truncate block leading-tight">{item.name}</span>
-                    <span className="text-[9px] text-slate-400 group-hover:text-slate-600 dark:text-slate-400 dark:group-hover:text-slate-300 block truncate leading-none mt-0.5 font-mono">
-                      {item.sub}
-                    </span>
                   </div>
                 )}
               </Link>

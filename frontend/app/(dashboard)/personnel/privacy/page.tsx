@@ -33,9 +33,7 @@ export default function PersonnelPrivacyPage() {
         <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#F8FAFC]">
           Personal Privacy & Consent Controls
         </h1>
-        <p className="text-xs text-slate-400 mt-1">
-          Full transparency on collected telemetry data and DPDP Act 2023 protections.
-        </p>
+
       </div>
 
       {/* Collects vs NOT Collects Comparison Grid */}
@@ -46,9 +44,7 @@ export default function PersonnelPrivacyPage() {
             <CheckCircle2 className="h-4 w-4 shrink-0" />
             <span>What MissionWell Collects</span>
           </div>
-          <p className="text-xs text-slate-300">
-            Only authorized operational and self-reported parameters necessary for fatigue and workload forecasting:
-          </p>
+
 
           <div className="space-y-2 text-xs">
             {[
@@ -71,9 +67,7 @@ export default function PersonnelPrivacyPage() {
             <XCircle className="h-4 w-4 shrink-0" />
             <span>What MissionWell Does NOT Collect</span>
           </div>
-          <p className="text-xs text-slate-300">
-            MissionWell strictly excludes personal surveillance, communication scraping, and private device tracking:
-          </p>
+
 
           <div className="space-y-2 text-xs">
             {[
@@ -99,9 +93,7 @@ export default function PersonnelPrivacyPage() {
             <h3 className="text-sm font-bold text-[#F8FAFC]">
               Active Consent Preferences
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Grant or revoke consent for optional data streams at any time.
-            </p>
+
           </div>
           <span className="rounded-md bg-emerald-500/10 text-emerald-400 text-[11px] font-mono font-semibold px-2.5 py-1 border border-emerald-500/20">
             DPDP 2023 Compliant

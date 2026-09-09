@@ -23,9 +23,7 @@ export default function PrivacyCenterPage() {
               DPDP 2023 Active
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
-            Zero-stigma safeguards, cryptographic pseudonymization, and role segregation.
-          </p>
+
         </div>
 
         <div className="flex items-center gap-2.5 bg-slate-900 border border-slate-800 px-3.5 py-2 rounded-lg">
@@ -44,9 +42,7 @@ export default function PrivacyCenterPage() {
             <h3 className="text-sm font-semibold text-white">
               Role Segregation & Data Visibility Matrix
             </h3>
-            <p className="text-xs text-slate-400">
-              Guaranteed architectural separation preventing operational commanders from accessing confidential psychological disclosures.
-            </p>
+
           </div>
           <span className="text-xs font-mono text-emerald-400">
             DPDP 2023 Protocol
@@ -145,9 +141,7 @@ export default function PrivacyCenterPage() {
             <Lock className="h-4 w-4" />
             <span>Differential Privacy & Salting</span>
           </div>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            All AI training and time-series projections utilize differential mathematical noise injection. No single individual’s identity can be reverse-engineered from force-level stress analytics.
-          </p>
+
         </div>
 
         <div className="p-5 rounded-xl border border-slate-800 bg-slate-900/60 space-y-2">
@@ -155,9 +149,7 @@ export default function PrivacyCenterPage() {
             <Database className="h-4 w-4" />
             <span>Automated 90-Day Purge Cycles</span>
           </div>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Raw voluntary assessment responses are automatically pruned after 90 days, retaining only rolling statistical aggregates to prevent permanent stigmatizing data accumulation.
-          </p>
+
         </div>
 
         <div className="p-5 rounded-xl border border-slate-800 bg-slate-900/60 space-y-2">
@@ -165,9 +157,7 @@ export default function PrivacyCenterPage() {
             <Scale className="h-4 w-4" />
             <span>Non-Punitive Legal Covenant</span>
           </div>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            MissionWell AI software licenses explicitly forbid the use of welfare indicator outputs in annual performance appraisals (APAR), promotion boards, disciplinary trials, or court-martial proceedings.
-          </p>
+
         </div>
 
         <div className="p-5 rounded-xl border border-slate-800 bg-slate-900/60 space-y-2">
@@ -175,9 +165,7 @@ export default function PrivacyCenterPage() {
             <History className="h-4 w-4" />
             <span>Cryptographic Access Audits</span>
           </div>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Every query into individual profiles generates an immutable, tamper-evident audit record verified by the National Informatics IT Security Cell.
-          </p>
+
         </div>
       </div>
     </div>
