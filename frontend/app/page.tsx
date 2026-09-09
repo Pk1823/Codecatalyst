@@ -200,8 +200,8 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* 3. Hero Section - Full Screen Viewport Height */}
-      <section className="relative min-h-[80vh] lg:min-h-[calc(100vh-68px)] flex flex-col items-center justify-center border-b border-slate-200 dark:border-slate-800/80 overflow-hidden bg-slate-900/5 dark:bg-[#090D16] py-8 sm:py-10 lg:py-12">
+      {/* 3. Hero Section - Perfectly Balanced & User Friendly Full Viewport */}
+      <section className="relative min-h-[85vh] lg:min-h-[calc(100vh-68px)] flex flex-col items-center justify-center border-b border-slate-200 dark:border-slate-800/80 overflow-hidden bg-slate-900/5 dark:bg-[#090D16] py-14 lg:py-20">
         {/* Breathtaking Defense Operational Command & Himalayan Sunrise Backdrop */}
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
           <img
@@ -217,11 +217,11 @@ export default function LandingPage() {
         {/* Ambient Emerald Glow */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-emerald-500/10 dark:bg-emerald-600/15 blur-[150px] pointer-events-none z-0 animate-pulse-ring" />
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 -mt-4 sm:-mt-6 lg:-mt-10 my-auto">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 my-auto text-center">
 
           {/* Value Prop Headline */}
-          <div className="text-center max-w-5xl mx-auto space-y-4">
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.08] drop-shadow-xs dark:drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)]">
+          <div className="max-w-4xl mx-auto space-y-4">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.12] drop-shadow-xs dark:drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)]">
               {isHi ? (
                 <>
                   ड्यूटी तनाव और थकान की{" "}
@@ -239,31 +239,54 @@ export default function LandingPage() {
               )}
             </h1>
 
-            {/* Primary Action Buttons - Shifted Upwards */}
-            <div className="pt-2 flex flex-wrap items-center justify-center gap-3.5">
-              <Link
-                href="/login"
-                className="inline-flex items-center justify-center gap-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-6 sm:px-8 py-3.5 text-sm sm:text-base font-semibold text-white shadow-lg shadow-emerald-600/25 hover:scale-[1.02] active:scale-[0.98] transition-all"
-              >
-                <HeartPulse className="h-5 w-5" />
-                <span>{isHi ? "सैनिक / जवान पोर्टल" : "Personnel Portal"}</span>
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/login/admin"
-                className="inline-flex items-center justify-center gap-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 px-6 sm:px-8 py-3.5 text-sm sm:text-base font-semibold text-slate-100 shadow-lg shadow-slate-950/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
-              >
-                <Shield className="h-5 w-5 text-emerald-400" />
-                <span>{isHi ? "कमांड एवं वेलफेयर पोर्टल" : "Command & Officer Portal"}</span>
-              </Link>
-              <a
-                href="#simulator"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 backdrop-blur-md hover:bg-slate-100 dark:hover:bg-slate-800 px-5 py-3.5 text-sm sm:text-base font-medium text-slate-800 dark:text-slate-200 transition-all shadow-xs"
-              >
-                <Sliders className="h-4 w-4 text-emerald-500" />
-                <span>{isHi ? "लाइव एआई सिम्युलेटर चलाएं" : "Try Live AI Simulator"}</span>
-              </a>
-            </div>
+            {/* Crisp 1-Line Value Sub-headline */}
+            <p className="text-sm sm:text-base font-medium text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+              {isHi
+                ? "सशस्त्र बलों एवं पुलिस कर्मियों हेतु एआई-आधारित मानसिक स्वास्थ्य व सामरिक तत्परता प्रणाली।"
+                : "AI-powered proactive stress detection & non-punitive welfare intelligence for defense personnel."}
+            </p>
+          </div>
+
+          {/* Primary Action Buttons - Perfectly Aligned & Spaced */}
+          <div className="flex flex-wrap items-center justify-center gap-3.5 pt-1">
+            <Link
+              href="/login"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-6 sm:px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-emerald-600/25 hover:scale-[1.02] active:scale-[0.98] transition-all"
+            >
+              <HeartPulse className="h-4.5 w-4.5" />
+              <span>{isHi ? "सैनिक / जवान पोर्टल" : "Personnel Portal"}</span>
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/login/admin"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 px-6 sm:px-7 py-3.5 text-sm font-semibold text-slate-100 shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all"
+            >
+              <Shield className="h-4.5 w-4.5 text-emerald-400" />
+              <span>{isHi ? "कमांड पोर्टल" : "Command & Officer Portal"}</span>
+            </Link>
+            <a
+              href="#simulator"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 backdrop-blur-md hover:bg-slate-100 dark:hover:bg-slate-800 px-5 py-3.5 text-sm font-medium text-slate-800 dark:text-slate-200 transition-all shadow-xs"
+            >
+              <Sliders className="h-4 w-4 text-emerald-500" />
+              <span>{isHi ? "एआई सिम्युलेटर" : "Try AI Simulator"}</span>
+            </a>
+          </div>
+
+          {/* User-Friendly Floating Trust Badges */}
+          <div className="pt-4 flex flex-wrap items-center justify-center gap-3 text-xs font-mono font-medium text-slate-600 dark:text-slate-400">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-xs">
+              <Lock className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+              100% DPDP Act Compliant
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-xs">
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+              Zero ACR Career Prejudice
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-xs">
+              <Zap className="h-3.5 w-3.5 text-amber-500" />
+              Anti-Masking LightGBM Engine
+            </span>
           </div>
         </div>
       </section>
