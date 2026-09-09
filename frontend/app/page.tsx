@@ -126,19 +126,22 @@ export default function LandingPage() {
 
       {/* 2. Top Header Navigation */}
       <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/85 dark:bg-[#090D16]/85 backdrop-blur-xl shadow-xs transition-colors">
-        <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-600/25 group-hover:scale-105 transition-transform">
-              <Shield className="h-5 w-5" />
+        <div className="max-w-7xl mx-auto flex h-20 items-center justify-between px-4 sm:px-6">
+          <Link href="/" className="flex items-center gap-3.5 group">
+            <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/30 group-hover:scale-105 transition-all">
+              <Shield className="h-6 w-6 sm:h-7 sm:w-7" />
             </div>
             <div className="flex flex-col">
-              <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-base tracking-tight text-slate-900 dark:text-white">
-                  MissionWell <span className="text-blue-600 dark:text-blue-400 font-mono text-xs">AI</span>
+              <div className="flex items-center gap-2">
+                <span className="font-extrabold text-xl sm:text-2xl tracking-tight text-slate-900 dark:text-white">
+                  MissionWell{" "}
+                  <span className="text-blue-600 dark:text-blue-400 font-mono text-sm sm:text-base font-bold">
+                    AI
+                  </span>
                 </span>
-                <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
+                <span className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
               </div>
-              <span className="text-[9px] uppercase font-mono font-semibold tracking-wider text-slate-500 dark:text-slate-400">
+              <span className="text-[10px] sm:text-[11px] uppercase font-mono font-semibold tracking-wider text-slate-500 dark:text-slate-400">
                 Ministry of Home Affairs • CAPF Directorate
               </span>
             </div>

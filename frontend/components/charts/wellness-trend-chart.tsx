@@ -18,30 +18,27 @@ export function WellnessTrendChart() {
   const data = MOCK_WELLNESS_TRENDS[timeframe];
 
   return (
-    <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 gap-3">
+    <div className="rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#0C1220] p-5 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800/80 gap-3">
         <div>
-          <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">
-            My Wellness Trend
+          <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+            Wellness Trajectory
           </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Voluntary indicators and self-reported wellness trajectory
-          </p>
         </div>
 
         {/* Timeframe Filter Buttons */}
-        <div className="flex items-center gap-1 rounded-lg bg-slate-100 dark:bg-slate-800 p-1">
+        <div className="flex items-center gap-1 rounded-lg bg-slate-100 dark:bg-slate-800/80 p-0.5">
           {(["7D", "30D", "90D", "6M"] as const).map((tf) => (
             <button
               key={tf}
               onClick={() => setTimeframe(tf)}
-              className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-colors ${
+              className={`px-2.5 py-1 text-[11px] font-medium rounded-md transition-colors ${
                 timeframe === tf
-                  ? "bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-300 shadow-2xs"
+                  ? "bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-300 shadow-2xs font-semibold"
                   : "text-slate-500 hover:text-slate-900 dark:hover:text-slate-200"
               }`}
             >
-              {tf === "7D" ? "7 Days" : tf === "30D" ? "30 Days" : tf === "90D" ? "90 Days" : "6 Months"}
+              {tf === "7D" ? "7D" : tf === "30D" ? "30D" : tf === "90D" ? "90D" : "6M"}
             </button>
           ))}
         </div>
