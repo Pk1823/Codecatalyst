@@ -114,6 +114,44 @@ export class AuthService {
   }
 
   /**
+   * Register a new user profile and persist in system database
+   */
+  static async register(profileData: {
+    name: string;
+    email: string;
+    password?: string;
+    role: UserRole;
+    force: string;
+    serviceId?: string;
+    rank?: string;
+    department?: string;
+    unitName?: string;
+    baseLocation?: string;
+    gender?: string;
+    bloodGroup?: string;
+  }): Promise<User> {
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(profileData),
+    });
+
+    const data = await res.json();
+    if (!res.ok || !data.success || !data.user) {
+      throw new Error(data.error || "Profile registration failed. Please check your details.");
+    }
+
+    const user: User = data.user;
+    if (typeof window !== "undefined") {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+      localStorage.setItem("user", JSON.stringify(user));
+      if (data.token) localStorage.setItem("token", data.token);
+      window.dispatchEvent(new Event("missionwell_auth_changed"));
+    }
+    return user;
+  }
+
+  /**
    * Authenticate or Auto-Register using Gmail / Google or other custom account
    */
   static async loginWithGoogle(
@@ -154,7 +192,15 @@ export class AuthService {
   static async loginWithGoogleOAuthToken(
     idTokenOrCredential: string,
     role?: UserRole,
-    force?: string
+    force?: string,
+    profileDetails?: {
+      rank?: string;
+      serviceId?: string;
+      unitName?: string;
+      baseLocation?: string;
+      gender?: string;
+      bloodGroup?: string;
+    }
   ): Promise<User> {
     const res = await fetch("/api/auth/google", {
       method: "POST",
@@ -164,6 +210,7 @@ export class AuthService {
         credential: idTokenOrCredential,
         role: role || "WELFARE_OFFICER",
         force: force || "CRPF",
+        ...profileDetails,
       }),
     });
 

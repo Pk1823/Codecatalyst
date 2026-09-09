@@ -122,7 +122,22 @@ async function exchangeCodeForGoogleProfile(
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { idToken, credential, code, email, name, role, force, redirectUri } = body;
+    const {
+      idToken,
+      credential,
+      code,
+      email,
+      name,
+      role,
+      force,
+      rank,
+      serviceId,
+      unitName,
+      baseLocation,
+      gender,
+      bloodGroup,
+      redirectUri,
+    } = body;
 
     let officialProfile: GoogleVerifiedProfile | null = null;
     const tokenCandidate = idToken || credential;
@@ -228,7 +243,7 @@ export async function POST(req: NextRequest) {
     } else {
       const defaultPasswordHash = await hashPassword("demo123");
       const serviceIdNumber = Math.floor(10000 + Math.random() * 90000);
-      const generatedServiceId = `${assignedForce}-EXT-${serviceIdNumber}`;
+      const generatedServiceId = serviceId?.trim() || `${assignedForce}-EXT-${serviceIdNumber}`;
 
       user = await prisma.user.create({
         data: {
@@ -240,13 +255,14 @@ export async function POST(req: NextRequest) {
           role: assignedRole,
           force: assignedForce,
           rank:
-            assignedRole === "COMMANDER"
+            rank?.trim() ||
+            (assignedRole === "COMMANDER"
               ? "Commandant"
               : assignedRole === "WELFARE_OFFICER"
               ? "Chief Medical Officer"
               : assignedRole === "ADMIN"
               ? "Systems Administrator"
-              : "Constable (GD)",
+              : "Constable (GD)"),
           department:
             assignedRole === "WELFARE_OFFICER"
               ? "Psychological Health Directorate"
@@ -272,11 +288,11 @@ export async function POST(req: NextRequest) {
             name: user.name,
             rank: user.rank || (assignedRole === "WELFARE_OFFICER" ? "Chief Medical Officer" : "Constable (GD)"),
             force: user.force,
-            gender: "MALE",
-            bloodGroup: "B+",
-            dateOfJoining: new Date("2021-03-15"),
+            gender: gender || "MALE",
+            bloodGroup: bloodGroup || "B+",
+            dateOfJoining: new Date(),
             unitId: "unit-114-alpha",
-            baseLocation: "Srinagar Base Camp",
+            baseLocation: baseLocation?.trim() || `${assignedForce} Base Camp`,
             activeDeployDays: 18,
             currentDutyStatus: "Active Duty",
             deployments: {

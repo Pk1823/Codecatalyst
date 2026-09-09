@@ -15,6 +15,7 @@ import {
   Loader2,
   CheckCircle2,
   Languages,
+  Shield,
 } from "lucide-react";
 import { useAuth, ForceType, useToast, useTheme } from "@/components/providers";
 import { UserRole } from "@/types/auth";
@@ -22,7 +23,7 @@ import { AuthService } from "@/services/auth.service";
 import { GoogleOAuthModal } from "@/components/auth/google-oauth-modal";
 import { ProjectServerIcon } from "@/components/common/server-icon";
 
-export default function PersonnelLoginPage() {
+export default function AdminLoginPage() {
   const router = useRouter();
   const { switchRole, force, setForce, lang, toggleLang } = useAuth();
   const { resolvedTheme, setTheme } = useTheme();
@@ -30,11 +31,12 @@ export default function PersonnelLoginPage() {
 
   const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
   const [selectedForce, setSelectedForce] = useState<ForceType>(force || "CRPF");
+  const [selectedRole, setSelectedRole] = useState<UserRole>("WELFARE_OFFICER");
 
-  // Minimal Sign Up State (Only essential fields)
-  const [signupName, setSignupName] = useState("");
-  const [signupEmail, setSignupEmail] = useState("");
-  const [signupPassword, setSignupPassword] = useState("");
+  // Minimal Sign Up fields
+  const [officerName, setOfficerName] = useState("");
+  const [officerEmail, setOfficerEmail] = useState("");
+  const [officerPassword, setOfficerPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   // Google SSO State
@@ -68,7 +70,7 @@ export default function PersonnelLoginPage() {
     loadGoogleConfig();
   }, []);
 
-  // Google Login & Sign Up Handler
+  // Google Sign In & Sign Up Handler
   const handleGoogleSuccess = async (
     credential: string,
     profileUser?: { name?: string; email?: string }
@@ -83,24 +85,24 @@ export default function PersonnelLoginPage() {
       if (credential && credential.length > 50) {
         authUser = await AuthService.loginWithGoogleOAuthToken(
           credential,
-          "PERSONNEL",
+          selectedRole,
           selectedForce
         );
       } else if (profileUser?.email) {
         authUser = await AuthService.loginWithGoogle(
           profileUser.email,
-          profileUser.name || "Soldier",
-          "PERSONNEL",
+          profileUser.name || "Officer",
+          selectedRole,
           selectedForce
         );
       }
 
-      const targetRole = (authUser?.role as UserRole) || "PERSONNEL";
+      const targetRole = (authUser?.role as UserRole) || selectedRole;
       switchRole(targetRole);
 
       toast({
-        title: isHi ? "लॉगिन सफल" : "Signed In",
-        description: `${isHi ? "स्वागत है" : "Welcome"}, ${authUser?.name || "Soldier"}`,
+        title: isHi ? "कमांड प्रवेश सफल" : "Clearance Granted",
+        description: `${isHi ? "लॉगिन हुआ:" : "Welcome"}, ${authUser?.name || "Officer"}`,
         type: "success",
       });
 
@@ -113,21 +115,21 @@ export default function PersonnelLoginPage() {
   };
 
   // Minimal Sign Up Handler (Accepts Service ID or Email)
-  const handleSignUpSubmit = async (e: React.FormEvent) => {
+  const handleOfficerSignUpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg("");
     setSuccessMsg("");
 
-    if (!signupName.trim()) {
+    if (!officerName.trim()) {
       setErrorMsg(isHi ? "कृपया अपना नाम दर्ज करें।" : "Please enter your name.");
       return;
     }
-    const identifier = signupEmail.trim();
+    const identifier = officerEmail.trim();
     if (!identifier) {
       setErrorMsg(isHi ? "कृपया सर्विस ID अथवा ईमेल दर्ज करें।" : "Please enter Service ID or Email.");
       return;
     }
-    if (!signupPassword || signupPassword.length < 4) {
+    if (!officerPassword || officerPassword.length < 4) {
       setErrorMsg(isHi ? "पासवर्ड कम से कम 4 अक्षरों का होना चाहिए।" : "Password must be at least 4 characters.");
       return;
     }
@@ -144,25 +146,25 @@ export default function PersonnelLoginPage() {
     try {
       setForce(selectedForce);
       const user = await AuthService.register({
-        name: signupName.trim(),
+        name: officerName.trim(),
         email: finalEmail,
         serviceId: finalServiceId,
-        password: signupPassword.trim(),
-        role: "PERSONNEL",
+        password: officerPassword.trim(),
+        role: selectedRole,
         force: selectedForce,
       });
 
-      switchRole("PERSONNEL");
+      switchRole(selectedRole);
       setSuccessMsg(isHi ? `स्वागत है, ${user.name}` : `Welcome, ${user.name}`);
 
       toast({
-        title: isHi ? "खाता तैयार है" : "Account Created",
-        description: `${isHi ? "स्वागत है" : "Welcome to MissionWell"}, ${user.name}`,
+        title: isHi ? "अधिकारी खाता तैयार है" : "Officer Profile Created",
+        description: `${isHi ? "स्वागत है" : "Welcome"}, ${user.name}`,
         type: "success",
       });
 
       setTimeout(() => {
-        router.push(AuthService.getRedirectPathForRole("PERSONNEL"));
+        router.push(AuthService.getRedirectPathForRole(selectedRole));
       }, 800);
     } catch (err: any) {
       setErrorMsg(err?.message || "Registration failed. Please check your email.");
@@ -172,20 +174,20 @@ export default function PersonnelLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#090D16] text-slate-900 dark:text-slate-100 flex flex-col justify-between p-4 sm:p-6 font-sans relative overflow-hidden">
+    <div className="min-h-screen bg-slate-900 dark:bg-[#070B13] text-slate-100 flex flex-col justify-between p-4 sm:p-6 font-sans relative overflow-hidden">
       
-      {/* Ambient background glow */}
+      {/* Ambient glow */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[300px] bg-emerald-500/10 dark:bg-emerald-500/15 blur-[120px]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[300px] bg-cyan-600/10 dark:bg-cyan-500/15 blur-[130px]" />
       </div>
 
       {/* Top Bar - Minimal */}
       <header className="max-w-md w-full mx-auto flex items-center justify-between py-2 relative z-10">
         <Link
           href="/"
-          className="inline-flex items-center gap-1 text-xs text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"
+          className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-white transition-colors"
         >
-          <ChevronLeft className="h-4 w-4 text-emerald-500" />
+          <ChevronLeft className="h-4 w-4 text-cyan-400" />
           <span>{isHi ? "होम" : "Home"}</span>
         </Link>
 
@@ -193,7 +195,7 @@ export default function PersonnelLoginPage() {
           <button
             type="button"
             onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-            className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white transition-colors"
             title="Toggle Theme"
           >
             {resolvedTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -202,44 +204,44 @@ export default function PersonnelLoginPage() {
           <button
             type="button"
             onClick={toggleLang}
-            className="px-2 py-1 rounded-md text-xs font-mono font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+            className="px-2 py-1 rounded-md text-xs font-mono font-medium text-slate-400 hover:text-white transition-colors"
           >
             {isHi ? "EN" : "हिन्दी"}
           </button>
         </div>
       </header>
 
-      {/* Main Card - Clean, focused, compact */}
+      {/* Main Card - Minimal */}
       <div className="relative z-10 max-w-sm w-full mx-auto my-auto py-2">
-        <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-[#0C1222]/95 backdrop-blur-xl p-6 sm:p-7 shadow-xl shadow-slate-900/5 dark:shadow-black/50 space-y-5">
+        <div className="rounded-2xl border border-slate-800 bg-[#0B132B]/95 backdrop-blur-xl p-6 sm:p-7 shadow-2xl shadow-black/70 space-y-5">
           
           {/* Header */}
           <div className="text-center space-y-1.5">
             <div className="flex justify-center mb-1">
               <ProjectServerIcon size="md" animate={false} showBadge={false} />
             </div>
-            <h1 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
+            <h1 className="text-lg sm:text-xl font-bold text-white tracking-tight">
               {authMode === "signin"
                 ? isHi
-                  ? "मिशनवेल में प्रवेश करें"
-                  : "Sign in to MissionWell"
+                  ? "कमांड व अधिकारी प्रवेश"
+                  : "Command & Officer Clearance"
                 : isHi
-                ? "नया खाता बनाएं"
-                : "Create an Account"}
+                ? "अधिकारी खाता बनाएं"
+                : "Register Officer Profile"}
             </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-400">
               {authMode === "signin"
                 ? isHi
-                  ? "सैनिक एवं जवान वेलनेस पोर्टल"
-                  : "Personnel wellness & self-care portal"
+                  ? "कल्याण अधिकारी, कमांडर व एडमिन पोर्टल"
+                  : "Welfare Officers, Commanders & Admins"
                 : isHi
-                ? "Google खाते अथवा ईमेल से साइनअप करें"
-                : "Sign up with your Google account or email"}
+                ? "Google खाते अथवा विवरण से पंजीकरण करें"
+                : "Sign up with official Google account"}
             </p>
           </div>
 
           {/* Segmented Mode Switcher */}
-          <div className="grid grid-cols-2 p-1 rounded-xl bg-slate-100 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 text-xs font-semibold">
+          <div className="grid grid-cols-2 p-1 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold">
             <button
               type="button"
               onClick={() => {
@@ -249,8 +251,8 @@ export default function PersonnelLoginPage() {
               }}
               className={`py-1.5 rounded-lg text-center transition-all ${
                 authMode === "signin"
-                  ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs font-bold"
-                  : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                  ? "bg-cyan-600 text-white shadow-xs font-bold"
+                  : "text-slate-400 hover:text-white"
               }`}
             >
               {isHi ? "लॉगिन" : "Sign In"}
@@ -264,8 +266,8 @@ export default function PersonnelLoginPage() {
               }}
               className={`py-1.5 rounded-lg text-center transition-all ${
                 authMode === "signup"
-                  ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs font-bold"
-                  : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                  ? "bg-cyan-600 text-white shadow-xs font-bold"
+                  : "text-slate-400 hover:text-white"
               }`}
             >
               {isHi ? "साइनअप" : "Sign Up"}
@@ -274,7 +276,7 @@ export default function PersonnelLoginPage() {
 
           {/* Error Banner */}
           {errorMsg && (
-            <div className="flex items-start gap-2 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-300 text-xs">
+            <div className="flex items-start gap-2 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs">
               <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-rose-500" />
               <div className="flex-1">{errorMsg}</div>
             </div>
@@ -282,15 +284,42 @@ export default function PersonnelLoginPage() {
 
           {/* Success Banner */}
           {successMsg && (
-            <div className="flex items-start gap-2 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-300 text-xs">
+            <div className="flex items-start gap-2 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs">
               <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-emerald-500" />
               <div className="flex-1">{successMsg}</div>
             </div>
           )}
 
-          {/* Security Force Branch Pills - Minimal */}
+          {/* Role Clearance Selector - Minimal */}
           <div className="space-y-1">
-            <label className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+            <label className="text-[11px] font-medium text-slate-400">
+              {isHi ? "भूमिका (Role):" : "Operating Role:"}
+            </label>
+            <div className="grid grid-cols-3 gap-1 text-xs font-semibold">
+              {[
+                { id: "WELFARE_OFFICER" as UserRole, label: isHi ? "कल्याण" : "Welfare" },
+                { id: "COMMANDER" as UserRole, label: isHi ? "कमांडर" : "Commander" },
+                { id: "ADMIN" as UserRole, label: isHi ? "एडमिन" : "Admin" },
+              ].map((r) => (
+                <button
+                  key={r.id}
+                  type="button"
+                  onClick={() => setSelectedRole(r.id)}
+                  className={`py-1.5 rounded-lg text-center border transition-all text-xs ${
+                    selectedRole === r.id
+                      ? "bg-cyan-600 border-cyan-500 text-white font-bold"
+                      : "bg-slate-900 border-slate-800 text-slate-400 hover:text-white"
+                  }`}
+                >
+                  {r.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Security Branch Pills - Minimal */}
+          <div className="space-y-1">
+            <label className="text-[11px] font-medium text-slate-400">
               {isHi ? "सुरक्षा बल:" : "Branch:"}
             </label>
             <div className="grid grid-cols-5 gap-1 text-xs font-semibold">
@@ -304,8 +333,8 @@ export default function PersonnelLoginPage() {
                   }}
                   className={`py-1 rounded-lg text-center border transition-all text-xs ${
                     selectedForce === f
-                      ? "bg-emerald-600 border-emerald-600 text-white font-bold"
-                      : "bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                      ? "bg-slate-700 border-slate-600 text-cyan-400 font-bold"
+                      : "bg-slate-900 border-slate-800 text-slate-400 hover:text-white"
                   }`}
                 >
                   {f}
@@ -315,49 +344,49 @@ export default function PersonnelLoginPage() {
           </div>
 
           {/* ========================================================= */}
-          {/* SIGN IN VIEW: Clean & Minimal                             */}
+          {/* SIGN IN VIEW                                              */}
           {/* ========================================================= */}
           {authMode === "signin" && (
             <div className="space-y-3 pt-1 animate-in fade-in duration-200">
               
-              {/* Google One-Tap / Button */}
-              <div className="flex justify-center p-1.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+              {/* Google Button */}
+              <div className="flex justify-center p-1.5 rounded-xl bg-slate-900 border border-slate-800">
                 <GoogleLogin
                   onSuccess={(credentialResponse) => {
                     if (credentialResponse.credential) {
                       handleGoogleSuccess(credentialResponse.credential);
                     }
                   }}
-                  onError={() => setErrorMsg("Google sign-in was canceled or failed.")}
+                  onError={() => setErrorMsg("Google sign-in was canceled.")}
                   shape="pill"
                   size="large"
-                  theme={resolvedTheme === "dark" ? "filled_black" : "outline"}
+                  theme="filled_black"
                   text="continue_with"
                   width="320"
                 />
               </div>
 
-              {/* Demo accounts modal link */}
+              {/* Demo accounts link */}
               <div className="text-center pt-1">
                 <button
                   type="button"
                   onClick={() => setIsGoogleModalOpen(true)}
-                  className="text-xs text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-emerald-400 transition-colors"
+                  className="text-xs text-slate-400 hover:text-cyan-400 transition-colors"
                 >
-                  {isHi ? "डेमो खाते / स्विच करें" : "Use pre-configured demo accounts"}
+                  {isHi ? "अधिकारी डेमो खाते" : "Use officer demo accounts"}
                 </button>
               </div>
 
               {/* Toggle to Sign Up */}
-              <div className="text-center pt-2 text-xs text-slate-500 dark:text-slate-400">
-                <span>{isHi ? "नया खाता चाहिए? " : "Don't have an account? "}</span>
+              <div className="text-center pt-2 text-xs text-slate-400">
+                <span>{isHi ? "नया अधिकारी खाता? " : "New officer? "}</span>
                 <button
                   type="button"
                   onClick={() => {
                     setAuthMode("signup");
                     setErrorMsg("");
                   }}
-                  className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline"
+                  className="text-cyan-400 font-semibold hover:underline"
                 >
                   {isHi ? "साइनअप करें" : "Sign up"}
                 </button>
@@ -367,13 +396,13 @@ export default function PersonnelLoginPage() {
           )}
 
           {/* ========================================================= */}
-          {/* SIGN UP VIEW: Minimal Google + Minimal 3 Inputs Form      */}
+          {/* SIGN UP VIEW                                              */}
           {/* ========================================================= */}
           {authMode === "signup" && (
             <div className="space-y-3.5 pt-1 animate-in fade-in duration-200">
               
-              {/* Primary 1-Click Google Sign Up */}
-              <div className="flex justify-center p-1.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+              {/* Google 1-Click Sign Up */}
+              <div className="flex justify-center p-1.5 rounded-xl bg-slate-900 border border-slate-800">
                 <GoogleLogin
                   onSuccess={(credentialResponse) => {
                     if (credentialResponse.credential) {
@@ -383,57 +412,57 @@ export default function PersonnelLoginPage() {
                   onError={() => setErrorMsg("Google sign-up was canceled.")}
                   shape="pill"
                   size="large"
-                  theme={resolvedTheme === "dark" ? "filled_black" : "outline"}
+                  theme="filled_black"
                   text="signup_with"
                   width="320"
                 />
               </div>
 
-              {/* Minimal Divider */}
+              {/* Divider */}
               <div className="relative flex items-center justify-center">
-                <div className="w-full border-t border-slate-200 dark:border-slate-800" />
-                <span className="absolute bg-white dark:bg-[#0C1222] px-2 text-[10px] uppercase font-mono text-slate-400">
+                <div className="w-full border-t border-slate-800" />
+                <span className="absolute bg-[#0B132B] px-2 text-[10px] uppercase font-mono text-slate-500">
                   {isHi ? "या ईमेल से" : "or with email"}
                 </span>
               </div>
 
               {/* Minimal Form */}
-              <form onSubmit={handleSignUpSubmit} className="space-y-2.5">
+              <form onSubmit={handleOfficerSignUpSubmit} className="space-y-2.5">
                 <div>
                   <input
                     type="text"
-                    value={signupName}
-                    onChange={(e) => setSignupName(e.target.value)}
-                    placeholder={isHi ? "पूरा नाम" : "Full Name"}
+                    value={officerName}
+                    onChange={(e) => setOfficerName(e.target.value)}
+                    placeholder={isHi ? "अधिकारी का नाम" : "Officer Full Name"}
                     required
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-800 bg-slate-900 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
                   />
                 </div>
 
                 <div>
                   <input
                     type="text"
-                    value={signupEmail}
-                    onChange={(e) => setSignupEmail(e.target.value)}
-                    placeholder={isHi ? "सर्विस ID अथवा ईमेल (उदा. MED-DIR-0881)" : "Service ID or Email (e.g. MED-DIR-0881)"}
+                    value={officerEmail}
+                    onChange={(e) => setOfficerEmail(e.target.value)}
+                    placeholder={isHi ? "सर्विस ID अथवा आधिकारिक ईमेल (उदा. MED-DIR-0881)" : "Service ID or Email (e.g. MED-DIR-0881)"}
                     required
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-800 bg-slate-900 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 font-mono"
                   />
                 </div>
 
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
-                    value={signupPassword}
-                    onChange={(e) => setSignupPassword(e.target.value)}
-                    placeholder={isHi ? "सुरक्षा पासवर्ड" : "Password"}
+                    value={officerPassword}
+                    onChange={(e) => setOfficerPassword(e.target.value)}
+                    placeholder={isHi ? "पासवर्ड" : "Password"}
                     required
-                    className="w-full pl-3 pr-8 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
+                    className="w-full pl-3 pr-8 py-2 rounded-xl border border-slate-800 bg-slate-900 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 font-mono"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
                   >
                     {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
                   </button>
@@ -442,29 +471,29 @@ export default function PersonnelLoginPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-xs shadow-sm transition-all"
+                  className="w-full py-2.5 px-4 rounded-xl bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-700 disabled:opacity-50 text-white font-semibold text-xs shadow-sm transition-all"
                 >
                   {isSubmitting ? (
                     <span className="flex items-center justify-center gap-1.5">
                       <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                      <span>{isHi ? "सहेजा जा रहा है..." : "Creating Account..."}</span>
+                      <span>{isHi ? "सहेजा जा रहा है..." : "Registering..."}</span>
                     </span>
                   ) : (
-                    <span>{isHi ? "खाता बनाएं" : "Create Account"}</span>
+                    <span>{isHi ? "अधिकारी खाता बनाएं" : "Register Profile"}</span>
                   )}
                 </button>
               </form>
 
               {/* Toggle to Sign In */}
-              <div className="text-center pt-1 text-xs text-slate-500 dark:text-slate-400">
-                <span>{isHi ? "पहले से खाता है? " : "Already have an account? "}</span>
+              <div className="text-center pt-1 text-xs text-slate-400">
+                <span>{isHi ? "पहले से खाता है? " : "Already registered? "}</span>
                 <button
                   type="button"
                   onClick={() => {
                     setAuthMode("signin");
                     setErrorMsg("");
                   }}
-                  className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline"
+                  className="text-cyan-400 font-semibold hover:underline"
                 >
                   {isHi ? "लॉगिन करें" : "Sign in"}
                 </button>
@@ -473,13 +502,13 @@ export default function PersonnelLoginPage() {
             </div>
           )}
 
-          {/* Minimal Link to Officer Portal */}
-          <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 text-center">
+          {/* Minimal Link to Personnel Portal */}
+          <div className="pt-2 border-t border-slate-800 text-center">
             <Link
-              href="/login/admin"
-              className="text-[11px] text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+              href="/login"
+              className="text-[11px] text-slate-400 hover:text-cyan-400 transition-colors"
             >
-              {isHi ? "अधिकारी / कमांड पोर्टल प्रवेश →" : "Officer & Command Portal →"}
+              {isHi ? "सैनिक / जवान पोर्टल प्रवेश →" : "Personnel & Soldier Portal →"}
             </Link>
           </div>
 
@@ -487,17 +516,17 @@ export default function PersonnelLoginPage() {
       </div>
 
       {/* Clean Minimal Footer */}
-      <footer className="relative z-10 max-w-sm w-full mx-auto text-center text-[10px] text-slate-400 py-1 flex items-center justify-center gap-1.5">
-        <ShieldCheck className="h-3 w-3 text-emerald-500" />
-        <span>Confidential • DPDP Act 2023 Compliant</span>
+      <footer className="relative z-10 max-w-sm w-full mx-auto text-center text-[10px] text-slate-500 py-1 flex items-center justify-center gap-1.5">
+        <ShieldCheck className="h-3 w-3 text-cyan-500" />
+        <span>Institutional Clearance • Audit Logged</span>
       </footer>
 
-      {/* Google OAuth Modal for fallback & pre-configured demo */}
+      {/* Google OAuth Modal */}
       <GoogleOAuthModal
         isOpen={isGoogleModalOpen}
         onClose={() => setIsGoogleModalOpen(false)}
         onSuccess={(user: any, token: string) => handleGoogleSuccess(token, user)}
-        initialRole="PERSONNEL"
+        initialRole={selectedRole}
         initialForce={selectedForce}
         googleClientId={googleClientId}
         isGoogleConfigured={isGoogleConfigured}

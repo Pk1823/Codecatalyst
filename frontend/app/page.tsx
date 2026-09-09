@@ -192,10 +192,18 @@ export default function LandingPage() {
 
             <Link
               href="/login"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 text-xs sm:text-sm font-semibold shadow-md shadow-emerald-600/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold shadow-md shadow-emerald-600/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
-              <span>{isHi ? "पोर्टल प्रवेश" : "Sign In"}</span>
-              <ArrowRight className="h-3.5 w-3.5" />
+              <HeartPulse className="h-3.5 w-3.5" />
+              <span>{isHi ? "जवान पोर्टल" : "Personnel"}</span>
+            </Link>
+
+            <Link
+              href="/login/admin"
+              className="inline-flex items-center gap-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <Shield className="h-3.5 w-3.5 text-cyan-400" />
+              <span>{isHi ? "कमांड पोर्टल" : "Command"}</span>
             </Link>
           </div>
         </div>
@@ -251,10 +259,18 @@ export default function LandingPage() {
             <div className="pt-3 flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/25 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/25 hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
-                <span>{isHi ? "मिशनवेल पोर्टल खोलें" : "Launch MissionWell Portal"}</span>
+                <HeartPulse className="h-4 w-4" />
+                <span>{isHi ? "सैनिक / जवान पोर्टल" : "Personnel Portal"}</span>
                 <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/login/admin"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-cyan-500/40 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-950/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
+              >
+                <Shield className="h-4 w-4 text-cyan-400" />
+                <span>{isHi ? "कमांड एवं वेलफेयर पोर्टल" : "Command & Officer Portal"}</span>
               </Link>
               <a
                 href="#simulator"

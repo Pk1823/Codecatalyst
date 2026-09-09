@@ -86,6 +86,123 @@ export class AuthService {
     };
   }
 
+  static async register(data: {
+    name: string;
+    email: string;
+    password: string;
+    role?: string;
+    force?: string;
+    serviceId?: string;
+    rank?: string;
+    department?: string;
+    baseLocation?: string;
+    gender?: string;
+    bloodGroup?: string;
+    ipAddress?: string;
+  }) {
+    const { name, email, password, role = "PERSONNEL", force = "CRPF" } = data;
+    if (!name || !name.trim()) throw new Error("Full Name is required");
+    if (!email || !email.includes("@")) throw new Error("Valid email is required");
+    if (!password || password.length < 4) throw new Error("Password must be at least 4 characters");
+
+    const trimmedEmail = email.trim().toLowerCase();
+    const existing = await prisma.user.findUnique({ where: { email: trimmedEmail } });
+    if (existing) {
+      throw new Error("Account with this email already exists");
+    }
+
+    const assignedRole = role as any;
+    const assignedForce = force;
+    let finalServiceId = data.serviceId?.trim();
+    if (!finalServiceId) {
+      const randNum = Math.floor(1000 + Math.random() * 9000);
+      finalServiceId = `${assignedForce}-${assignedRole.slice(0, 3)}-${randNum}`;
+    }
+
+    const passwordHash = await hashPassword(password);
+    const finalRank = data.rank || (assignedRole === "COMMANDER" ? "Commandant" : assignedRole === "WELFARE_OFFICER" ? "Chief Medical Officer" : "Constable (GD)");
+    const finalDept = data.department || (assignedRole === "WELFARE_OFFICER" ? "Psychological Health Directorate" : "Battalion Support");
+    const baseLocation = data.baseLocation || `${assignedForce} Base Camp, Sector HQ`;
+
+    let unit = await prisma.unit.findFirst({ where: { force: assignedForce } });
+    if (!unit) {
+      unit = await prisma.unit.create({
+        data: {
+          name: `${assignedForce} 114 Bn - Main`,
+          force: assignedForce,
+          location: baseLocation,
+          theatre: "Operational Grid",
+        },
+      });
+    }
+
+    const user = await prisma.user.create({
+      data: {
+        email: trimmedEmail,
+        name: name.trim(),
+        serviceId: finalServiceId,
+        passwordHash,
+        role: assignedRole,
+        force: assignedForce,
+        rank: finalRank,
+        department: finalDept,
+        unitId: unit?.id,
+      },
+      include: { personnel: true },
+    });
+
+    const pId = `P-${Math.floor(1000 + Math.random() * 9000)}`;
+    let personnel = null;
+    try {
+      personnel = await prisma.personnel.create({
+        data: {
+          id: pId,
+          userId: user.id,
+          serviceNumber: user.serviceId,
+          name: user.name,
+          rank: finalRank,
+          force: assignedForce,
+          gender: data.gender || "MALE",
+          bloodGroup: data.bloodGroup || "B+",
+          dateOfJoining: new Date(),
+          unitId: unit.id,
+          baseLocation,
+          activeDeployDays: 10,
+          currentDutyStatus: "Active Duty",
+        },
+      });
+    } catch {}
+
+    const payload: SessionPayload = {
+      userId: user.id,
+      email: user.email,
+      name: user.name,
+      serviceId: user.serviceId,
+      role: user.role as any,
+      force: user.force,
+      personnelId: personnel?.id || undefined,
+      rank: user.rank || undefined,
+      unitId: user.unitId || undefined,
+    };
+
+    const token = await signSessionToken(payload);
+
+    return {
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        serviceId: user.serviceId,
+        rank: user.rank,
+        unit: user.unitId,
+        force: user.force,
+        personnelId: personnel?.id,
+      },
+    };
+  }
+
   static async loginWithGoogleOrEmail({
     email,
     name,

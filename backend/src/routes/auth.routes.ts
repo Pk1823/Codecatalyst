@@ -5,7 +5,8 @@ import { authenticate } from "../middleware/auth.middleware";
 const router = Router();
 
 router.post("/login", AuthController.login);
-router.post("/signup", AuthController.signup);
+router.post("/signup", AuthController.register);
+router.post("/register", AuthController.register);
 router.get("/google/url", AuthController.getGoogleUrl);
 router.get("/google/callback", AuthController.googleCallback);
 router.post("/google/callback", AuthController.googleCallback);

@@ -36,27 +36,14 @@ export class AuthController {
   }
 
   /**
-   * POST /api/auth/signup
-   * Register a new real user account
+   * POST /api/auth/register & POST /api/auth/signup
+   * Create new defense user profile & persist in database
    */
-  static async signup(req: Request, res: Response): Promise<void> {
+  static async register(req: Request, res: Response): Promise<void> {
     try {
-      const { name, email, password, role, force, serviceId, rank, department, baseLocation, bloodGroup, gender, avatarUrl } = req.body;
       const ipAddress = req.ip || req.socket.remoteAddress;
-
-      const { token, user } = await AuthService.signup({
-        name,
-        email,
-        password,
-        role,
-        force,
-        serviceId,
-        rank,
-        department,
-        baseLocation,
-        bloodGroup,
-        gender,
-        avatarUrl,
+      const { token, user } = await AuthService.register({
+        ...req.body,
         ipAddress,
       });
 
@@ -72,6 +59,8 @@ export class AuthController {
       res.status(400).json({ error: error.message || "Registration failed" });
     }
   }
+
+  static signup = AuthController.register;
 
   /**
    * GET /api/auth/google/url
