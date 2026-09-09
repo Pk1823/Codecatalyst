@@ -83,6 +83,24 @@ export function GoogleAccountDatasetModal({
     try {
       const data = await ProfileService.getProfileDataset(targetPersonnelId);
       setDataset(data);
+      if (data?.googleAccount?.name) {
+        try {
+          const current = user || ({} as any);
+          if (current.name !== data.googleAccount.name || current.email !== data.googleAccount.email) {
+            const updated = {
+              ...current,
+              name: data.googleAccount.name,
+              email: data.googleAccount.email,
+              avatarUrl: data.googleAccount.avatarUrl || current.avatarUrl,
+              serviceId: data.googleAccount.serviceId || current.serviceId,
+              force: data.googleAccount.force || current.force,
+            };
+            localStorage.setItem("missionwell_auth_user", JSON.stringify(updated));
+            localStorage.setItem("user", JSON.stringify(updated));
+            window.dispatchEvent(new Event("missionwell_auth_changed"));
+          }
+        } catch {}
+      }
       if (data.personnel) {
         setEditBloodGroup(data.personnel.bloodGroup || "B+");
         setEditBaseLocation(data.personnel.baseLocation || "");

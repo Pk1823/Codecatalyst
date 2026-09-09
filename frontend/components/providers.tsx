@@ -128,6 +128,20 @@ export function Providers({ children }: { children: React.ReactNode }) {
     // Load user
     setUser(AuthService.getCurrentUser());
 
+    // Sync active authenticated session if available
+    fetch("/api/auth/session")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.authenticated && data?.user) {
+          const freshUser = data.user;
+          setUser(freshUser);
+          localStorage.setItem("missionwell_auth_user", JSON.stringify(freshUser));
+          localStorage.setItem("user", JSON.stringify(freshUser));
+          window.dispatchEvent(new Event("missionwell_auth_changed"));
+        }
+      })
+      .catch(() => {});
+
     const handleAuthChange = () => {
       setUser(AuthService.getCurrentUser());
     };
@@ -175,6 +189,27 @@ export function Providers({ children }: { children: React.ReactNode }) {
   };
 
   const switchRole = (role: UserRole) => {
+    const current = AuthService.getCurrentUser();
+    const isRealAccount =
+      current &&
+      current.email &&
+      (current.email.includes("@gmail.com") ||
+        (!current.email.includes("crpf.gov.in") && !current.email.includes("defense.gov.in")));
+
+    if (isRealAccount) {
+      const updatedUser = { ...current, role };
+      localStorage.setItem("missionwell_auth_user", JSON.stringify(updatedUser));
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setUser(updatedUser);
+      window.dispatchEvent(new Event("missionwell_auth_changed"));
+      toast({
+        title: `Role Switched`,
+        description: `Active role: ${role.replace("_", " ")} (${updatedUser.name})`,
+        type: "info",
+      });
+      return;
+    }
+
     const newUser = AuthService.login(role);
     setUser(newUser);
     toast({
