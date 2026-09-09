@@ -47,9 +47,6 @@ export default function CommanderDashboardPage() {
               {meta.sampleCommanderName}
             </span>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            <span className="font-mono text-slate-700 dark:text-slate-300">{meta.sampleBattalion}</span> • {meta.primaryTheatre}
-          </p>
         </div>
 
         <div className="flex items-center gap-2.5 rounded-lg bg-white dark:bg-[#0F172A] px-3 py-2 border border-slate-200/80 dark:border-slate-800 shadow-xs">
@@ -117,9 +114,6 @@ export default function CommanderDashboardPage() {
             <h3 className="text-sm font-bold text-slate-900 dark:text-[#F8FAFC]">
               {isHi ? "कंपनी-वार रोल-कॉल तनाव एवं तत्परता स्थिति" : "Company-Wise Roll-Call & Operational Stress Grid"}
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              {meta.sampleBattalion} • {isHi ? "रोटेशनल आराम एवं अवकाश संतुलन की निगरानी" : "Monitor fatigue accumulation across deployment sectors"}
-            </p>
           </div>
           <span className="text-[11px] font-mono text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded-md">
             {isHi ? "5 सक्रिय कंपनियां" : "5 Active Deployments"}

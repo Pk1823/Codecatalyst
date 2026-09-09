@@ -72,9 +72,6 @@ export default function WelfareOfficerDashboard() {
               {meta.sampleOfficerName}
             </span>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            <span className="font-medium text-slate-700 dark:text-slate-300">{meta.sampleBattalion}</span> • {meta.primaryTheatre}
-          </p>
         </div>
 
         <div className="flex items-center gap-2.5">
@@ -146,9 +143,6 @@ export default function WelfareOfficerDashboard() {
             <h2 className="text-sm font-bold text-slate-900 dark:text-white">
               Priority Welfare Alerts
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Predictive indicators flagged for officer evaluation
-            </p>
           </div>
           <span className="text-xs font-mono font-medium px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
             {alerts.length} Pending

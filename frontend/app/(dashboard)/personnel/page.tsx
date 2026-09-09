@@ -133,9 +133,6 @@ export default function PersonnelDashboard() {
               {user.serviceId || meta.sampleServiceId}
             </span>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            <span className="text-slate-700 dark:text-slate-300 font-medium">{meta.sampleUnit}</span> • {meta.sampleLocation}
-          </p>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
@@ -219,11 +216,6 @@ export default function PersonnelDashboard() {
                 <h4 className="text-xs font-bold text-slate-900 dark:text-[#F8FAFC]">
                   {isHi ? "सैनिक सम्मेलन / गोपनीय दरबार अनुरोध" : "Confidential Sainik Sammelan Request"}
                 </h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                  {isHi
-                    ? "कमांडिंग ऑफिसर या सूबेदार मेजर के समक्ष सीधे एवं गोपनीय रूप से अपनी बात रखें।"
-                    : "Direct 1-on-1 audience with the Commanding Officer without administrative filtering."}
-                </p>
               </div>
             </div>
 
@@ -250,9 +242,6 @@ export default function PersonnelDashboard() {
                 <h3 className="text-sm font-bold text-slate-900 dark:text-[#F8FAFC]">
                   {isHi ? "कर्तव्य एवं अवकाश संतुलन" : "Duty & Recovery Balance"}
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  {meta.sampleUnit} • {meta.primaryTheatre}
-                </p>
               </div>
               <div className="text-right">
                 <span className="text-2xl font-bold text-amber-600 dark:text-amber-400 font-mono">

@@ -77,9 +77,6 @@ export default function PersonnelPrivacyPage() {
               <p className="text-xs font-semibold text-slate-200">
                 Voluntary Wellness Self-Assessment
               </p>
-              <p className="text-[11px] text-slate-400">
-                Used confidentially for fatigue forecasting and rest pacing.
-              </p>
             </div>
             <button
               onClick={() => handleToggle(setWellnessDataConsent, wellnessDataConsent, "Self-Assessment")}
@@ -102,9 +99,6 @@ export default function PersonnelPrivacyPage() {
               <p className="text-xs font-semibold text-slate-200">
                 Smart-Band Rest Telemetry (Optional)
               </p>
-              <p className="text-[11px] text-slate-400">
-                Syncs sleep interval readings when authorized wearable is active.
-              </p>
             </div>
             <button
               onClick={() => handleToggle(setOptionalDataConsent, optionalDataConsent, "Smart-Band Data")}
@@ -126,9 +120,6 @@ export default function PersonnelPrivacyPage() {
             <div>
               <p className="text-xs font-semibold text-slate-200">
                 Anonymized Unit Readiness Analytics
-              </p>
-              <p className="text-[11px] text-slate-400">
-                Aggregates sanitized statistics without exposing personal identifiers.
               </p>
             </div>
             <button
