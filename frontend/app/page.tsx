@@ -201,7 +201,7 @@ export default function LandingPage() {
       </header>
 
       {/* 3. Hero Section - Full Screen Viewport Height */}
-      <section className="relative min-h-[calc(100vh-68px)] flex flex-col items-center justify-center border-b border-slate-200 dark:border-slate-800/80 overflow-hidden bg-slate-900/5 dark:bg-[#090D16] py-12 lg:py-16">
+      <section className="relative min-h-[80vh] lg:min-h-[calc(100vh-68px)] flex flex-col items-center justify-center border-b border-slate-200 dark:border-slate-800/80 overflow-hidden bg-slate-900/5 dark:bg-[#090D16] py-8 sm:py-10 lg:py-12">
         {/* Breathtaking Defense Operational Command & Himalayan Sunrise Backdrop */}
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
           <img
@@ -217,10 +217,10 @@ export default function LandingPage() {
         {/* Ambient Emerald Glow */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-emerald-500/10 dark:bg-emerald-600/15 blur-[150px] pointer-events-none z-0 animate-pulse-ring" />
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 my-auto">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 -mt-4 sm:-mt-6 lg:-mt-10 my-auto">
 
           {/* Value Prop Headline */}
-          <div className="text-center max-w-5xl mx-auto space-y-6">
+          <div className="text-center max-w-5xl mx-auto space-y-4">
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.08] drop-shadow-xs dark:drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)]">
               {isHi ? (
                 <>
@@ -239,13 +239,11 @@ export default function LandingPage() {
               )}
             </h1>
 
-
-
-            {/* Primary Action Buttons */}
-            <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
+            {/* Primary Action Buttons - Shifted Upwards */}
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-3.5">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-white shadow-lg shadow-emerald-600/25 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="inline-flex items-center justify-center gap-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-6 sm:px-8 py-3.5 text-sm sm:text-base font-semibold text-white shadow-lg shadow-emerald-600/25 hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
                 <HeartPulse className="h-5 w-5" />
                 <span>{isHi ? "सैनिक / जवान पोर्टल" : "Personnel Portal"}</span>
@@ -253,7 +251,7 @@ export default function LandingPage() {
               </Link>
               <Link
                 href="/login/admin"
-                className="inline-flex items-center justify-center gap-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-slate-100 shadow-lg shadow-slate-950/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="inline-flex items-center justify-center gap-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 px-6 sm:px-8 py-3.5 text-sm sm:text-base font-semibold text-slate-100 shadow-lg shadow-slate-950/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
                 <Shield className="h-5 w-5 text-emerald-400" />
                 <span>{isHi ? "कमांड एवं वेलफेयर पोर्टल" : "Command & Officer Portal"}</span>
