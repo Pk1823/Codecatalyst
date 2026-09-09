@@ -210,14 +210,18 @@ export async function POST(req: NextRequest) {
     });
 
     if (user) {
-      user = await prisma.user.update({
-        where: { id: user.id },
-        data: {
-          name: finalName || user.name,
-          avatarUrl: finalPicture || user.avatarUrl,
-        },
-        include: { personnel: true },
-      });
+      try {
+        user = await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            name: finalName || user.name,
+            avatarUrl: finalPicture || user.avatarUrl,
+          },
+          include: { personnel: true },
+        });
+      } catch (dbErr) {
+        console.warn("Prisma user.update skipped in callback due to DB lock:", dbErr);
+      }
     } else {
       const defaultPasswordHash = await hashPassword("demo123");
       const serviceIdNumber = Math.floor(10000 + Math.random() * 90000);

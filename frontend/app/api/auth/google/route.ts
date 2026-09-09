@@ -231,15 +231,19 @@ export async function POST(req: NextRequest) {
     });
 
     if (user) {
-      // Update name and avatarUrl if fresh from Google
-      user = await prisma.user.update({
-        where: { id: user.id },
-        data: {
-          name: finalName || user.name,
-          avatarUrl: finalPicture || user.avatarUrl,
-        },
-        include: { personnel: true },
-      });
+      // Update name and avatarUrl if fresh from Google (graceful fallback if DB is read-only)
+      try {
+        user = await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            name: finalName || user.name,
+            avatarUrl: finalPicture || user.avatarUrl,
+          },
+          include: { personnel: true },
+        });
+      } catch (dbErr) {
+        console.warn("Prisma user.update skipped due to DB lock/permissions:", dbErr);
+      }
     } else {
       const defaultPasswordHash = await hashPassword("demo123");
       const serviceIdNumber = Math.floor(10000 + Math.random() * 90000);
