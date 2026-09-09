@@ -172,15 +172,6 @@
   box-shadow: 0 0 35px -5px rgba(168, 85, 247, 0.15);
 }
 
-/* Tactical Keyframe Animations */
-@keyframes radar-sweep {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
 
 @keyframes float-slow {
   0%, 100% {
@@ -218,9 +209,6 @@
   }
 }
 
-.animate-radar {
-  animation: radar-sweep 8s linear infinite;
-}
 
 .animate-float {
   animation: float-slow 4s ease-in-out infinite;

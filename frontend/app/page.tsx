@@ -31,7 +31,6 @@ import {
   RotateCcw,
   Presentation,
   Compass,
-  Radar,
   ChevronDown,
   ExternalLink,
 } from "lucide-react";
@@ -57,7 +56,6 @@ export default function LandingPage() {
   const [sleepHours, setSleepHours] = useState<number>(3.8);
   const [selfReportVal, setSelfReportVal] = useState<number>(2); // 1 = Normal/Fit (Masked), 2 = Normal, 3 = Stressed
   const [sectorTension, setSectorTension] = useState<"routine" | "elevated" | "active">("active");
-  const [activeSimulationVisual, setActiveSimulationVisual] = useState<"radar" | "neural" | "command">("radar");
 
   // Dynamic simulation calculations
   const simResults = useMemo(() => {
@@ -158,9 +156,6 @@ export default function LandingPage() {
           <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold text-slate-600 dark:text-slate-300">
             <a href="#simulator" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors py-1 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60">
               {isHi ? "एआई सिम्युलेटर" : "Live AI Simulator"}
-            </a>
-            <a href="#animated-simulation" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors py-1 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60">
-              {isHi ? "एनिमेटेड रडार" : "Animated Radar"}
             </a>
             <a href="#how-it-works" className="hover:text-emerald-600 dark:hover:text-white transition-colors py-1 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60">
               {isHi ? "कार्यप्रणाली" : "How It Works"}
@@ -272,13 +267,6 @@ export default function LandingPage() {
                 <span>{isHi ? "मिशनवेल पोर्टल खोलें" : "Launch MissionWell Portal"}</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
-              <a
-                href="#animated-simulation"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 backdrop-blur-md px-5 py-3 text-sm font-semibold text-emerald-700 dark:text-emerald-300 transition-all hover:scale-[1.02] shadow-xs"
-              >
-                <Activity className="h-4 w-4 text-emerald-500 animate-pulse" />
-                <span>{isHi ? "सिम्युलेटेड एनिमेटेड रडार" : "Simulated Animated Radar"}</span>
-              </a>
               <a
                 href="#simulator"
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 backdrop-blur-md hover:bg-slate-100 dark:hover:bg-slate-800 px-5 py-3 text-sm font-medium text-slate-800 dark:text-slate-200 transition-all shadow-xs"
@@ -578,7 +566,7 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Right Column: Live AI Evaluation & Radar Triage (5 Cols) */}
+            {/* Right Column: Live AI Evaluation & Risk Triage (5 Cols) */}
             <div className="lg:col-span-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-6 shadow-xl space-y-5 relative overflow-hidden">
               {/* Top Status */}
               <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
