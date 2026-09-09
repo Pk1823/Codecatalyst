@@ -116,16 +116,16 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-50/30 dark:bg-[#090D16]/40 text-slate-900 dark:text-slate-100 selection:bg-blue-500/20 selection:text-blue-700 dark:selection:text-blue-300 flex flex-col font-sans transition-colors duration-200">
+    <div className="relative min-h-screen bg-slate-50/40 dark:bg-[#090D16]/40 text-slate-900 dark:text-slate-100 selection:bg-blue-500/20 selection:text-blue-700 dark:selection:text-blue-300 flex flex-col font-sans transition-colors duration-200">
       {/* Sticky Fixed Tactical Backdrop Image across whole Home Page */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
         <img
           src="/hero-bg.jpg"
           alt="Himalayan Defense Command & Biometric Telemetry Operational Backdrop"
-          className="w-full h-full object-cover object-center opacity-65 dark:opacity-85 transition-opacity duration-700 select-none scale-100"
+          className="w-full h-full object-cover object-center opacity-35 dark:opacity-80 transition-opacity duration-700 select-none scale-100"
         />
-        {/* Soft, translucent overlay that lets the background image show through fully while maintaining crisp text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-50/50 via-slate-50/25 to-slate-50/60 dark:from-[#090D16]/65 dark:via-[#090D16]/40 dark:to-[#090D16]/75" />
+        {/* Soft, translucent overlay tailored for both Light (White) & Dark themes */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-50/80 via-slate-50/55 to-slate-50/85 dark:from-[#090D16]/80 dark:via-[#090D16]/50 dark:to-[#090D16]/85" />
       </div>
 
       {/* 1. National Tricolor Strip */}
@@ -136,7 +136,7 @@ export default function LandingPage() {
       </div>
 
       {/* 2. Top Header Navigation */}
-      <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/85 dark:bg-[#090D16]/85 backdrop-blur-xl shadow-xs transition-colors">
+      <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-[#090D16]/90 backdrop-blur-xl shadow-xs transition-colors">
         <div className="max-w-7xl mx-auto flex h-20 items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-3.5 group">
             <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/30 group-hover:scale-105 transition-all">
@@ -172,17 +172,23 @@ export default function LandingPage() {
 
           <div className="flex items-center gap-2 sm:gap-2.5">
 
-            {/* Theme Toggle Button */}
+            {/* User-Friendly Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs font-mono font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shadow-xs"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs font-mono font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shadow-xs"
               title={resolvedTheme === "dark" ? "Switch to Light Theme" : "Switch to Dark Theme"}
               aria-label="Toggle theme appearance"
             >
               {resolvedTheme === "dark" ? (
-                <Sun className="h-3.5 w-3.5 text-slate-300" />
+                <>
+                  <Sun className="h-3.5 w-3.5 text-amber-400" />
+                  <span className="hidden sm:inline">Light Mode</span>
+                </>
               ) : (
-                <Moon className="h-3.5 w-3.5 text-slate-700" />
+                <>
+                  <Moon className="h-3.5 w-3.5 text-blue-600" />
+                  <span className="hidden sm:inline">Dark Mode</span>
+                </>
               )}
             </button>
 
