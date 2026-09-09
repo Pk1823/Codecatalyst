@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { RoleGuard } from "@/components/auth/role-guard";
+import { RouteBackground } from "@/components/layout/route-background";
 
 export default function DashboardLayout({
   children,
@@ -13,15 +14,18 @@ export default function DashboardLayout({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-50/80 dark:bg-[#090D16] text-slate-900 dark:text-slate-100 flex flex-col transition-colors duration-200 font-sans">
-      <div className="flex flex-1 relative">
+    <div className="min-h-screen bg-slate-50/80 dark:bg-[#090D16] text-slate-900 dark:text-slate-100 flex flex-col transition-colors duration-200 font-sans relative overflow-x-hidden">
+      {/* Route-Adaptive Cinematic Defense & Biometric Ambient Background */}
+      <RouteBackground />
+
+      <div className="flex flex-1 relative z-10">
         <Sidebar
           mobileOpen={mobileMenuOpen}
           onMobileClose={() => setMobileMenuOpen(false)}
         />
-        <div className="flex flex-1 flex-col min-w-0">
+        <div className="flex flex-1 flex-col min-w-0 relative z-10">
           <Topbar onMobileMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)} />
-          <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto pb-12">
+          <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto pb-12 relative z-10">
             <RoleGuard>{children}</RoleGuard>
           </main>
         </div>

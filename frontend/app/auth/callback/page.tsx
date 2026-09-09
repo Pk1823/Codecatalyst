@@ -165,17 +165,35 @@ function CallbackContent() {
 
 export default function AuthCallbackPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-slate-50 dark:bg-[#090D16] text-slate-900 dark:text-white transition-colors duration-200">
-      <Suspense
-        fallback={
-          <div className="flex flex-col items-center gap-3">
-            <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
-            <span className="text-xs font-mono text-slate-500">Initializing DPDP Gateway...</span>
-          </div>
-        }
-      >
-        <CallbackContent />
-      </Suspense>
+    <div className="min-h-screen flex items-center justify-center p-4 bg-slate-50 dark:bg-[#090D16] text-slate-900 dark:text-white transition-colors duration-200 relative overflow-hidden">
+      {/* Cinematic Defense Security Gateway Backdrop */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none" aria-hidden="true">
+        <img
+          src="/login-bg.jpg"
+          alt="Defense Security Gateway & Mountain Outpost Backdrop"
+          className="w-full h-full object-cover object-center opacity-40 dark:opacity-75 transition-opacity duration-700 select-none scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-50/90 via-slate-50/45 to-slate-50/90 dark:from-[#090D16]/90 dark:via-[#090D16]/55 dark:to-[#090D16]/90" />
+        <div className="absolute inset-0 bg-radial from-transparent via-slate-50/40 dark:via-[#090D16]/40 to-slate-50/95 dark:to-[#090D16]/95" />
+        <div className="absolute inset-0 bg-tactical-grid opacity-60 dark:opacity-40" />
+      </div>
+
+      {/* Ambient Defense Glows */}
+      <div className="fixed top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-emerald-500/10 dark:bg-emerald-500/15 blur-[130px] pointer-events-none z-0" />
+      <div className="fixed bottom-1/4 right-1/4 w-[400px] h-[250px] bg-cyan-500/10 dark:bg-cyan-500/15 blur-[120px] pointer-events-none z-0" />
+
+      <div className="relative z-10 w-full flex justify-center">
+        <Suspense
+          fallback={
+            <div className="flex flex-col items-center gap-3 bg-white/90 dark:bg-[#0F172A]/90 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl backdrop-blur-md">
+              <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+              <span className="text-xs font-mono text-slate-600 dark:text-slate-400">Initializing DPDP Gateway...</span>
+            </div>
+          }
+        >
+          <CallbackContent />
+        </Suspense>
+      </div>
     </div>
   );
 }

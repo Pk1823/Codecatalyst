@@ -25,6 +25,7 @@ export interface GoogleAccount {
   rank: string;
   avatarBg: string;
   badge: string;
+  category?: "WELFARE" | "COMMAND" | "PERSONNEL" | "ADMIN";
 }
 
 export const PRECONFIGURED_GOOGLE_ACCOUNTS: GoogleAccount[] = [
@@ -36,6 +37,7 @@ export const PRECONFIGURED_GOOGLE_ACCOUNTS: GoogleAccount[] = [
     rank: "Chief Medical Officer",
     avatarBg: "bg-blue-600",
     badge: "Welfare & Clinical Dossiers",
+    category: "WELFARE",
   },
   {
     name: "Col. Vikram Rathore",
@@ -45,6 +47,7 @@ export const PRECONFIGURED_GOOGLE_ACCOUNTS: GoogleAccount[] = [
     rank: "Commandant (Ops)",
     avatarBg: "bg-emerald-600",
     badge: "Unit Command & Readiness",
+    category: "COMMAND",
   },
   {
     name: "Ct. Piyush Kumar",
@@ -54,6 +57,7 @@ export const PRECONFIGURED_GOOGLE_ACCOUNTS: GoogleAccount[] = [
     rank: "Constable (High Altitude)",
     avatarBg: "bg-amber-600",
     badge: "Field Personnel & Check-in",
+    category: "PERSONNEL",
   },
   {
     name: "Sh. Rajesh Patel",
@@ -63,6 +67,7 @@ export const PRECONFIGURED_GOOGLE_ACCOUNTS: GoogleAccount[] = [
     rank: "Systems Director",
     avatarBg: "bg-purple-600",
     badge: "MHA Central Administration",
+    category: "ADMIN",
   },
   {
     name: "Officer Recmit",
@@ -72,6 +77,7 @@ export const PRECONFIGURED_GOOGLE_ACCOUNTS: GoogleAccount[] = [
     rank: "Chief Medical Officer",
     avatarBg: "bg-indigo-600",
     badge: "Evaluator • Sandbox Google Account",
+    category: "WELFARE",
   },
 ];
 
@@ -92,6 +98,7 @@ export function GoogleOAuthModal({
 }: GoogleOAuthModalProps) {
   const [step, setStep] = useState<"chooser" | "consent">("chooser");
   const [selectedAccount, setSelectedAccount] = useState<GoogleAccount | null>(null);
+  const [categoryFilter, setCategoryFilter] = useState<"ALL" | "WELFARE" | "COMMAND" | "PERSONNEL" | "ADMIN">("ALL");
   const [customEmail, setCustomEmail] = useState("");
   const [customName, setCustomName] = useState("");
   const [customRole, setCustomRole] = useState(initialRole);
@@ -275,44 +282,75 @@ export function GoogleOAuthModal({
               </div>
 
               {!showCustomInput ? (
-                <div className="space-y-2.5 mb-5">
-                  {PRECONFIGURED_GOOGLE_ACCOUNTS.map((acc) => (
-                    <button
-                      key={acc.email}
-                      disabled={isLoading}
-                      onClick={() => handleSelectAccount(acc)}
-                      className="w-full text-left p-3.5 rounded-2xl border transition-all flex items-center justify-between group border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#090D16] hover:border-blue-500/60 dark:hover:border-blue-500/60 hover:bg-blue-50/30 dark:hover:bg-blue-950/20 shadow-2xs hover:shadow-md"
-                    >
-                      <div className="flex items-center gap-3.5 min-w-0">
-                        <div
-                          className={`w-10 h-10 rounded-full ${acc.avatarBg} text-white flex items-center justify-center font-bold text-sm shadow-md shrink-0 ring-2 ring-white dark:ring-slate-800`}
+                <div className="space-y-3 mb-5">
+                  {/* Category Filter Pills */}
+                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+                    {[
+                      { id: "ALL" as const, label: "All (5)" },
+                      { id: "WELFARE" as const, label: "Welfare (2)" },
+                      { id: "COMMAND" as const, label: "Command (1)" },
+                      { id: "PERSONNEL" as const, label: "Personnel (1)" },
+                      { id: "ADMIN" as const, label: "Admin (1)" },
+                    ].map((tab) => {
+                      const isSelected = categoryFilter === tab.id;
+                      return (
+                        <button
+                          key={tab.id}
+                          type="button"
+                          onClick={() => setCategoryFilter(tab.id)}
+                          className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-medium transition-all whitespace-nowrap border ${
+                            isSelected
+                              ? "bg-blue-600 text-white border-blue-600 shadow-xs"
+                              : "bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200/70 dark:hover:bg-slate-700"
+                          }`}
                         >
-                          {acc.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .slice(0, 2)
-                            .join("")}
+                          {tab.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="space-y-2">
+                    {PRECONFIGURED_GOOGLE_ACCOUNTS.filter(
+                      (acc) => categoryFilter === "ALL" || acc.category === categoryFilter
+                    ).map((acc) => (
+                      <button
+                        key={acc.email}
+                        disabled={isLoading}
+                        onClick={() => handleSelectAccount(acc)}
+                        className="w-full text-left p-3 rounded-2xl border transition-all flex items-center justify-between group border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#090D16] hover:border-blue-500/60 dark:hover:border-blue-500/60 hover:bg-blue-50/30 dark:hover:bg-blue-950/20 shadow-2xs hover:shadow-md"
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div
+                            className={`w-9 h-9 rounded-full ${acc.avatarBg} text-white flex items-center justify-center font-bold text-xs shadow-md shrink-0 ring-2 ring-white dark:ring-slate-800`}
+                          >
+                            {acc.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .slice(0, 2)
+                              .join("")}
+                          </div>
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-1.5">
+                              <span className="font-semibold text-xs sm:text-sm text-slate-900 dark:text-white truncate">
+                                {acc.name}
+                              </span>
+                              <span className="text-[9px] font-mono font-medium px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                                {acc.force}
+                              </span>
+                            </div>
+                            <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate font-mono">
+                              {acc.rank} • {acc.email}
+                            </div>
+                            <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium truncate mt-0.5">
+                              {acc.badge}
+                            </div>
+                          </div>
                         </div>
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-2">
-                            <span className="font-semibold text-sm text-slate-900 dark:text-white truncate">
-                              {acc.name}
-                            </span>
-                            <span className="text-[10px] font-mono font-medium px-1.5 py-0.2 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
-                              {acc.force}
-                            </span>
-                          </div>
-                          <div className="text-xs text-slate-500 dark:text-slate-400 truncate">
-                            {acc.email}
-                          </div>
-                          <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
-                            {acc.badge}
-                          </div>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all shrink-0" />
-                    </button>
-                  ))}
+                        <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all shrink-0 ml-2" />
+                      </button>
+                    ))}
+                  </div>
 
                   {/* Use Another Google Account Toggle */}
                   <button
@@ -424,6 +462,7 @@ export function GoogleOAuthModal({
                         rank: customRole === "COMMANDER" ? "Commandant" : "Medical Officer",
                         avatarBg: "bg-blue-600",
                         badge: "Custom Gmail Persona",
+                        category: (customRole as any) === "COMMANDER" ? "COMMAND" : (customRole as any) === "PERSONNEL" ? "PERSONNEL" : (customRole as any) === "ADMIN" ? "ADMIN" : "WELFARE",
                       })
                     }
                     className="w-full mt-2 py-2.5 px-4 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2"

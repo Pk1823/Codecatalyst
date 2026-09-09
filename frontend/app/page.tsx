@@ -1247,16 +1247,271 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 10. Official Government Footer */}
-      <footer className="bg-slate-100 dark:bg-[#060910] py-8 text-slate-600 dark:text-slate-400 text-xs border-t border-slate-200 dark:border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-slate-700 dark:text-slate-400">
-            <Shield className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-            <span className="font-semibold text-slate-900 dark:text-white">MissionWell AI</span>
-            <span>• {isHi ? "सशस्त्र बल एवं पुलिस कल्याण खुफिया प्रणाली" : "Defense Personnel Welfare & Stress Intelligence"}</span>
+      {/* 10. Official Government & Defense Executive Footer (Dual-Mode: White Toggle & Dark Defense) */}
+      <footer className="relative bg-slate-100/90 dark:bg-[#050814] text-slate-700 dark:text-slate-300 border-t border-slate-200 dark:border-slate-800/80 overflow-hidden transition-colors duration-200">
+        {/* Sovereign Tricolor Accent Strip */}
+        <div className="h-1 w-full bg-gradient-to-r from-amber-500 via-white/80 to-emerald-500 shadow-[0_0_16px_rgba(245,158,11,0.5)]" />
+
+        {/* Tactical Atmospheric Background Layer */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-5 dark:opacity-10 pointer-events-none mix-blend-multiply dark:mix-blend-luminosity"
+          style={{ backgroundImage: "url('/tactical-command-bg.jpg')" }}
+        />
+        <div className="absolute inset-0 bg-tactical-grid opacity-10 dark:opacity-15 pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-gradient-to-b from-teal-500/10 dark:from-teal-500/10 via-blue-500/5 to-transparent blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-10">
+          {/* Top Bar: Brand & Operational Status */}
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-10 border-b border-slate-200/90 dark:border-slate-800/80">
+            <div className="flex items-center gap-3.5">
+              <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-700 via-teal-600 to-emerald-500 p-0.5 shadow-md shadow-teal-900/20">
+                <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-white dark:bg-slate-950/80 backdrop-blur-sm">
+                  <Shield className="h-5 w-5 text-teal-600 dark:text-teal-400" />
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center gap-2.5">
+                  <span className="font-extrabold text-slate-900 dark:text-white text-xl tracking-tight">
+                    MissionWell <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 font-mono">AI</span>
+                  </span>
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-teal-500/10 dark:bg-teal-500/15 border border-teal-500/30 text-teal-700 dark:text-teal-300">
+                    {isHi ? "सशस्त्र बल क्षमता" : "DEFENSE READY"}
+                  </span>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-400 font-medium tracking-wide">
+                  {isHi 
+                    ? "सशस्त्र बल एवं केंद्रीय पुलिस बल कल्याण खुफिया प्रणाली • सतर्कता एवं संवेदना" 
+                    : "Defense & Central Armed Police Forces Welfare Intelligence • Vigilance Through Compassion"}
+                </p>
+              </div>
+            </div>
+
+            {/* Live Security & Telemetry Pills */}
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-900/90 border border-emerald-500/30 text-[11px] font-mono text-emerald-700 dark:text-emerald-400 shadow-xs backdrop-blur-md">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span>{isHi ? "प्रणाली स्थिति: एयर-गैप सक्रिय" : "SYSTEM: AIR-GAP OPERATIONAL"}</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/60 text-[11px] font-mono text-slate-700 dark:text-slate-300 shadow-xs backdrop-blur-md">
+                <Lock className="h-3 w-3 text-teal-600 dark:text-teal-400" />
+                <span>k-ANONYMITY k≥15</span>
+              </div>
+            </div>
           </div>
-          <div className="text-slate-600 dark:text-slate-400 text-center sm:text-right font-mono text-[11px]">
-            <span>24x7 Helplines: Tele-MANAS <strong className="text-emerald-600 dark:text-emerald-400 font-medium">14416</strong> • KIRAN <strong className="text-emerald-600 dark:text-emerald-400 font-medium">1800-599-0019</strong> • MADADGAR <strong className="text-emerald-600 dark:text-emerald-400 font-medium">14417</strong></span>
+
+          {/* 4-Column Executive Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 py-12">
+            {/* Column 1: Sovereign Mandate & Legal APAR Covenant */}
+            <div className="space-y-4">
+              <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-slate-900 dark:text-slate-200 flex items-center gap-2">
+                <Scale className="h-4 w-4 text-teal-600 dark:text-teal-400" />
+                {isHi ? "संप्रभु जनादेश" : "Sovereign Mandate"}
+              </h4>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                {isHi
+                  ? "भारतीय सशस्त्र बलों और सीएपीएफ (सीआरपीएफ, बीएसएफ, आईटीबीपी, सीआईएसएफ, एसएसबी, असम राइफल्स) के लिए स्वदेशी एवं गोपनीय कल्याण प्रणाली।"
+                  : "Indigenous, culturally-attuned, privacy-first welfare intelligence capability engineered for Indian Armed Forces and Central Armed Police Forces."}
+              </p>
+              <div className="p-3.5 rounded-xl bg-amber-50/90 dark:bg-slate-900/70 border border-amber-200/90 dark:border-slate-800 text-[11px] space-y-1.5 shadow-xs">
+                <div className="flex items-center gap-1.5 text-amber-800 dark:text-amber-400 font-semibold font-mono">
+                  <ShieldCheck className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
+                  <span>{isHi ? "गैर-दंडात्मक एसीआर संरक्षण" : "Non-Punitive APAR Covenant"}</span>
+                </div>
+                <p className="text-amber-900/90 dark:text-slate-400 leading-relaxed text-[11px]">
+                  {isHi
+                    ? "कल्याण इनपुट का उपयोग कभी भी सेवा रिकॉर्ड, पदोन्नति या एपीएआर में नहीं किया जा सकता है।"
+                    : "Welfare telemetry is legally firewalled and can never be utilized for ACR/APAR grading, disciplinary action, or promotion eligibility."}
+                </p>
+              </div>
+            </div>
+
+            {/* Column 2: Stakeholder Command Portals */}
+            <div className="space-y-4">
+              <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-slate-900 dark:text-slate-200 flex items-center gap-2">
+                <Users className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                {isHi ? "कमांड पोर्टल्स" : "Command Portals"}
+              </h4>
+              <ul className="space-y-2.5 text-xs">
+                <li>
+                  <Link 
+                    href="/commander" 
+                    className="group flex items-center justify-between py-2 px-3 rounded-lg bg-white dark:bg-slate-900/40 hover:bg-slate-100/90 dark:hover:bg-slate-800/80 border border-slate-200/90 dark:border-slate-800/60 hover:border-blue-500/40 dark:hover:border-blue-500/30 text-slate-700 hover:text-slate-950 dark:text-slate-300 dark:hover:text-white transition-all shadow-xs"
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-blue-500 dark:bg-blue-400 group-hover:scale-125 transition-transform" />
+                      {isHi ? "यूनिट कमांडर कंसोल" : "Unit Commander Console"}
+                    </span>
+                    <span className="text-[10px] font-mono text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-200 dark:border-blue-500/20">
+                      {isHi ? "तनाव सूचकांक" : "Fatigue Metrics"}
+                    </span>
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    href="/welfare" 
+                    className="group flex items-center justify-between py-2 px-3 rounded-lg bg-white dark:bg-slate-900/40 hover:bg-slate-100/90 dark:hover:bg-slate-800/80 border border-slate-200/90 dark:border-slate-800/60 hover:border-teal-500/40 dark:hover:border-teal-500/30 text-slate-700 hover:text-slate-950 dark:text-slate-300 dark:hover:text-white transition-all shadow-xs"
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-teal-500 dark:bg-teal-400 group-hover:scale-125 transition-transform" />
+                      {isHi ? "कल्याण अधिकारी कंसोल" : "Welfare Officer Console"}
+                    </span>
+                    <span className="text-[10px] font-mono text-teal-700 dark:text-teal-400 bg-teal-50 dark:bg-teal-500/10 px-1.5 py-0.5 rounded border border-teal-200 dark:border-teal-500/20">
+                      {isHi ? "ट्राइएज कतार" : "Triage Queue"}
+                    </span>
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    href="/personnel" 
+                    className="group flex items-center justify-between py-2 px-3 rounded-lg bg-white dark:bg-slate-900/40 hover:bg-slate-100/90 dark:hover:bg-slate-800/80 border border-slate-200/90 dark:border-slate-800/60 hover:border-emerald-500/40 dark:hover:border-emerald-500/30 text-slate-700 hover:text-slate-950 dark:text-slate-300 dark:hover:text-white transition-all shadow-xs"
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 group-hover:scale-125 transition-transform" />
+                      {isHi ? "जवान गोपनीय स्व-देखभाल" : "Personnel Self-Care"}
+                    </span>
+                    <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-200 dark:border-emerald-500/20">
+                      {isHi ? "शून्य ट्रेस" : "Zero-Trace"}
+                    </span>
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    href="/presentation" 
+                    className="group flex items-center justify-between py-2 px-3 rounded-lg bg-white dark:bg-slate-900/40 hover:bg-slate-100/90 dark:hover:bg-slate-800/80 border border-slate-200/90 dark:border-slate-800/60 hover:border-amber-500/40 dark:hover:border-amber-500/30 text-slate-700 hover:text-slate-950 dark:text-slate-300 dark:hover:text-white transition-all shadow-xs"
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-amber-500 dark:bg-amber-400 group-hover:scale-125 transition-transform" />
+                      {isHi ? "कार्यकारी प्रस्तुति" : "Executive Pitch Deck"}
+                    </span>
+                    <span className="text-[10px] font-mono text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-200 dark:border-amber-500/20">
+                      {isHi ? "डोजियर" : "Dossier"}
+                    </span>
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    href="/privacy" 
+                    className="group flex items-center justify-between py-2 px-3 rounded-lg bg-white dark:bg-slate-900/40 hover:bg-slate-100/90 dark:hover:bg-slate-800/80 border border-slate-200/90 dark:border-slate-800/60 hover:border-purple-500/40 dark:hover:border-purple-500/30 text-slate-700 hover:text-slate-950 dark:text-slate-300 dark:hover:text-white transition-all shadow-xs"
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-purple-500 dark:bg-purple-400 group-hover:scale-125 transition-transform" />
+                      {isHi ? "डीपीडीपी गोपनीयता वास्तुकला" : "DPDP Privacy Architecture"}
+                    </span>
+                    <span className="text-[10px] font-mono text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-purple-500/10 px-1.5 py-0.5 rounded border border-purple-200 dark:border-purple-500/20">
+                      Zero-Trust
+                    </span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 3: Statutory & Technical Governance */}
+            <div className="space-y-4">
+              <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-slate-900 dark:text-slate-200 flex items-center gap-2">
+                <FileCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                {isHi ? "वैधानिक अनुपालन" : "Statutory Governance"}
+              </h4>
+              <ul className="space-y-2.5 text-xs text-slate-600 dark:text-slate-400">
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
+                  <div>
+                    <strong className="text-slate-900 dark:text-slate-200 block">DPDP Act 2023 Section 8(4)</strong>
+                    <span>{isHi ? "सख्त उद्देश्य-सीमित डेटा प्रोसेसिंग और सुरक्षा सीमाएं।" : "Strict purpose-limited data processing with cryptographic security boundaries."}</span>
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
+                  <div>
+                    <strong className="text-slate-900 dark:text-slate-200 block">{isHi ? "गेम-थ्योरेटिक SHAP AI" : "SHAP Factor Transparency"}</strong>
+                    <span>{isHi ? "ब्लैक-बॉक्स स्कोरिंग के बिना पारदर्शी मॉडल व्याख्यात्मकता।" : "Game-theoretic explainable AI attribution replaces black-box scoring for full auditability."}</span>
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
+                  <div>
+                    <strong className="text-slate-900 dark:text-slate-200 block">{isHi ? "एयर-गैप सैन्य इंट्रानेट" : "Air-Gap Defense Topology"}</strong>
+                    <span>{isHi ? "इंटरनेट के बिना पूर्ण परिचालन क्षमता और शून्य डेटा रिसाव।" : "Operable on sovereign defense intranets without external telemetric dependencies."}</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 4: 24x7 National Support Helplines */}
+            <div className="space-y-4">
+              <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-slate-900 dark:text-slate-200 flex items-center gap-2">
+                <PhoneCall className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                {isHi ? "24x7 आपातकालीन हेल्पलाइन" : "24x7 Force Helplines"}
+              </h4>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                {isHi
+                  ? "निःशुल्क, 24 घंटे मनोवैज्ञानिक सहायता। पूर्णतः गोपनीय और सैन्य पदानुक्रम से सुरक्षित।"
+                  : "Toll-free, round-the-clock psychological and crisis assistance. Completely confidential and detached from command hierarchy."}
+              </p>
+
+              <div className="space-y-2">
+                {/* Tele-MANAS */}
+                <a 
+                  href="tel:14416"
+                  className="flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-gradient-to-r dark:from-emerald-950/40 dark:to-slate-900/80 border border-emerald-200 dark:border-emerald-500/30 hover:border-emerald-500 transition-all group shadow-xs hover:shadow-md"
+                >
+                  <div>
+                    <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 uppercase font-bold block">Tele-MANAS (MoHFW)</span>
+                    <span className="text-sm font-bold text-slate-900 dark:text-white font-mono group-hover:text-emerald-600 dark:group-hover:text-emerald-300">14416</span>
+                  </div>
+                  <span className="text-[10px] font-medium text-emerald-800 dark:text-emerald-400 bg-emerald-100/90 dark:bg-emerald-500/10 px-2 py-1 rounded-full border border-emerald-200 dark:border-emerald-500/20">
+                    24x7 Toll-Free
+                  </span>
+                </a>
+
+                {/* KIRAN Helpline */}
+                <a 
+                  href="tel:18005990019"
+                  className="flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-gradient-to-r dark:from-blue-950/40 dark:to-slate-900/80 border border-blue-200 dark:border-blue-500/30 hover:border-blue-500 transition-all group shadow-xs hover:shadow-md"
+                >
+                  <div>
+                    <span className="text-[10px] font-mono text-blue-700 dark:text-blue-400 uppercase font-bold block">KIRAN Helpline</span>
+                    <span className="text-xs font-bold text-slate-900 dark:text-white font-mono group-hover:text-blue-600 dark:group-hover:text-blue-300">1800-599-0019</span>
+                  </div>
+                  <span className="text-[10px] font-medium text-blue-800 dark:text-blue-400 bg-blue-100/90 dark:bg-blue-500/10 px-2 py-1 rounded-full border border-blue-200 dark:border-blue-500/20">
+                    Govt of India
+                  </span>
+                </a>
+
+                {/* CRPF Madadgaar */}
+                <a 
+                  href="tel:14417"
+                  className="flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-gradient-to-r dark:from-amber-950/40 dark:to-slate-900/80 border border-amber-200 dark:border-amber-500/30 hover:border-amber-500 transition-all group shadow-xs hover:shadow-md"
+                >
+                  <div>
+                    <span className="text-[10px] font-mono text-amber-700 dark:text-amber-400 uppercase font-bold block">CRPF Madadgaar</span>
+                    <span className="text-sm font-bold text-slate-900 dark:text-white font-mono group-hover:text-amber-600 dark:group-hover:text-amber-300">14417</span>
+                  </div>
+                  <span className="text-[10px] font-medium text-amber-800 dark:text-amber-400 bg-amber-100/90 dark:bg-amber-500/10 px-2 py-1 rounded-full border border-amber-200 dark:border-amber-500/20">
+                    CAPF Support
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Dossier & Classification Bar */}
+          <div className="pt-8 border-t border-slate-200 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-600 dark:text-slate-400 font-mono">
+            <div className="flex items-center gap-2">
+              <span className="inline-block h-2 w-2 rounded-full bg-teal-500 dark:bg-teal-400" />
+              <span className="text-slate-900 dark:text-slate-300 font-semibold">
+                {isHi ? "सशस्त्र बल एवं सीएपीएफ कल्याण पहल" : "OFFICIAL WELFARE CAPABILITY"}
+              </span>
+              <span className="text-slate-400 dark:text-slate-500">•</span>
+              <span>MINISTRY OF HOME AFFAIRS & INDIAN ARMED FORCES</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-slate-600 dark:text-slate-400">BUILD v1.4.2-STAC-CERTIFIED</span>
+              <span className="text-slate-400 dark:text-slate-600">|</span>
+              <span className="text-slate-600 dark:text-slate-400">© 2026 MissionWell AI</span>
+            </div>
           </div>
         </div>
       </footer>
