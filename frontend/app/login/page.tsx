@@ -224,7 +224,7 @@ export default function PersonnelLoginPage() {
       
       {/* Ambient background glow */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[300px] bg-emerald-500/10 dark:bg-emerald-500/15 blur-[120px]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[300px] bg-blue-500/10 dark:bg-blue-500/15 blur-[120px]" />
       </div>
 
       {/* Top Bar - Minimal */}
@@ -233,7 +233,7 @@ export default function PersonnelLoginPage() {
           href="/"
           className="inline-flex items-center gap-1 text-xs text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"
         >
-          <ChevronLeft className="h-4 w-4 text-emerald-500" />
+          <ChevronLeft className="h-4 w-4 text-blue-500" />
           <span>{isHi ? "होम" : "Home"}</span>
         </Link>
 
@@ -330,8 +330,8 @@ export default function PersonnelLoginPage() {
 
           {/* Success Banner */}
           {successMsg && (
-            <div className="flex items-start gap-2 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-300 text-xs">
-              <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-emerald-500" />
+            <div className="flex items-start gap-2 p-3 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-300 text-xs">
+              <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-blue-500" />
               <div className="flex-1">{successMsg}</div>
             </div>
           )}
@@ -352,7 +352,7 @@ export default function PersonnelLoginPage() {
                   }}
                   className={`py-1 rounded-lg text-center border transition-all text-xs ${
                     selectedForce === f
-                      ? "bg-emerald-600 border-emerald-600 text-white font-bold"
+                      ? "bg-blue-600 border-blue-600 text-white font-bold"
                       : "bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                   }`}
                 >
@@ -402,7 +402,7 @@ export default function PersonnelLoginPage() {
                     onChange={(e) => setSigninIdentifier(e.target.value)}
                     placeholder={isHi ? "सर्विस ID अथवा ईमेल (उदा. P-1024)" : "Service ID or Email (e.g. P-1024)"}
                     required
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono"
                   />
                 </div>
 
@@ -413,7 +413,7 @@ export default function PersonnelLoginPage() {
                     onChange={(e) => setSigninPassword(e.target.value)}
                     placeholder={isHi ? "पासवर्ड" : "Password"}
                     required
-                    className="w-full pl-3 pr-8 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
+                    className="w-full pl-3 pr-8 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono"
                   />
                   <button
                     type="button"
@@ -427,7 +427,7 @@ export default function PersonnelLoginPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-xs shadow-sm transition-all"
+                  className="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 active:bg-blue-700 disabled:opacity-50 text-white font-semibold text-xs shadow-sm transition-all"
                 >
                   {isSubmitting ? (
                     <span className="flex items-center justify-center gap-1.5">
@@ -445,7 +445,7 @@ export default function PersonnelLoginPage() {
                 <button
                   type="button"
                   onClick={() => setIsGoogleModalOpen(true)}
-                  className="text-xs text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-emerald-400 transition-colors"
+                  className="text-xs text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 transition-colors"
                 >
                   {isHi ? "डेमो खाते / त्वरित प्रवेश" : "Use pre-configured demo accounts"}
                 </button>
@@ -460,7 +460,7 @@ export default function PersonnelLoginPage() {
                     setAuthMode("signup");
                     setErrorMsg("");
                   }}
-                  className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline"
+                  className="text-blue-600 dark:text-blue-400 font-semibold hover:underline"
                 >
                   {isHi ? "साइनअप करें" : "Sign up"}
                 </button>
@@ -509,7 +509,7 @@ export default function PersonnelLoginPage() {
                     onChange={(e) => setSignupName(e.target.value)}
                     placeholder={isHi ? "पूरा नाम" : "Full Name"}
                     required
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
 
@@ -520,7 +520,7 @@ export default function PersonnelLoginPage() {
                     onChange={(e) => setSignupEmail(e.target.value)}
                     placeholder={isHi ? "सर्विस ID अथवा ईमेल (उदा. MED-DIR-0881)" : "Service ID or Email (e.g. MED-DIR-0881)"}
                     required
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono"
                   />
                 </div>
 
@@ -531,7 +531,7 @@ export default function PersonnelLoginPage() {
                     onChange={(e) => setSignupPassword(e.target.value)}
                     placeholder={isHi ? "सुरक्षा पासवर्ड" : "Password"}
                     required
-                    className="w-full pl-3 pr-8 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
+                    className="w-full pl-3 pr-8 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono"
                   />
                   <button
                     type="button"
@@ -545,7 +545,7 @@ export default function PersonnelLoginPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-xs shadow-sm transition-all"
+                  className="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 active:bg-blue-700 disabled:opacity-50 text-white font-semibold text-xs shadow-sm transition-all"
                 >
                   {isSubmitting ? (
                     <span className="flex items-center justify-center gap-1.5">
@@ -567,7 +567,7 @@ export default function PersonnelLoginPage() {
                     setAuthMode("signin");
                     setErrorMsg("");
                   }}
-                  className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline"
+                  className="text-blue-600 dark:text-blue-400 font-semibold hover:underline"
                 >
                   {isHi ? "लॉगिन करें" : "Sign in"}
                 </button>
@@ -580,7 +580,7 @@ export default function PersonnelLoginPage() {
           <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 text-center">
             <Link
               href="/login/admin"
-              className="text-[11px] text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+              className="text-[11px] text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               {isHi ? "अधिकारी / कमांड पोर्टल प्रवेश →" : "Officer & Command Portal →"}
             </Link>
@@ -591,7 +591,7 @@ export default function PersonnelLoginPage() {
 
       {/* Clean Minimal Footer */}
       <footer className="relative z-10 max-w-sm w-full mx-auto text-center text-[10px] text-slate-400 py-1 flex items-center justify-center gap-1.5">
-        <ShieldCheck className="h-3 w-3 text-emerald-500" />
+        <ShieldCheck className="h-3 w-3 text-blue-500" />
         <span>Confidential • DPDP Act 2023 Compliant</span>
       </footer>
 

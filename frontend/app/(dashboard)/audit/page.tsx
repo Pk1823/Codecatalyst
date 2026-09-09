@@ -71,7 +71,7 @@ export default function AuditLogPage() {
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
               Audit & Compliance Trail
             </h1>
-            <span className="rounded bg-slate-100 dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 text-xs font-mono px-2 py-0.5 border border-slate-200 dark:border-slate-700">
+            <span className="rounded bg-slate-100 dark:bg-slate-800 text-blue-700 dark:text-blue-400 text-xs font-mono px-2 py-0.5 border border-slate-200 dark:border-slate-700">
               Immutable Ledger
             </span>
           </div>
@@ -79,12 +79,12 @@ export default function AuditLogPage() {
 
         <div className="flex items-center gap-2.5">
           <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-xs">
-            <Lock className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+            <Lock className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
             <span>Hash Chain Integrity: Verified</span>
           </div>
           <button
             onClick={handleExportCSV}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-xs transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-xs transition-colors"
           >
             <Download className="h-3.5 w-3.5" />
             <span>Export Audit Log</span>
@@ -102,14 +102,14 @@ export default function AuditLogPage() {
               placeholder="Search user, action, resource..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 pl-8 pr-3 py-1.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:border-emerald-500 font-mono"
+              className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 pl-8 pr-3 py-1.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:border-blue-500 font-mono"
             />
           </div>
 
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-200 focus:outline-hidden focus:border-emerald-500"
+            className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-200 focus:outline-hidden focus:border-blue-500"
           >
             <option value="ALL">All Event Statuses</option>
             <option value="Authorized">Authorized</option>
@@ -156,7 +156,7 @@ export default function AuditLogPage() {
                   <td className="py-3 px-4 text-slate-800 dark:text-slate-200 font-sans">
                     {entry.action}
                   </td>
-                  <td className="py-3 px-4 text-emerald-600 dark:text-emerald-400 max-w-[200px] truncate font-semibold" title={entry.resource}>
+                  <td className="py-3 px-4 text-blue-600 dark:text-blue-400 max-w-[200px] truncate font-semibold" title={entry.resource}>
                     {entry.resource}
                   </td>
                   <td className="py-3 px-4 text-slate-500 dark:text-slate-400 text-[11px]">
@@ -166,7 +166,7 @@ export default function AuditLogPage() {
                     <span
                       className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-semibold ${
                         entry.status === "Authorized"
-                          ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900"
+                          ? "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-900"
                           : entry.status === "Blocked"
                           ? "bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-900"
                           : "bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900"

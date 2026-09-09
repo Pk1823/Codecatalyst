@@ -50,7 +50,7 @@ export function RoleGuard({ children }: { children: React.ReactNode }) {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
             <Link
               href={AuthService.getRedirectPathForRole(role)}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-[#090D16] px-5 py-2.5 text-xs font-semibold transition-all"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-[#090D16] px-5 py-2.5 text-xs font-semibold transition-all"
             >
               <span>Go to My Authorized Portal</span>
               <ArrowRight className="h-4 w-4" />
@@ -59,7 +59,7 @@ export function RoleGuard({ children }: { children: React.ReactNode }) {
               onClick={() => switchRole("WELFARE_OFFICER")}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-slate-700 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition-colors"
             >
-              <UserCheck className="h-4 w-4 text-emerald-400" />
+              <UserCheck className="h-4 w-4 text-blue-400" />
               <span>Switch to Welfare Officer</span>
             </button>
           </div>

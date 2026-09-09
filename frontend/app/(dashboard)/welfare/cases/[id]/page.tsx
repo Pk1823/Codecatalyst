@@ -128,7 +128,7 @@ export default function CaseDetailPage({
       <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-md">
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="font-mono text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded border border-emerald-200 dark:border-emerald-900">
+            <span className="font-mono text-xs font-semibold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-2.5 py-0.5 rounded border border-blue-200 dark:border-blue-900">
               {welfareCase.id}
             </span>
             <RiskBadge level={welfareCase.riskLevel} size="md" />
@@ -144,7 +144,7 @@ export default function CaseDetailPage({
               <strong className="text-slate-700 dark:text-slate-300">Personnel:</strong>{" "}
               <Link
                 href={`/analytics/personnel/${welfareCase.personnelId}`}
-                className="text-emerald-600 dark:text-emerald-400 hover:underline font-mono font-bold"
+                className="text-blue-600 dark:text-blue-400 hover:underline font-mono font-bold"
               >
                 {welfareCase.personnelId} ({welfareCase.anonymizedCode})
               </Link>
@@ -166,7 +166,7 @@ export default function CaseDetailPage({
           <select
             value={welfareCase.status}
             onChange={(e) => handleStatusChange(e.target.value as WelfareCaseStatus)}
-            className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs text-slate-900 dark:text-white font-medium focus:outline-hidden focus:border-emerald-500"
+            className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs text-slate-900 dark:text-white font-medium focus:outline-hidden focus:border-blue-500"
           >
             <option value="New">New</option>
             <option value="Under Review">Under Review</option>
@@ -203,8 +203,8 @@ export default function CaseDetailPage({
             {welfareCase.timeline.map((event) => (
               <div key={event.id} className="relative group">
                 {/* Node circle */}
-                <div className="absolute -left-6 top-1 h-5 w-5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-xs">
-                  <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                <div className="absolute -left-6 top-1 h-5 w-5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-xs">
+                  <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />
                 </div>
 
                 <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 p-3.5 space-y-1">
@@ -244,7 +244,7 @@ export default function CaseDetailPage({
               </div>
               <button
                 onClick={() => setInterventionModalOpen(true)}
-                className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
               >
                 <Plus className="h-3.5 w-3.5" />
                 <span>Add</span>
@@ -266,7 +266,7 @@ export default function CaseDetailPage({
                       <span className="text-xs font-semibold text-slate-900 dark:text-white">
                         {int.title}
                       </span>
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-mono font-bold">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 font-mono font-bold">
                         {int.status}
                       </span>
                     </div>
@@ -285,12 +285,12 @@ export default function CaseDetailPage({
           <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-6 space-y-4 shadow-xs">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2">
-                <Lock className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                <Lock className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white">
                   Officer Notes (Confidential)
                 </h3>
               </div>
-              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono font-semibold">
+              <span className="text-[10px] text-blue-600 dark:text-blue-400 font-mono font-semibold">
                 Privileged
               </span>
             </div>
@@ -318,12 +318,12 @@ export default function CaseDetailPage({
                 placeholder="Log confidential observation or check-in note..."
                 value={newNote}
                 onChange={(e) => setNewNote(e.target.value)}
-                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:border-emerald-500"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:border-blue-500"
               />
               <button
                 type="submit"
                 disabled={!newNote.trim()}
-                className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold disabled:opacity-30 transition-colors shadow-xs"
+                className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold disabled:opacity-30 transition-colors shadow-xs"
               >
                 <Send className="h-3 w-3" />
                 <span>Append Note</span>
@@ -363,7 +363,7 @@ export default function CaseDetailPage({
                 <select
                   value={intType}
                   onChange={(e) => setIntType(e.target.value as InterventionType)}
-                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500"
                 >
                   <option value="Counseling">Counseling</option>
                   <option value="Workload Adjustment">Workload Adjustment</option>
@@ -385,7 +385,7 @@ export default function CaseDetailPage({
                   placeholder="e.g. Rotational Daylight Duty Swap"
                   value={intTitle}
                   onChange={(e) => setIntTitle(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500"
                 />
               </div>
 
@@ -399,7 +399,7 @@ export default function CaseDetailPage({
                   placeholder="Details of rotational roster, stand-down, or psychological session..."
                   value={intDesc}
                   onChange={(e) => setIntDesc(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500"
                 />
               </div>
 
@@ -413,7 +413,7 @@ export default function CaseDetailPage({
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold shadow-xs transition-colors"
+                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-xs transition-colors"
                 >
                   Save Intervention
                 </button>

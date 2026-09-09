@@ -116,7 +116,7 @@ export default function ReportsPage() {
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
               Welfare Reports
             </h1>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700">
               <ShieldCheck className="h-3 w-3" />
               DPDP Compliant
             </span>
@@ -151,9 +151,9 @@ export default function ReportsPage() {
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-medium shadow-xs transition-colors disabled:opacity-50"
           >
             {downloading?.id === "rep-05" && downloading?.format === "csv" ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin text-emerald-600 dark:text-emerald-400" />
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-blue-600 dark:text-blue-400" />
             ) : (
-              <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+              <FileSpreadsheet className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
             )}
             <span>Export Master CSV</span>
           </button>
@@ -161,7 +161,7 @@ export default function ReportsPage() {
           <button
             onClick={() => handleDownload("rep-05", "pdf", "Sector Monthly Executive Briefing")}
             disabled={downloading !== null}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-xs transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-xs transition-colors disabled:opacity-50"
           >
             {downloading?.id === "rep-05" && downloading?.format === "pdf" ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -190,7 +190,7 @@ export default function ReportsPage() {
           </div>
           <div>
             <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono">Resolution Rate</span>
-            <div className="text-base font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
+            <div className="text-base font-bold text-blue-600 dark:text-blue-400 mt-0.5">
               {liveReportData.data.overview.resolutionRatePercent}% Closed
             </div>
           </div>
@@ -216,7 +216,7 @@ export default function ReportsPage() {
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-semibold">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-blue-600 dark:text-blue-400 font-semibold">
                     {r.category}
                   </span>
                   <span className="text-[10px] text-slate-500 font-mono">
@@ -251,9 +251,9 @@ export default function ReportsPage() {
                     className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-medium shadow-xs transition-colors disabled:opacity-40"
                   >
                     {isCsvDownloading ? (
-                      <Loader2 className="h-3.5 w-3.5 animate-spin text-emerald-600 dark:text-emerald-400" />
+                      <Loader2 className="h-3.5 w-3.5 animate-spin text-blue-600 dark:text-blue-400" />
                     ) : (
-                      <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                      <FileSpreadsheet className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
                     )}
                     <span>CSV</span>
                   </button>
@@ -263,7 +263,7 @@ export default function ReportsPage() {
                     onClick={() => handleDownload(r.id, "pdf", r.title)}
                     disabled={downloading !== null}
                     title="Print / Save Official PDF"
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-xs transition-colors disabled:opacity-40"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-xs transition-colors disabled:opacity-40"
                   >
                     {isPdfDownloading ? (
                       <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -292,7 +292,7 @@ export default function ReportsPage() {
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] uppercase font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
+                  <span className="text-[10px] uppercase font-mono text-blue-600 dark:text-blue-400 font-semibold">
                     Official Document Preview
                   </span>
                   <span className="text-[10px] uppercase font-mono px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
@@ -312,7 +312,7 @@ export default function ReportsPage() {
             <div className="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-5 text-xs text-slate-700 dark:text-slate-300 space-y-3 font-mono shadow-inner">
               <div className="border-b border-slate-200 dark:border-slate-800 pb-2 flex justify-between text-[10px] text-slate-500 dark:text-slate-400 font-medium">
                 <span>GOVERNMENT OF INDIA • MINISTRY OF HOME AFFAIRS</span>
-                <span className="text-emerald-700 dark:text-emerald-400 font-bold">NON-PUNITIVE MEDICAL</span>
+                <span className="text-blue-700 dark:text-blue-400 font-bold">NON-PUNITIVE MEDICAL</span>
               </div>
               <div className="text-center py-2">
                 <p className="font-bold text-sm text-slate-900 dark:text-white font-sans">
@@ -363,13 +363,13 @@ export default function ReportsPage() {
                 onClick={() => handleDownload(previewReport.id, "csv", previewReport.title)}
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-medium transition-colors shadow-xs"
               >
-                <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                <FileSpreadsheet className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
                 <span>Download CSV</span>
               </button>
 
               <button
                 onClick={() => handleDownload(previewReport.id, "pdf", previewReport.title)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-xs transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-xs transition-colors"
               >
                 <Printer className="h-3.5 w-3.5" />
                 <span>Print / Save PDF</span>

@@ -73,7 +73,7 @@ export default function PresentationPage() {
         <div className="absolute inset-0 bg-tactical-grid opacity-20 dark:opacity-50" />
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[750px] h-[380px] bg-blue-600/10 dark:bg-blue-600/20 blur-[140px] rounded-full pointer-events-none" />
         <div className="absolute bottom-1/4 right-1/4 w-[550px] h-[320px] bg-teal-500/10 dark:bg-teal-500/18 blur-[130px] rounded-full pointer-events-none" />
-        <div className="absolute top-2/3 left-10 w-[450px] h-[250px] bg-emerald-500/10 dark:bg-emerald-500/15 blur-[140px] rounded-full pointer-events-none" />
+        <div className="absolute top-2/3 left-10 w-[450px] h-[250px] bg-blue-500/10 dark:bg-blue-500/15 blur-[140px] rounded-full pointer-events-none" />
       </div>
 
       {/* 1. Official National Tricolor Top Ribbon */}
@@ -110,7 +110,7 @@ export default function PresentationPage() {
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Force selector badge */}
             <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 font-medium">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
+              <span className="h-2 w-2 rounded-full bg-blue-500 dark:bg-blue-400 animate-pulse" />
               <span>Armed Forces & Paramilitary</span>
               <span className="text-slate-400 dark:text-slate-600">•</span>
               <span className="text-amber-600 dark:text-amber-300 font-bold">{force}</span>
@@ -180,8 +180,8 @@ export default function PresentationPage() {
               <ShieldCheck className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
               MoHA & CAPF Welfare Wing
             </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-300 text-xs font-bold tracking-wide shadow-xs">
-              <Lock className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-500/15 border border-blue-200 dark:border-blue-500/30 text-blue-800 dark:text-blue-300 text-xs font-bold tracking-wide shadow-xs">
+              <Lock className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
               Zero-Trust DPDP Act 2023 Shield
             </span>
           </div>
@@ -190,7 +190,7 @@ export default function PresentationPage() {
           <div className="space-y-4 max-w-4xl">
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.15]">
               Predictive Wellness Intelligence for{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-teal-500 to-emerald-600 dark:from-blue-400 dark:via-teal-300 dark:to-emerald-400">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-teal-500 to-blue-600 dark:from-blue-400 dark:via-teal-300 dark:to-blue-400">
                 Safer, Stronger Forces
               </span>
             </h1>
@@ -258,7 +258,7 @@ export default function PresentationPage() {
                 value: "100%",
                 label: "DPDP & APAR Immunity",
                 sub: "Strict statutory exclusion from appraisals or punishment",
-                color: "text-emerald-600 dark:text-emerald-400",
+                color: "text-blue-600 dark:text-blue-400",
                 badge: "Zero-Trust",
               },
             ].map((stat, idx) => (
@@ -439,7 +439,7 @@ export default function PresentationPage() {
                 desc: "Client-side salting, pseudonymization, and strict k-anonymity (k ≥ 15) aggregation. Separates identifiable medical data from command tactical dashboards.",
                 features: ["Strict Role Segregation", "DPDP Act 2023 Compliant", "Audit Query Ledger", "Legal Covenant Shield"],
                 lightBg: "bg-teal-50/70 border-teal-200/90 text-teal-700",
-                darkBg: "dark:bg-gradient-to-b dark:from-teal-600/20 dark:to-emerald-600/10 dark:border-teal-500/30 dark:text-teal-400",
+                darkBg: "dark:bg-gradient-to-b dark:from-teal-600/20 dark:to-blue-600/10 dark:border-teal-500/30 dark:text-teal-400",
                 stepColor: "text-teal-600 dark:text-teal-400",
               },
               {
@@ -458,9 +458,9 @@ export default function PresentationPage() {
                 title: "Closed-Loop Welfare Interventions",
                 desc: "Triages elevated indicators directly to battalion medical officers. Automatically triggers fatigue-mitigating duty reallocations, rest pauses, and expedited family leave.",
                 features: ["Doctor Confidential Queue", "Automated Rest Rotation", "Expedited Leave Routing", "Milestone Tracking"],
-                lightBg: "bg-emerald-50/70 border-emerald-200/90 text-emerald-700",
-                darkBg: "dark:bg-gradient-to-b dark:from-emerald-600/20 dark:to-teal-600/10 dark:border-emerald-500/30 dark:text-emerald-400",
-                stepColor: "text-emerald-600 dark:text-emerald-400",
+                lightBg: "bg-blue-50/70 border-blue-200/90 text-blue-700",
+                darkBg: "dark:bg-gradient-to-b dark:from-blue-600/20 dark:to-teal-600/10 dark:border-blue-500/30 dark:text-blue-400",
+                stepColor: "text-blue-600 dark:text-blue-400",
               },
             ].map((col, idx) => (
               <div
@@ -700,8 +700,8 @@ export default function PresentationPage() {
         {/* SECTION 5: OPERATIONAL IMPACT */}
         <section id="impact" className="scroll-mt-32 space-y-8">
           <div className="space-y-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider shadow-xs">
-              <TrendingDown className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase tracking-wider shadow-xs">
+              <TrendingDown className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
               Measurable Readiness Multiplier
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
@@ -745,9 +745,9 @@ export default function PresentationPage() {
                 metric: "4.8x",
                 label: "Earlier Intervention",
                 detail: "Assistance delivered an average of 18 to 24 days prior to clinical decompensation thresholds.",
-                border: "border-emerald-200 dark:border-emerald-500/35",
-                bg: "bg-white/95 dark:bg-gradient-to-b dark:from-emerald-950/30 dark:via-slate-900/85 dark:to-slate-950/90",
-                metricColor: "text-emerald-600 dark:text-emerald-400",
+                border: "border-blue-200 dark:border-blue-500/35",
+                bg: "bg-white/95 dark:bg-gradient-to-b dark:from-blue-950/30 dark:via-slate-900/85 dark:to-slate-950/90",
+                metricColor: "text-blue-600 dark:text-blue-400",
                 badge: "EARLY HORIZON",
               },
             ].map((st, i) => (
@@ -973,7 +973,7 @@ export default function PresentationPage() {
       {/* 6. Executive Footer & Defense Doctrine Close (Dual-Mode: White Toggle & Dark Defense) */}
       <footer className="relative bg-slate-100/90 dark:bg-[#050814] text-slate-700 dark:text-slate-300 border-t border-slate-200 dark:border-slate-800/80 overflow-hidden transition-colors duration-200">
         {/* Sovereign Tricolor Accent Strip */}
-        <div className="h-1 w-full bg-gradient-to-r from-amber-500 via-white/80 to-emerald-500 shadow-[0_0_16px_rgba(245,158,11,0.6)]" />
+        <div className="h-1 w-full bg-gradient-to-r from-amber-500 via-white/80 to-blue-500 shadow-[0_0_16px_rgba(245,158,11,0.6)]" />
 
         {/* Tactical Atmospheric Background Layer */}
         <div 
@@ -987,7 +987,7 @@ export default function PresentationPage() {
           {/* Top Bar: Brand & Operational Status */}
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-10 border-b border-slate-200/90 dark:border-slate-800/70">
             <div className="flex items-center gap-3.5">
-              <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-700 via-teal-600 to-emerald-500 p-0.5 shadow-md shadow-teal-900/20">
+              <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-700 via-teal-600 to-blue-500 p-0.5 shadow-md shadow-teal-900/20">
                 <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-white dark:bg-slate-950/80 backdrop-blur-sm">
                   <Shield className="h-5 w-5 text-teal-600 dark:text-teal-400" />
                 </div>
@@ -995,7 +995,7 @@ export default function PresentationPage() {
               <div>
                 <div className="flex items-center gap-2.5">
                   <span className="font-extrabold text-slate-900 dark:text-white text-xl tracking-tight">
-                    MissionWell <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 font-mono">AI</span>
+                    MissionWell <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-blue-600 dark:from-teal-400 dark:to-blue-400 font-mono">AI</span>
                   </span>
                   <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-teal-500/10 dark:bg-teal-500/15 border border-teal-500/30 text-teal-700 dark:text-teal-300">
                     DEFENSE READY
@@ -1009,10 +1009,10 @@ export default function PresentationPage() {
 
             {/* Live Security & Telemetry Pill */}
             <div className="flex flex-wrap items-center gap-3">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-900/90 border border-emerald-500/30 text-[11px] font-mono text-emerald-700 dark:text-emerald-400 shadow-xs backdrop-blur-md">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-900/90 border border-blue-500/30 text-[11px] font-mono text-blue-700 dark:text-blue-400 shadow-xs backdrop-blur-md">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                 </span>
                 <span>SYSTEM STATUS: AIR-GAP OPERATIONAL</span>
               </div>
@@ -1083,13 +1083,13 @@ export default function PresentationPage() {
                 <li>
                   <Link 
                     href="/personnel" 
-                    className="group flex items-center justify-between py-2 px-3 rounded-lg bg-white dark:bg-slate-900/40 hover:bg-slate-100/90 dark:hover:bg-slate-800/80 border border-slate-200/90 dark:border-slate-800/60 hover:border-emerald-500/40 dark:hover:border-emerald-500/30 text-slate-700 hover:text-slate-950 dark:text-slate-300 dark:hover:text-white transition-all shadow-xs"
+                    className="group flex items-center justify-between py-2 px-3 rounded-lg bg-white dark:bg-slate-900/40 hover:bg-slate-100/90 dark:hover:bg-slate-800/80 border border-slate-200/90 dark:border-slate-800/60 hover:border-blue-500/40 dark:hover:border-blue-500/30 text-slate-700 hover:text-slate-950 dark:text-slate-300 dark:hover:text-white transition-all shadow-xs"
                   >
                     <span className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 group-hover:scale-125 transition-transform" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-blue-500 dark:bg-blue-400 group-hover:scale-125 transition-transform" />
                       Personnel Self-Care
                     </span>
-                    <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-200 dark:border-emerald-500/20">
+                    <span className="text-[10px] font-mono text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-200 dark:border-blue-500/20">
                       Zero-Trace
                     </span>
                   </Link>
@@ -1128,7 +1128,7 @@ export default function PresentationPage() {
             {/* Column 3: Statutory & Technical Governance */}
             <div className="space-y-4">
               <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-slate-900 dark:text-slate-200 flex items-center gap-2">
-                <FileCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                <FileCheck className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                 Statutory Governance
               </h4>
               <ul className="space-y-2.5 text-xs text-slate-600 dark:text-slate-400">
@@ -1170,13 +1170,13 @@ export default function PresentationPage() {
                 {/* Tele-MANAS */}
                 <a 
                   href="tel:14416"
-                  className="flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-gradient-to-r dark:from-emerald-950/40 dark:to-slate-900/80 border border-emerald-200 dark:border-emerald-500/30 hover:border-emerald-500 transition-all group shadow-xs hover:shadow-md"
+                  className="flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-gradient-to-r dark:from-blue-950/40 dark:to-slate-900/80 border border-blue-200 dark:border-blue-500/30 hover:border-blue-500 transition-all group shadow-xs hover:shadow-md"
                 >
                   <div>
-                    <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 uppercase font-bold block">Tele-MANAS (MoHFW)</span>
-                    <span className="text-sm font-bold text-slate-900 dark:text-white font-mono group-hover:text-emerald-600 dark:group-hover:text-emerald-300">14416</span>
+                    <span className="text-[10px] font-mono text-blue-700 dark:text-blue-400 uppercase font-bold block">Tele-MANAS (MoHFW)</span>
+                    <span className="text-sm font-bold text-slate-900 dark:text-white font-mono group-hover:text-blue-600 dark:group-hover:text-blue-300">14416</span>
                   </div>
-                  <span className="text-[10px] font-medium text-emerald-800 dark:text-emerald-400 bg-emerald-100/90 dark:bg-emerald-500/10 px-2 py-1 rounded-full border border-emerald-200 dark:border-emerald-500/20">
+                  <span className="text-[10px] font-medium text-blue-800 dark:text-blue-400 bg-blue-100/90 dark:bg-blue-500/10 px-2 py-1 rounded-full border border-blue-200 dark:border-blue-500/20">
                     24x7 Toll-Free
                   </span>
                 </a>

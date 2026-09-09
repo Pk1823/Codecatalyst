@@ -28,7 +28,7 @@ export function ProjectServerIcon({
   return (
     <div className={`relative inline-flex items-center justify-center shrink-0 ${className}`}>
       {animate && (
-        <span className="absolute -inset-1 rounded-2xl bg-emerald-500/20 blur-sm animate-pulse dark:bg-emerald-400/15" />
+        <span className="absolute -inset-1 rounded-2xl bg-blue-500/20 blur-sm animate-pulse dark:bg-blue-400/15" />
       )}
       <svg
         className={`${sizeClass} relative drop-shadow-md`}
@@ -189,8 +189,8 @@ export function ProjectServerIcon({
 
       {showBadge && (
         <span className="absolute -bottom-1 -right-1 flex h-3 w-3 items-center justify-center">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500 border border-white dark:border-slate-900" />
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75" />
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-blue-500 border border-white dark:border-slate-900" />
         </span>
       )}
     </div>

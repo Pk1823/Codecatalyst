@@ -84,7 +84,7 @@ export default function WelfareOfficerDashboard() {
         <div className="flex items-center gap-2.5">
           <Link
             href="/welfare/cases"
-            className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 text-xs font-semibold shadow-xs transition-colors"
+            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white px-3.5 py-2 text-xs font-semibold shadow-xs transition-colors"
           >
             <FolderHeart className="h-3.5 w-3.5" />
             <span>{isHi ? "सभी मामले देखें" : "Manage All Cases"}</span>
@@ -197,7 +197,7 @@ export default function WelfareOfficerDashboard() {
                     <span className="text-xs font-semibold text-slate-900 dark:text-white">
                       {alert.title}
                     </span>
-                    <span className="font-mono text-[11px] text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800/60">
+                    <span className="font-mono text-[11px] text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-800/60">
                       ID: {alert.personnelId}
                     </span>
                     <span className="text-[11px] text-slate-500">• {alert.timestamp}</span>
@@ -222,7 +222,7 @@ export default function WelfareOfficerDashboard() {
                     </div>
                   )}
 
-                  <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
+                  <p className="text-[11px] text-blue-600 dark:text-blue-400 font-medium">
                     Recommended: {alert.recommendedAction || "Human welfare officer review"}
                   </p>
                 </div>
@@ -237,7 +237,7 @@ export default function WelfareOfficerDashboard() {
                         router.push(`/welfare/cases/${alert.caseId}`);
                       }
                     }}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium transition-colors shadow-xs"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition-colors shadow-xs"
                   >
                     <span>Review Detail</span>
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -266,7 +266,7 @@ export default function WelfareOfficerDashboard() {
 
       {/* Ethical Governance Advisory */}
       <div className="rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-100/60 dark:bg-slate-900/40 p-3 text-center text-xs text-slate-600 dark:text-slate-400">
-        <ShieldCheck className="h-4 w-4 inline-block mr-1.5 text-emerald-600 dark:text-emerald-400" />
+        <ShieldCheck className="h-4 w-4 inline-block mr-1.5 text-blue-600 dark:text-blue-400" />
         <span>
           MissionWell AI provides predictive welfare indicators for authorized support personnel. It does not provide medical diagnoses or automated disciplinary decisions.
         </span>

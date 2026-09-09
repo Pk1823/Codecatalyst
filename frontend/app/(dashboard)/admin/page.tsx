@@ -80,7 +80,7 @@ export default function AdminDashboardPage() {
                 Configured role-based access tokens
               </p>
             </div>
-            <span className="text-xs font-mono text-emerald-400">RBAC Active</span>
+            <span className="text-xs font-mono text-blue-400">RBAC Active</span>
           </div>
 
           <div className="overflow-x-auto">
@@ -101,7 +101,7 @@ export default function AdminDashboardPage() {
                     </td>
                     <td className="py-3 px-3 text-slate-400 font-mono text-[11px]">{u.email}</td>
                     <td className="py-3 px-3">
-                      <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-[10px]">
+                      <span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono text-[10px]">
                         {u.role}
                       </span>
                     </td>
@@ -140,7 +140,7 @@ export default function AdminDashboardPage() {
                   <span
                     className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
                       evt.status === "Authorized"
-                        ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                        ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"
                         : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
                     }`}
                   >

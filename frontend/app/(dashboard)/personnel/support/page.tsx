@@ -63,19 +63,19 @@ export default function RequestSupportPage() {
     return (
       <div className="max-w-2xl mx-auto space-y-6 animate-in fade-in duration-200">
         <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-8 text-center space-y-6 shadow-xl">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900 shadow-sm">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900 shadow-sm">
             <CheckCircle2 className="h-7 w-7" />
           </div>
 
           <div>
-            <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+            <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Confidential Welfare Intake Confirmed
             </span>
             <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">
               Your support request has been submitted.
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Tracking Case ID: <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">{createdCaseId}</span>
+              Tracking Case ID: <span className="font-mono font-bold text-blue-600 dark:text-blue-400">{createdCaseId}</span>
             </p>
           </div>
 
@@ -100,7 +100,7 @@ export default function RequestSupportPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
             <Link
               href="/personnel"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 text-xs font-semibold shadow-xs transition-all"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 text-xs font-semibold shadow-xs transition-all"
             >
               <span>Back to Wellbeing Overview</span>
               <ArrowRight className="h-4 w-4" />
@@ -150,7 +150,7 @@ export default function RequestSupportPage() {
                   onClick={() => setSupportType(type)}
                   className={`p-3 rounded-xl border text-xs font-medium text-left transition-all ${
                     supportType === type
-                      ? "border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-300 ring-1 ring-emerald-500/50 shadow-2xs font-semibold"
+                      ? "border-blue-500 bg-blue-50/80 dark:bg-blue-950/40 text-blue-900 dark:text-blue-300 ring-1 ring-blue-500/50 shadow-2xs font-semibold"
                       : "border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/50 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-850"
                   }`}
                 >
@@ -177,7 +177,7 @@ export default function RequestSupportPage() {
                   onClick={() => setPriority(p.label)}
                   className={`p-3 rounded-xl border text-left transition-all ${
                     priority === p.label
-                      ? "border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-300 ring-1 ring-emerald-500/50 shadow-2xs font-semibold"
+                      ? "border-blue-500 bg-blue-50/80 dark:bg-blue-950/40 text-blue-900 dark:text-blue-300 ring-1 ring-blue-500/50 shadow-2xs font-semibold"
                       : "border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/50 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-850"
                   }`}
                 >
@@ -208,7 +208,7 @@ export default function RequestSupportPage() {
                     onClick={() => setPreferredContact(c.id)}
                     className={`p-2.5 rounded-xl border text-xs font-medium flex items-center justify-center gap-2 transition-all ${
                       preferredContact === c.id
-                        ? "border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-300 ring-1 ring-emerald-500/50 font-semibold"
+                        ? "border-blue-500 bg-blue-50/80 dark:bg-blue-950/40 text-blue-900 dark:text-blue-300 ring-1 ring-blue-500/50 font-semibold"
                         : "border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/50 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-850"
                     }`}
                   >
@@ -231,7 +231,7 @@ export default function RequestSupportPage() {
               placeholder="Describe your request or current duty stress (e.g. consecutive night shifts, need for family leave assistance, physical exhaustion)..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-3 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
+              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-3 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
             />
           </div>
 
@@ -240,7 +240,7 @@ export default function RequestSupportPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white py-3 text-xs font-semibold shadow-md shadow-emerald-600/20 transition-all disabled:opacity-50 hover:scale-[1.01] active:scale-[0.99]"
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white py-3 text-xs font-semibold shadow-md shadow-blue-600/20 transition-all disabled:opacity-50 hover:scale-[1.01] active:scale-[0.99]"
             >
               <Send className="h-4 w-4" />
               <span>{isSubmitting ? "Submitting Request..." : "Submit Support Request"}</span>

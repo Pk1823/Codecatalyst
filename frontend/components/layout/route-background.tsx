@@ -23,7 +23,7 @@ export function RouteBackground() {
         alt: "Tactical Operations Command Deck & Himalayan Sector Grid",
         lightOpacity: "opacity-[0.11]",
         darkOpacity: "opacity-[0.28]",
-        primaryGlow: "bg-emerald-500/15 dark:bg-emerald-500/20",
+        primaryGlow: "bg-blue-500/15 dark:bg-blue-500/20",
         secondaryGlow: "bg-cyan-500/10 dark:bg-cyan-500/15",
       };
     }
@@ -35,7 +35,7 @@ export function RouteBackground() {
         alt: "Himalayan Defense Outpost & Biometric Telemetry",
         lightOpacity: "opacity-[0.09]",
         darkOpacity: "opacity-[0.25]",
-        primaryGlow: "bg-emerald-500/15 dark:bg-emerald-600/15",
+        primaryGlow: "bg-blue-500/15 dark:bg-blue-600/15",
         secondaryGlow: "bg-blue-500/10 dark:bg-blue-600/15",
       };
     }
@@ -48,7 +48,7 @@ export function RouteBackground() {
         lightOpacity: "opacity-[0.12]",
         darkOpacity: "opacity-[0.32]",
         primaryGlow: "bg-cyan-500/15 dark:bg-cyan-500/20",
-        secondaryGlow: "bg-emerald-500/10 dark:bg-teal-500/15",
+        secondaryGlow: "bg-blue-500/10 dark:bg-teal-500/15",
       };
     }
 
@@ -60,7 +60,7 @@ export function RouteBackground() {
         lightOpacity: "opacity-[0.10]",
         darkOpacity: "opacity-[0.30]",
         primaryGlow: "bg-amber-500/15 dark:bg-amber-500/18",
-        secondaryGlow: "bg-emerald-500/12 dark:bg-emerald-500/18",
+        secondaryGlow: "bg-blue-500/12 dark:bg-blue-500/18",
       };
     }
 
@@ -74,7 +74,7 @@ export function RouteBackground() {
         alt: "Himalayan Resilience Sanctuary - Wellness, Support & Health Telemetry",
         lightOpacity: "opacity-[0.13]",
         darkOpacity: "opacity-[0.30]",
-        primaryGlow: "bg-emerald-500/15 dark:bg-emerald-500/20",
+        primaryGlow: "bg-blue-500/15 dark:bg-blue-500/20",
         secondaryGlow: "bg-teal-500/12 dark:bg-cyan-500/15",
       };
     }
@@ -86,7 +86,7 @@ export function RouteBackground() {
         alt: "Tactical Personnel Grid & Squad Telemetry Backdrop",
         lightOpacity: "opacity-[0.10]",
         darkOpacity: "opacity-[0.26]",
-        primaryGlow: "bg-emerald-500/12 dark:bg-emerald-500/18",
+        primaryGlow: "bg-blue-500/12 dark:bg-blue-500/18",
         secondaryGlow: "bg-blue-500/10 dark:bg-blue-500/15",
       };
     }
@@ -101,7 +101,7 @@ export function RouteBackground() {
         alt: "Proactive Defense Welfare Operations & Health Care Network",
         lightOpacity: "opacity-[0.12]",
         darkOpacity: "opacity-[0.28]",
-        primaryGlow: "bg-emerald-500/15 dark:bg-emerald-500/20",
+        primaryGlow: "bg-blue-500/15 dark:bg-blue-500/20",
         secondaryGlow: "bg-cyan-500/10 dark:bg-cyan-500/15",
       };
     }
@@ -119,7 +119,7 @@ export function RouteBackground() {
         alt: "High-Altitude Defense Security Watchtower & Holographic Shield",
         lightOpacity: "opacity-[0.10]",
         darkOpacity: "opacity-[0.28]",
-        primaryGlow: "bg-emerald-500/12 dark:bg-emerald-500/18",
+        primaryGlow: "bg-blue-500/12 dark:bg-blue-500/18",
         secondaryGlow: "bg-indigo-500/10 dark:bg-indigo-500/15",
       };
     }
@@ -130,7 +130,7 @@ export function RouteBackground() {
       alt: "Digital Defense Topography Ambient Backdrop",
       lightOpacity: "opacity-[0.09]",
       darkOpacity: "opacity-[0.25]",
-      primaryGlow: "bg-emerald-500/10 dark:bg-emerald-500/15",
+      primaryGlow: "bg-blue-500/10 dark:bg-blue-500/15",
       secondaryGlow: "bg-cyan-500/10 dark:bg-cyan-500/15",
     };
   }, [pathname]);

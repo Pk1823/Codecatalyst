@@ -111,7 +111,7 @@ function CallbackContent() {
   return (
     <div className="w-full max-w-md bg-white dark:bg-[#0F172A] border border-slate-200/80 dark:border-slate-800 rounded-3xl p-8 shadow-2xl backdrop-blur-xl relative overflow-hidden">
       {/* Ambient Top Glow */}
-      <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-48 h-48 bg-emerald-500/15 dark:bg-emerald-500/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-48 h-48 bg-blue-500/15 dark:bg-blue-500/20 rounded-full blur-3xl pointer-events-none" />
 
       <div className="text-center relative z-10">
         <div className="relative inline-flex items-center justify-center mb-6">
@@ -119,8 +119,8 @@ function CallbackContent() {
         </div>
 
         <div className="flex items-center justify-center gap-2 mb-2">
-          <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-          <span className="text-xs font-mono font-semibold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
+          <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+          <span className="text-xs font-mono font-semibold uppercase tracking-widest text-blue-600 dark:text-blue-400">
             DPDP 2023 Secure Gateway
           </span>
         </div>
@@ -137,7 +137,7 @@ function CallbackContent() {
 
         {status === "processing" && (
           <div className="mt-6 w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-500 via-emerald-500 to-blue-500 h-full w-full animate-pulse" />
+            <div className="bg-gradient-to-r from-blue-500 via-blue-500 to-blue-500 h-full w-full animate-pulse" />
           </div>
         )}
 
@@ -194,14 +194,14 @@ export default function AuthCallbackPage() {
       </div>
 
       {/* Ambient Defense Glows */}
-      <div className="fixed top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-emerald-500/10 dark:bg-emerald-500/15 blur-[130px] pointer-events-none z-0" />
+      <div className="fixed top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-blue-500/10 dark:bg-blue-500/15 blur-[130px] pointer-events-none z-0" />
       <div className="fixed bottom-1/4 right-1/4 w-[400px] h-[250px] bg-cyan-500/10 dark:bg-cyan-500/15 blur-[120px] pointer-events-none z-0" />
 
       <div className="relative z-10 w-full flex justify-center">
         <Suspense
           fallback={
             <div className="flex flex-col items-center gap-3 bg-white/90 dark:bg-[#0F172A]/90 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl backdrop-blur-md">
-              <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+              <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
               <span className="text-xs font-mono text-slate-600 dark:text-slate-400">Initializing DPDP Gateway...</span>
             </div>
           }

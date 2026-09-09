@@ -116,7 +116,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#090D16] text-slate-900 dark:text-slate-100 selection:bg-emerald-500/20 selection:text-emerald-700 dark:selection:text-emerald-300 flex flex-col font-sans transition-colors duration-200">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#090D16] text-slate-900 dark:text-slate-100 selection:bg-blue-500/20 selection:text-blue-700 dark:selection:text-blue-300 flex flex-col font-sans transition-colors duration-200">
       {/* 1. National Tricolor Strip */}
       <div className="h-1.5 w-full flex shrink-0">
         <div className="h-full w-1/3 bg-[#FF9933]" />
@@ -128,15 +128,15 @@ export default function LandingPage() {
       <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/85 dark:bg-[#090D16]/85 backdrop-blur-xl shadow-xs transition-colors">
         <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md shadow-emerald-600/25 group-hover:scale-105 transition-transform">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-600/25 group-hover:scale-105 transition-transform">
               <Shield className="h-5 w-5" />
             </div>
             <div className="flex flex-col">
               <div className="flex items-center gap-1.5">
                 <span className="font-extrabold text-base tracking-tight text-slate-900 dark:text-white">
-                  MissionWell <span className="text-emerald-600 dark:text-emerald-400 font-mono text-xs">AI</span>
+                  MissionWell <span className="text-blue-600 dark:text-blue-400 font-mono text-xs">AI</span>
                 </span>
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
               </div>
               <span className="text-[9px] uppercase font-mono font-semibold tracking-wider text-slate-500 dark:text-slate-400">
                 Ministry of Home Affairs • CAPF Directorate
@@ -145,13 +145,13 @@ export default function LandingPage() {
           </Link>
 
           <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold text-slate-600 dark:text-slate-300">
-            <a href="#simulator" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors py-1 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60">
+            <a href="#simulator" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors py-1 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60">
               {isHi ? "एआई सिम्युलेटर" : "Live AI Simulator"}
             </a>
-            <a href="#how-it-works" className="hover:text-emerald-600 dark:hover:text-white transition-colors py-1 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60">
+            <a href="#how-it-works" className="hover:text-blue-600 dark:hover:text-white transition-colors py-1 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60">
               {isHi ? "कार्यप्रणाली" : "How It Works"}
             </a>
-            <a href="#features" className="hover:text-emerald-600 dark:hover:text-white transition-colors py-1 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60">
+            <a href="#features" className="hover:text-blue-600 dark:hover:text-white transition-colors py-1 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60">
               {isHi ? "मुख्य क्षमताएं" : "Key Capabilities"}
             </a>
           </nav>
@@ -183,7 +183,7 @@ export default function LandingPage() {
 
             <Link
               href="/login"
-              className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold shadow-md shadow-emerald-600/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex items-center gap-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold shadow-md shadow-blue-600/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               <HeartPulse className="h-3.5 w-3.5" />
               <span>{isHi ? "जवान पोर्टल" : "Personnel"}</span>
@@ -193,7 +193,7 @@ export default function LandingPage() {
               href="/login/admin"
               className="inline-flex items-center gap-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
-              <Shield className="h-3.5 w-3.5 text-emerald-400" />
+              <Shield className="h-3.5 w-3.5 text-blue-400" />
               <span>{isHi ? "कमांड पोर्टल" : "Command"}</span>
             </Link>
           </div>
@@ -215,7 +215,7 @@ export default function LandingPage() {
         </div>
 
         {/* Ambient Emerald Glow */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-emerald-500/10 dark:bg-emerald-600/15 blur-[150px] pointer-events-none z-0 animate-pulse-ring" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-blue-500/10 dark:bg-blue-600/15 blur-[150px] pointer-events-none z-0 animate-pulse-ring" />
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 my-auto text-center">
 
@@ -225,14 +225,14 @@ export default function LandingPage() {
               {isHi ? (
                 <>
                   ड्यूटी तनाव और थकान की{" "}
-                  <span className="text-emerald-600 dark:text-emerald-400">
+                  <span className="text-blue-600 dark:text-blue-400">
                     समय रहते पहचान
                   </span>
                 </>
               ) : (
                 <>
                   Predictive Stress & Fatigue Intelligence for{" "}
-                  <span className="text-emerald-600 dark:text-emerald-400">
+                  <span className="text-blue-600 dark:text-blue-400">
                     Safer, Resilient Armed Forces
                   </span>
                 </>
@@ -251,7 +251,7 @@ export default function LandingPage() {
           <div className="flex flex-wrap items-center justify-center gap-3.5 pt-1">
             <Link
               href="/login"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-6 sm:px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-emerald-600/25 hover:scale-[1.02] active:scale-[0.98] transition-all"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 px-6 sm:px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/25 hover:scale-[1.02] active:scale-[0.98] transition-all"
             >
               <HeartPulse className="h-4.5 w-4.5" />
               <span>{isHi ? "सैनिक / जवान पोर्टल" : "Personnel Portal"}</span>
@@ -261,14 +261,14 @@ export default function LandingPage() {
               href="/login/admin"
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 px-6 sm:px-7 py-3.5 text-sm font-semibold text-slate-100 shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all"
             >
-              <Shield className="h-4.5 w-4.5 text-emerald-400" />
+              <Shield className="h-4.5 w-4.5 text-blue-400" />
               <span>{isHi ? "कमांड पोर्टल" : "Command & Officer Portal"}</span>
             </Link>
             <a
               href="#simulator"
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 backdrop-blur-md hover:bg-slate-100 dark:hover:bg-slate-800 px-5 py-3.5 text-sm font-medium text-slate-800 dark:text-slate-200 transition-all shadow-xs"
             >
-              <Sliders className="h-4 w-4 text-emerald-500" />
+              <Sliders className="h-4 w-4 text-blue-500" />
               <span>{isHi ? "एआई सिम्युलेटर" : "Try AI Simulator"}</span>
             </a>
           </div>
@@ -276,11 +276,11 @@ export default function LandingPage() {
           {/* User-Friendly Floating Trust Badges */}
           <div className="pt-4 flex flex-wrap items-center justify-center gap-3 text-xs font-mono font-medium text-slate-600 dark:text-slate-400">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-xs">
-              <Lock className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+              <Lock className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
               100% DPDP Act Compliant
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-xs">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+              <ShieldCheck className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
               Zero ACR Career Prejudice
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-xs">
@@ -304,7 +304,7 @@ export default function LandingPage() {
         </div>
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <div className="inline-flex items-center gap-2 text-emerald-700 dark:text-emerald-400 text-xs font-mono font-bold uppercase tracking-wide">
+            <div className="inline-flex items-center gap-2 text-blue-700 dark:text-blue-400 text-xs font-mono font-bold uppercase tracking-wide">
               <Brain className="h-3.5 w-3.5" />
               <span>INTERACTIVE MACHINE LEARNING ENGINE DEMO</span>
             </div>
@@ -318,19 +318,19 @@ export default function LandingPage() {
               <span className="text-xs font-mono text-slate-500 dark:text-slate-400">Quick Scenarios:</span>
               <button
                 onClick={() => handleScenarioPreset("bastar")}
-                className="px-2.5 py-1 text-xs font-mono font-medium rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                className="px-2.5 py-1 text-xs font-mono font-medium rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
               >
                 Bastar Sector (High Masking)
               </button>
               <button
                 onClick={() => handleScenarioPreset("siachen")}
-                className="px-2.5 py-1 text-xs font-mono font-medium rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                className="px-2.5 py-1 text-xs font-mono font-medium rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
               >
                 Siachen (-35°C Altitude)
               </button>
               <button
                 onClick={() => handleScenarioPreset("routine")}
-                className="px-2.5 py-1 text-xs font-mono font-medium rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                className="px-2.5 py-1 text-xs font-mono font-medium rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
               >
                 Routine Peacetime Unit
               </button>
@@ -343,13 +343,13 @@ export default function LandingPage() {
             <div className="lg:col-span-7 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-[#0F172A] p-6 shadow-md space-y-6">
               <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
                 <div className="flex items-center gap-2">
-                  <Sliders className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                  <Sliders className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                   <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase font-mono">
                     Operational Telemetry Parameters
                   </h3>
                 </div>
                 <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
-                  Target Force: <strong className="text-emerald-600 dark:text-emerald-400">{selectedForce}</strong>
+                  Target Force: <strong className="text-blue-600 dark:text-blue-400">{selectedForce}</strong>
                 </span>
               </div>
 
@@ -359,7 +359,7 @@ export default function LandingPage() {
                   <span className="font-medium text-slate-700 dark:text-slate-300">
                     1. Consecutive Forward Deployment Days:
                   </span>
-                  <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-slate-800 px-2.5 py-0.5 rounded border border-emerald-200 dark:border-slate-700">
+                  <span className="font-mono font-bold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-slate-800 px-2.5 py-0.5 rounded border border-blue-200 dark:border-slate-700">
                     {consecutiveDays} Days continuous
                   </span>
                 </div>
@@ -370,7 +370,7 @@ export default function LandingPage() {
                   step="1"
                   value={consecutiveDays}
                   onChange={(e) => setConsecutiveDays(parseInt(e.target.value))}
-                  className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+                  className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-600"
                 />
                 <div className="flex justify-between text-[10px] font-mono text-slate-500 dark:text-slate-400">
                   <span>10d (Base standard)</span>
@@ -396,7 +396,7 @@ export default function LandingPage() {
                   step="0.1"
                   value={sleepHours}
                   onChange={(e) => setSleepHours(parseFloat(e.target.value))}
-                  className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+                  className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-600"
                 />
                 <div className="flex justify-between text-[10px] font-mono text-slate-500 dark:text-slate-400">
                   <span>2.5 hrs (Severe deprivation)</span>
@@ -411,7 +411,7 @@ export default function LandingPage() {
                   <span className="font-medium text-slate-700 dark:text-slate-300">
                     3. Jawan Self-Reported Response (Ethos Masking):
                   </span>
-                  <span className="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                  <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400">
                     {selfReportVal === 1
                       ? "Level 1: 'All Normal / Fit' (Masked)"
                       : selfReportVal === 2
@@ -424,7 +424,7 @@ export default function LandingPage() {
                     onClick={() => setSelfReportVal(1)}
                     className={`py-2 px-3 rounded-lg border text-center transition-all ${
                       selfReportVal === 1
-                        ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 font-bold"
+                        ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 font-bold"
                         : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400"
                     }`}
                   >
@@ -434,7 +434,7 @@ export default function LandingPage() {
                     onClick={() => setSelfReportVal(2)}
                     className={`py-2 px-3 rounded-lg border text-center transition-all ${
                       selfReportVal === 2
-                        ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 font-bold"
+                        ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 font-bold"
                         : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400"
                     }`}
                   >
@@ -444,7 +444,7 @@ export default function LandingPage() {
                     onClick={() => setSelfReportVal(3)}
                     className={`py-2 px-3 rounded-lg border text-center transition-all ${
                       selfReportVal === 3
-                        ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 font-bold"
+                        ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 font-bold"
                         : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400"
                     }`}
                   >
@@ -465,7 +465,7 @@ export default function LandingPage() {
                       onClick={() => setSectorTension(lvl)}
                       className={`py-2 px-3 rounded-lg border capitalize text-center transition-all ${
                         sectorTension === lvl
-                          ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 font-bold"
+                          ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 font-bold"
                           : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400"
                       }`}
                     >
@@ -481,12 +481,12 @@ export default function LandingPage() {
               {/* Top Status */}
               <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
                 <div className="flex items-center gap-2">
-                  <Activity className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                  <Activity className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                   <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900 dark:text-white">
                     Model Inference Output
                   </span>
                 </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-slate-700">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-slate-700">
                   SHAP Explainer Live
                 </span>
               </div>
@@ -556,7 +556,7 @@ export default function LandingPage() {
                     <span className="font-bold text-slate-900 dark:text-slate-200">+{simResults.daysStrainImpact}%</span>
                   </div>
                   <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-emerald-500 h-full rounded-full" style={{ width: `${simResults.daysStrainImpact}%` }} />
+                    <div className="bg-blue-500 h-full rounded-full" style={{ width: `${simResults.daysStrainImpact}%` }} />
                   </div>
 
                   <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
@@ -564,7 +564,7 @@ export default function LandingPage() {
                     <span className="font-bold text-slate-900 dark:text-slate-200">+{simResults.sleepDeficitImpact}%</span>
                   </div>
                   <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-emerald-500/80 h-full rounded-full" style={{ width: `${simResults.sleepDeficitImpact}%` }} />
+                    <div className="bg-blue-500/80 h-full rounded-full" style={{ width: `${simResults.sleepDeficitImpact}%` }} />
                   </div>
 
                   <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
@@ -579,7 +579,7 @@ export default function LandingPage() {
 
               {/* Automated Non-Punitive Welfare Recommendation */}
               <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 block mb-1">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-blue-600 dark:text-blue-400 block mb-1">
                   Automated Non-Punitive Triage Recommendation:
                 </span>
                 <p className="text-slate-800 dark:text-slate-200 font-medium">
@@ -601,7 +601,7 @@ export default function LandingPage() {
       <section className="py-14 bg-slate-50/70 dark:bg-[#090D16] border-b border-slate-200 dark:border-slate-800/80">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="text-center max-w-2xl mx-auto space-y-2">
-            <span className="text-xs font-mono font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
+            <span className="text-xs font-mono font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">
               OPERATIONAL EVALUATION DIRECT SHORTCUTS
             </span>
             <h3 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
@@ -614,14 +614,14 @@ export default function LandingPage() {
             {/* Card 1: Welfare Officer */}
             <div
               onClick={() => handleQuickLaunchRole("WELFARE_OFFICER")}
-              className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:border-emerald-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
+              className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:border-blue-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
+                  <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
                     <HeartPulse className="h-5 w-5" />
                   </div>
-                  <span className="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-slate-800 px-2 py-0.5 rounded border border-emerald-200 dark:border-slate-700">
+                  <span className="text-[10px] font-mono font-bold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-slate-800 px-2 py-0.5 rounded border border-blue-200 dark:border-slate-700">
                     PRIMARY CARE
                   </span>
                 </div>
@@ -632,7 +632,7 @@ export default function LandingPage() {
                   Manage individual risk dossiers, clinical interventions, and proactive duty pacing rotas.
                 </p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                 <span>Enter Welfare Console</span>
                 <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </div>
@@ -641,11 +641,11 @@ export default function LandingPage() {
             {/* Card 2: Tactical Commander */}
             <div
               onClick={() => handleQuickLaunchRole("COMMANDER")}
-              className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:border-emerald-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
+              className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:border-blue-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
+                  <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
                     <Activity className="h-5 w-5" />
                   </div>
                   <span className="text-[10px] font-mono font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
@@ -659,7 +659,7 @@ export default function LandingPage() {
                   Battalion-level stress heatmaps, operational readiness metrics, and PII-masked unit telemetry.
                 </p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                 <span>Enter Command Brief</span>
                 <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </div>
@@ -668,11 +668,11 @@ export default function LandingPage() {
             {/* Card 3: Jawan / Soldier */}
             <div
               onClick={() => handleQuickLaunchRole("PERSONNEL")}
-              className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:border-emerald-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
+              className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:border-blue-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
+                  <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
                     <UserCheck className="h-5 w-5" />
                   </div>
                   <span className="text-[10px] font-mono font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
@@ -686,7 +686,7 @@ export default function LandingPage() {
                   7-step confidential self-assessment, buddy watch, and direct support intake with zero stigma.
                 </p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                 <span>Enter Soldier Hub</span>
                 <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </div>
@@ -695,11 +695,11 @@ export default function LandingPage() {
             {/* Card 4: System Admin */}
             <div
               onClick={() => handleQuickLaunchRole("ADMIN")}
-              className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:border-emerald-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
+              className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:border-blue-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
+                  <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
                     <ShieldCheck className="h-5 w-5" />
                   </div>
                   <span className="text-[10px] font-mono font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
@@ -713,7 +713,7 @@ export default function LandingPage() {
                   Cryptographic access ledger, DPDP Act 2023 compliance auditing, and system health status.
                 </p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                 <span>Enter Admin Console</span>
                 <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </div>
@@ -726,7 +726,7 @@ export default function LandingPage() {
       <section id="how-it-works" className="py-20 bg-white dark:bg-[#090D16] border-b border-slate-200 dark:border-slate-800/80">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2">
-            <h2 className="text-xs font-mono font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+            <h2 className="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               {isHi ? "कार्यप्रणाली" : "Operational Continuum"}
             </h2>
             <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
@@ -740,10 +740,10 @@ export default function LandingPage() {
             <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-[#0F172A] p-6 flex flex-col justify-between shadow-xs hover:shadow-md transition-all">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-slate-800 px-2.5 py-1 rounded border border-emerald-200 dark:border-slate-700">
+                  <span className="font-mono text-xs font-bold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-slate-800 px-2.5 py-1 rounded border border-blue-200 dark:border-slate-700">
                     STEP 01
                   </span>
-                  <HeartPulse className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                  <HeartPulse className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 </div>
                 <h4 className="text-base font-bold text-slate-900 dark:text-white">
                   {isHi ? "स्वैच्छिक व बडी चेक-इन" : "Voluntary & Buddy Check-in"}
@@ -763,10 +763,10 @@ export default function LandingPage() {
             <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-[#0F172A] p-6 flex flex-col justify-between shadow-xs hover:shadow-md transition-all">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-slate-800 px-2.5 py-1 rounded border border-emerald-200 dark:border-slate-700">
+                  <span className="font-mono text-xs font-bold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-slate-800 px-2.5 py-1 rounded border border-blue-200 dark:border-slate-700">
                     STEP 02
                   </span>
-                  <Brain className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                  <Brain className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 </div>
                 <h4 className="text-base font-bold text-slate-900 dark:text-white">
                   {isHi ? "एंटी-मास्किंग एआई विश्लेषण" : "Anti-Masking AI Triage"}
@@ -786,10 +786,10 @@ export default function LandingPage() {
             <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-[#0F172A] p-6 flex flex-col justify-between shadow-xs hover:shadow-md transition-all">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-slate-800 px-2.5 py-1 rounded border border-emerald-200 dark:border-slate-700">
+                  <span className="font-mono text-xs font-bold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-slate-800 px-2.5 py-1 rounded border border-blue-200 dark:border-slate-700">
                     STEP 03
                   </span>
-                  <Zap className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                  <Zap className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 </div>
                 <h4 className="text-base font-bold text-slate-900 dark:text-white">
                   {isHi ? "सक्रिय विश्राम व रोटेशन" : "Proactive Rest & Rotation"}
@@ -812,7 +812,7 @@ export default function LandingPage() {
       <section id="features" className="py-20 bg-slate-50/50 dark:bg-[#090D16] border-b border-slate-200 dark:border-slate-800/80">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2">
-            <h2 className="text-xs font-mono font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+            <h2 className="text-xs font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               {isHi ? "मुख्य क्षमताएं" : "Core Architectural Pillars"}
             </h2>
             <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
@@ -823,8 +823,8 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Pillar 1: Anti-Masking */}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 flex items-center gap-3.5 shadow-xs hover:border-emerald-500/60 transition-all">
-              <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 shrink-0">
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 flex items-center gap-3.5 shadow-xs hover:border-blue-500/60 transition-all">
+              <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 shrink-0">
                 <Brain className="h-5 w-5" />
               </div>
               <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">
@@ -833,8 +833,8 @@ export default function LandingPage() {
             </div>
 
             {/* Pillar 2: Buddy-Pair */}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 flex items-center gap-3.5 shadow-xs hover:border-emerald-500/60 transition-all">
-              <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 shrink-0">
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 flex items-center gap-3.5 shadow-xs hover:border-blue-500/60 transition-all">
+              <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 shrink-0">
                 <Users className="h-5 w-5" />
               </div>
               <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">
@@ -843,8 +843,8 @@ export default function LandingPage() {
             </div>
 
             {/* Pillar 3: DPDP Zero Prejudice */}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 flex items-center gap-3.5 shadow-xs hover:border-emerald-500/60 transition-all">
-              <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 shrink-0">
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 flex items-center gap-3.5 shadow-xs hover:border-blue-500/60 transition-all">
+              <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 shrink-0">
                 <Lock className="h-5 w-5" />
               </div>
               <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">
@@ -853,8 +853,8 @@ export default function LandingPage() {
             </div>
 
             {/* Pillar 4: Force Adaptation */}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 flex items-center gap-3.5 shadow-xs hover:border-emerald-500/60 transition-all">
-              <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 shrink-0">
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 flex items-center gap-3.5 shadow-xs hover:border-blue-500/60 transition-all">
+              <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 shrink-0">
                 <Layers className="h-5 w-5" />
               </div>
               <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">
@@ -878,7 +878,7 @@ export default function LandingPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-slate-50/95 via-slate-50/80 to-slate-50/95 dark:from-[#090D16]/95 dark:via-[#090D16]/85 dark:to-[#090D16]/95" />
         </div>
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 space-y-5">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-600 text-white mx-auto shadow-lg shadow-emerald-600/25">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white mx-auto shadow-lg shadow-blue-600/25">
             <Shield className="h-6 w-6" />
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
@@ -888,7 +888,7 @@ export default function LandingPage() {
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex items-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               <span>{isHi ? "पोर्टल में प्रवेश करें" : "Access MissionWell Portal"}</span>
               <ArrowRight className="h-4 w-4" />
@@ -907,13 +907,13 @@ export default function LandingPage() {
             {/* Brand & Purpose */}
             <div className="space-y-1.5 max-w-md">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-white shadow-xs">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white shadow-xs">
                   <Shield className="h-4 w-4" />
                 </div>
                 <span className="font-bold text-slate-900 dark:text-white text-base tracking-tight">
-                  MissionWell <span className="text-emerald-600 dark:text-emerald-400 font-mono">AI</span>
+                  MissionWell <span className="text-blue-600 dark:text-blue-400 font-mono">AI</span>
                 </span>
-                <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60">
+                <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800/60">
                   {isHi ? "गोपनीय एवं सुरक्षित" : "Confidential & Non-Punitive"}
                 </span>
               </div>
@@ -926,22 +926,22 @@ export default function LandingPage() {
 
             {/* Quick Navigation Links */}
             <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-medium">
-              <Link href="/login" className="text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+              <Link href="/login" className="text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                 {isHi ? "पोर्टल लॉगिन" : "Portal Login"}
               </Link>
-              <Link href="/commander" className="text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+              <Link href="/commander" className="text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                 {isHi ? "कमांडर कंसोल" : "Commander"}
               </Link>
-              <Link href="/welfare" className="text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+              <Link href="/welfare" className="text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                 {isHi ? "कल्याण अधिकारी" : "Welfare Officer"}
               </Link>
-              <Link href="/personnel" className="text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+              <Link href="/personnel" className="text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                 {isHi ? "जवान स्व-देखभाल" : "Personnel"}
               </Link>
-              <Link href="/presentation" className="text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+              <Link href="/presentation" className="text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                 {isHi ? "प्रस्तुति" : "Presentation"}
               </Link>
-              <Link href="/privacy" className="text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+              <Link href="/privacy" className="text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                 {isHi ? "गोपनीयता नीति" : "Privacy & DPDP"}
               </Link>
             </nav>
@@ -950,20 +950,20 @@ export default function LandingPage() {
           {/* 24x7 Helplines Strip */}
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-medium">
-              <PhoneCall className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <PhoneCall className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
               <span>{isHi ? "24x7 निःशुल्क एवं गोपनीय हेल्पलाइन:" : "24x7 Confidential Helplines:"}</span>
             </div>
             <div className="flex flex-wrap items-center gap-4 text-xs font-mono">
-              <a href="tel:14416" className="text-slate-800 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 font-semibold transition-colors">
-                Tele-MANAS: <span className="text-emerald-600 dark:text-emerald-400">14416</span>
+              <a href="tel:14416" className="text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 font-semibold transition-colors">
+                Tele-MANAS: <span className="text-blue-600 dark:text-blue-400">14416</span>
               </a>
               <span className="text-slate-300 dark:text-slate-700 hidden sm:inline">•</span>
-              <a href="tel:18005990019" className="text-slate-800 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 font-semibold transition-colors">
-                KIRAN: <span className="text-emerald-600 dark:text-emerald-400">1800-599-0019</span>
+              <a href="tel:18005990019" className="text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 font-semibold transition-colors">
+                KIRAN: <span className="text-blue-600 dark:text-blue-400">1800-599-0019</span>
               </a>
               <span className="text-slate-300 dark:text-slate-700 hidden sm:inline">•</span>
-              <a href="tel:14417" className="text-slate-800 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 font-semibold transition-colors">
-                Madadgaar: <span className="text-emerald-600 dark:text-emerald-400">14417</span>
+              <a href="tel:14417" className="text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 font-semibold transition-colors">
+                Madadgaar: <span className="text-blue-600 dark:text-blue-400">14417</span>
               </a>
             </div>
           </div>
@@ -971,7 +971,7 @@ export default function LandingPage() {
           {/* Bottom Copyright & Guarantee */}
           <div className="pt-4 border-t border-slate-200/70 dark:border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500 dark:text-slate-400">
             <div className="flex items-center gap-1.5">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+              <ShieldCheck className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
               <span>{isHi ? "शून्य एसीआर/एपीएआर पूर्वाग्रह गारंटी • पूर्णतः सुरक्षित डेटा" : "Zero APAR / ACR Career Linkage Guarantee • 100% Confidential"}</span>
             </div>
             <div>

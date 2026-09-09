@@ -77,8 +77,8 @@ export const FORCES_METADATA: Record<ForceType, ForceMetadata> = {
     sampleLocation: "Forward Defended Post, Sub-Sector North (Leh)",
     helpline: "14416 / 1904",
     helplineName: "Army Helpline & AWWA Family Support",
-    badgeAccent: "text-emerald-400 border-emerald-500/40 bg-emerald-950/30",
-    badgeBg: "from-emerald-950 via-slate-900 to-slate-950",
+    badgeAccent: "text-blue-400 border-blue-500/40 bg-blue-950/30",
+    badgeBg: "from-blue-950 via-slate-900 to-slate-950",
     ranks: {
       personnel: "Sepoy / Rifleman",
       personnelHi: "सिपाही / राइफलमैन",

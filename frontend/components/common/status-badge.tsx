@@ -19,14 +19,14 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
     style = "bg-amber-950/40 text-amber-300 border-amber-800/60";
     dot = "bg-amber-400";
   } else if (norm.includes("intervention") || norm.includes("active")) {
-    style = "bg-emerald-950/40 text-emerald-300 border-emerald-800/60";
-    dot = "bg-emerald-400";
+    style = "bg-blue-950/40 text-blue-300 border-blue-800/60";
+    dot = "bg-blue-400";
   } else if (norm.includes("follow-up") || norm.includes("pending")) {
     style = "bg-cyan-950/40 text-cyan-300 border-cyan-800/60";
     dot = "bg-cyan-400";
   } else if (norm.includes("resolved") || norm.includes("completed")) {
     style = "bg-slate-800/90 text-slate-300 border-slate-700";
-    dot = "bg-emerald-400";
+    dot = "bg-blue-400";
   }
 
   return (

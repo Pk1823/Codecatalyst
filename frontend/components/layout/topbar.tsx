@@ -119,7 +119,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
       case "WELFARE_OFFICER":
         return {
           label: "Welfare Officer",
-          color: "text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-800/80",
+          color: "text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 border-blue-300 dark:border-blue-800/80",
           icon: UserCheck,
         };
       case "COMMANDER":
@@ -259,7 +259,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                     <p className="text-[11px] font-bold text-slate-900 dark:text-white uppercase tracking-wider font-mono">
                       {lang === "hi" ? "सक्रिय भूमिका बदलें" : "Switch Active Persona"}
                     </p>
-                    <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono font-semibold">1-Click</span>
+                    <span className="text-[10px] text-blue-600 dark:text-blue-400 font-mono font-semibold">1-Click</span>
                   </div>
                   <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
                     {lang === "hi" ? "अलग-अलग दृष्टिकोण से सिस्टम को समझें" : "Explore the system from any operational perspective"}
@@ -273,7 +273,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                       title: "Welfare Officer",
                       hiTitle: "कल्याण अधिकारी",
                       icon: UserCheck,
-                      color: "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-800",
+                      color: "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 border-blue-300 dark:border-blue-800",
                       desc: "Triage fatigue, manage cases & assign interventions",
                     },
                     {
@@ -313,7 +313,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                         className={cn(
                           "w-full text-left p-2 rounded-xl transition-all flex items-start gap-2.5 border",
                           isSelected
-                            ? "bg-emerald-50/50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-800 ring-1 ring-emerald-500/20"
+                            ? "bg-blue-50/50 dark:bg-blue-950/30 border-blue-300 dark:border-blue-800 ring-1 ring-blue-500/20"
                             : "border-transparent hover:bg-slate-50 dark:hover:bg-slate-850 hover:border-slate-200 dark:hover:border-slate-800"
                         )}
                       >
@@ -326,7 +326,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                               {lang === "hi" ? r.hiTitle : r.title}
                             </p>
                             {isSelected && (
-                              <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100/60 dark:bg-emerald-900/60 px-1.5 py-0.2 rounded">
+                              <span className="text-[9px] font-mono font-bold text-blue-600 dark:text-blue-400 bg-blue-100/60 dark:bg-blue-900/60 px-1.5 py-0.2 rounded">
                                 ACTIVE
                               </span>
                             )}
@@ -403,7 +403,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                 <img
                   src={user.avatarUrl}
                   alt={user.name}
-                  className="h-6 w-6 rounded-full object-cover border border-emerald-500/40 shadow-xs shrink-0"
+                  className="h-6 w-6 rounded-full object-cover border border-blue-500/40 shadow-xs shrink-0"
                 />
               ) : (
                 <div className="flex h-5 w-5 items-center justify-center rounded-sm text-slate-900 dark:text-white font-mono font-bold text-xs">
@@ -412,7 +412,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
               )}
               <div className="hidden md:flex flex-col text-left leading-none">
                 <span className="text-xs font-semibold text-slate-900 dark:text-white truncate max-w-[100px]">{user.name}</span>
-                <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-mono uppercase mt-0.5">{role.replace("_", " ")}</span>
+                <span className="text-[9px] text-blue-600 dark:text-blue-400 font-mono uppercase mt-0.5">{role.replace("_", " ")}</span>
               </div>
               <ChevronDown className="h-3 w-3 text-slate-400" />
             </button>
@@ -429,17 +429,17 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                       <img
                         src={user.avatarUrl}
                         alt={user.name}
-                        className="h-8 w-8 rounded-full object-cover border border-emerald-500/40 shadow-xs shrink-0"
+                        className="h-8 w-8 rounded-full object-cover border border-blue-500/40 shadow-xs shrink-0"
                       />
                     ) : (
-                      <div className="h-8 w-8 rounded-full bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-500/30 flex items-center justify-center text-emerald-800 dark:text-emerald-300 font-bold text-xs shrink-0">
+                      <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-950/60 border border-blue-500/30 flex items-center justify-center text-blue-800 dark:text-blue-300 font-bold text-xs shrink-0">
                         {user.name.charAt(0)}
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <p className="text-xs font-bold text-slate-900 dark:text-white truncate">{user.name}</p>
-                        <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-mono font-bold bg-emerald-50 dark:bg-emerald-950/40 px-1.5 py-0.5 rounded border border-emerald-500/20">
+                        <span className="text-[9px] text-blue-600 dark:text-blue-400 font-mono font-bold bg-blue-50 dark:bg-blue-950/40 px-1.5 py-0.5 rounded border border-blue-500/20">
                           ONLINE
                         </span>
                       </div>
@@ -474,7 +474,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                     </svg>
                     <span>{lang === "hi" ? "गूगल खाता एवं डेटासेट" : "Google Account & Dataset"}</span>
                   </div>
-                  <span className="text-[9px] font-mono uppercase bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 px-1.5 py-0.5 rounded font-bold">
+                  <span className="text-[9px] font-mono uppercase bg-blue-500/20 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded font-bold">
                     CRUD
                   </span>
                 </button>
@@ -550,7 +550,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                 <div>
                   <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <span>{lang === "hi" ? "मिशनवेल एआई गाइड" : "How MissionWell AI Works"}</span>
-                    <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+                    <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-300 dark:border-blue-800">
                       User Guide
                     </span>
                   </h2>
@@ -597,9 +597,9 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
             <div className="overflow-y-auto p-6 space-y-4 text-xs text-slate-700 dark:text-slate-300">
               {guideTab === "overview" && (
                 <div className="space-y-4 animate-in fade-in duration-150">
-                  <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-slate-800 dark:text-slate-200 space-y-1.5">
-                    <h3 className="text-sm font-bold text-emerald-800 dark:text-emerald-300 flex items-center gap-2">
-                      <Heart className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                  <div className="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-slate-800 dark:text-slate-200 space-y-1.5">
+                    <h3 className="text-sm font-bold text-blue-800 dark:text-blue-300 flex items-center gap-2">
+                      <Heart className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                       <span>{lang === "hi" ? "हमारा उद्देश्य: तनाव और थकान की समय पर पहचान" : "Our Mission: Proactive Care Before Burnout"}</span>
                     </h3>
                     <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-300">
@@ -639,7 +639,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                     </div>
 
                     <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 space-y-1.5">
-                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold font-mono">
+                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold font-mono">
                         3
                       </div>
                       <h4 className="font-bold text-slate-900 dark:text-white">
@@ -663,10 +663,10 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                       : "Here is how to read the traffic-light health scores across all pages:"}
                   </p>
 
-                  <div className="p-3.5 rounded-2xl border border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/70 dark:bg-emerald-950/30 flex items-start gap-3">
-                    <div className="h-3 w-3 rounded-full bg-emerald-500 mt-1 shrink-0 ring-4 ring-emerald-500/20" />
+                  <div className="p-3.5 rounded-2xl border border-blue-300 dark:border-blue-800/80 bg-blue-50/70 dark:bg-blue-950/30 flex items-start gap-3">
+                    <div className="h-3 w-3 rounded-full bg-blue-500 mt-1 shrink-0 ring-4 ring-blue-500/20" />
                     <div>
-                      <h4 className="font-bold text-emerald-900 dark:text-emerald-300 text-xs">
+                      <h4 className="font-bold text-blue-900 dark:text-blue-300 text-xs">
                         {lang === "hi" ? "हरा संकेत (0 - 39%): फिट और स्वस्थ (Fit & Ready)" : "Green (0 - 39%): Fit & Ready"}
                       </h4>
                       <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-0.5">
@@ -730,7 +730,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
 
                     <div className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-1">
                       <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white">
-                        <UserCheck className="h-4 w-4 text-emerald-500" />
+                        <UserCheck className="h-4 w-4 text-blue-500" />
                         <span>{lang === "hi" ? "कल्याण अधिकारी" : "Welfare Officer"}</span>
                       </div>
                       <p className="text-[11px] text-slate-500 dark:text-slate-400">

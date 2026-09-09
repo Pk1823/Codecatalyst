@@ -128,7 +128,7 @@ export default function PersonnelDashboard() {
               {isHi ? "जय हिन्द" : "Welcome"},{" "}
               {user.name || meta.samplePersonnelName}
             </h1>
-            <span className="rounded bg-slate-100 dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 text-xs font-mono font-semibold px-2 py-0.5 border border-slate-200 dark:border-slate-700">
+            <span className="rounded bg-slate-100 dark:bg-slate-800 text-blue-700 dark:text-blue-400 text-xs font-mono font-semibold px-2 py-0.5 border border-slate-200 dark:border-slate-700">
               {user.serviceId || meta.sampleServiceId}
             </span>
           </div>
@@ -140,14 +140,14 @@ export default function PersonnelDashboard() {
         <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
           <button
             onClick={() => setIsQuickCheckinOpen(true)}
-            className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 px-3.5 py-2 text-xs font-semibold shadow-xs transition-colors hover:bg-emerald-100 dark:hover:bg-emerald-900/40"
+            className="inline-flex items-center gap-2 rounded-lg border border-blue-500/30 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 px-3.5 py-2 text-xs font-semibold shadow-xs transition-colors hover:bg-blue-100 dark:hover:bg-blue-900/40"
           >
-            <Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            <Sparkles className="h-4 w-4 text-blue-600 dark:text-blue-400" />
             <span>{isHi ? "त्वरित दैनिक चेक-इन" : "Quick Daily Vitals"}</span>
           </button>
           <Link
             href="/personnel/wellness"
-            className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 text-xs font-semibold shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white px-3.5 py-2 text-xs font-semibold shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
             <FileHeart className="h-4 w-4" />
             <span>{isHi ? "स्व-कल्याण जांच शुरू करें" : "Full Assessment"}</span>
@@ -156,7 +156,7 @@ export default function PersonnelDashboard() {
             href="/personnel/support"
             className="inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-3.5 py-2 text-xs font-medium shadow-xs transition-colors"
           >
-            <HandHelping className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            <HandHelping className="h-4 w-4 text-blue-600 dark:text-blue-400" />
             <span>{isHi ? "गोपनीय सहायता अनुरोध" : "Confidential Support"}</span>
           </Link>
         </div>
@@ -211,7 +211,7 @@ export default function PersonnelDashboard() {
           {/* Sainik Sammelan & Darbar Request Card */}
           <div className="rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0F172A]/90 p-4 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-emerald-50 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-emerald-200/60 dark:border-slate-700">
+              <div className="p-2 rounded-lg bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-blue-200/60 dark:border-slate-700">
                 <Award className="h-5 w-5" />
               </div>
               <div>
@@ -227,7 +227,7 @@ export default function PersonnelDashboard() {
             </div>
 
             {sainikRequestSent ? (
-              <span className="text-xs font-mono font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-slate-900 px-3 py-1.5 rounded-lg border border-emerald-200 dark:border-slate-700">
+              <span className="text-xs font-mono font-medium text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-slate-900 px-3 py-1.5 rounded-lg border border-blue-200 dark:border-slate-700">
                 ✓ {isHi ? "दरबार अनुरोध दर्ज हुआ" : "Audience Slot Requested"}
               </span>
             ) : (
@@ -333,12 +333,12 @@ export default function PersonnelDashboard() {
 
           <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
             <span className="flex items-center gap-1.5">
-              <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              <ShieldCheck className="h-4 w-4 text-blue-600 dark:text-blue-400" />
               <span>{isHi ? "अधिकृत डॉक्टर:" : "Assigned Welfare MO:"} {meta.sampleOfficerName}</span>
             </span>
             <Link
               href="/personnel/privacy"
-              className="text-emerald-600 dark:text-emerald-400 hover:underline font-mono"
+              className="text-blue-600 dark:text-blue-400 hover:underline font-mono"
             >
               {isHi ? "गोपनीयता नियंत्रण →" : "Privacy Settings →"}
             </Link>
@@ -346,6 +346,31 @@ export default function PersonnelDashboard() {
         </div>
       </div>
 
+      {/* Welfare Advisory Banner */}
+      <div className="rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0F172A]/90 p-4 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-blue-200/60 dark:border-slate-700 shrink-0">
+            <PhoneCall className="h-5 w-5" />
+          </div>
+          <div>
+            <h4 className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+              {meta.helplineName} (24x7 Toll-Free: <span className="font-mono text-blue-600 dark:text-blue-400">{meta.helpline}</span>)
+            </h4>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              {isHi
+                ? "आपका 142 दिनों का निरंतर फॉरवर्ड पोस्ट कार्यकाल पूरा हो चुका है। आप रोटेशनल अवकाश व विश्राम के पात्र हैं।"
+                : "You have completed 142 continuous forward outpost days. You are eligible for rotational decompression leave."}
+            </p>
+          </div>
+        </div>
+        <Link
+          href="/personnel/support"
+          className="shrink-0 text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 flex items-center gap-1"
+        >
+          <span>{isHi ? "अवकाश समीक्षा का अनुरोध करें" : "Request Decompression Review"}</span>
+          <ArrowRight className="h-3.5 w-3.5" />
+        </Link>
+      </div>
       {/* Quick 1-Click Daily Vitals Check-in Modal */}
       {isQuickCheckinOpen && (
         <div
@@ -358,7 +383,7 @@ export default function PersonnelDashboard() {
           >
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                <Sparkles className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 <div>
                   <h3 className="text-base font-bold text-slate-900 dark:text-white">
                     {isHi ? "दैनिक त्वरित कल्याण स्थिति" : "Quick Daily Vitals Check-in"}
@@ -389,7 +414,7 @@ export default function PersonnelDashboard() {
                       onClick={() => setQuickEnergy(lvl)}
                       className={`p-2 rounded-xl border text-center font-bold text-xs transition-all ${
                         quickEnergy === lvl
-                          ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 shadow-2xs"
+                          ? "border-blue-500 bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 shadow-2xs"
                           : "border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
                       }`}
                     >
@@ -406,7 +431,7 @@ export default function PersonnelDashboard() {
                 <select
                   value={quickSleep}
                   onChange={(e) => setQuickSleep(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500 font-mono"
+                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500 font-mono"
                 >
                   <option value="> 7 hours">&gt; 7 hours (Optimal)</option>
                   <option value="6-7 hours">6-7 hours (Good)</option>
@@ -423,7 +448,7 @@ export default function PersonnelDashboard() {
                 <select
                   value={quickStress}
                   onChange={(e) => setQuickStress(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500 font-mono"
+                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500 font-mono"
                 >
                   <option value="1-2">1-2 (Calm / Peacetime)</option>
                   <option value="3-4">3-4 (Normal Operational Duty)</option>
@@ -443,7 +468,7 @@ export default function PersonnelDashboard() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold shadow-xs transition-colors flex items-center gap-1.5"
+                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-xs transition-colors flex items-center gap-1.5"
                 >
                   <CheckCircle2 className="h-4 w-4" />
                   <span>{isHi ? "स्थिति सहेजें" : "Save Vitals"}</span>

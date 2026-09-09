@@ -45,10 +45,10 @@ export default function PersonnelPrivacyPage() {
 
       {/* Crisp 2-Point Scope Notice */}
       <div className="rounded-xl border border-slate-800 bg-[#0F172A] px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-2 text-emerald-400">
+        <div className="flex items-center gap-2 text-blue-400">
           <CheckCircle2 className="h-4 w-4 shrink-0" />
           <span className="text-slate-300">
-            <strong className="text-emerald-400 font-semibold">Included:</strong> Duty rosters & voluntary vitals only
+            <strong className="text-blue-400 font-semibold">Included:</strong> Duty rosters & voluntary vitals only
           </span>
         </div>
         <div className="flex items-center gap-2 text-slate-400">
@@ -65,7 +65,7 @@ export default function PersonnelPrivacyPage() {
           <h2 className="text-sm font-bold text-[#F8FAFC]">
             Consent Preferences
           </h2>
-          <span className="rounded bg-slate-800 text-emerald-400 text-[10px] font-mono font-semibold px-2 py-0.5 border border-slate-700">
+          <span className="rounded bg-slate-800 text-blue-400 text-[10px] font-mono font-semibold px-2 py-0.5 border border-slate-700">
             DPDP 2023 Compliant
           </span>
         </div>
@@ -84,7 +84,7 @@ export default function PersonnelPrivacyPage() {
             <button
               onClick={() => handleToggle(setWellnessDataConsent, wellnessDataConsent, "Self-Assessment")}
               className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors duration-200 ease-in-out shrink-0 ml-4 cursor-pointer active:scale-95 ${
-                wellnessDataConsent ? "bg-emerald-500" : "bg-slate-700"
+                wellnessDataConsent ? "bg-blue-500" : "bg-slate-700"
               }`}
               aria-label="Toggle wellness data consent"
             >
@@ -109,7 +109,7 @@ export default function PersonnelPrivacyPage() {
             <button
               onClick={() => handleToggle(setOptionalDataConsent, optionalDataConsent, "Smart-Band Data")}
               className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors duration-200 ease-in-out shrink-0 ml-4 cursor-pointer active:scale-95 ${
-                optionalDataConsent ? "bg-emerald-500" : "bg-slate-700"
+                optionalDataConsent ? "bg-blue-500" : "bg-slate-700"
               }`}
               aria-label="Toggle biometric data consent"
             >
@@ -134,7 +134,7 @@ export default function PersonnelPrivacyPage() {
             <button
               onClick={() => handleToggle(setAnalyticsConsent, analyticsConsent, "Anonymized Analytics")}
               className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors duration-200 ease-in-out shrink-0 ml-4 cursor-pointer active:scale-95 ${
-                analyticsConsent ? "bg-emerald-500" : "bg-slate-700"
+                analyticsConsent ? "bg-blue-500" : "bg-slate-700"
               }`}
               aria-label="Toggle analytics consent"
             >
@@ -175,7 +175,7 @@ export default function PersonnelPrivacyPage() {
                 <td className="py-2 font-mono text-[10px] text-slate-400">2025-03-08 10:30</td>
                 <td>Self-Assessment Telemetry</td>
                 <td>
-                  <span className="text-emerald-400 font-medium font-mono text-[10px]">Granted</span>
+                  <span className="text-blue-400 font-medium font-mono text-[10px]">Granted</span>
                 </td>
                 <td className="text-slate-400">Self-Service</td>
               </tr>
@@ -183,7 +183,7 @@ export default function PersonnelPrivacyPage() {
                 <td className="py-2 font-mono text-[10px] text-slate-400">2025-02-15 08:45</td>
                 <td>Anonymized Readiness Trends</td>
                 <td>
-                  <span className="text-emerald-400 font-medium font-mono text-[10px]">Granted</span>
+                  <span className="text-blue-400 font-medium font-mono text-[10px]">Granted</span>
                 </td>
                 <td className="text-slate-400">Onboarding</td>
               </tr>

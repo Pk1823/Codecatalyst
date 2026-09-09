@@ -265,7 +265,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
                     <div
                       className={`h-2.5 w-2.5 rounded-full mt-1.5 shrink-0 ${
                         t.type === "success"
-                          ? "bg-emerald-500"
+                          ? "bg-blue-500"
                           : t.type === "warning"
                           ? "bg-amber-500"
                           : t.type === "error"

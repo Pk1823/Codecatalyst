@@ -216,7 +216,7 @@ export default function IndividualRiskDetailPage({
       <div className="rounded-xl border border-slate-800 bg-[#0F172A] p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="font-mono text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded border border-emerald-500/20">
+            <span className="font-mono text-xs font-semibold text-blue-400 bg-blue-500/10 px-2.5 py-0.5 rounded border border-blue-500/20">
               Personnel ID: {riskData.personnelId}
             </span>
             <span className="text-xs text-slate-500 font-mono">
@@ -240,7 +240,7 @@ export default function IndividualRiskDetailPage({
             AI Risk Evaluation
           </span>
           <div className="mt-1 flex items-baseline justify-center gap-1">
-            <span className="text-3xl font-mono font-bold text-emerald-400">
+            <span className="text-3xl font-mono font-bold text-blue-400">
               {livePrediction?.risk_band || riskData.riskLevel}
             </span>
           </div>
@@ -254,10 +254,10 @@ export default function IndividualRiskDetailPage({
       </div>
 
       {/* Live AI Telemetry Simulator & Interactive Evaluator */}
-      <div className="rounded-xl border border-emerald-500/30 bg-[#0F172A] p-6 space-y-5">
+      <div className="rounded-xl border border-blue-500/30 bg-[#0F172A] p-6 space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <div className="p-2 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
               <Cpu className="h-4 w-4" />
             </div>
             <div>
@@ -272,7 +272,7 @@ export default function IndividualRiskDetailPage({
           <button
             onClick={handleRunLivePrediction}
             disabled={isPredicting}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-[#090D16] text-xs font-bold transition-all disabled:opacity-50 self-start sm:self-auto"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-[#090D16] text-xs font-bold transition-all disabled:opacity-50 self-start sm:self-auto"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${isPredicting ? "animate-spin" : ""}`} />
             <span>{isPredicting ? "Running Inference..." : "Re-Evaluate AI Model"}</span>
@@ -285,7 +285,7 @@ export default function IndividualRiskDetailPage({
           <div className="p-3 rounded-lg bg-[#090D16] border border-slate-800 space-y-2">
             <div className="flex justify-between font-mono">
               <span className="text-slate-400">5-Day Duty Hours:</span>
-              <strong className="text-emerald-400">{dutyHours}h</strong>
+              <strong className="text-blue-400">{dutyHours}h</strong>
             </div>
             <input
               type="range"
@@ -294,7 +294,7 @@ export default function IndividualRiskDetailPage({
               step="1"
               value={dutyHours}
               onChange={(e) => setDutyHours(parseFloat(e.target.value))}
-              className="w-full accent-emerald-500"
+              className="w-full accent-blue-500"
             />
           </div>
 
@@ -302,7 +302,7 @@ export default function IndividualRiskDetailPage({
           <div className="p-3 rounded-lg bg-[#090D16] border border-slate-800 space-y-2">
             <div className="flex justify-between font-mono">
               <span className="text-slate-400">Continuous Field Days:</span>
-              <strong className="text-emerald-400">{fieldDays}d</strong>
+              <strong className="text-blue-400">{fieldDays}d</strong>
             </div>
             <input
               type="range"
@@ -311,7 +311,7 @@ export default function IndividualRiskDetailPage({
               step="5"
               value={fieldDays}
               onChange={(e) => setFieldDays(parseInt(e.target.value))}
-              className="w-full accent-emerald-500"
+              className="w-full accent-blue-500"
             />
           </div>
 
@@ -319,7 +319,7 @@ export default function IndividualRiskDetailPage({
           <div className="p-3 rounded-lg bg-[#090D16] border border-slate-800 space-y-2">
             <div className="flex justify-between font-mono">
               <span className="text-slate-400">Avg Sleep (24h):</span>
-              <strong className="text-emerald-400">{sleepHrs}h</strong>
+              <strong className="text-blue-400">{sleepHrs}h</strong>
             </div>
             <input
               type="range"
@@ -328,7 +328,7 @@ export default function IndividualRiskDetailPage({
               step="0.2"
               value={sleepHrs}
               onChange={(e) => setSleepHrs(parseFloat(e.target.value))}
-              className="w-full accent-emerald-500"
+              className="w-full accent-blue-500"
             />
           </div>
 
@@ -336,7 +336,7 @@ export default function IndividualRiskDetailPage({
           <div className="p-3 rounded-lg bg-[#090D16] border border-slate-800 space-y-2">
             <div className="flex justify-between font-mono">
               <span className="text-slate-400">Heart Rate Delta (RHR):</span>
-              <strong className="text-emerald-400">+{deltaRhr} bpm</strong>
+              <strong className="text-blue-400">+{deltaRhr} bpm</strong>
             </div>
             <input
               type="range"
@@ -345,7 +345,7 @@ export default function IndividualRiskDetailPage({
               step="0.5"
               value={deltaRhr}
               onChange={(e) => setDeltaRhr(parseFloat(e.target.value))}
-              className="w-full accent-emerald-500"
+              className="w-full accent-blue-500"
             />
           </div>
         </div>
@@ -355,7 +355,7 @@ export default function IndividualRiskDetailPage({
       <div className="rounded-xl border border-slate-800 bg-[#0F172A] p-6 space-y-6">
         <div className="flex items-center justify-between border-b border-slate-800 pb-4">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <div className="p-2 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
               <Brain className="h-4 w-4" />
             </div>
             <div>
@@ -367,7 +367,7 @@ export default function IndividualRiskDetailPage({
               </p>
             </div>
           </div>
-          <span className="rounded bg-[#090D16] border border-slate-800 px-2.5 py-1 text-[11px] font-mono text-emerald-400">
+          <span className="rounded bg-[#090D16] border border-slate-800 px-2.5 py-1 text-[11px] font-mono text-blue-400">
             SHAP Exact TreeExplainer
           </span>
         </div>
@@ -378,12 +378,12 @@ export default function IndividualRiskDetailPage({
             <div key={i} className="space-y-1.5">
               <div className="flex items-center justify-between text-xs">
                 <span className="font-medium text-white flex items-center gap-2">
-                  <span className="font-mono text-emerald-300 font-semibold">{d.feature.replace(/_/g, " ")}</span>
+                  <span className="font-mono text-blue-300 font-semibold">{d.feature.replace(/_/g, " ")}</span>
                   <span className="rounded bg-slate-800 text-[10px] text-slate-400 px-1.5 py-0.5 font-mono">
                     Value: {d.value}
                   </span>
                 </span>
-                <span className="font-mono text-emerald-400">
+                <span className="font-mono text-blue-400">
                   SHAP Impact: {d.importance > 0 ? `+${d.importance.toFixed(3)}` : d.importance.toFixed(3)}
                 </span>
               </div>
@@ -391,7 +391,7 @@ export default function IndividualRiskDetailPage({
               {/* Progress bar */}
               <div className="h-2 w-full rounded-full bg-[#090D16] overflow-hidden border border-slate-800">
                 <div
-                  className="h-full rounded-full bg-emerald-500 transition-all duration-500"
+                  className="h-full rounded-full bg-blue-500 transition-all duration-500"
                   style={{ width: `${Math.min(100, Math.max(15, Math.abs(d.importance) * 45))}%` }}
                 />
               </div>
@@ -405,7 +405,7 @@ export default function IndividualRiskDetailPage({
 
         {/* Mandatory Medical / Non-Punitive Disclaimer */}
         <div className="rounded-lg border border-slate-800 bg-[#090D16] p-3 text-xs text-slate-400 flex items-center gap-2.5">
-          <ShieldCheck className="h-4 w-4 text-emerald-400 shrink-0" />
+          <ShieldCheck className="h-4 w-4 text-blue-400 shrink-0" />
           <span>Non-punitive welfare indicator. Legally barred from performance appraisals (APAR) under DPDP Act 2023 regulations.</span>
         </div>
       </div>
@@ -424,7 +424,7 @@ export default function IndividualRiskDetailPage({
           {riskData.hasActiveWelfareCase && riskData.activeCaseId && (
             <Link
               href={`/welfare/cases/${riskData.activeCaseId}`}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-mono font-medium"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-mono font-medium"
             >
               <FolderHeart className="h-3 w-3" />
               <span>Active Case: {riskData.activeCaseId} →</span>
@@ -439,9 +439,9 @@ export default function IndividualRiskDetailPage({
               key={idx}
               className="flex items-start gap-2.5 p-3 rounded-lg border border-slate-800 bg-[#090D16] text-xs text-slate-300"
             >
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0 mt-0.5" />
+              <CheckCircle2 className="h-3.5 w-3.5 text-blue-400 shrink-0 mt-0.5" />
               <div>
-                <span className="font-mono text-[10px] text-emerald-400 block font-semibold">{action.code}</span>
+                <span className="font-mono text-[10px] text-blue-400 block font-semibold">{action.code}</span>
                 <span>{action.recommendation}</span>
               </div>
             </div>
@@ -452,7 +452,7 @@ export default function IndividualRiskDetailPage({
         <div className="pt-2 flex flex-wrap items-center gap-2.5">
           <button
             onClick={handleAssignOfficer}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-[#090D16] text-xs font-bold transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-[#090D16] text-xs font-bold transition-colors"
           >
             <UserCheck className="h-3.5 w-3.5" />
             <span>Assign Welfare Officer</span>
@@ -494,7 +494,7 @@ export default function IndividualRiskDetailPage({
               placeholder="Enter observations regarding rest rhythm, leave sanction, or interview notes..."
               value={noteText}
               onChange={(e) => setNoteText(e.target.value)}
-              className="w-full rounded-lg border border-slate-800 bg-[#0F172A] p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+              className="w-full rounded-lg border border-slate-800 bg-[#0F172A] p-2.5 text-xs text-white focus:outline-none focus:border-blue-500"
             />
             <div className="flex justify-end gap-2">
               <button
@@ -505,7 +505,7 @@ export default function IndividualRiskDetailPage({
               </button>
               <button
                 onClick={handleAddNote}
-                className="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-[#090D16] text-xs font-bold"
+                className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-[#090D16] text-xs font-bold"
               >
                 Save Note
               </button>

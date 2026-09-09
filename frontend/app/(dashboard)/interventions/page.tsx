@@ -187,7 +187,7 @@ export default function InterventionsPage() {
           </button>
           <button
             onClick={() => setIsNewModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
             <Plus className="h-3.5 w-3.5" />
             <span>Log New Intervention</span>
@@ -206,7 +206,7 @@ export default function InterventionsPage() {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {[
           { title: "Counseling", count: interventionsList.filter((i) => i.type === "Counseling").length, icon: HeartPulse, color: "text-rose-500 dark:text-rose-400", bg: "bg-rose-50 dark:bg-rose-950/40" },
-          { title: "Workload Adjustment", count: interventionsList.filter((i) => i.type === "Workload Adjustment").length, icon: Briefcase, color: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-50 dark:bg-emerald-950/40" },
+          { title: "Workload Adjustment", count: interventionsList.filter((i) => i.type === "Workload Adjustment").length, icon: Briefcase, color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-950/40" },
           { title: "Recovery Support", count: interventionsList.filter((i) => i.type === "Recovery Support").length, icon: Moon, color: "text-amber-500 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-950/40" },
           { title: "Welfare Assistance", count: interventionsList.filter((i) => i.type === "Welfare Assistance" || i.type === "Family Support").length, icon: Users, color: "text-teal-600 dark:text-teal-400", bg: "bg-teal-50 dark:bg-teal-950/40" },
           { title: "Follow-up Checks", count: interventionsList.filter((i) => i.status === "Pending").length || 4, icon: CalendarClock, color: "text-sky-500 dark:text-sky-400", bg: "bg-sky-50 dark:bg-sky-950/40" },
@@ -241,7 +241,7 @@ export default function InterventionsPage() {
             onClick={() => setActiveTab(tab)}
             className={`px-3 py-1.5 rounded-lg font-semibold transition-colors ${
               activeTab === tab
-                ? "bg-emerald-600 text-white shadow-xs"
+                ? "bg-blue-600 text-white shadow-xs"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800/60"
             }`}
           >
@@ -256,18 +256,18 @@ export default function InterventionsPage() {
           return (
             <div
               key={item.id}
-              className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 flex flex-col justify-between hover:border-emerald-500/50 hover:shadow-md transition-all cursor-pointer group"
+              className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 flex flex-col justify-between hover:border-blue-500/50 hover:shadow-md transition-all cursor-pointer group"
               onClick={() => setSelectedIntervention(item)}
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-semibold">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-blue-600 dark:text-blue-400 font-semibold">
                     {item.type}
                   </span>
                   <span
                     className={`text-[10px] font-mono px-2 py-0.5 rounded ${
                       item.status === "Completed"
-                        ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900"
+                        ? "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-900"
                         : "bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900"
                     }`}
                   >
@@ -275,7 +275,7 @@ export default function InterventionsPage() {
                   </span>
                 </div>
 
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                   {item.title}
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">
@@ -284,7 +284,7 @@ export default function InterventionsPage() {
               </div>
 
               <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
-                <span className="font-mono font-medium text-emerald-600 dark:text-emerald-400">
+                <span className="font-mono font-medium text-blue-600 dark:text-blue-400">
                   {item.personnelId}
                 </span>
                 <span className="flex items-center gap-1 font-mono text-slate-400 text-[10px]">
@@ -309,7 +309,7 @@ export default function InterventionsPage() {
           >
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <Plus className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                <Plus className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                 <h3 className="text-base font-bold text-slate-900 dark:text-white">
                   Schedule Welfare Intervention
                 </h3>
@@ -330,7 +330,7 @@ export default function InterventionsPage() {
                 <select
                   value={newType}
                   onChange={(e) => setNewType(e.target.value as InterventionType)}
-                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500"
+                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500"
                 >
                   <option value="Workload Adjustment">Workload Adjustment (Duty Stand-down)</option>
                   <option value="Counseling">Psychological Counseling & Decompression</option>
@@ -347,7 +347,7 @@ export default function InterventionsPage() {
                   <select
                     value={newPersonnelId}
                     onChange={(e) => setNewPersonnelId(e.target.value)}
-                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500 font-mono"
+                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500 font-mono"
                   >
                     {personnelList.map((p) => (
                       <option key={p.id} value={p.id}>
@@ -361,7 +361,7 @@ export default function InterventionsPage() {
                     value={newPersonnelId}
                     onChange={(e) => setNewPersonnelId(e.target.value)}
                     placeholder="e.g. P-1024 or Service ID"
-                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500 font-mono"
+                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500 font-mono"
                     required
                   />
                 )}
@@ -376,7 +376,7 @@ export default function InterventionsPage() {
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
                   placeholder="e.g. 48-Hour Decompression Stand-Down"
-                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500"
+                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500"
                   required
                 />
               </div>
@@ -390,7 +390,7 @@ export default function InterventionsPage() {
                   onChange={(e) => setNewDesc(e.target.value)}
                   placeholder="Detail the non-punitive rest arrangement, shift re-allocation, or counseling session..."
                   rows={3}
-                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500"
+                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500"
                   required
                 />
               </div>
@@ -403,7 +403,7 @@ export default function InterventionsPage() {
                   type="date"
                   value={newDate}
                   onChange={(e) => setNewDate(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500 font-mono"
+                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500 font-mono"
                 />
               </div>
 
@@ -417,7 +417,7 @@ export default function InterventionsPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-xs transition-colors"
+                  className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-xs transition-colors"
                 >
                   Confirm & Schedule
                 </button>
@@ -439,7 +439,7 @@ export default function InterventionsPage() {
           >
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
-                <span className="text-[10px] font-mono uppercase text-emerald-600 dark:text-emerald-400 font-semibold">
+                <span className="text-[10px] font-mono uppercase text-blue-600 dark:text-blue-400 font-semibold">
                   {selectedIntervention.type}
                 </span>
                 <h3 className="text-base font-semibold text-slate-900 dark:text-white">
@@ -460,11 +460,11 @@ export default function InterventionsPage() {
               </p>
               <p>
                 <strong className="text-slate-900 dark:text-white">Personnel ID:</strong>{" "}
-                <span className="font-mono text-emerald-600 dark:text-emerald-400 font-semibold">{selectedIntervention.personnelId}</span>
+                <span className="font-mono text-blue-600 dark:text-blue-400 font-semibold">{selectedIntervention.personnelId}</span>
               </p>
               <p>
                 <strong className="text-slate-900 dark:text-white">Case ID:</strong>{" "}
-                <span className="font-mono text-emerald-600 dark:text-emerald-400 font-semibold">{selectedIntervention.caseId}</span>
+                <span className="font-mono text-blue-600 dark:text-blue-400 font-semibold">{selectedIntervention.caseId}</span>
               </p>
               <p>
                 <strong className="text-slate-900 dark:text-white">Supervising Officer:</strong> {selectedIntervention.officerName}
@@ -496,7 +496,7 @@ export default function InterventionsPage() {
 
               <Link
                 href={`/welfare/cases/${selectedIntervention.caseId}`}
-                className="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-xs transition-colors"
+                className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-xs transition-colors"
               >
                 Open Associated Case →
               </Link>

@@ -160,7 +160,7 @@
 }
 
 /* Subtle Tactical Ambient Glows — Strict 3-Color Tone (Emerald & Slate) */
-.glow-emerald {
+.glow-blue {
   box-shadow: 0 0 35px -5px rgba(16, 185, 129, 0.15);
 }
 

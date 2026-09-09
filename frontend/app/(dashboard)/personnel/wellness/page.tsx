@@ -96,12 +96,12 @@ export default function WellnessAssessmentPage() {
     return (
       <div className="max-w-2xl mx-auto space-y-6 animate-in fade-in zoom-in-95 duration-200">
         <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-6 sm:p-8 text-center space-y-6 shadow-xl">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900 shadow-sm">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900 shadow-sm">
             <CheckCircle2 className="h-7 w-7" />
           </div>
 
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-semibold">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-blue-600 dark:text-blue-400 font-semibold">
               Assessment Completed Confidentially
             </span>
             <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">
@@ -119,7 +119,7 @@ export default function WellnessAssessmentPage() {
                 <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
                   Overall Status
                 </span>
-                <p className="text-base font-bold text-emerald-600 dark:text-emerald-400">
+                <p className="text-base font-bold text-blue-600 dark:text-blue-400">
                   {submittedResult.indicatorStatus}
                 </p>
               </div>
@@ -162,7 +162,7 @@ export default function WellnessAssessmentPage() {
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               href="/personnel"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 text-xs font-semibold shadow-xs transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 text-xs font-semibold shadow-xs transition-colors"
             >
               <span>View My Dashboard</span>
               <ArrowRight className="h-3.5 w-3.5" />
@@ -171,7 +171,7 @@ export default function WellnessAssessmentPage() {
               href="/personnel/support"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-5 py-2.5 text-xs font-semibold shadow-xs transition-colors"
             >
-              <HandHelping className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+              <HandHelping className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
               <span>Request Support</span>
             </Link>
           </div>
@@ -199,13 +199,12 @@ export default function WellnessAssessmentPage() {
             <span>
               Step {currentStep.stepNumber} of {WELLNESS_STEPS.length}
             </span>
-            <span className="text-emerald-600 dark:text-emerald-400 font-mono font-semibold">
+            <span className="text-blue-600 dark:text-blue-400 font-mono font-semibold">
               {Math.round((currentStep.stepNumber / WELLNESS_STEPS.length) * 100)}% Completed
             </span>
           </div>
-          <div className="h-1.5 w-full rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
             <div
-              className="h-full bg-emerald-500 rounded-full transition-all duration-500 ease-out"
+              className="h-full bg-blue-500 rounded-full transition-all duration-500 ease-out"
               style={{
                 width: `${(currentStep.stepNumber / WELLNESS_STEPS.length) * 100}%`,
               }}
@@ -216,7 +215,7 @@ export default function WellnessAssessmentPage() {
         {/* Step Content */}
         <div className="space-y-6">
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-semibold">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-blue-600 dark:text-blue-400 font-semibold">
               Dimension 0{currentStep.stepNumber} • {currentStep.title}
             </span>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-1">
@@ -238,7 +237,7 @@ export default function WellnessAssessmentPage() {
                   onClick={() => handleSelectOption(opt.value)}
                   className={`w-full p-3.5 rounded-xl border text-left transition-all duration-150 ease-out flex items-start justify-between gap-3 cursor-pointer active:scale-[0.99] ${
                     isSelected
-                      ? "border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/40 shadow-xs"
+                      ? "border-blue-500 bg-blue-50/80 dark:bg-blue-950/40 shadow-xs"
                       : "border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-850"
                   }`}
                 >
@@ -251,7 +250,7 @@ export default function WellnessAssessmentPage() {
                   <div
                     className={`h-4 w-4 rounded-full border flex items-center justify-center shrink-0 mt-0.5 ${
                       isSelected
-                        ? "border-emerald-500 bg-emerald-500 text-white"
+                        ? "border-blue-500 bg-blue-500 text-white"
                         : "border-slate-300 dark:border-slate-700"
                     }`}
                   >
@@ -273,7 +272,7 @@ export default function WellnessAssessmentPage() {
                 placeholder="Any special remarks regarding recent fatigue, family concerns, or rest..."
                 value={formValues.additionalNotes || ""}
                 onChange={(e) => setValue("additionalNotes", e.target.value)}
-                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:border-emerald-500"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:border-blue-500"
               />
             </div>
           )}
@@ -294,7 +293,7 @@ export default function WellnessAssessmentPage() {
               <button
                 type="button"
                 onClick={nextStep}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-xs transition-colors"
               >
                 <span>Continue</span>
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -304,7 +303,7 @@ export default function WellnessAssessmentPage() {
                 type="button"
                 onClick={handleSubmit(onSubmit)}
                 disabled={isSubmitting}
-                className="inline-flex items-center gap-2 px-5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs transition-colors disabled:opacity-40"
+                className="inline-flex items-center gap-2 px-5 py-2 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-xs transition-colors disabled:opacity-40"
               >
                 <CheckCircle2 className="h-3.5 w-3.5" />
                 <span>{isSubmitting ? "Submitting..." : "Submit Voluntary Assessment"}</span>
@@ -316,7 +315,7 @@ export default function WellnessAssessmentPage() {
 
       {/* Disciplinary Protection Guarantee */}
       <div className="text-center text-[11px] text-slate-500 dark:text-slate-400 max-w-md mx-auto flex items-center justify-center gap-1.5">
-        <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+        <ShieldCheck className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
         <span>
           Responses are protected under DPDP Act 2023 and are strictly excluded from Annual Confidential Reports (ACR).
         </span>

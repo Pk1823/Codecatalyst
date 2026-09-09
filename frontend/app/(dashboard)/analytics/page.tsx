@@ -212,12 +212,12 @@ export default function AnalyticsOverviewPage() {
         </div>
 
         {/* Live Model Badge */}
-        <div className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-50 dark:bg-emerald-500/10 px-3 py-1.5 text-xs font-mono shadow-xs">
+        <div className="inline-flex items-center gap-2 rounded-lg border border-blue-500/20 bg-blue-50 dark:bg-blue-500/10 px-3 py-1.5 text-xs font-mono shadow-xs">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
           </span>
-          <span className="text-emerald-700 dark:text-emerald-300 font-semibold">
+          <span className="text-blue-700 dark:text-blue-300 font-semibold">
             {isAiOnline ? "AI Engine Online" : "AI Engine (Local Fallback)"}
           </span>
           <span className="text-slate-400 dark:text-slate-500">•</span>
@@ -231,7 +231,7 @@ export default function AnalyticsOverviewPage() {
       <div className="rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 shadow-sm space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-start sm:items-center gap-3.5">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-600 dark:text-emerald-400 shadow-2xs">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-600 dark:text-blue-400 shadow-2xs">
               <HeartPulse className="h-6 w-6" />
             </div>
             <div>
@@ -239,7 +239,7 @@ export default function AnalyticsOverviewPage() {
                 <h3 className="text-sm font-bold text-slate-900 dark:text-[#F8FAFC]">
                   Smart Health & Fatigue Early-Warning Radar
                 </h3>
-                <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 text-[10px] font-mono font-semibold text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+                <span className="rounded-full bg-blue-50 dark:bg-blue-950/40 px-2 py-0.5 text-[10px] font-mono font-semibold text-blue-700 dark:text-blue-300 border border-blue-300 dark:border-blue-800">
                   Calibrated for Defense Duties
                 </span>
               </div>
@@ -261,10 +261,10 @@ export default function AnalyticsOverviewPage() {
 
         {/* 3 Simple Color Threshold Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1 border-t border-slate-100 dark:border-slate-800/80">
-          <div className="p-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-900/60 bg-emerald-50/40 dark:bg-emerald-950/20 flex items-start gap-2.5">
-            <div className="h-2.5 w-2.5 rounded-full bg-emerald-500 mt-1 shrink-0 ring-4 ring-emerald-500/20" />
+          <div className="p-2.5 rounded-xl border border-blue-200/80 dark:border-blue-900/60 bg-blue-50/40 dark:bg-blue-950/20 flex items-start gap-2.5">
+            <div className="h-2.5 w-2.5 rounded-full bg-blue-500 mt-1 shrink-0 ring-4 ring-blue-500/20" />
             <div>
-              <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300">
+              <p className="text-xs font-bold text-blue-800 dark:text-blue-300">
                 Low Fatigue (0–39%)
               </p>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
@@ -305,32 +305,32 @@ export default function AnalyticsOverviewPage() {
               <span className="text-slate-600 dark:text-slate-400 font-bold">
                 Algorithm: {modelInfo?.model_name || "LightGBM Multi-Class Stress Classifier (v2.4)"}
               </span>
-              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-300 dark:border-emerald-800">
+              <span className="text-[10px] text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded border border-blue-300 dark:border-blue-800">
                 Calibrated Accuracy Range: 70% – 85%
               </span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-slate-700 dark:text-slate-300">
               <div className="p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
                 <span className="text-[10px] text-slate-500 block">Raw Accuracy</span>
-                <strong className="text-emerald-600 dark:text-emerald-400 text-xs">
+                <strong className="text-blue-600 dark:text-blue-400 text-xs">
                   {modelInfo ? `${(modelInfo.accuracy * 100).toFixed(1)}%` : "77.9%"}
                 </strong>
               </div>
               <div className="p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
                 <span className="text-[10px] text-slate-500 block">Balanced Acc</span>
-                <strong className="text-emerald-600 dark:text-emerald-400 text-xs">
+                <strong className="text-blue-600 dark:text-blue-400 text-xs">
                   {modelInfo ? `${(modelInfo.balanced_accuracy * 100).toFixed(1)}%` : "78.4%"}
                 </strong>
               </div>
               <div className="p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
                 <span className="text-[10px] text-slate-500 block">Macro F1 Score</span>
-                <strong className="text-emerald-600 dark:text-emerald-400 text-xs">
+                <strong className="text-blue-600 dark:text-blue-400 text-xs">
                   {modelInfo ? `${modelInfo.macro_f1.toFixed(3)}` : "0.773"}
                 </strong>
               </div>
               <div className="p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
                 <span className="text-[10px] text-slate-500 block">Explainability</span>
-                <strong className="text-emerald-600 dark:text-emerald-400 text-xs">
+                <strong className="text-blue-600 dark:text-blue-400 text-xs">
                   SHAP Exact TreeExplainer
                 </strong>
               </div>
@@ -412,7 +412,7 @@ export default function AnalyticsOverviewPage() {
                   setSearch(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090D16] pl-8 pr-3 py-1.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:border-emerald-500 font-mono shadow-2xs"
+                className="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090D16] pl-8 pr-3 py-1.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:border-blue-500 font-mono shadow-2xs"
               />
             </div>
 
@@ -422,7 +422,7 @@ export default function AnalyticsOverviewPage() {
                 setSelectedUnit(e.target.value);
                 setCurrentPage(1);
               }}
-              className="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090D16] px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-300 focus:outline-hidden focus:border-emerald-500 font-mono shadow-2xs"
+              className="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#090D16] px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-300 focus:outline-hidden focus:border-blue-500 font-mono shadow-2xs"
             >
               <option value="ALL">All Units / Depts ({filtered.length})</option>
               {Array.from(new Set(personnelList.map((p) => p.unit))).filter(Boolean).sort().map((u) => (
@@ -441,7 +441,7 @@ export default function AnalyticsOverviewPage() {
 
             <button
               onClick={() => setIsEnrollOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 text-xs font-semibold shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white px-3.5 py-1.5 text-xs font-semibold shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
             >
               <UserPlus className="h-3.5 w-3.5" />
               <span>Enroll Personnel</span>
@@ -469,7 +469,7 @@ export default function AnalyticsOverviewPage() {
                   key={p.id}
                   className="hover:bg-slate-50/80 dark:hover:bg-slate-800/30 transition-colors"
                 >
-                  <td className="py-3 px-3 font-mono font-medium text-emerald-600 dark:text-emerald-400">
+                  <td className="py-3 px-3 font-mono font-medium text-blue-600 dark:text-blue-400">
                     {p.id}
                   </td>
                   <td className="py-3 px-3">
@@ -499,7 +499,7 @@ export default function AnalyticsOverviewPage() {
                       </button>
                       <Link
                         href={`/analytics/personnel/${p.id}`}
-                        className="inline-flex items-center gap-1 text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 hover:underline"
+                        className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 hover:underline"
                       >
                         <span>Inspect</span>
                         <ChevronRight className="h-3.5 w-3.5" />
@@ -555,7 +555,7 @@ export default function AnalyticsOverviewPage() {
           >
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <UserPlus className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                <UserPlus className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 <div>
                   <h3 className="text-base font-bold text-slate-900 dark:text-white">
                     Enroll Personnel / Add Jawan
@@ -585,7 +585,7 @@ export default function AnalyticsOverviewPage() {
                     placeholder="e.g. Ct. Rameshwar Verma"
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
-                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500"
+                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500"
                   />
                 </div>
 
@@ -596,7 +596,7 @@ export default function AnalyticsOverviewPage() {
                   <select
                     value={newRank}
                     onChange={(e) => setNewRank(e.target.value)}
-                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500"
+                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500"
                   >
                     <option value="Constable (GD)">Constable (GD)</option>
                     <option value="Head Constable">Head Constable</option>
@@ -616,7 +616,7 @@ export default function AnalyticsOverviewPage() {
                   <select
                     value={newForce}
                     onChange={(e) => setNewForce(e.target.value)}
-                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500"
+                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500"
                   >
                     <option value="CRPF">CRPF</option>
                     <option value="BSF">BSF</option>
@@ -634,7 +634,7 @@ export default function AnalyticsOverviewPage() {
                   <select
                     value={newUnit}
                     onChange={(e) => setNewUnit(e.target.value)}
-                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500"
+                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500"
                   >
                     <option value="Alpha Company">Alpha Company</option>
                     <option value="Bravo Company">Bravo Company</option>
@@ -651,7 +651,7 @@ export default function AnalyticsOverviewPage() {
                   <select
                     value={newBloodGroup}
                     onChange={(e) => setNewBloodGroup(e.target.value)}
-                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500 font-mono"
+                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500 font-mono"
                   >
                     <option value="O+">O+</option>
                     <option value="A+">A+</option>
@@ -675,7 +675,7 @@ export default function AnalyticsOverviewPage() {
                     value={newLocation}
                     onChange={(e) => setNewLocation(e.target.value)}
                     placeholder="e.g. Kupwara Forward Post"
-                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500"
+                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500"
                   />
                 </div>
 
@@ -689,7 +689,7 @@ export default function AnalyticsOverviewPage() {
                     max={365}
                     value={newDays}
                     onChange={(e) => setNewDays(Number(e.target.value))}
-                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500 font-mono"
+                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500 font-mono"
                   />
                 </div>
               </div>
@@ -697,7 +697,7 @@ export default function AnalyticsOverviewPage() {
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label className="font-medium text-slate-700 dark:text-slate-300">
-                    Baseline Workload / Fatigue Index: <span className="font-mono text-emerald-600 dark:text-emerald-400 font-bold">{newWorkload}%</span>
+                    Baseline Workload / Fatigue Index: <span className="font-mono text-blue-600 dark:text-blue-400 font-bold">{newWorkload}%</span>
                   </label>
                   <span className="text-[10px] text-slate-500 font-mono">
                     {newWorkload > 75 ? "High Concern" : newWorkload > 50 ? "Moderate" : "Optimal"}
@@ -709,7 +709,7 @@ export default function AnalyticsOverviewPage() {
                   max={95}
                   value={newWorkload}
                   onChange={(e) => setNewWorkload(Number(e.target.value))}
-                  className="w-full accent-emerald-600 cursor-pointer"
+                  className="w-full accent-blue-600 cursor-pointer"
                 />
               </div>
 
@@ -724,7 +724,7 @@ export default function AnalyticsOverviewPage() {
                 <button
                   type="submit"
                   disabled={isSubmittingEnroll}
-                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold shadow-xs transition-colors flex items-center gap-1.5"
+                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-xs transition-colors flex items-center gap-1.5"
                 >
                   <UserPlus className="h-4 w-4" />
                   <span>{isSubmittingEnroll ? "Enrolling..." : "Enroll to Unit Roster"}</span>
@@ -747,7 +747,7 @@ export default function AnalyticsOverviewPage() {
           >
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <FolderHeart className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                <FolderHeart className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 <h3 className="text-base font-bold text-slate-900 dark:text-white">
                   Initiate Triage Case
                 </h3>
@@ -762,7 +762,7 @@ export default function AnalyticsOverviewPage() {
 
             <div className="rounded-xl bg-slate-50 dark:bg-slate-900/60 p-3 text-xs border border-slate-200 dark:border-slate-800">
               <span className="font-semibold text-slate-900 dark:text-white">{triagePersonnel.name}</span>{" "}
-              <span className="font-mono text-emerald-600 dark:text-emerald-400 font-bold">({triagePersonnel.id})</span>
+              <span className="font-mono text-blue-600 dark:text-blue-400 font-bold">({triagePersonnel.id})</span>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                 {triagePersonnel.rank} • {triagePersonnel.unit} • Workload Score: {triagePersonnel.workloadScore}%
               </p>
@@ -776,7 +776,7 @@ export default function AnalyticsOverviewPage() {
                 <select
                   value={triageCategory}
                   onChange={(e) => setTriageCategory(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500"
+                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500"
                 >
                   <option value="Workload Adjustment">Workload Adjustment</option>
                   <option value="Recovery Support">Recovery Support & Rest Rota</option>
@@ -798,7 +798,7 @@ export default function AnalyticsOverviewPage() {
                       onClick={() => setTriagePriority(pr)}
                       className={`p-2 rounded-xl border text-center font-semibold transition-all ${
                         triagePriority === pr
-                          ? "border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-300 shadow-2xs"
+                          ? "border-blue-500 bg-blue-50/80 dark:bg-blue-950/40 text-blue-900 dark:text-blue-300 shadow-2xs"
                           : "border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
                       }`}
                     >
@@ -818,7 +818,7 @@ export default function AnalyticsOverviewPage() {
                   placeholder="Note specific duty stressors, fatigue indicators, or recommended rest window..."
                   value={triageRemarks}
                   onChange={(e) => setTriageRemarks(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500"
+                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-blue-500"
                 />
               </div>
 
@@ -832,7 +832,7 @@ export default function AnalyticsOverviewPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold shadow-xs transition-colors"
+                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-xs transition-colors"
                 >
                   Dispatch Case
                 </button>
@@ -844,7 +844,7 @@ export default function AnalyticsOverviewPage() {
 
       {/* Mandatory Disclaimer */}
       <div className="rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-100/60 dark:bg-[#0F172A] p-3 text-center text-xs text-slate-600 dark:text-slate-400">
-        <ShieldCheck className="h-4 w-4 inline-block mr-1 text-emerald-600 dark:text-emerald-400" />
+        <ShieldCheck className="h-4 w-4 inline-block mr-1 text-blue-600 dark:text-blue-400" />
         <span>
           Predictive welfare intelligence capability designed for proactive fatigue and burnout mitigation under DPDP Act 2023 regulations. Non-punitive and legally barred from APAR appraisal evaluations.
         </span>

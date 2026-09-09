@@ -70,7 +70,7 @@ export default function AlertCenterPage() {
           onClick={handleMarkAllAsRead}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-xs font-medium text-slate-700 dark:text-slate-300 shadow-xs transition-colors self-start sm:self-auto"
         >
-          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+          <CheckCircle2 className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
           <span>Mark All as Read</span>
         </button>
       </div>
@@ -83,7 +83,7 @@ export default function AlertCenterPage() {
             onClick={() => setCategory(cat)}
             className={`px-3 py-1.5 rounded-lg font-medium transition-colors ${
               category === cat
-                ? "bg-emerald-600 text-white shadow-xs"
+                ? "bg-blue-600 text-white shadow-xs"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800/60"
             }`}
           >
@@ -100,7 +100,7 @@ export default function AlertCenterPage() {
             className={`p-4 rounded-xl border transition-colors flex items-start justify-between gap-4 ${
               item.isRead
                 ? "border-slate-200/80 bg-slate-50/60 dark:border-slate-800 dark:bg-slate-900/40 opacity-75"
-                : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/80 shadow-xs ring-1 ring-emerald-500/20"
+                : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/80 shadow-xs ring-1 ring-blue-500/20"
             }`}
           >
             <div className="space-y-1.5 flex-1">
@@ -138,7 +138,7 @@ export default function AlertCenterPage() {
               {item.personnelId && (
                 <Link
                   href={`/analytics/personnel/${item.personnelId}`}
-                  className="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-medium hover:bg-emerald-500 flex items-center gap-1 transition-colors shadow-xs"
+                  className="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-medium hover:bg-blue-500 flex items-center gap-1 transition-colors shadow-xs"
                 >
                   <span>Review</span>
                   <ArrowRight className="h-3 w-3" />

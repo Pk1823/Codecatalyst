@@ -25,7 +25,7 @@ export function formatDate(dateStr: string): string {
 export function getRiskColorClass(level: "LOW" | "MODERATE" | "HIGH" | "URGENT REVIEW" | string) {
   switch (level?.toUpperCase()) {
     case "LOW":
-      return "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800";
+      return "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800";
     case "MODERATE":
       return "text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800";
     case "HIGH":

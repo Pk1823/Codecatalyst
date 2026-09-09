@@ -94,7 +94,7 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
       case "ADMIN":
         return { label: "System Administrator", color: "text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-purple-500/10 border-purple-200 dark:border-purple-500/20" };
       default:
-        return { label: "Welfare Officer", color: "text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20" };
+        return { label: "Welfare Officer", color: "text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/20" };
     }
   };
 
@@ -115,7 +115,7 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">
                   <span className="font-bold text-sm tracking-tight text-slate-900 dark:text-[#F8FAFC]">
-                    MissionWell <span className="text-emerald-600 dark:text-emerald-400 font-mono text-xs">AI</span>
+                    MissionWell <span className="text-blue-600 dark:text-blue-400 font-mono text-xs">AI</span>
                   </span>
                   <span className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.2 text-[9px] font-mono font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                     {force}
@@ -163,7 +163,7 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
                 className={cn(
                   "group flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium transition-all duration-150 relative",
                   isActive
-                    ? "bg-emerald-50 text-emerald-800 font-semibold border-l-2 border-emerald-600 shadow-xs dark:bg-slate-800/90 dark:text-white dark:border-emerald-500"
+                    ? "bg-blue-50 text-blue-800 font-semibold border-l-2 border-blue-600 shadow-xs dark:bg-slate-800/90 dark:text-white dark:border-blue-500"
                     : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800/50 dark:hover:text-white",
                   collapsed && "justify-center px-2 border-l-0"
                 )}
@@ -172,7 +172,7 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
                   className={cn(
                     "h-4 w-4 shrink-0 transition-colors",
                     isActive
-                      ? "text-emerald-600 dark:text-emerald-400"
+                      ? "text-blue-600 dark:text-blue-400"
                       : "text-slate-400 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200"
                   )}
                 />
@@ -194,29 +194,29 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
 
 
             <div className="rounded-lg bg-white dark:bg-[#0F172A] border border-slate-200 dark:border-slate-800 p-2.5 text-[10px] text-slate-700 dark:text-slate-300 flex items-center gap-2.5 shadow-xs">
-              <PhoneCall className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <PhoneCall className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
               <div>
                 <span className="font-semibold block text-slate-800 dark:text-slate-200">24x7 Force Helpline</span>
-                <span className="text-emerald-600 dark:text-emerald-400 font-mono text-[11px] font-medium">14416 / 1800-599-0019</span>
+                <span className="text-blue-600 dark:text-blue-400 font-mono text-[11px] font-medium">14416 / 1800-599-0019</span>
               </div>
             </div>
 
             <div className="flex items-center justify-between text-[10px] text-slate-400 pt-1">
               <div className="flex items-center gap-1.5">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                 </span>
                 <span className="text-slate-400 font-mono text-[10px]">AI Engine Active</span>
               </div>
-              <span className="font-mono text-[9px] text-emerald-400">78.4% Acc</span>
+              <span className="font-mono text-[9px] text-blue-400">78.4% Acc</span>
             </div>
           </>
         ) : (
           <div className="flex justify-center" title="AI Engine Active (78.4% Acc) • 24x7 Helpline 14416">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
             </span>
           </div>
         )}
