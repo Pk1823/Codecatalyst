@@ -18,11 +18,16 @@ import {
   CheckCircle2,
   PhoneCall,
   Award,
+  Sparkles,
+  Smile,
+  X,
 } from "lucide-react";
 import { useAuth, useToast } from "@/components/providers";
 import { FORCES_METADATA } from "@/lib/force-metadata";
 import { StatCard } from "@/components/common/stat-card";
 import { WellnessTrendChart } from "@/components/charts/wellness-trend-chart";
+import { WelfareService } from "@/services/welfare.service";
+import { WellnessService } from "@/services/wellness.service";
 
 export default function PersonnelDashboard() {
   const { user, force, lang } = useAuth();
@@ -32,6 +37,11 @@ export default function PersonnelDashboard() {
 
   const [buddyStatus, setBuddyStatus] = useState<"optimal" | "alert" | "reported">("optimal");
   const [sainikRequestSent, setSainikRequestSent] = useState(false);
+  const [isQuickCheckinOpen, setIsQuickCheckinOpen] = useState(false);
+  const [quickEnergy, setQuickEnergy] = useState(4);
+  const [quickSleep, setQuickSleep] = useState("6-7 hours");
+  const [quickStress, setQuickStress] = useState("3-4");
+
   const [liveStats, setLiveStats] = useState({
     status: isHi ? "उत्कृष्ट" : "Good",
     stress: isHi ? "मध्यम" : "Moderate",
@@ -52,10 +62,20 @@ export default function PersonnelDashboard() {
         });
       }
     } catch (e) {}
-  }, []);
+  }, [isHi]);
 
-  const handleBuddyReport = () => {
+  const handleBuddyReport = async () => {
     setBuddyStatus("reported");
+    try {
+      await WelfareService.createSupportRequestCase({
+        personnelId: "P-1088",
+        supportType: "Buddy Welfare Alert",
+        priority: "High",
+        description: "Buddy Mutual Check-in: Ct. Arvind Minz observed exhibiting continuous operational fatigue and distress.",
+        preferredContact: "Welfare Coordinator",
+      });
+    } catch {}
+
     toast({
       title: isHi ? "बडी रिपोर्ट दर्ज की गई" : "Buddy Welfare Alert Dispatched",
       description: isHi
@@ -72,6 +92,63 @@ export default function PersonnelDashboard() {
       description: isHi ? "साथी की स्थिति सामान्य दर्ज की गई।" : "Buddy status recorded as optimal.",
       type: "info",
     });
+  };
+
+  const handleSainikAudienceRequest = async () => {
+    setSainikRequestSent(true);
+    try {
+      await WelfareService.createSupportRequestCase({
+        personnelId: meta.sampleServiceId || "P-1024",
+        supportType: "Sainik Sammelan Audience",
+        priority: "High",
+        description: "Direct confidential 1-on-1 audience requested with Commanding Officer.",
+        preferredContact: "Direct In-Person",
+      });
+    } catch {}
+
+    toast({
+      title: isHi ? "दरबार अनुरोध दर्ज हुआ" : "Audience Slot Requested",
+      description: isHi
+        ? "कमांडिंग ऑफिसर के गोपनीय समय-सारणी में स्लॉट दर्ज कर दिया गया है।"
+        : "Confidential audience slot queued directly for Battalion Commander review.",
+      type: "success",
+    });
+  };
+
+  const handleQuickCheckinSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await WellnessService.submitAssessment(
+        {
+          consecutiveFieldDays: "11-30",
+          dutyHours5d: "30-45 hours",
+          nightShifts5d: "1",
+          sleepHrs5dAvg: quickSleep,
+          selfReportedEnergy: String(quickEnergy),
+          selfReportedStress: quickStress,
+          additionalNotes: "Quick 1-Click Daily Vitals Check-in.",
+        },
+        meta.sampleServiceId || "P-1024"
+      );
+
+      const newStatus = quickEnergy >= 4 ? (isHi ? "उत्कृष्ट" : "Good") : (isHi ? "ध्यान अपेक्षित" : "Attention Needed");
+      const newStress = quickStress === "1-2" ? (isHi ? "कम" : "Low") : quickStress === "3-4" ? (isHi ? "मध्यम" : "Moderate") : (isHi ? "उच्च" : "Elevated");
+      setLiveStats({
+        status: newStatus,
+        stress: newStress,
+        fatigue: quickEnergy >= 4 ? (isHi ? "नियंत्रित" : "Low") : (isHi ? "मध्यम" : "Moderate"),
+        workload: isHi ? "सामान्य" : "Balanced",
+      });
+
+      setIsQuickCheckinOpen(false);
+      toast({
+        title: isHi ? "दैनिक स्थिति दर्ज हुई" : "Daily Vitals Logged",
+        description: isHi ? "आपकी आज की स्थिति गोपनीय रूप से दर्ज कर ली गई है।" : "Today's wellbeing metrics recorded confidentially.",
+        type: "success",
+      });
+    } catch {
+      toast({ title: "Error recording vitals", type: "error" });
+    }
   };
 
   return (
@@ -99,12 +176,19 @@ export default function PersonnelDashboard() {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
+          <button
+            onClick={() => setIsQuickCheckinOpen(true)}
+            className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 px-3.5 py-2 text-xs font-semibold shadow-xs transition-colors hover:bg-emerald-100 dark:hover:bg-emerald-900/40"
+          >
+            <Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            <span>{isHi ? "त्वरित दैनिक चेक-इन" : "Quick Daily Vitals"}</span>
+          </button>
           <Link
             href="/personnel/wellness"
             className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 text-xs font-semibold shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
             <FileHeart className="h-4 w-4" />
-            <span>{isHi ? "स्व-कल्याण जांच शुरू करें" : "Start Wellness Check"}</span>
+            <span>{isHi ? "स्व-कल्याण जांच शुरू करें" : "Full Assessment"}</span>
           </Link>
           <Link
             href="/personnel/support"
@@ -238,7 +322,7 @@ export default function PersonnelDashboard() {
               </span>
             ) : (
               <button
-                onClick={() => setSainikRequestSent(true)}
+                onClick={handleSainikAudienceRequest}
                 className="shrink-0 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs font-medium shadow-xs transition-colors"
               >
                 {isHi ? "दरबार समय मांगें" : "Request Audience"}
@@ -331,15 +415,15 @@ export default function PersonnelDashboard() {
                   </span>
                 </div>
                 <div className="h-2 w-full rounded-full bg-slate-100 dark:bg-slate-900 overflow-hidden">
-                  <div className="h-full bg-slate-400 dark:bg-slate-600 rounded-full w-[20%]" />
+                  <div className="h-full bg-slate-400 rounded-full w-[20%]" />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
-            <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+          <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
+            <span className="flex items-center gap-1.5">
+              <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
               <span>{isHi ? "अधिकृत डॉक्टर:" : "Assigned Welfare MO:"} {meta.sampleOfficerName}</span>
             </span>
             <Link
@@ -377,6 +461,114 @@ export default function PersonnelDashboard() {
           <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       </div>
+
+      {/* Quick 1-Click Daily Vitals Check-in Modal */}
+      {isQuickCheckinOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in"
+          onClick={() => setIsQuickCheckinOpen(false)}
+        >
+          <div
+            className="w-full max-w-md rounded-2xl bg-white dark:bg-[#0F172A] border border-slate-200 dark:border-slate-800 p-6 shadow-2xl space-y-4 animate-in zoom-in-95"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                    {isHi ? "दैनिक त्वरित कल्याण स्थिति" : "Quick Daily Vitals Check-in"}
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    {isHi ? "10 सेकंड में अपनी आज की तत्परता दर्ज करें" : "Record your energy and sleep in 10 seconds"}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsQuickCheckinOpen(false)}
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleQuickCheckinSubmit} className="space-y-4 text-xs">
+              <div>
+                <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                  {isHi ? "आज आपकी ऊर्जा (Energy Level)" : "Today's Energy Level"} ({quickEnergy}/5)
+                </label>
+                <div className="grid grid-cols-5 gap-2">
+                  {[1, 2, 3, 4, 5].map((lvl) => (
+                    <button
+                      key={lvl}
+                      type="button"
+                      onClick={() => setQuickEnergy(lvl)}
+                      className={`p-2 rounded-xl border text-center font-bold text-xs transition-all ${
+                        quickEnergy === lvl
+                          ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 shadow-2xs"
+                          : "border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
+                      }`}
+                    >
+                      {lvl}★
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  {isHi ? "पिछली रात की नींद (Sleep Hours)" : "Last Night's Sleep Hours"}
+                </label>
+                <select
+                  value={quickSleep}
+                  onChange={(e) => setQuickSleep(e.target.value)}
+                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500 font-mono"
+                >
+                  <option value="> 7 hours">&gt; 7 hours (Optimal)</option>
+                  <option value="6-7 hours">6-7 hours (Good)</option>
+                  <option value="5-6 hours">5-6 hours (Moderate)</option>
+                  <option value="4-5 hours">4-5 hours (Disturbed)</option>
+                  <option value="< 4 hours">&lt; 4 hours (Severe Insomnia)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  {isHi ? "कर्तव्य तनाव स्तर (Duty Stress)" : "Perceived Duty Stress"}
+                </label>
+                <select
+                  value={quickStress}
+                  onChange={(e) => setQuickStress(e.target.value)}
+                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500 font-mono"
+                >
+                  <option value="1-2">1-2 (Calm / Peacetime)</option>
+                  <option value="3-4">3-4 (Normal Operational Duty)</option>
+                  <option value="5-6">5-6 (Elevated Watch Rhythm)</option>
+                  <option value="7-8">7-8 (High Tension / Fatigued)</option>
+                  <option value="9-10">9-10 (Extreme Stress Pressure)</option>
+                </select>
+              </div>
+
+              <div className="pt-2 flex justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => setIsQuickCheckinOpen(false)}
+                  className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 font-semibold transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold shadow-xs transition-colors flex items-center gap-1.5"
+                >
+                  <CheckCircle2 className="h-4 w-4" />
+                  <span>{isHi ? "स्थिति सहेजें" : "Save Vitals"}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -4,24 +4,47 @@ import { MOCK_WELFARE_CASES, MOCK_RECOMMENDATIONS } from "@/lib/mock-data/cases"
 let casesState: WelfareCase[] = [...MOCK_WELFARE_CASES];
 let recommendationsState: AIRecommendation[] = [...MOCK_RECOMMENDATIONS];
 
+function getStoredCustomCases(): WelfareCase[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem("missionwell_custom_cases");
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveCustomCases(records: WelfareCase[]) {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem("missionwell_custom_cases", JSON.stringify(records));
+  } catch {}
+}
+
 export class WelfareService {
   static async getCases(): Promise<WelfareCase[]> {
-    return [...casesState];
+    const custom = getStoredCustomCases();
+    const customIds = new Set(custom.map((c) => c.id.toLowerCase()));
+    const base = casesState.filter((c) => !customIds.has(c.id.toLowerCase()));
+    return [...custom, ...base];
   }
 
   static async getCaseById(id: string): Promise<WelfareCase | null> {
-    const found = casesState.find(
+    const allCases = await this.getCases();
+    const found = allCases.find(
       (c) => c.id.toLowerCase() === id.toLowerCase() || c.personnelId.toLowerCase() === id.toLowerCase()
     );
     return found || null;
   }
 
   static async updateCaseStatus(id: string, status: WelfareCaseStatus): Promise<WelfareCase | null> {
-    const caseIndex = casesState.findIndex((c) => c.id.toLowerCase() === id.toLowerCase());
+    const allCases = await this.getCases();
+    const caseIndex = allCases.findIndex((c) => c.id.toLowerCase() === id.toLowerCase());
     if (caseIndex === -1) return null;
 
-    const updatedCase = {
-      ...casesState[caseIndex],
+    const targetCase = allCases[caseIndex];
+    const updatedCase: WelfareCase = {
+      ...targetCase,
       status,
       updatedAt: new Date().toISOString().split("T")[0],
       timeline: [
@@ -34,18 +57,29 @@ export class WelfareService {
           actorRole: "Welfare Officer",
           type: "status_change" as const,
         },
-        ...casesState[caseIndex].timeline,
+        ...targetCase.timeline,
       ],
     };
 
-    casesState[caseIndex] = updatedCase;
+    allCases[caseIndex] = updatedCase;
+    saveCustomCases(allCases);
+
+    const memIndex = casesState.findIndex((c) => c.id.toLowerCase() === id.toLowerCase());
+    if (memIndex !== -1) {
+      casesState[memIndex] = updatedCase;
+    } else {
+      casesState.unshift(updatedCase);
+    }
+
     return updatedCase;
   }
 
   static async addCaseNote(caseId: string, text: string, author: string = "Dr. Aarti Sharma"): Promise<WelfareCase | null> {
-    const caseIndex = casesState.findIndex((c) => c.id.toLowerCase() === caseId.toLowerCase());
+    const allCases = await this.getCases();
+    const caseIndex = allCases.findIndex((c) => c.id.toLowerCase() === caseId.toLowerCase());
     if (caseIndex === -1) return null;
 
+    const targetCase = allCases[caseIndex];
     const newNote = {
       id: `note-${Date.now()}`,
       author,
@@ -54,30 +88,41 @@ export class WelfareService {
       isConfidential: true,
     };
 
-    const updated = {
-      ...casesState[caseIndex],
-      notesCount: casesState[caseIndex].notesCount + 1,
-      caseNotes: [newNote, ...casesState[caseIndex].caseNotes],
+    const updated: WelfareCase = {
+      ...targetCase,
+      notesCount: targetCase.notesCount + 1,
+      caseNotes: [newNote, ...targetCase.caseNotes],
     };
 
-    casesState[caseIndex] = updated;
+    allCases[caseIndex] = updated;
+    saveCustomCases(allCases);
+
+    const memIndex = casesState.findIndex((c) => c.id.toLowerCase() === caseId.toLowerCase());
+    if (memIndex !== -1) {
+      casesState[memIndex] = updated;
+    } else {
+      casesState.unshift(updated);
+    }
+
     return updated;
   }
 
   static async addIntervention(caseId: string, intervention: Omit<InterventionRecord, "id" | "caseId">): Promise<WelfareCase | null> {
-    const caseIndex = casesState.findIndex((c) => c.id.toLowerCase() === caseId.toLowerCase());
+    const allCases = await this.getCases();
+    const caseIndex = allCases.findIndex((c) => c.id.toLowerCase() === caseId.toLowerCase());
     if (caseIndex === -1) return null;
 
+    const targetCase = allCases[caseIndex];
     const record: InterventionRecord = {
       ...intervention,
       id: `int-${Date.now().toString().slice(-4)}`,
       caseId,
     };
 
-    const updated = {
-      ...casesState[caseIndex],
-      interventionsCount: casesState[caseIndex].interventionsCount + 1,
-      interventions: [record, ...casesState[caseIndex].interventions],
+    const updated: WelfareCase = {
+      ...targetCase,
+      interventionsCount: targetCase.interventionsCount + 1,
+      interventions: [record, ...targetCase.interventions],
       timeline: [
         {
           id: `tl-${Date.now()}`,
@@ -88,11 +133,20 @@ export class WelfareService {
           actorRole: "Welfare Officer",
           type: "intervention" as const,
         },
-        ...casesState[caseIndex].timeline,
+        ...targetCase.timeline,
       ],
     };
 
-    casesState[caseIndex] = updated;
+    allCases[caseIndex] = updated;
+    saveCustomCases(allCases);
+
+    const memIndex = casesState.findIndex((c) => c.id.toLowerCase() === caseId.toLowerCase());
+    if (memIndex !== -1) {
+      casesState[memIndex] = updated;
+    } else {
+      casesState.unshift(updated);
+    }
+
     return updated;
   }
 
@@ -103,10 +157,11 @@ export class WelfareService {
     description: string;
     preferredContact: string;
   }): Promise<WelfareCase> {
+    const caseNum = Math.floor(100 + Math.random() * 900);
     const newCase: WelfareCase = {
-      id: `CASE-2025-${Math.floor(100 + Math.random() * 900)}`,
-      personnelId: input.personnelId,
-      anonymizedCode: `SEC-P-${Math.floor(100 + Math.random() * 900)}`,
+      id: `CASE-2025-${caseNum}`,
+      personnelId: input.personnelId.toUpperCase(),
+      anonymizedCode: `SEC-P-${caseNum}`,
       riskLevel: input.priority === "High" ? "HIGH" : input.priority === "Medium" ? "MODERATE" : "LOW",
       primaryConcern: `${input.supportType} Support Request`,
       unit: "Bravo Company",
@@ -140,15 +195,54 @@ export class WelfareService {
       ],
     };
 
+    // Attempt to persist to /api/welfare-cases
+    try {
+      if (typeof window !== "undefined") {
+        await fetch("/api/welfare-cases", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            personnelId: input.personnelId.toUpperCase(),
+            title: `${input.supportType} Support Request`,
+            reason: input.description,
+            priority: input.priority,
+            riskScore: input.priority === "High" ? 75 : input.priority === "Medium" ? 50 : 25,
+          }),
+        });
+      }
+    } catch {
+      // Graceful offline fallback
+    }
+
+    // Persist to local storage
+    const custom = getStoredCustomCases();
+    saveCustomCases([newCase, ...custom]);
     casesState = [newCase, ...casesState];
+
     return newCase;
   }
 
   static async getRecommendations(): Promise<AIRecommendation[]> {
+    if (typeof window !== "undefined") {
+      try {
+        const raw = localStorage.getItem("missionwell_custom_recommendations");
+        if (raw) {
+          const stored = JSON.parse(raw);
+          if (Array.isArray(stored) && stored.length > 0) {
+            return stored;
+          }
+        }
+      } catch {}
+    }
     return [...recommendationsState];
   }
 
   static async updateRecommendationStatus(id: string, status: AIRecommendation["status"]): Promise<void> {
     recommendationsState = recommendationsState.map((r) => (r.id === id ? { ...r, status } : r));
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("missionwell_custom_recommendations", JSON.stringify(recommendationsState));
+      } catch {}
+    }
   }
 }

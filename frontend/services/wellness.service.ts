@@ -180,6 +180,25 @@ export class WellnessService {
       localStorage.setItem("missionwell_last_assessment", JSON.stringify({
         status, stress, fatigue, workload, score, date: new Date().toISOString()
       }));
+
+      // Background persist to database API
+      try {
+        fetch("/api/wellness/assessments", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            personnelId,
+            energy: energyVal >= 4 ? "Good" : energyVal === 3 ? "Moderate" : "Low",
+            sleepQuality: sleepHrs >= 7 ? "Good" : sleepHrs >= 5.5 ? "Moderate" : "Low",
+            workload: dutyHours > 60 ? "Elevated" : dutyHours > 45 ? "Moderate" : "Low",
+            recovery: sleepHrs >= 6.5 ? "Good" : "Moderate",
+            emotionalFatigue: stressVal >= 7 ? "High" : stressVal >= 4 ? "Moderate" : "Low",
+            workLifeBalance: dutyHours > 60 ? "Low" : "Moderate",
+            overallWellbeing: status === "Low Concern" ? "Good" : "Moderate",
+            additionalNotes: input.additionalNotes || "",
+          }),
+        }).catch(() => {});
+      } catch {}
     } catch (e) {
       console.error("Failed to save custom alert or case", e);
     }

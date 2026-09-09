@@ -9,9 +9,14 @@ import {
   ChevronRight,
   ShieldCheck,
   X,
+  Download,
+  CheckCircle2,
+  Filter,
 } from "lucide-react";
 import { WelfareService } from "@/services/welfare.service";
-import { WelfareCase } from "@/types/welfare";
+import { PersonnelService } from "@/services/personnel.service";
+import { WelfareCase, WelfareCaseStatus } from "@/types/welfare";
+import { PersonnelRecord } from "@/types/personnel";
 import { RiskBadge } from "@/components/common/risk-badge";
 import { StatusBadge } from "@/components/common/status-badge";
 import { useToast } from "@/components/providers";
@@ -19,6 +24,7 @@ import { useToast } from "@/components/providers";
 export default function WelfareCasesPage() {
   const { toast } = useToast();
   const [cases, setCases] = useState<WelfareCase[]>([]);
+  const [personnelList, setPersonnelList] = useState<PersonnelRecord[]>([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [riskFilter, setRiskFilter] = useState<string>("ALL");
@@ -34,26 +40,26 @@ export default function WelfareCasesPage() {
   const [newDesc, setNewDesc] = useState("");
 
   useEffect(() => {
-    async function loadCases() {
+    async function loadData() {
       const data = await WelfareService.getCases();
+      setCases(data);
       try {
-        const customCasesStr = localStorage.getItem("missionwell_custom_cases");
-        if (customCasesStr) {
-          const customCases = JSON.parse(customCasesStr);
-          setCases([...customCases, ...data]);
-        } else {
-          setCases(data);
+        const pRoster = await PersonnelService.getAllPersonnel();
+        setPersonnelList(pRoster);
+        if (pRoster.length > 0 && !newPersonnelId) {
+          setNewPersonnelId(pRoster[0].id);
         }
-      } catch (e) {
-        setCases(data);
-      }
+      } catch {}
     }
-    loadCases();
+    loadData();
   }, []);
 
   const handleCreateCaseSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newDesc.trim()) return;
+    if (!newDesc.trim()) {
+      toast({ title: "Please enter case remarks", type: "warning" });
+      return;
+    }
 
     try {
       const created = await WelfareService.createSupportRequestCase({
@@ -68,7 +74,7 @@ export default function WelfareCasesPage() {
       setNewModalOpen(false);
       setNewDesc("");
       toast({
-        title: "Case Created",
+        title: "Case Created Successfully",
         description: `Welfare case ${created.id} initiated for ${newPersonnelId}.`,
         type: "success",
       });
@@ -78,6 +84,52 @@ export default function WelfareCasesPage() {
         type: "error",
       });
     }
+  };
+
+  const handleQuickStatusChange = async (caseId: string, newStatus: WelfareCaseStatus) => {
+    try {
+      const updated = await WelfareService.updateCaseStatus(caseId, newStatus);
+      if (updated) {
+        setCases((prev) => prev.map((c) => (c.id === caseId ? { ...c, status: newStatus } : c)));
+        toast({
+          title: "Status Updated",
+          description: `Case ${caseId} marked as ${newStatus}.`,
+          type: "success",
+        });
+      }
+    } catch {
+      toast({ title: "Failed to update case status", type: "error" });
+    }
+  };
+
+  const handleExportCSV = () => {
+    const headers = ["CaseID", "PersonnelID", "AnonymizedCode", "RiskLevel", "PrimaryConcern", "Unit", "AssignedOfficer", "Status", "CreatedAt"];
+    const rows = filtered.map((c) => [
+      c.id,
+      c.personnelId,
+      c.anonymizedCode,
+      c.riskLevel,
+      `"${c.primaryConcern.replace(/"/g, '""')}"`,
+      `"${c.unit}"`,
+      `"${c.assignedOfficer}"`,
+      c.status,
+      c.createdAt,
+    ]);
+
+    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `missionwell_welfare_cases_${new Date().toISOString().split("T")[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast({
+      title: "Cases Exported",
+      description: `Downloaded ${filtered.length} case records as CSV.`,
+      type: "info",
+    });
   };
 
   const filtered = cases.filter((c) => {
@@ -107,13 +159,23 @@ export default function WelfareCasesPage() {
           </p>
         </div>
 
-        <button
-          onClick={() => setNewModalOpen(true)}
-          className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 text-xs font-semibold shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98] self-start sm:self-auto"
-        >
-          <Plus className="h-3.5 w-3.5" />
-          <span>Create Welfare Case</span>
-        </button>
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          <button
+            onClick={handleExportCSV}
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 px-4 py-2 text-xs font-semibold shadow-xs transition-colors"
+          >
+            <Download className="h-3.5 w-3.5 text-slate-500" />
+            <span>Export CSV</span>
+          </button>
+
+          <button
+            onClick={() => setNewModalOpen(true)}
+            className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 text-xs font-semibold shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            <span>Create Welfare Case</span>
+          </button>
+        </div>
       </div>
 
       {/* Filter Bar */}
@@ -236,7 +298,17 @@ export default function WelfareCasesPage() {
                     {c.assignedOfficer}
                   </td>
                   <td className="py-3.5 px-4">
-                    <StatusBadge status={c.status} />
+                    <select
+                      value={c.status}
+                      onChange={(e) => handleQuickStatusChange(c.id, e.target.value as WelfareCaseStatus)}
+                      className="text-[11px] font-medium rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2 py-1 text-slate-800 dark:text-slate-200 focus:outline-hidden focus:border-emerald-500 cursor-pointer shadow-2xs"
+                    >
+                      <option value="New">New</option>
+                      <option value="Under Review">Under Review</option>
+                      <option value="Intervention">Intervention</option>
+                      <option value="Follow-up">Follow-up</option>
+                      <option value="Resolved">Resolved</option>
+                    </select>
                   </td>
                   <td className="py-3.5 px-4 text-right">
                     <Link
@@ -305,16 +377,30 @@ export default function WelfareCasesPage() {
             <form onSubmit={handleCreateCaseSubmit} className="space-y-4 text-xs">
               <div>
                 <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
-                  Target Personnel ID
+                  Target Personnel
                 </label>
-                <input
-                  type="text"
-                  required
-                  value={newPersonnelId}
-                  onChange={(e) => setNewPersonnelId(e.target.value)}
-                  placeholder="e.g. P-1025"
-                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500 font-mono"
-                />
+                {personnelList.length > 0 ? (
+                  <select
+                    value={newPersonnelId}
+                    onChange={(e) => setNewPersonnelId(e.target.value)}
+                    className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500 font-mono"
+                  >
+                    {personnelList.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.id} — {p.name} ({p.rank}, {p.unit})
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    type="text"
+                    required
+                    value={newPersonnelId}
+                    onChange={(e) => setNewPersonnelId(e.target.value)}
+                    placeholder="e.g. P-1025"
+                    className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500 font-mono"
+                  />
+                )}
               </div>
 
               <div>

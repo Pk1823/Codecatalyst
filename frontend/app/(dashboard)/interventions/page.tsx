@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   HandHelping,
@@ -14,8 +14,11 @@ import {
   X,
   Plus,
   CheckCircle2,
+  Download,
 } from "lucide-react";
 import { MOCK_WELFARE_CASES } from "@/lib/mock-data/cases";
+import { PersonnelService } from "@/services/personnel.service";
+import { PersonnelRecord } from "@/types/personnel";
 import { InterventionRecord, InterventionType } from "@/types/welfare";
 import { useToast } from "@/components/providers";
 
@@ -23,11 +26,40 @@ export default function InterventionsPage() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<"All" | "Active" | "Completed" | "Pending">("All");
   const [selectedIntervention, setSelectedIntervention] = useState<InterventionRecord | null>(null);
+  const [personnelList, setPersonnelList] = useState<PersonnelRecord[]>([]);
 
-  // State to hold interventions so newly added ones persist in the current session
-  const [interventionsList, setInterventionsList] = useState<InterventionRecord[]>(() =>
-    MOCK_WELFARE_CASES.flatMap((c) => c.interventions)
-  );
+  // State to hold interventions with local storage persistence
+  const [interventionsList, setInterventionsList] = useState<InterventionRecord[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("missionwell_custom_interventions");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch {}
+    }
+    return MOCK_WELFARE_CASES.flatMap((c) => c.interventions);
+  });
+
+  useEffect(() => {
+    async function loadPersonnel() {
+      try {
+        const list = await PersonnelService.getAllPersonnel();
+        setPersonnelList(list);
+      } catch {}
+    }
+    loadPersonnel();
+  }, []);
+
+  const saveInterventions = (list: InterventionRecord[]) => {
+    setInterventionsList(list);
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("missionwell_custom_interventions", JSON.stringify(list));
+      } catch {}
+    }
+  };
 
   // New Intervention Modal State
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
@@ -60,15 +92,54 @@ export default function InterventionsPage() {
       officerName: "Dr. Aarti Sharma",
     };
 
-    setInterventionsList((prev) => [created, ...prev]);
+    saveInterventions([created, ...interventionsList]);
     setIsNewModalOpen(false);
     setNewTitle("");
     setNewDesc("");
 
     toast({
-      title: "Intervention Logged",
-      description: `New ${newType} intervention scheduled for ${newPersonnelId}.`,
+      title: "Intervention Scheduled",
+      description: `New ${newType} logged for ${newPersonnelId}.`,
       type: "success",
+    });
+  };
+
+  const handleUpdateInterventionStatus = (id: string, status: InterventionRecord["status"]) => {
+    const updated = interventionsList.map((i) => (i.id === id ? { ...i, status } : i));
+    saveInterventions(updated);
+    toast({
+      title: "Status Updated",
+      description: `Intervention marked as ${status}.`,
+      type: "success",
+    });
+  };
+
+  const handleExportCSV = () => {
+    const headers = ["ID", "CaseID", "PersonnelID", "Type", "Title", "Status", "ScheduledDate", "Officer"];
+    const rows = filtered.map((i) => [
+      i.id,
+      i.caseId,
+      i.personnelId,
+      `"${i.type}"`,
+      `"${i.title.replace(/"/g, '""')}"`,
+      i.status,
+      i.scheduledDate,
+      `"${i.officerName}"`,
+    ]);
+
+    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `missionwell_interventions_${new Date().toISOString().split("T")[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast({
+      title: "Interventions Exported",
+      description: `Downloaded ${filtered.length} intervention records as CSV.`,
+      type: "info",
     });
   };
 
@@ -109,7 +180,14 @@ export default function InterventionsPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <button
+            onClick={handleExportCSV}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold shadow-xs transition-colors"
+          >
+            <Download className="h-3.5 w-3.5 text-slate-500" />
+            <span>Export CSV</span>
+          </button>
           <button
             onClick={() => setIsNewModalOpen(true)}
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
@@ -266,16 +344,30 @@ export default function InterventionsPage() {
 
               <div>
                 <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
-                  Personnel Identifier
+                  Target Personnel
                 </label>
-                <input
-                  type="text"
-                  value={newPersonnelId}
-                  onChange={(e) => setNewPersonnelId(e.target.value)}
-                  placeholder="e.g. P-1024 or Service ID"
-                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500 font-mono"
-                  required
-                />
+                {personnelList.length > 0 ? (
+                  <select
+                    value={newPersonnelId}
+                    onChange={(e) => setNewPersonnelId(e.target.value)}
+                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500 font-mono"
+                  >
+                    {personnelList.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.id} — {p.name} ({p.rank}, {p.unit})
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    type="text"
+                    value={newPersonnelId}
+                    onChange={(e) => setNewPersonnelId(e.target.value)}
+                    placeholder="e.g. P-1024 or Service ID"
+                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500 font-mono"
+                    required
+                  />
+                )}
               </div>
 
               <div>
@@ -387,10 +479,27 @@ export default function InterventionsPage() {
               )}
             </div>
 
-            <div className="pt-2 flex justify-end gap-2">
+            <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-medium text-slate-500">Status:</span>
+                <select
+                  value={selectedIntervention.status}
+                  onChange={(e) => {
+                    const newSt = e.target.value as InterventionRecord["status"];
+                    handleUpdateInterventionStatus(selectedIntervention.id, newSt);
+                    setSelectedIntervention({ ...selectedIntervention, status: newSt });
+                  }}
+                  className="rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2.5 py-1 text-xs text-slate-900 dark:text-white font-semibold cursor-pointer"
+                >
+                  <option value="Active">Active</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Pending">Pending</option>
+                </select>
+              </div>
+
               <Link
                 href={`/welfare/cases/${selectedIntervention.caseId}`}
-                className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-xs transition-colors"
+                className="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-xs transition-colors"
               >
                 Open Associated Case →
               </Link>
