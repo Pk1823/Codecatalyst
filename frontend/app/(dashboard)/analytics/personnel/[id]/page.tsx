@@ -264,9 +264,6 @@ export default function IndividualRiskDetailPage({
               <h3 className="text-sm font-bold text-[#F8FAFC]">
                 Interactive AI Telemetry Evaluator (FastAPI Live Model)
               </h3>
-              <p className="text-xs text-slate-400">
-                Adjust operational parameters to test real-time fatigue mitigation and leave rotation forecasting.
-              </p>
             </div>
           </div>
           <button
@@ -362,9 +359,6 @@ export default function IndividualRiskDetailPage({
               <h3 className="text-sm font-semibold text-[#F8FAFC]">
                 Live SHAP TreeExplainer Factor Attributions
               </h3>
-              <p className="text-xs text-slate-400">
-                Transparent feature impact scores showing why this personnel's fatigue indicator was flagged.
-              </p>
             </div>
           </div>
           <span className="rounded bg-[#090D16] border border-slate-800 px-2.5 py-1 text-[11px] font-mono text-blue-400">
@@ -417,9 +411,6 @@ export default function IndividualRiskDetailPage({
             <h3 className="text-sm font-semibold text-[#F8FAFC]">
               Recommended Clinical Welfare Actions
             </h3>
-            <p className="text-xs text-slate-400">
-              Decisions must always be taken by qualified human welfare officers.
-            </p>
           </div>
           {riskData.hasActiveWelfareCase && riskData.activeCaseId && (
             <Link

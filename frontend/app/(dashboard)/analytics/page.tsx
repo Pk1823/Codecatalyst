@@ -243,9 +243,6 @@ export default function AnalyticsOverviewPage() {
                   Calibrated for Defense Duties
                 </span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
-                Combines sleep logs, night-shift frequency, and field deployment duration to alert Welfare Officers before severe fatigue or distress occurs.
-              </p>
             </div>
           </div>
 
@@ -396,9 +393,6 @@ export default function AnalyticsOverviewPage() {
             <h3 className="text-sm font-semibold text-slate-900 dark:text-[#F8FAFC]">
               Personnel Risk Profiles & Explainability
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Select any profile to inspect contributing factors and recommended welfare actions.
-            </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
