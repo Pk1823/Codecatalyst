@@ -168,9 +168,6 @@ export default function LandingPage() {
             <a href="#features" className="hover:text-emerald-600 dark:hover:text-white transition-colors py-1 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60">
               {isHi ? "मुख्य क्षमताएं" : "Key Capabilities"}
             </a>
-            <a href="#privacy" className="hover:text-emerald-600 dark:hover:text-white transition-colors py-1 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60">
-              {isHi ? "गोपनीयता नीति" : "Zero-Trust Privacy"}
-            </a>
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-2.5">
@@ -1008,65 +1005,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 8. Section 3: Separation of Powers Privacy Matrix */}
-      <section id="privacy" className="py-20 bg-white dark:bg-[#090D16] border-b border-slate-200 dark:border-slate-800/80">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-6">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <h2 className="text-xs font-mono font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-              {isHi ? "डेटा सुरक्षा" : "Zero-Trust Confidentiality"}
-            </h2>
-            <h3 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
-              {isHi ? "कठोर डेटा विभाजन मैट्रिक्स" : "Separation of Powers Access Matrix"}
-            </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              {isHi
-                ? "किस भूमिका को क्या डेटा दिखता है, इसका स्पष्ट व पारदर्शी नियम।"
-                : "Strict role-based cryptographic isolation guarantees personnel trust and clinical privacy."}
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 shadow-lg overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs font-mono">
-                <thead>
-                  <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">
-                    <th className="py-3 px-4 font-sans font-medium">{isHi ? "डेटा श्रेणी" : "Data Class"}</th>
-                    <th className="py-3 px-4 text-center">{isHi ? "जवान" : "Jawan"}</th>
-                    <th className="py-3 px-4 text-center">{isHi ? "कल्याण अधिकारी / डॉक्टर" : "Welfare Officer"}</th>
-                    <th className="py-3 px-4 text-center">{isHi ? "कमांडर" : "Commander"}</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300">
-                  <tr>
-                    <td className="py-3.5 px-4 font-sans font-medium text-slate-900 dark:text-white">
-                      {isHi ? "स्वैच्छिक चेक-इन व बडी रिपोर्ट" : "Self-Report & Buddy Feedback"}
-                    </td>
-                    <td className="py-3.5 px-4 text-center text-emerald-600 dark:text-emerald-400 font-bold">✓ Full Access</td>
-                    <td className="py-3.5 px-4 text-center text-emerald-600 dark:text-emerald-400 font-bold">✓ Care Triage</td>
-                    <td className="py-3.5 px-4 text-center text-rose-600 dark:text-rose-400 font-bold">✕ BLOCKED</td>
-                  </tr>
-                  <tr>
-                    <td className="py-3.5 px-4 font-sans font-medium text-slate-900 dark:text-white">
-                      {isHi ? "चिकित्सा परामर्श नोट्स" : "Counseling Clinical Notes"}
-                    </td>
-                    <td className="py-3.5 px-4 text-center text-slate-400">—</td>
-                    <td className="py-3.5 px-4 text-center text-emerald-600 dark:text-emerald-400 font-bold">✓ Doctor-Only</td>
-                    <td className="py-3.5 px-4 text-center text-rose-600 dark:text-rose-400 font-bold">✕ BLOCKED</td>
-                  </tr>
-                  <tr>
-                    <td className="py-3.5 px-4 font-sans font-medium text-slate-900 dark:text-white">
-                      {isHi ? "कंपनी तनाव व तत्परता सूचकांक" : "Unit Stress & Readiness Index"}
-                    </td>
-                    <td className="py-3.5 px-4 text-center text-slate-400">—</td>
-                    <td className="py-3.5 px-4 text-center text-emerald-600 dark:text-emerald-400 font-bold">✓ Aggregated</td>
-                    <td className="py-3.5 px-4 text-center text-emerald-600 dark:text-emerald-400 font-bold">✓ Masked Summary</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* 9. Final Call to Action */}
       <section className="relative py-20 bg-slate-50/70 dark:bg-[#090D16] text-center border-b border-slate-200 dark:border-slate-800/80 overflow-hidden">
