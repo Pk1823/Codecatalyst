@@ -200,8 +200,8 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* 3. Hero Section - Enlarged Scale & Spacious Tactical Presence */}
-      <section className="relative py-20 sm:py-28 lg:py-36 min-h-[75vh] flex items-center justify-center border-b border-slate-200 dark:border-slate-800/80 overflow-hidden bg-slate-900/5 dark:bg-[#090D16]">
+      {/* 3. Hero Section - Full Screen Viewport Height */}
+      <section className="relative min-h-[calc(100vh-68px)] flex flex-col items-center justify-center border-b border-slate-200 dark:border-slate-800/80 overflow-hidden bg-slate-900/5 dark:bg-[#090D16] py-12 lg:py-16">
         {/* Breathtaking Defense Operational Command & Himalayan Sunrise Backdrop */}
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
           <img
@@ -217,7 +217,7 @@ export default function LandingPage() {
         {/* Ambient Emerald Glow */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-emerald-500/10 dark:bg-emerald-600/15 blur-[150px] pointer-events-none z-0 animate-pulse-ring" />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 space-y-10 my-auto">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 my-auto">
 
           {/* Value Prop Headline */}
           <div className="text-center max-w-5xl mx-auto space-y-6">
@@ -281,7 +281,7 @@ export default function LandingPage() {
           />
           <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-slate-50/80 to-slate-50 dark:from-[#090D16] dark:via-[#090D16]/80 dark:to-[#090D16]" />
         </div>
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 space-y-10">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <div className="inline-flex items-center gap-2 text-emerald-700 dark:text-emerald-400 text-xs font-mono font-bold uppercase tracking-wide">
               <Brain className="h-3.5 w-3.5" />
@@ -578,7 +578,7 @@ export default function LandingPage() {
 
       {/* 5. Judge's 1-Click Persona Quick Launcher */}
       <section className="py-14 bg-slate-50/70 dark:bg-[#090D16] border-b border-slate-200 dark:border-slate-800/80">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-6">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <span className="text-xs font-mono font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
               OPERATIONAL EVALUATION DIRECT SHORTCUTS
@@ -703,7 +703,7 @@ export default function LandingPage() {
 
       {/* 6. Section 1: How It Works in 3 Simple Steps */}
       <section id="how-it-works" className="py-20 bg-white dark:bg-[#090D16] border-b border-slate-200 dark:border-slate-800/80">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2">
             <h2 className="text-xs font-mono font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
               {isHi ? "कार्यप्रणाली" : "Operational Continuum"}
@@ -789,7 +789,7 @@ export default function LandingPage() {
 
       {/* 7. Section 2: Key Capabilities (4 Core Pillars) */}
       <section id="features" className="py-20 bg-slate-50/50 dark:bg-[#090D16] border-b border-slate-200 dark:border-slate-800/80">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2">
             <h2 className="text-xs font-mono font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
               {isHi ? "मुख्य क्षमताएं" : "Core Architectural Pillars"}
