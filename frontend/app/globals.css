@@ -223,18 +223,20 @@
 @keyframes page-enter {
   0% {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(16px);
+    filter: blur(4px);
   }
   100% {
     opacity: 1;
     transform: translateY(0);
+    filter: blur(0px);
   }
 }
 
 @keyframes modal-reveal {
   0% {
     opacity: 0;
-    transform: scale(0.96) translateY(4px);
+    transform: scale(0.95) translateY(8px);
   }
   100% {
     opacity: 1;
@@ -242,26 +244,41 @@
   }
 }
 
+@keyframes slide-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .animate-page-enter {
-  animation: page-enter 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: page-enter 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .animate-modal-reveal {
-  animation: modal-reveal 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: modal-reveal 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-slide-up {
+  animation: slide-in-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .card-hover-lift {
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease;
 }
 .card-hover-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.35);
 }
 
 .btn-press {
-  transition: transform 0.15s ease, opacity 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  transition: transform 0.15s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
 }
 .btn-press:active {
-  transform: scale(0.97);
+  transform: scale(0.96);
 }
 
