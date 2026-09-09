@@ -101,7 +101,7 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   const roleInfo = getRoleLabel();
 
   const sidebarContent = (
-    <div className="flex h-full flex-col justify-between overflow-y-auto bg-white dark:bg-[#090D16] text-slate-800 dark:text-slate-100 border-r border-slate-200 dark:border-slate-800/80 transition-all duration-300">
+    <div className="flex h-full flex-col justify-between overflow-y-auto bg-white/90 dark:bg-[#090D16]/90 backdrop-blur-xl text-slate-800 dark:text-slate-100 border-r border-slate-200 dark:border-slate-800/80 transition-all duration-300">
       {/* Brand Header */}
       <div>
         <div className="flex h-16 items-center justify-between px-4 border-b border-slate-200 dark:border-slate-800/80">
