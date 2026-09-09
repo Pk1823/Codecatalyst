@@ -26,6 +26,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { RouteBackground } from "@/components/layout/route-background";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -65,8 +67,11 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body suppressHydrationWarning className="antialiased font-sans bg-slate-50 text-slate-900 dark:bg-[#090D16] dark:text-slate-100 min-h-screen selection:bg-blue-500/20 selection:text-blue-700 dark:selection:text-blue-300 transition-colors duration-200">
-        <Providers>{children}</Providers>
+      <body suppressHydrationWarning className="antialiased font-sans bg-slate-50 text-slate-900 dark:bg-[#090D16] dark:text-slate-100 min-h-screen selection:bg-blue-500/20 selection:text-blue-700 dark:selection:text-blue-300 transition-colors duration-200 relative">
+        <Providers>
+          <RouteBackground />
+          <div className="relative z-10">{children}</div>
+        </Providers>
       </body>
     </html>
   );

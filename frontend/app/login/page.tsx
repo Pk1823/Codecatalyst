@@ -220,7 +220,7 @@ export default function PersonnelLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#090D16] text-slate-900 dark:text-slate-100 flex flex-col justify-between p-4 sm:p-6 font-sans relative overflow-hidden">
+    <div className="min-h-screen bg-transparent text-slate-900 dark:text-slate-100 flex flex-col justify-between p-4 sm:p-6 font-sans relative overflow-hidden">
       
       {/* Ambient background glow */}
       <div className="fixed inset-0 pointer-events-none z-0">

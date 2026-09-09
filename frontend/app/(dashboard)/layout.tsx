@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { RoleGuard } from "@/components/auth/role-guard";
-import { RouteBackground } from "@/components/layout/route-background";
 
 export default function DashboardLayout({
   children,
@@ -14,10 +13,7 @@ export default function DashboardLayout({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-50/80 dark:bg-[#090D16] text-slate-900 dark:text-slate-100 flex flex-col transition-colors duration-200 font-sans relative overflow-x-hidden">
-      {/* Route-Adaptive Cinematic Defense & Biometric Ambient Background */}
-      <RouteBackground />
-
+    <div className="min-h-screen bg-transparent text-slate-900 dark:text-slate-100 flex flex-col transition-colors duration-200 font-sans relative overflow-x-hidden">
       <div className="flex flex-1 relative z-10">
         <Sidebar
           mobileOpen={mobileMenuOpen}

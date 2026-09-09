@@ -117,15 +117,15 @@ export default function LandingPage() {
 
   return (
     <div className="relative min-h-screen bg-slate-50/40 dark:bg-[#090D16]/40 text-slate-900 dark:text-slate-100 selection:bg-blue-500/20 selection:text-blue-700 dark:selection:text-blue-300 flex flex-col font-sans transition-colors duration-200">
-      {/* Sticky Fixed Tactical Backdrop Image across whole Home Page */}
+      {/* Sticky Fixed Tactical Backdrop Image across whole Home Page with Blur Effect */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
         <img
           src="/hero-bg.jpg"
           alt="Himalayan Defense Command & Biometric Telemetry Operational Backdrop"
-          className="w-full h-full object-cover object-center opacity-35 dark:opacity-80 transition-opacity duration-700 select-none scale-100"
+          className="w-full h-full object-cover object-center blur-[3px] scale-105 opacity-35 dark:opacity-75 transition-opacity duration-700 select-none"
         />
         {/* Soft, translucent overlay tailored for both Light (White) & Dark themes */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-50/80 via-slate-50/55 to-slate-50/85 dark:from-[#090D16]/80 dark:via-[#090D16]/50 dark:to-[#090D16]/85" />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-50/80 via-slate-50/55 to-slate-50/85 dark:from-[#090D16]/80 dark:via-[#090D16]/55 dark:to-[#090D16]/85 backdrop-blur-xs" />
       </div>
 
       {/* 1. National Tricolor Strip */}

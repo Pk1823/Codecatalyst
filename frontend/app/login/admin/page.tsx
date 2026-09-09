@@ -222,7 +222,7 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 dark:bg-[#070B13] text-slate-100 flex flex-col justify-between p-4 sm:p-6 font-sans relative overflow-hidden">
+    <div className="min-h-screen bg-transparent text-slate-100 flex flex-col justify-between p-4 sm:p-6 font-sans relative overflow-hidden">
       
       {/* Ambient glow */}
       <div className="fixed inset-0 pointer-events-none z-0">
