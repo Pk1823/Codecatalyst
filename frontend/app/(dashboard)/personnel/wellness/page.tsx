@@ -18,15 +18,13 @@ import { WellnessRating, WellnessAssessmentInput, WellnessAssessmentResult } fro
 import { WellnessService } from "@/services/wellness.service";
 import { useToast } from "@/components/providers";
 
-// Zod Schema for 7 Steps
 const assessmentSchema = z.object({
-  energy: z.enum(["Very Low", "Low", "Moderate", "Good", "Very Good"] as const),
-  sleepQuality: z.enum(["Very Low", "Low", "Moderate", "Good", "Very Good"] as const),
-  workload: z.enum(["Very Low", "Low", "Moderate", "Good", "Very Good"] as const),
-  recovery: z.enum(["Very Low", "Low", "Moderate", "Good", "Very Good"] as const),
-  emotionalFatigue: z.enum(["Very Low", "Low", "Moderate", "Good", "Very Good"] as const),
-  workLifeBalance: z.enum(["Very Low", "Low", "Moderate", "Good", "Very Good"] as const),
-  overallWellbeing: z.enum(["Very Low", "Low", "Moderate", "Good", "Very Good"] as const),
+  consecutiveFieldDays: z.string().min(1, "Required"),
+  dutyHours5d: z.string().min(1, "Required"),
+  nightShifts5d: z.string().min(1, "Required"),
+  sleepHrs5dAvg: z.string().min(1, "Required"),
+  selfReportedEnergy: z.string().min(1, "Required"),
+  selfReportedStress: z.string().min(1, "Required"),
   additionalNotes: z.string().optional(),
 });
 
@@ -43,13 +41,12 @@ export default function WellnessAssessmentPage() {
   } = useForm<WellnessAssessmentInput>({
     resolver: zodResolver(assessmentSchema),
     defaultValues: {
-      energy: "Moderate",
-      sleepQuality: "Moderate",
-      workload: "Low",
-      recovery: "Moderate",
-      emotionalFatigue: "Moderate",
-      workLifeBalance: "Moderate",
-      overallWellbeing: "Moderate",
+      consecutiveFieldDays: "11-30",
+      dutyHours5d: "30-45 hours",
+      nightShifts5d: "0",
+      sleepHrs5dAvg: "6-7 hours",
+      selfReportedEnergy: "3",
+      selfReportedStress: "3-4",
       additionalNotes: "",
     },
   });

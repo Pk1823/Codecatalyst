@@ -176,131 +176,55 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
           {/* Back Navigation Button */}
           <button
             onClick={() => router.back()}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all text-xs font-semibold shadow-xs"
+            className="flex items-center gap-1 px-1.5 py-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-xs font-bold"
             title="Go back to previous screen"
           >
-            <ChevronLeft className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            <ChevronLeft className="h-4 w-4" />
             <span className="hidden sm:inline">Back</span>
           </button>
 
           {/* Breadcrumb Hierarchy */}
           <div className="flex flex-col ml-1">
-            <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-500 dark:text-slate-400">
-              <span className="font-bold text-emerald-600 dark:text-emerald-400 font-mono">
-                {force}
-              </span>
-              <span className="text-slate-300 dark:text-slate-600">/</span>
-              <span className="text-slate-600 dark:text-slate-400 font-medium">{breadcrumb.section}</span>
-              <span className="text-slate-300 dark:text-slate-600 hidden md:inline">/</span>
-              {/* Role chip */}
-              <span className={`hidden md:inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold border ${roleBadge.color}`}>
-                <RoleIcon className="h-3 w-3" />
-                <span>{roleBadge.label}</span>
-              </span>
-            </div>
             <h1 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white tracking-tight truncate max-w-[180px] sm:max-w-xs md:max-w-none">
-              {breadcrumb.title}
+              Personal Assessment
             </h1>
-          </div>
-
-          {/* Minimal Server Status Pill on larger screens */}
-          <div className="hidden xl:flex ml-3 pl-3 border-l border-slate-200 dark:border-slate-800">
-            <ServerStatusPill variant="minimal" />
           </div>
         </div>
 
         {/* Right Side: Quick Controls & User Profile */}
         <div className="flex items-center gap-1.5 sm:gap-2">
-          {/* Force Branch Switcher Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setForceMenuOpen(!forceMenuOpen)}
-              className="flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] px-2.5 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-all shadow-xs"
-              title="Select Uniformed Service Branch"
-            >
-              <Layers className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span className="font-mono text-[11px] font-bold">{force}</span>
-              <ChevronDown className="h-3 w-3 text-slate-400" />
-            </button>
-
-            {forceMenuOpen && (
-              <div
-                className="absolute right-0 mt-2 w-64 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-1.5 shadow-xl z-50 animate-in fade-in zoom-in-95"
-                onMouseLeave={() => setForceMenuOpen(false)}
-              >
-                <div className="px-2.5 py-1 text-[10px] font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                  Select Uniformed Service
-                </div>
-                {forcesList.map((f) => (
-                  <button
-                    key={f.id}
-                    onClick={() => handleForceSwitch(f.id)}
-                    className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs transition-colors ${
-                      force === f.id
-                        ? "bg-emerald-50 dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 font-semibold"
-                        : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white"
-                    }`}
-                  >
-                    <div className="text-left">
-                      <span className="block font-semibold">{f.name}</span>
-                      <span className="text-[10px] text-slate-500 dark:text-slate-400">{f.full}</span>
-                    </div>
-                    {force === f.id && <span className="text-emerald-600 dark:text-emerald-400 text-xs font-bold font-mono">✓</span>}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          {/* Force Branch Switcher Dropdown removed */}
 
           {/* Bilingual Language Switcher (EN / हिन्दी) */}
           <button
             onClick={toggleLang}
-            className="flex items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] px-2.5 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-all shadow-xs"
+            className="flex items-center gap-1 px-1.5 py-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
             title="Toggle Language (English / हिन्दी)"
           >
-            <Languages className="h-3.5 w-3.5 text-slate-400" />
+            <Languages className="h-3.5 w-3.5" />
             <span className="text-[11px] font-mono font-bold">{lang === "en" ? "हिन्दी" : "EN"}</span>
           </button>
 
-          {/* Executive Presentation Deck Link Button */}
-          <Link
-            href="/presentation"
-            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-teal-500/30 bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 hover:bg-teal-100 dark:hover:bg-teal-900/60 text-xs font-semibold shadow-xs transition-all hover:scale-[1.02]"
-            title="View Executive Pitch Deck & System Brief"
-          >
-            <Presentation className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" />
-            <span className="hidden xl:inline font-mono text-[11px]">Judge Pitch Deck</span>
-          </Link>
 
-          {/* Quick Search Button */}
-          <button
-            onClick={() => setSearchOpen(true)}
-            className="hidden sm:flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] px-3 py-1.5 text-xs text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700 hover:text-slate-900 dark:hover:text-slate-200 transition-all shadow-xs"
-            title="Global Quick Search (Ctrl+K)"
-          >
-            <Search className="h-3.5 w-3.5 text-slate-400" />
-            <span className="hidden lg:inline text-[11px]">Search...</span>
-            <span className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[9px] font-mono text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
-              Ctrl K
-            </span>
-          </button>
+
+          {/* Quick Search Button removed */}
 
           {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
-            className="flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] px-2.5 py-1.5 text-xs text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-all shadow-xs"
+            className="flex items-center gap-1 px-1.5 py-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
             title={theme === "dark" ? "Dark mode active — click for light mode" : "Light mode active — click for dark mode"}
             aria-label="Toggle theme"
           >
             {theme === "dark" ? (
               <>
-                <Sun className="h-3.5 w-3.5 text-amber-400 transition-transform rotate-0" />
-                <span className="hidden md:inline font-mono text-[10px] font-medium text-slate-300">Dark</span>
+                <Sun className="h-3.5 w-3.5" />
+                <span className="hidden md:inline font-mono text-[10px] font-bold">Dark</span>
               </>
             ) : (
               <>
-                <Moon className="h-3.5 w-3.5 text-blue-600 transition-transform -rotate-12" />
-                <span className="hidden md:inline font-mono text-[10px] font-medium text-slate-700">Light</span>
+                <Moon className="h-3.5 w-3.5" />
+                <span className="hidden md:inline font-mono text-[10px] font-bold">Light</span>
               </>
             )}
           </button>
@@ -312,19 +236,33 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
             title="Welfare Alerts & Critical Triage Notifications"
           >
             <Bell className="h-4 w-4" />
-            <span className="absolute top-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-rose-500 text-[8px] font-bold text-white font-mono shadow-xs">
-              3
-            </span>
+            {(() => {
+              let count = 3;
+              try {
+                if (typeof window !== "undefined") {
+                  const customStr = localStorage.getItem("missionwell_custom_alerts");
+                  if (customStr) {
+                    const alerts = JSON.parse(customStr);
+                    count += alerts.filter((a: any) => !a.isRead).length;
+                  }
+                }
+              } catch (e) {}
+              return count > 0 ? (
+                <span className="absolute top-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-rose-500 text-[8px] font-bold text-white font-mono shadow-xs">
+                  {count}
+                </span>
+              ) : null;
+            })()}
           </Link>
 
           {/* User Profile & Persona Quick Switcher Dropdown */}
           <div className="relative">
             <button
               onClick={() => setProfileOpen(!profileOpen)}
-              className="flex items-center gap-2 rounded-lg p-1 px-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors focus:outline-hidden shadow-xs"
+              className="flex items-center gap-1.5 px-1.5 py-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors focus:outline-hidden"
               aria-label="User profile and persona switch menu"
             >
-              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-600 text-white font-mono font-bold text-xs shadow-xs">
+              <div className="flex h-5 w-5 items-center justify-center rounded-sm text-slate-900 dark:text-white font-mono font-bold text-xs">
                 {user.name.charAt(0)}
               </div>
               <div className="hidden md:flex flex-col text-left leading-none">
@@ -356,58 +294,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
                   </div>
                 </div>
 
-                {/* 1-Click Evaluation Persona Switcher */}
-                <div className="px-2 py-1 mb-1 bg-slate-50 dark:bg-slate-900/60 rounded-lg border border-slate-100 dark:border-slate-800/80">
-                  <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1">
-                    Quick Role Switcher:
-                  </span>
-                  <div className="grid grid-cols-2 gap-1">
-                    <button
-                      onClick={() => handleRoleQuickSwitch("WELFARE_OFFICER")}
-                      className={`px-2 py-1 rounded text-[10px] font-mono text-left transition-colors flex items-center gap-1 ${
-                        role === "WELFARE_OFFICER"
-                          ? "bg-emerald-600 text-white font-bold"
-                          : "text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800"
-                      }`}
-                    >
-                      <UserCheck className="h-3 w-3" />
-                      <span>Welfare</span>
-                    </button>
-                    <button
-                      onClick={() => handleRoleQuickSwitch("COMMANDER")}
-                      className={`px-2 py-1 rounded text-[10px] font-mono text-left transition-colors flex items-center gap-1 ${
-                        role === "COMMANDER"
-                          ? "bg-blue-600 text-white font-bold"
-                          : "text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800"
-                      }`}
-                    >
-                      <Activity className="h-3 w-3" />
-                      <span>Commander</span>
-                    </button>
-                    <button
-                      onClick={() => handleRoleQuickSwitch("PERSONNEL")}
-                      className={`px-2 py-1 rounded text-[10px] font-mono text-left transition-colors flex items-center gap-1 ${
-                        role === "PERSONNEL"
-                          ? "bg-amber-600 text-white font-bold"
-                          : "text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800"
-                      }`}
-                    >
-                      <HeartPulse className="h-3 w-3" />
-                      <span>Jawan</span>
-                    </button>
-                    <button
-                      onClick={() => handleRoleQuickSwitch("ADMIN")}
-                      className={`px-2 py-1 rounded text-[10px] font-mono text-left transition-colors flex items-center gap-1 ${
-                        role === "ADMIN"
-                          ? "bg-purple-600 text-white font-bold"
-                          : "text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800"
-                      }`}
-                    >
-                      <Shield className="h-3 w-3" />
-                      <span>Admin</span>
-                    </button>
-                  </div>
-                </div>
+
 
                 {/* Navigation Links */}
                 <Link

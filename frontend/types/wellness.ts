@@ -1,13 +1,12 @@
 export type WellnessRating = "Very Low" | "Low" | "Moderate" | "Good" | "Very Good";
 
 export interface WellnessAssessmentInput {
-  energy: WellnessRating;
-  sleepQuality: WellnessRating;
-  workload: WellnessRating;
-  recovery: WellnessRating;
-  emotionalFatigue: WellnessRating;
-  workLifeBalance: WellnessRating;
-  overallWellbeing: WellnessRating;
+  consecutiveFieldDays: string;
+  dutyHours5d: string;
+  nightShifts5d: string;
+  sleepHrs5dAvg: string;
+  selfReportedEnergy: string;
+  selfReportedStress: string;
   additionalNotes?: string;
 }
 

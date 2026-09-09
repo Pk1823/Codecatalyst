@@ -155,14 +155,12 @@ export default function LandingPage() {
             </div>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-5 text-xs font-semibold text-slate-600 dark:text-slate-300">
-            <a href="#simulator" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-1.5 py-1 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60">
-              <Brain className="h-3.5 w-3.5 text-emerald-500" />
-              <span>{isHi ? "एआई सिम्युलेटर" : "Live AI Simulator"}</span>
+          <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold text-slate-600 dark:text-slate-300">
+            <a href="#simulator" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors py-1 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60">
+              {isHi ? "एआई सिम्युलेटर" : "Live AI Simulator"}
             </a>
-            <a href="#animated-simulation" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-1.5 py-1 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60">
-              <Activity className="h-3.5 w-3.5 text-emerald-500 animate-pulse" />
-              <span>{isHi ? "एनिमेटेड रडार" : "Animated Radar"}</span>
+            <a href="#animated-simulation" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors py-1 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60">
+              {isHi ? "एनिमेटेड रडार" : "Animated Radar"}
             </a>
             <a href="#how-it-works" className="hover:text-emerald-600 dark:hover:text-white transition-colors py-1 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60">
               {isHi ? "कार्यप्रणाली" : "How It Works"}
@@ -176,15 +174,6 @@ export default function LandingPage() {
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-2.5">
-            {/* Executive Pitch Deck Link Button */}
-            <Link
-              href="/presentation"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-teal-500/30 bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 hover:bg-teal-100 dark:hover:bg-teal-900/50 text-xs font-semibold shadow-xs transition-all hover:scale-[1.02]"
-              title="View Executive Pitch Deck & System Brief"
-            >
-              <Presentation className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" />
-              <span className="hidden sm:inline font-mono text-[11px]">Judge Pitch Deck</span>
-            </Link>
 
             {/* Theme Toggle Button */}
             <button
@@ -240,13 +229,13 @@ export default function LandingPage() {
 
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 space-y-8">
           {/* Top Pill / Badge */}
-          <div className="flex flex-wrap items-center justify-center gap-2 text-center">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs font-mono">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+          <div className="flex flex-wrap items-center justify-center gap-4 text-center">
+            <div className="inline-flex items-center gap-2 text-slate-800 dark:text-slate-200 text-xs font-mono font-bold uppercase tracking-wide">
+              <span className="h-2 w-2 rounded-full bg-slate-400 dark:bg-slate-500 animate-pulse" />
               <span>{isHi ? "सशस्त्र बल मानसिक स्वास्थ्य एवं कल्याण प्रणाली" : "Operational Resilience & Personnel Welfare Intelligence"}</span>
             </div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-300 text-xs font-mono">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+            <div className="inline-flex items-center gap-1.5 text-slate-800 dark:text-slate-200 text-xs font-mono font-bold uppercase tracking-wide">
+              <ShieldCheck className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
               <span>DPDP Act 2023 Compliant</span>
             </div>
           </div>
@@ -285,13 +274,6 @@ export default function LandingPage() {
               >
                 <span>{isHi ? "मिशनवेल पोर्टल खोलें" : "Launch MissionWell Portal"}</span>
                 <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/presentation"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-teal-500/30 bg-teal-500/10 hover:bg-teal-500/15 backdrop-blur-md px-5 py-3 text-sm font-semibold text-teal-700 dark:text-teal-300 transition-all hover:scale-[1.02]"
-              >
-                <Presentation className="h-4 w-4" />
-                <span>{isHi ? "हैकथॉन प्रेजेंटेशन डेक" : "Executive Pitch Deck"}</span>
               </Link>
               <a
                 href="#animated-simulation"
@@ -419,7 +401,7 @@ export default function LandingPage() {
         </div>
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 space-y-10">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs font-mono font-semibold">
+            <div className="inline-flex items-center gap-2 text-emerald-700 dark:text-emerald-400 text-xs font-mono font-bold uppercase tracking-wide">
               <Brain className="h-3.5 w-3.5" />
               <span>INTERACTIVE MACHINE LEARNING ENGINE DEMO</span>
             </div>
@@ -433,23 +415,23 @@ export default function LandingPage() {
             </p>
 
             {/* Quick Presets */}
-            <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+            <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
               <span className="text-xs font-mono text-slate-500 dark:text-slate-400">Quick Scenarios:</span>
               <button
                 onClick={() => handleScenarioPreset("bastar")}
-                className="px-3 py-1 text-xs font-mono rounded-lg border border-red-500/30 bg-red-500/10 text-red-700 dark:text-red-400 hover:bg-red-500/20 transition-colors"
+                className="px-1 py-1 text-xs font-mono font-bold text-red-700 dark:text-red-400 hover:opacity-80 transition-opacity"
               >
                 🔴 Bastar Naxal Grid (High Masking)
               </button>
               <button
                 onClick={() => handleScenarioPreset("siachen")}
-                className="px-3 py-1 text-xs font-mono rounded-lg border border-cyan-500/30 bg-cyan-500/10 text-cyan-700 dark:text-cyan-400 hover:bg-cyan-500/20 transition-colors"
+                className="px-1 py-1 text-xs font-mono font-bold text-cyan-700 dark:text-cyan-400 hover:opacity-80 transition-opacity"
               >
                 ❄️ Siachen Extreme Cold (-35°C)
               </button>
               <button
                 onClick={() => handleScenarioPreset("routine")}
-                className="px-3 py-1 text-xs font-mono rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/20 transition-colors"
+                className="px-1 py-1 text-xs font-mono font-bold text-emerald-700 dark:text-emerald-400 hover:opacity-80 transition-opacity"
               >
                 🟢 Routine Peacetime Unit
               </button>
@@ -620,13 +602,7 @@ export default function LandingPage() {
                   Composite Stress Risk Score
                 </span>
                 <div className="flex items-baseline justify-center gap-1.5">
-                  <span className={`text-4xl sm:text-5xl font-extrabold font-mono transition-colors ${
-                    simResults.score >= 70
-                      ? "text-rose-600 dark:text-rose-400"
-                      : simResults.score >= 45
-                      ? "text-amber-600 dark:text-amber-400"
-                      : "text-emerald-600 dark:text-emerald-400"
-                  }`}>
+                  <span className={`text-4xl sm:text-5xl font-extrabold font-mono transition-colors text-slate-800 dark:text-slate-200`}>
                     {simResults.score}
                   </span>
                   <span className="text-sm font-mono text-slate-500">/ 100</span>
@@ -634,17 +610,17 @@ export default function LandingPage() {
 
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold font-mono uppercase">
                   {simResults.riskBand === "HIGH" && (
-                    <span className="text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-900 px-2.5 py-0.5 rounded-full">
+                    <span className="text-slate-900 dark:text-slate-100 bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 px-2.5 py-0.5 rounded-full">
                       CRITICAL RISK • Stand-down Required
                     </span>
                   )}
                   {simResults.riskBand === "MODERATE" && (
-                    <span className="text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-900 px-2.5 py-0.5 rounded-full">
+                    <span className="text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 px-2.5 py-0.5 rounded-full">
                       ELEVATED STRAIN • Rotational Watch
                     </span>
                   )}
                   {simResults.riskBand === "LOW" && (
-                    <span className="text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-900 px-2.5 py-0.5 rounded-full">
+                    <span className="text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2.5 py-0.5 rounded-full">
                       STABLE READINESS • Routine Duty
                     </span>
                   )}
@@ -653,19 +629,19 @@ export default function LandingPage() {
 
               {/* Anti-Masking Trigger Banner */}
               {simResults.isMaskingTriggered ? (
-                <div className="p-3.5 rounded-xl border border-amber-300 dark:border-amber-500/40 bg-amber-50 dark:bg-amber-950/30 text-xs space-y-1.5">
-                  <div className="flex items-center gap-2 font-bold text-amber-900 dark:text-amber-300">
-                    <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400 animate-pulse" />
+                <div className="p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs space-y-1.5">
+                  <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-slate-100">
+                    <AlertTriangle className="h-4 w-4 shrink-0 text-slate-700 dark:text-slate-300 animate-pulse" />
                     <span>ANTI-MASKING DISCREPANCY DETECTED ({simResults.maskingConfidence}%)</span>
                   </div>
-                  <p className="text-[11px] text-amber-800 dark:text-amber-200 leading-relaxed">
+                  <p className="text-[11px] text-slate-700 dark:text-slate-300 leading-relaxed">
                     Jawan reported normal condition, but telemetry reveals <strong>{consecutiveDays} consecutive watch days</strong> and <strong>{sleepHours}h average sleep</strong>. Fatigue pattern masked by military toughness ethos.
                   </p>
                 </div>
               ) : (
                 <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 text-xs space-y-1">
                   <div className="flex items-center gap-2 font-semibold text-slate-700 dark:text-slate-300">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                    <CheckCircle2 className="h-4 w-4 text-slate-600 dark:text-slate-400" />
                     <span>Telemetry & Self-Report Consistent</span>
                   </div>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400">
@@ -722,120 +698,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Interactive Simulated Animated Image Showcase */}
-          <div id="animated-simulation" className="pt-8 border-t border-slate-200 dark:border-slate-800 space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <Activity className="h-4 w-4 text-emerald-500 animate-pulse" />
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase font-mono tracking-wider">
-                    {isHi ? "सिम्युलेटेड एनिमेटेड टेलीमेट्री व रडार दृश्य" : "Simulated Animated Telemetry & Radar Feeds"}
-                  </h3>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                    60 FPS VECTOR ENGINE
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  {isHi
-                    ? "लाइव 360° रडार स्वीप, न्यूरल एंटी-मास्किंग संज्ञानात्मक स्कैन और हाई-एल्टीट्यूड कमांड पोस्ट के बीच स्विच करें।"
-                    : "Experience live animated 360° tactical radar sweep, cortical neuro-fatigue scan, and strategic command telemetry."}
-                </p>
-              </div>
 
-              {/* View Switcher Tabs */}
-              <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-[#0F172A] border border-slate-200 dark:border-slate-800 self-start sm:self-auto">
-                <button
-                  type="button"
-                  onClick={() => setActiveSimulationVisual("radar")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all ${
-                    activeSimulationVisual === "radar"
-                      ? "bg-emerald-600 text-white shadow-xs"
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-                  }`}
-                >
-                  📡 Tactical Radar (Live)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveSimulationVisual("neural")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all ${
-                    activeSimulationVisual === "neural"
-                      ? "bg-emerald-600 text-white shadow-xs"
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-                  }`}
-                >
-                  🧠 Neural Scan
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveSimulationVisual("command")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all ${
-                    activeSimulationVisual === "command"
-                      ? "bg-emerald-600 text-white shadow-xs"
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-                  }`}
-                >
-                  🛰️ Command Post
-                </button>
-              </div>
-            </div>
-
-            {/* Display Visual Container */}
-            <div className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-[#020b0a] shadow-2xl group transition-all duration-300">
-              {activeSimulationVisual === "radar" && (
-                <div className="relative w-full aspect-[16/10] sm:aspect-[16/9] max-h-[500px] flex items-center justify-center p-2 sm:p-4">
-                  <img
-                    src="/simulated-radar.svg"
-                    alt="Simulated Animated Tactical Radar HUD"
-                    className="w-full h-full object-contain select-none"
-                  />
-                  <div className="absolute bottom-3 left-4 right-4 hidden sm:flex items-center justify-between text-[11px] font-mono text-emerald-400/90 bg-slate-950/80 px-3 py-1.5 rounded-lg backdrop-blur border border-emerald-500/20">
-                    <span className="flex items-center gap-1.5">
-                      <span className="h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
-                      LIVE SWEEP 360° • TARGETS: 4 UNITS
-                    </span>
-                    <span className="text-slate-400">
-                      ECG BIOMETRIC STRAIN: 98 BPM • ANTI-MASKING: +0.76
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              {activeSimulationVisual === "neural" && (
-                <div className="relative w-full aspect-[16/10] sm:aspect-[16/9] max-h-[500px] flex items-center justify-center p-2 sm:p-4">
-                  <img
-                    src="/simulated-neural-scan.svg"
-                    alt="Simulated Animated Neural Scan"
-                    className="w-full h-full object-contain select-none"
-                  />
-                  <div className="absolute bottom-3 left-4 right-4 hidden sm:flex items-center justify-between text-[11px] font-mono text-emerald-400/90 bg-slate-950/80 px-3 py-1.5 rounded-lg backdrop-blur border border-emerald-500/20">
-                    <span className="flex items-center gap-1.5">
-                      <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
-                      SYNAPSE SIGNAL LATENCY • LIGHTGBM SHAP MAPPING
-                    </span>
-                    <span className="text-rose-400 font-bold">
-                      ANOMALY: ETHOS SUPPRESSION DETECTED
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              {activeSimulationVisual === "command" && (
-                <div className="relative w-full aspect-[16/10] sm:aspect-[16/9] max-h-[500px] flex items-center justify-center">
-                  <img
-                    src="/hero-bg.jpg"
-                    alt="Simulated Command Operational Center"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs font-mono text-emerald-400 bg-slate-900/90 px-4 py-2.5 rounded-xl backdrop-blur border border-emerald-500/30">
-                    <span className="font-bold">HIMALAYAN STRATEGIC THEATRE SECTOR 04</span>
-                    <span className="text-slate-300">LIVE DEFENSE COMMAND HEADQUARTERS</span>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
         </div>
       </section>
 
@@ -1236,13 +1099,7 @@ export default function LandingPage() {
               <span>{isHi ? "पोर्टल में प्रवेश करें" : "Access MissionWell Portal"}</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
-            <Link
-              href="/presentation"
-              className="inline-flex items-center gap-2 rounded-xl border border-teal-500/30 bg-teal-500/10 hover:bg-teal-500/15 px-5 py-3 text-sm font-semibold text-teal-700 dark:text-teal-300 transition-all hover:scale-[1.02]"
-            >
-              <Presentation className="h-4 w-4" />
-              <span>{isHi ? "हैकथॉन प्रेजेंटेशन" : "Executive Pitch Deck"}</span>
-            </Link>
+
           </div>
         </div>
       </section>

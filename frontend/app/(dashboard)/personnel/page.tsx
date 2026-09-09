@@ -32,6 +32,27 @@ export default function PersonnelDashboard() {
 
   const [buddyStatus, setBuddyStatus] = useState<"optimal" | "alert" | "reported">("optimal");
   const [sainikRequestSent, setSainikRequestSent] = useState(false);
+  const [liveStats, setLiveStats] = useState({
+    status: isHi ? "उत्कृष्ट" : "Good",
+    stress: isHi ? "मध्यम" : "Moderate",
+    fatigue: isHi ? "नियंत्रित" : "Low",
+    workload: isHi ? "अधिक" : "Elevated",
+  });
+
+  React.useEffect(() => {
+    try {
+      const stored = localStorage.getItem("missionwell_last_assessment");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        setLiveStats({
+          status: parsed.status || (isHi ? "उत्कृष्ट" : "Good"),
+          stress: parsed.stress || (isHi ? "मध्यम" : "Moderate"),
+          fatigue: parsed.fatigue || (isHi ? "नियंत्रित" : "Low"),
+          workload: parsed.workload || (isHi ? "अधिक" : "Elevated"),
+        });
+      }
+    } catch (e) {}
+  }, []);
 
   const handleBuddyReport = () => {
     setBuddyStatus("reported");
@@ -47,7 +68,7 @@ export default function PersonnelDashboard() {
   const handleBuddyGood = () => {
     setBuddyStatus("optimal");
     toast({
-      title: isHi ? "बडी स्थिति पुष्ट" : "Buddy Watch Confirmed",
+      title: isHi ? "बडी स्थिति पुष्ट" : "Buddy Status Confirmed",
       description: isHi ? "साथी की स्थिति सामान्य दर्ज की गई।" : "Buddy status recorded as optimal.",
       type: "info",
     });
@@ -105,7 +126,7 @@ export default function PersonnelDashboard() {
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-sm font-bold text-slate-900 dark:text-[#F8FAFC]">
-                  {isHi ? "बडी-पेयर कल्याण निगरानी (Buddy Watch)" : "Buddy-Pair Mutual Welfare Watch"}
+                  {isHi ? "बडी-पेयर कल्याण निगरानी" : "Buddy-Pair Mutual Welfare System"}
                 </h3>
                 <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 border border-slate-200 dark:border-slate-700">
                   PAIR #B-1088
@@ -116,7 +137,7 @@ export default function PersonnelDashboard() {
                 <strong className="text-slate-800 dark:text-slate-200">Ct. Arvind Minz</strong> (Forward Patrol, Post Dantewada).{" "}
                 {isHi
                   ? "यदि आपका साथी थका हुआ या तनाव में दिखे, तो बिना किसी संकोच के सूचित करें।"
-                  : "Watch out for each other. Report if your partner shows severe fatigue, family distress, or sleeplessness."}
+                  : "Look out for each other. Report if your partner shows severe fatigue, family distress, or sleeplessness."}
               </p>
             </div>
           </div>
@@ -151,39 +172,39 @@ export default function PersonnelDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           title={isHi ? "समग्र कल्याण स्थिति" : "Wellness Status"}
-          value={isHi ? "उत्कृष्ट" : "Good"}
-          subtitle={isHi ? "14 दिनों का स्थिर आधारभूत स्तर" : "Stable baseline over 14 days"}
-          change="● Optimal"
-          trend="down"
+          value={liveStats.status}
+          subtitle={isHi ? "नवीनतम AI मूल्यांकन" : "Based on latest AI assessment"}
+          change={liveStats.status.includes("Attention") ? "● Needs Review" : "● Optimal"}
+          trend={liveStats.status.includes("Attention") ? "up" : "down"}
           icon={HeartPulse}
-          variant="success"
+          variant={liveStats.status.includes("Attention") ? "urgent" : "success"}
         />
         <StatCard
           title={isHi ? "तनाव सूचकांक" : "Stress Indicator"}
-          value={isHi ? "मध्यम" : "Moderate"}
-          subtitle={isHi ? "रात्रि ड्यूटी के दौरान वृद्धि" : "Elevated during night rotations"}
-          change="▲ +4% this week"
-          trend="up"
+          value={liveStats.stress}
+          subtitle={isHi ? "स्व-मूल्यांकन आधारित" : "From subjective & objective metrics"}
+          change={liveStats.stress === "Elevated" ? "▲ High Alert" : "▼ Stable"}
+          trend={liveStats.stress === "Elevated" ? "up" : "down"}
           icon={Activity}
-          variant="warning"
+          variant={liveStats.stress === "Elevated" ? "urgent" : liveStats.stress === "Moderate" ? "warning" : "info"}
         />
         <StatCard
           title={isHi ? "थकान सूचकांक" : "Fatigue Indicator"}
-          value={isHi ? "नियंत्रित" : "Low"}
+          value={liveStats.fatigue}
           subtitle={isHi ? "प्रबंधनीय सीमाओं के भीतर" : "Within manageable boundaries"}
-          change="▼ -2% improvement"
-          trend="down"
+          change={liveStats.fatigue === "High" ? "▲ Exhaustion Risk" : "▼ Managed"}
+          trend={liveStats.fatigue === "High" ? "up" : "down"}
           icon={BatteryCharging}
-          variant="info"
+          variant={liveStats.fatigue === "High" ? "urgent" : liveStats.fatigue === "Moderate" ? "warning" : "info"}
         />
         <StatCard
           title={isHi ? "कार्यभार स्थिति" : "Duty Workload"}
-          value={isHi ? "अधिक" : "Elevated"}
-          subtitle={isHi ? "68 ड्यूटी घंटे निर्धारित" : "68 duty hours scheduled"}
-          change="▲ Needs Review"
-          trend="up"
+          value={liveStats.workload}
+          subtitle={isHi ? "ड्यूटी घंटे निर्धारित" : "Recent shift cycles"}
+          change={liveStats.workload === "High" ? "▲ Elevated" : "▼ Normal"}
+          trend={liveStats.workload === "High" ? "up" : "down"}
           icon={Briefcase}
-          variant="urgent"
+          variant={liveStats.workload === "High" ? "urgent" : liveStats.workload === "Elevated" ? "warning" : "info"}
         />
       </div>
 

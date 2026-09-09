@@ -111,11 +111,16 @@ class StressPredictor:
             "high": round(p_high, 4)
         }
 
-        # Step 1: Calibrated Dual-Threshold Logic
-        if p_high >= 0.60:
+        # Step 1: Calibrated Dual-Threshold Logic with Heuristic Overrides
+        stress_val = float(telemetry_dict.get('self_reported_stress', 3))
+        energy_val = float(telemetry_dict.get('self_reported_energy', 3))
+        sleep_val = float(telemetry_dict.get('sleep_hrs_5d_avg', 7))
+        duty_hrs = float(telemetry_dict.get('duty_hours_5d', 40))
+
+        if p_high >= 0.50 or stress_val >= 8 or (stress_val >= 6 and sleep_val <= 4) or duty_hrs >= 50:
             risk_band = "HIGH"
             alert_priority = "URGENT"
-        elif p_high >= 0.30 or p_moderate >= 0.45:
+        elif p_high >= 0.30 or p_moderate >= 0.45 or stress_val >= 5 or energy_val <= 2 or duty_hrs >= 40:
             risk_band = "MODERATE"
             alert_priority = "ROUTINE_MONITORING"
         else:

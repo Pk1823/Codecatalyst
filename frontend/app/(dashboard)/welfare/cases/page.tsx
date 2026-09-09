@@ -36,7 +36,17 @@ export default function WelfareCasesPage() {
   useEffect(() => {
     async function loadCases() {
       const data = await WelfareService.getCases();
-      setCases(data);
+      try {
+        const customCasesStr = localStorage.getItem("missionwell_custom_cases");
+        if (customCasesStr) {
+          const customCases = JSON.parse(customCasesStr);
+          setCases([...customCases, ...data]);
+        } else {
+          setCases(data);
+        }
+      } catch (e) {
+        setCases(data);
+      }
     }
     loadCases();
   }, []);
