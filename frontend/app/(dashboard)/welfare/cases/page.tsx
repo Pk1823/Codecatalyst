@@ -154,9 +154,6 @@ export default function WelfareCasesPage() {
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
             Active Welfare Cases
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Officer reviews, support interventions, and rehabilitation progress.
-          </p>
         </div>
 
         <div className="flex items-center gap-2 self-start sm:self-auto">

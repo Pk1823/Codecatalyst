@@ -75,9 +75,6 @@ export default function AuditLogPage() {
               Immutable Ledger
             </span>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Cryptographic access logs and DPDP Act 2023 verification.
-          </p>
         </div>
 
         <div className="flex items-center gap-2.5">

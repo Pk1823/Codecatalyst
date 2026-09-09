@@ -64,9 +64,6 @@ export default function AlertCenterPage() {
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
             Alerts & Notifications
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Operational warnings, assessment updates, and system events.
-          </p>
         </div>
 
         <button

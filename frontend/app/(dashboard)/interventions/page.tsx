@@ -175,9 +175,6 @@ export default function InterventionsPage() {
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
             Welfare Interventions
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Active duty rotations, sleep decompression, and psychological support tracking.
-          </p>
         </div>
 
         <div className="flex items-center gap-2.5 flex-wrap">

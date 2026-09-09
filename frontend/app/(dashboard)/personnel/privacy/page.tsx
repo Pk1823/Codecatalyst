@@ -41,9 +41,6 @@ export default function PersonnelPrivacyPage() {
         <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#F8FAFC]">
           Personal Privacy & Consent Controls
         </h1>
-        <p className="text-xs text-slate-400 mt-1">
-          DPDP 2023 protected. Manage your voluntary data preferences.
-        </p>
       </div>
 
       {/* Crisp 2-Point Scope Notice */}

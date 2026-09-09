@@ -209,9 +209,6 @@ export default function AnalyticsOverviewPage() {
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-[#F8FAFC]">
             Risk Analytics & Telemetry
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Machine learning indicators for stress, sleep deficit, and operational strain.
-          </p>
         </div>
 
         {/* Live Model Badge */}

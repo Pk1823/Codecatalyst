@@ -121,9 +121,6 @@ export default function ReportsPage() {
               DPDP Compliant
             </span>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Executive briefings, workload manifests, and predictive fatigue audits.
-          </p>
         </div>
 
         {/* Global Quick Download Actions */}
