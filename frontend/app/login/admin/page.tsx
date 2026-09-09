@@ -178,7 +178,7 @@ export default function AdminLoginPage() {
       
       {/* Ambient glow */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[300px] bg-cyan-600/10 dark:bg-cyan-500/15 blur-[130px]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[300px] bg-emerald-600/10 dark:bg-emerald-500/15 blur-[130px]" />
       </div>
 
       {/* Top Bar - Minimal */}
@@ -187,7 +187,7 @@ export default function AdminLoginPage() {
           href="/"
           className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-white transition-colors"
         >
-          <ChevronLeft className="h-4 w-4 text-cyan-400" />
+          <ChevronLeft className="h-4 w-4 text-emerald-400" />
           <span>{isHi ? "होम" : "Home"}</span>
         </Link>
 
@@ -251,7 +251,7 @@ export default function AdminLoginPage() {
               }}
               className={`py-1.5 rounded-lg text-center transition-all ${
                 authMode === "signin"
-                  ? "bg-cyan-600 text-white shadow-xs font-bold"
+                  ? "bg-emerald-600 text-white shadow-xs font-bold"
                   : "text-slate-400 hover:text-white"
               }`}
             >
@@ -266,7 +266,7 @@ export default function AdminLoginPage() {
               }}
               className={`py-1.5 rounded-lg text-center transition-all ${
                 authMode === "signup"
-                  ? "bg-cyan-600 text-white shadow-xs font-bold"
+                  ? "bg-emerald-600 text-white shadow-xs font-bold"
                   : "text-slate-400 hover:text-white"
               }`}
             >
@@ -307,7 +307,7 @@ export default function AdminLoginPage() {
                   onClick={() => setSelectedRole(r.id)}
                   className={`py-1.5 rounded-lg text-center border transition-all text-xs ${
                     selectedRole === r.id
-                      ? "bg-cyan-600 border-cyan-500 text-white font-bold"
+                      ? "bg-emerald-600 border-emerald-500 text-white font-bold"
                       : "bg-slate-900 border-slate-800 text-slate-400 hover:text-white"
                   }`}
                 >
@@ -333,7 +333,7 @@ export default function AdminLoginPage() {
                   }}
                   className={`py-1 rounded-lg text-center border transition-all text-xs ${
                     selectedForce === f
-                      ? "bg-slate-700 border-slate-600 text-cyan-400 font-bold"
+                      ? "bg-slate-700 border-slate-600 text-emerald-400 font-bold"
                       : "bg-slate-900 border-slate-800 text-slate-400 hover:text-white"
                   }`}
                 >
@@ -371,7 +371,7 @@ export default function AdminLoginPage() {
                 <button
                   type="button"
                   onClick={() => setIsGoogleModalOpen(true)}
-                  className="text-xs text-slate-400 hover:text-cyan-400 transition-colors"
+                  className="text-xs text-slate-400 hover:text-emerald-400 transition-colors"
                 >
                   {isHi ? "अधिकारी डेमो खाते" : "Use officer demo accounts"}
                 </button>
@@ -386,7 +386,7 @@ export default function AdminLoginPage() {
                     setAuthMode("signup");
                     setErrorMsg("");
                   }}
-                  className="text-cyan-400 font-semibold hover:underline"
+                  className="text-emerald-400 font-semibold hover:underline"
                 >
                   {isHi ? "साइनअप करें" : "Sign up"}
                 </button>
@@ -435,7 +435,7 @@ export default function AdminLoginPage() {
                     onChange={(e) => setOfficerName(e.target.value)}
                     placeholder={isHi ? "अधिकारी का नाम" : "Officer Full Name"}
                     required
-                    className="w-full px-3 py-2 rounded-xl border border-slate-800 bg-slate-900 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-800 bg-slate-900 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                   />
                 </div>
 
@@ -446,7 +446,7 @@ export default function AdminLoginPage() {
                     onChange={(e) => setOfficerEmail(e.target.value)}
                     placeholder={isHi ? "सर्विस ID अथवा आधिकारिक ईमेल (उदा. MED-DIR-0881)" : "Service ID or Email (e.g. MED-DIR-0881)"}
                     required
-                    className="w-full px-3 py-2 rounded-xl border border-slate-800 bg-slate-900 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 font-mono"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-800 bg-slate-900 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
                   />
                 </div>
 
@@ -457,7 +457,7 @@ export default function AdminLoginPage() {
                     onChange={(e) => setOfficerPassword(e.target.value)}
                     placeholder={isHi ? "पासवर्ड" : "Password"}
                     required
-                    className="w-full pl-3 pr-8 py-2 rounded-xl border border-slate-800 bg-slate-900 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 font-mono"
+                    className="w-full pl-3 pr-8 py-2 rounded-xl border border-slate-800 bg-slate-900 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
                   />
                   <button
                     type="button"
@@ -471,7 +471,7 @@ export default function AdminLoginPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-2.5 px-4 rounded-xl bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-700 disabled:opacity-50 text-white font-semibold text-xs shadow-sm transition-all"
+                  className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-xs shadow-sm transition-all"
                 >
                   {isSubmitting ? (
                     <span className="flex items-center justify-center gap-1.5">
@@ -493,7 +493,7 @@ export default function AdminLoginPage() {
                     setAuthMode("signin");
                     setErrorMsg("");
                   }}
-                  className="text-cyan-400 font-semibold hover:underline"
+                  className="text-emerald-400 font-semibold hover:underline"
                 >
                   {isHi ? "लॉगिन करें" : "Sign in"}
                 </button>
@@ -506,7 +506,7 @@ export default function AdminLoginPage() {
           <div className="pt-2 border-t border-slate-800 text-center">
             <Link
               href="/login"
-              className="text-[11px] text-slate-400 hover:text-cyan-400 transition-colors"
+              className="text-[11px] text-slate-400 hover:text-emerald-400 transition-colors"
             >
               {isHi ? "सैनिक / जवान पोर्टल प्रवेश →" : "Personnel & Soldier Portal →"}
             </Link>
@@ -517,7 +517,7 @@ export default function AdminLoginPage() {
 
       {/* Clean Minimal Footer */}
       <footer className="relative z-10 max-w-sm w-full mx-auto text-center text-[10px] text-slate-500 py-1 flex items-center justify-center gap-1.5">
-        <ShieldCheck className="h-3 w-3 text-cyan-500" />
+        <ShieldCheck className="h-3 w-3 text-emerald-500" />
         <span>Institutional Clearance • Audit Logged</span>
       </footer>
 

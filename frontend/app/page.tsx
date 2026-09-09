@@ -115,15 +115,6 @@ export default function LandingPage() {
     router.push(dest);
   };
 
-  const forcesList: { id: ForceType; label: string; location: string }[] = [
-    { id: "CRPF", label: "CRPF", location: "Bastar / J&K Grid" },
-    { id: "ARMY", label: "Indian Army", location: "Siachen / LoC High Altitude" },
-    { id: "BSF", label: "BSF", location: "Thar Desert / Rann of Kutch" },
-    { id: "ITBP", label: "ITBP", location: "Ladakh Himalayan LAC" },
-    { id: "CISF", label: "CISF", location: "Aviation & Critical Hubs" },
-    { id: "STATE_POLICE", label: "State Police", location: "High Density Urban Grid" },
-  ];
-
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#090D16] text-slate-900 dark:text-slate-100 selection:bg-emerald-500/20 selection:text-emerald-700 dark:selection:text-emerald-300 flex flex-col font-sans transition-colors duration-200">
       {/* 1. National Tricolor Strip */}
@@ -137,7 +128,7 @@ export default function LandingPage() {
       <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/85 dark:bg-[#090D16]/85 backdrop-blur-xl shadow-xs transition-colors">
         <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-md shadow-emerald-600/25 group-hover:scale-105 transition-transform">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md shadow-emerald-600/25 group-hover:scale-105 transition-transform">
               <Shield className="h-5 w-5" />
             </div>
             <div className="flex flex-col">
@@ -175,9 +166,9 @@ export default function LandingPage() {
               aria-label="Toggle theme appearance"
             >
               {resolvedTheme === "dark" ? (
-                <Sun className="h-3.5 w-3.5 text-amber-400" />
+                <Sun className="h-3.5 w-3.5 text-slate-300" />
               ) : (
-                <Moon className="h-3.5 w-3.5 text-blue-600" />
+                <Moon className="h-3.5 w-3.5 text-slate-700" />
               )}
             </button>
 
@@ -202,15 +193,15 @@ export default function LandingPage() {
               href="/login/admin"
               className="inline-flex items-center gap-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
-              <Shield className="h-3.5 w-3.5 text-cyan-400" />
+              <Shield className="h-3.5 w-3.5 text-emerald-400" />
               <span>{isHi ? "कमांड पोर्टल" : "Command"}</span>
             </Link>
           </div>
         </div>
       </header>
 
-      {/* 3. Hero Section */}
-      <section className="relative pt-12 pb-16 lg:pt-16 lg:pb-24 border-b border-slate-200 dark:border-slate-800/80 overflow-hidden bg-slate-900/5 dark:bg-[#090D16]">
+      {/* 3. Hero Section - Enlarged Scale & Spacious Tactical Presence */}
+      <section className="relative py-20 sm:py-28 lg:py-36 min-h-[75vh] flex items-center justify-center border-b border-slate-200 dark:border-slate-800/80 overflow-hidden bg-slate-900/5 dark:bg-[#090D16]">
         {/* Breathtaking Defense Operational Command & Himalayan Sunrise Backdrop */}
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
           <img
@@ -219,160 +210,65 @@ export default function LandingPage() {
             className="w-full h-full object-cover object-center sm:object-[center_35%] opacity-40 dark:opacity-75 transition-opacity duration-700 select-none scale-100"
           />
           {/* Subtle Ambient Vignette & Smooth Bottom Color Blending */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-50/80 via-slate-50/40 to-slate-50 dark:from-[#090D16]/80 dark:via-[#090D16]/50 dark:to-[#090D16]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-50/85 via-slate-50/40 to-slate-50 dark:from-[#090D16]/85 dark:via-[#090D16]/50 dark:to-[#090D16]" />
           <div className="absolute inset-0 bg-radial-at-c from-transparent via-transparent to-slate-50/60 dark:to-[#090D16]/80" />
         </div>
 
-        {/* Ambient Glows */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[360px] bg-emerald-500/15 dark:bg-emerald-600/20 blur-[140px] pointer-events-none z-0 animate-pulse-ring" />
-        <div className="absolute top-1/3 left-1/4 w-[400px] h-[260px] bg-teal-500/10 dark:bg-cyan-600/15 blur-[130px] pointer-events-none z-0" />
+        {/* Ambient Emerald Glow */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-emerald-500/10 dark:bg-emerald-600/15 blur-[150px] pointer-events-none z-0 animate-pulse-ring" />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 space-y-8">
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 space-y-10 my-auto">
 
           {/* Value Prop Headline */}
-          <div className="text-center max-w-4xl mx-auto space-y-4">
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15] drop-shadow-xs dark:drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)]">
+          <div className="text-center max-w-5xl mx-auto space-y-6">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.08] drop-shadow-xs dark:drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)]">
               {isHi ? (
                 <>
                   ड्यूटी तनाव और थकान की{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-500 dark:from-emerald-400 dark:via-teal-300 dark:to-cyan-400">
+                  <span className="text-emerald-600 dark:text-emerald-400">
                     समय रहते पहचान
                   </span>
                 </>
               ) : (
                 <>
                   Predictive Stress & Fatigue Intelligence for{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-500 dark:from-emerald-400 dark:via-teal-300 dark:to-cyan-400">
+                  <span className="text-emerald-600 dark:text-emerald-400">
                     Safer, Resilient Armed Forces
                   </span>
                 </>
               )}
             </h1>
 
-            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl mx-auto font-normal">
+            <p className="text-base sm:text-lg lg:text-xl text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl mx-auto font-normal">
               {isHi
                 ? "भारतीय सेना, CRPF, BSF, ITBP, CISF और राज्य पुलिस के जवानों में कठिन ड्यूटी, अनिद्रा और तैनाती तनाव को बिना किसी मेडिकल कलंक या सेवा रिकॉर्ड (ACR) पर असर डाले समय रहते पहचान कर आराम व सहायता पहुंचाता है।"
                 : "MissionWell AI empowers commanders and welfare officers to identify cumulative operational fatigue, sleep deprivation, and high-stress deployments early with Anti-Masking AI—guaranteeing zero ACR/APAR career prejudice."}
             </p>
 
             {/* Primary Action Buttons */}
-            <div className="pt-3 flex flex-wrap items-center justify-center gap-3">
+            <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/25 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="inline-flex items-center justify-center gap-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-white shadow-lg shadow-emerald-600/25 hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
-                <HeartPulse className="h-4 w-4" />
+                <HeartPulse className="h-5 w-5" />
                 <span>{isHi ? "सैनिक / जवान पोर्टल" : "Personnel Portal"}</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/login/admin"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-cyan-500/40 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-950/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="inline-flex items-center justify-center gap-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-slate-100 shadow-lg shadow-slate-950/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
-                <Shield className="h-4 w-4 text-cyan-400" />
+                <Shield className="h-5 w-5 text-emerald-400" />
                 <span>{isHi ? "कमांड एवं वेलफेयर पोर्टल" : "Command & Officer Portal"}</span>
               </Link>
               <a
                 href="#simulator"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 backdrop-blur-md hover:bg-slate-100 dark:hover:bg-slate-800 px-5 py-3 text-sm font-medium text-slate-800 dark:text-slate-200 transition-all shadow-xs"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 backdrop-blur-md hover:bg-slate-100 dark:hover:bg-slate-800 px-5 py-3.5 text-sm sm:text-base font-medium text-slate-800 dark:text-slate-200 transition-all shadow-xs"
               >
                 <Sliders className="h-4 w-4 text-emerald-500" />
                 <span>{isHi ? "लाइव एआई सिम्युलेटर चलाएं" : "Try Live AI Simulator"}</span>
               </a>
-            </div>
-          </div>
-
-          {/* Force Selector Ribbon */}
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-[#0F172A]/90 p-4 shadow-lg backdrop-blur-xl">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800/80 text-xs">
-              <div className="flex items-center gap-2">
-                <Compass className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                <span className="font-bold text-slate-900 dark:text-white uppercase font-mono tracking-wider">
-                  Adaptive Force Doctrine Switcher:
-                </span>
-                <span className="text-slate-500 dark:text-slate-400">
-                  Calibrated for 6 Uniformed Services
-                </span>
-              </div>
-              <div className="text-[11px] font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded border border-emerald-500/20">
-                Active Theatre: <strong className="font-semibold">{meta.primaryTheatre}</strong>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 pt-3">
-              {forcesList.map((f) => {
-                const isActive = selectedForce === f.id;
-                return (
-                  <button
-                    key={f.id}
-                    onClick={() => setForce(f.id)}
-                    className={`p-2.5 rounded-xl border text-left transition-all ${
-                      isActive
-                        ? "border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-300 shadow-xs"
-                        : "border-slate-200 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-900/50 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="font-bold text-xs font-mono">{f.label}</span>
-                      {isActive && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />}
-                    </div>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1 block">
-                      {f.location}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* 4 Key Proof Metric Cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 text-center">
-            <div className="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0F172A]/80 shadow-xs">
-              <span className="text-2xl sm:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono block">
-                94.2%
-              </span>
-              <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 block mt-1">
-                Anti-Masking Detection
-              </span>
-              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
-                Cross-validated with duty logs
-              </span>
-            </div>
-
-            <div className="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0F172A]/80 shadow-xs">
-              <span className="text-2xl sm:text-3xl font-extrabold text-blue-600 dark:text-cyan-400 font-mono block">
-                &lt; 1.8s
-              </span>
-              <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 block mt-1">
-                Inference & SHAP Latency
-              </span>
-              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
-                LightGBM Decision Tree
-              </span>
-            </div>
-
-            <div className="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0F172A]/80 shadow-xs">
-              <span className="text-2xl sm:text-3xl font-extrabold text-purple-600 dark:text-purple-400 font-mono block">
-                100%
-              </span>
-              <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 block mt-1">
-                DPDP Act 2023 Isolation
-              </span>
-              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
-                Medical-command separation
-              </span>
-            </div>
-
-            <div className="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0F172A]/80 shadow-xs">
-              <span className="text-2xl sm:text-3xl font-extrabold text-amber-600 dark:text-amber-400 font-mono block">
-                ZERO
-              </span>
-              <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 block mt-1">
-                ACR/APAR Career Penalty
-              </span>
-              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
-                Non-punitive welfare doctrine
-              </span>
             </div>
           </div>
         </div>
@@ -405,25 +301,25 @@ export default function LandingPage() {
             </p>
 
             {/* Quick Presets */}
-            <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
               <span className="text-xs font-mono text-slate-500 dark:text-slate-400">Quick Scenarios:</span>
               <button
                 onClick={() => handleScenarioPreset("bastar")}
-                className="px-1 py-1 text-xs font-mono font-bold text-red-700 dark:text-red-400 hover:opacity-80 transition-opacity"
+                className="px-2.5 py-1 text-xs font-mono font-medium rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
               >
-                🔴 Bastar Naxal Grid (High Masking)
+                Bastar Sector (High Masking)
               </button>
               <button
                 onClick={() => handleScenarioPreset("siachen")}
-                className="px-1 py-1 text-xs font-mono font-bold text-cyan-700 dark:text-cyan-400 hover:opacity-80 transition-opacity"
+                className="px-2.5 py-1 text-xs font-mono font-medium rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
               >
-                ❄️ Siachen Extreme Cold (-35°C)
+                Siachen (-35°C Altitude)
               </button>
               <button
                 onClick={() => handleScenarioPreset("routine")}
-                className="px-1 py-1 text-xs font-mono font-bold text-emerald-700 dark:text-emerald-400 hover:opacity-80 transition-opacity"
+                className="px-2.5 py-1 text-xs font-mono font-medium rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
               >
-                🟢 Routine Peacetime Unit
+                Routine Peacetime Unit
               </button>
             </div>
           </div>
@@ -476,11 +372,7 @@ export default function LandingPage() {
                   <span className="font-medium text-slate-700 dark:text-slate-300">
                     2. Rolling 5-Day Average Sleep:
                   </span>
-                  <span className={`font-mono font-bold px-2.5 py-0.5 rounded border ${
-                    sleepHours < 4.5
-                      ? "text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-900"
-                      : "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-slate-800 border-emerald-200 dark:border-slate-700"
-                  }`}>
+                  <span className="font-mono font-bold px-2.5 py-0.5 rounded border text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700">
                     {sleepHours} Hours / night
                   </span>
                 </div>
@@ -506,7 +398,7 @@ export default function LandingPage() {
                   <span className="font-medium text-slate-700 dark:text-slate-300">
                     3. Jawan Self-Reported Response (Ethos Masking):
                   </span>
-                  <span className="font-mono text-xs font-bold text-blue-600 dark:text-cyan-400">
+                  <span className="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400">
                     {selfReportVal === 1
                       ? "Level 1: 'All Normal / Fit' (Masked)"
                       : selfReportVal === 2
@@ -659,7 +551,7 @@ export default function LandingPage() {
                     <span className="font-bold text-slate-900 dark:text-slate-200">+{simResults.sleepDeficitImpact}%</span>
                   </div>
                   <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-cyan-500 h-full rounded-full" style={{ width: `${simResults.sleepDeficitImpact}%` }} />
+                    <div className="bg-emerald-500/80 h-full rounded-full" style={{ width: `${simResults.sleepDeficitImpact}%` }} />
                   </div>
 
                   <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
@@ -667,7 +559,7 @@ export default function LandingPage() {
                     <span className="font-bold text-slate-900 dark:text-slate-200">+{simResults.sectorImpact}%</span>
                   </div>
                   <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-purple-500 h-full rounded-full" style={{ width: `${simResults.sectorImpact}%` }} />
+                    <div className="bg-slate-500 dark:bg-slate-600 h-full rounded-full" style={{ width: `${simResults.sectorImpact}%` }} />
                   </div>
                 </div>
               </div>
@@ -711,14 +603,14 @@ export default function LandingPage() {
             {/* Card 1: Welfare Officer */}
             <div
               onClick={() => handleQuickLaunchRole("WELFARE_OFFICER")}
-              className="p-5 rounded-2xl border border-emerald-500/30 bg-white dark:bg-[#0F172A] hover:border-emerald-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
+              className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:border-emerald-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900 group-hover:scale-105 transition-transform">
+                  <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
                     <HeartPulse className="h-5 w-5" />
                   </div>
-                  <span className="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-slate-800 px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-slate-800 px-2 py-0.5 rounded border border-emerald-200 dark:border-slate-700">
                     PRIMARY CARE
                   </span>
                 </div>
@@ -729,7 +621,7 @@ export default function LandingPage() {
                   Manage individual risk dossiers, clinical interventions, and proactive duty pacing rotas.
                 </p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                 <span>Enter Welfare Console</span>
                 <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </div>
@@ -738,14 +630,14 @@ export default function LandingPage() {
             {/* Card 2: Tactical Commander */}
             <div
               onClick={() => handleQuickLaunchRole("COMMANDER")}
-              className="p-5 rounded-2xl border border-amber-500/30 bg-white dark:bg-[#0F172A] hover:border-amber-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
+              className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:border-emerald-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-900 group-hover:scale-105 transition-transform">
+                  <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
                     <Activity className="h-5 w-5" />
                   </div>
-                  <span className="text-[10px] font-mono font-bold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-slate-800 px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-mono font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
                     TACTICAL AGGREGATE
                   </span>
                 </div>
@@ -756,7 +648,7 @@ export default function LandingPage() {
                   Battalion-level stress heatmaps, operational readiness metrics, and PII-masked unit telemetry.
                 </p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-amber-600 dark:text-amber-400">
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                 <span>Enter Command Brief</span>
                 <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </div>
@@ -765,14 +657,14 @@ export default function LandingPage() {
             {/* Card 3: Jawan / Soldier */}
             <div
               onClick={() => handleQuickLaunchRole("PERSONNEL")}
-              className="p-5 rounded-2xl border border-blue-500/30 bg-white dark:bg-[#0F172A] hover:border-blue-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
+              className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:border-emerald-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-cyan-400 border border-blue-200 dark:border-blue-900 group-hover:scale-105 transition-transform">
+                  <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
                     <UserCheck className="h-5 w-5" />
                   </div>
-                  <span className="text-[10px] font-mono font-bold text-blue-700 dark:text-cyan-400 bg-blue-50 dark:bg-slate-800 px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-mono font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
                     VOLUNTARY & BUDDY
                   </span>
                 </div>
@@ -783,7 +675,7 @@ export default function LandingPage() {
                   7-step confidential self-assessment, buddy watch, and direct support intake with zero stigma.
                 </p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-blue-600 dark:text-cyan-400">
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                 <span>Enter Soldier Hub</span>
                 <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </div>
@@ -792,14 +684,14 @@ export default function LandingPage() {
             {/* Card 4: System Admin */}
             <div
               onClick={() => handleQuickLaunchRole("ADMIN")}
-              className="p-5 rounded-2xl border border-purple-500/30 bg-white dark:bg-[#0F172A] hover:border-purple-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
+              className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:border-emerald-500 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-900 group-hover:scale-105 transition-transform">
+                  <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
                     <ShieldCheck className="h-5 w-5" />
                   </div>
-                  <span className="text-[10px] font-mono font-bold text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-slate-800 px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-mono font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
                     DPDP AUDIT LEDGER
                   </span>
                 </div>
@@ -810,7 +702,7 @@ export default function LandingPage() {
                   Cryptographic access ledger, DPDP Act 2023 compliance auditing, and system health status.
                 </p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-purple-600 dark:text-purple-400">
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                 <span>Enter Admin Console</span>
                 <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </div>
@@ -864,10 +756,10 @@ export default function LandingPage() {
             <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-[#0F172A] p-6 flex flex-col justify-between shadow-xs hover:shadow-md transition-all">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs font-bold text-blue-700 dark:text-cyan-400 bg-blue-50 dark:bg-slate-800 px-2.5 py-1 rounded border border-blue-200 dark:border-slate-700">
+                  <span className="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-slate-800 px-2.5 py-1 rounded border border-emerald-200 dark:border-slate-700">
                     STEP 02
                   </span>
-                  <Brain className="h-5 w-5 text-blue-600 dark:text-cyan-400" />
+                  <Brain className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <h4 className="text-base font-bold text-slate-900 dark:text-white">
                   {isHi ? "एंटी-मास्किंग एआई विश्लेषण" : "Anti-Masking AI Triage"}
@@ -887,10 +779,10 @@ export default function LandingPage() {
             <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-[#0F172A] p-6 flex flex-col justify-between shadow-xs hover:shadow-md transition-all">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs font-bold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-slate-800 px-2.5 py-1 rounded border border-amber-200 dark:border-slate-700">
+                  <span className="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-slate-800 px-2.5 py-1 rounded border border-emerald-200 dark:border-slate-700">
                     STEP 03
                   </span>
-                  <Zap className="h-5 w-5 text-amber-500 dark:text-amber-400" />
+                  <Zap className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <h4 className="text-base font-bold text-slate-900 dark:text-white">
                   {isHi ? "सक्रिय विश्राम व रोटेशन" : "Proactive Rest & Rotation"}
@@ -926,73 +818,45 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Pillar 1: Anti-Masking */}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-6 flex gap-4 shadow-xs">
-              <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900 shrink-0 h-fit">
-                <Brain className="h-6 w-6" />
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 flex items-center gap-3.5 shadow-xs hover:border-emerald-500/60 transition-all">
+              <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 shrink-0">
+                <Brain className="h-5 w-5" />
               </div>
-              <div>
-                <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-1">
-                  {isHi ? "एंटी-मास्किंग तनाव पहचान" : "Anti-Masking AI Architecture"}
-                </h4>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  {isHi
-                    ? "जवान अक्सर शारीरिक या मानसिक तनाव छिपाते हैं। हमारा मॉडल ऑब्जेक्टिव ड्यूटी घंटों और आराम के अंतराल से छिपी थकान को पहचानता है।"
-                    : "Uniformed personnel rarely admit vulnerability. Cross-validation between duty logs, sleep telemetry, and survey responses uncovers hidden strain."}
-                </p>
-              </div>
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">
+                {isHi ? "एंटी-मास्किंग तनाव पहचान" : "Anti-Masking AI Architecture"}
+              </h4>
             </div>
 
             {/* Pillar 2: Buddy-Pair */}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-6 flex gap-4 shadow-xs">
-              <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-cyan-400 border border-blue-200 dark:border-blue-900 shrink-0 h-fit">
-                <Users className="h-6 w-6" />
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 flex items-center gap-3.5 shadow-xs hover:border-emerald-500/60 transition-all">
+              <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 shrink-0">
+                <Users className="h-5 w-5" />
               </div>
-              <div>
-                <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-1">
-                  {isHi ? "बडी-पेयर पारस्परिक सुरक्षा" : "Operational Buddy-Pair Doctrine"}
-                </h4>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  {isHi
-                    ? "सशस्त्र बलों की सदियों पुरानी 'जोड़ीदार' प्रथा को डिजिटल शक्ति प्रदान करता है, ताकि साथी जवान समय पर सहायता मांग सके।"
-                    : "Leverages the armed forces centuries-old 'buddy pair' tradition, allowing peers to discreetly trigger rest without shame or formal reports."}
-                </p>
-              </div>
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">
+                {isHi ? "बडी-पेयर पारस्परिक सुरक्षा" : "Operational Buddy-Pair Doctrine"}
+              </h4>
             </div>
 
             {/* Pillar 3: DPDP Zero Prejudice */}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-6 flex gap-4 shadow-xs">
-              <div className="p-3 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-900 shrink-0 h-fit">
-                <Lock className="h-6 w-6" />
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 flex items-center gap-3.5 shadow-xs hover:border-emerald-500/60 transition-all">
+              <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 shrink-0">
+                <Lock className="h-5 w-5" />
               </div>
-              <div>
-                <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-1">
-                  {isHi ? "शून्य एसीआर पूर्वग्रह गारंटी" : "Zero ACR/APAR Career Prejudice Guarantee"}
-                </h4>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  {isHi
-                    ? "डीपीडीपी अधिनियम 2023 के तहत सभी कल्याण मूल्यांकन सेवा रिकॉर्ड से पूर्णतः अलग हैं। सहायता लेने पर कोई करियर हानि नहीं होती।"
-                    : "Self-assessments and clinical counseling are cryptographically isolated under DPDP Act 2023. Welfare inputs can never impact promotional eligibility or appraisal files."}
-                </p>
-              </div>
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">
+                {isHi ? "शून्य एसीआर पूर्वग्रह गारंटी" : "Zero ACR/APAR Career Prejudice Guarantee"}
+              </h4>
             </div>
 
             {/* Pillar 4: Force Adaptation */}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-6 flex gap-4 shadow-xs">
-              <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-900 shrink-0 h-fit">
-                <Layers className="h-6 w-6" />
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-5 flex items-center gap-3.5 shadow-xs hover:border-emerald-500/60 transition-all">
+              <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 shrink-0">
+                <Layers className="h-5 w-5" />
               </div>
-              <div>
-                <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-1">
-                  {isHi ? "6 वर्दीधारी सेवाओं हेतु अनुकूलित" : "6 Uniformed Services Adaptation"}
-                </h4>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  {isHi
-                    ? "CRPF (बस्तर), सेना (सियाचिन), BSF (रेगिस्तान), ITBP (-30°C), CISF और राज्य पुलिस के अनुसार शब्द व मानक स्वतः बदलते हैं।"
-                    : "Dynamically adapts unit hierarchies, terminology, and operational thresholds for CRPF, Army, BSF, ITBP, CISF, and State Police."}
-                </p>
-              </div>
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">
+                {isHi ? "6 वर्दीधारी सेवाओं हेतु अनुकूलित" : "6 Uniformed Services Adaptation"}
+              </h4>
             </div>
           </div>
         </div>
