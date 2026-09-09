@@ -203,6 +203,7 @@ export default function WellnessAssessmentPage() {
               {Math.round((currentStep.stepNumber / WELLNESS_STEPS.length) * 100)}% Completed
             </span>
           </div>
+          <div className="h-1.5 w-full rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
             <div
               className="h-full bg-blue-500 rounded-full transition-all duration-500 ease-out"
               style={{

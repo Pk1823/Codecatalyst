@@ -19,6 +19,7 @@ import {
   Sparkles,
   Smile,
   X,
+  PhoneCall,
 } from "lucide-react";
 import { useAuth, useToast } from "@/components/providers";
 import { FORCES_METADATA } from "@/lib/force-metadata";
