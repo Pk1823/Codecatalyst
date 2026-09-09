@@ -239,11 +239,7 @@ export default function LandingPage() {
               )}
             </h1>
 
-            <p className="text-base sm:text-lg lg:text-xl text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl mx-auto font-normal">
-              {isHi
-                ? "भारतीय सेना, CRPF, BSF, ITBP, CISF और राज्य पुलिस के जवानों में कठिन ड्यूटी, अनिद्रा और तैनाती तनाव को बिना किसी मेडिकल कलंक या सेवा रिकॉर्ड (ACR) पर असर डाले समय रहते पहचान कर आराम व सहायता पहुंचाता है।"
-                : "MissionWell AI empowers commanders and welfare officers to identify cumulative operational fatigue, sleep deprivation, and high-stress deployments early with Anti-Masking AI—guaranteeing zero ACR/APAR career prejudice."}
-            </p>
+
 
             {/* Primary Action Buttons */}
             <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
@@ -294,11 +290,7 @@ export default function LandingPage() {
             <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               {isHi ? "लाइव एंटी-मास्किंग एआई परीक्षण कंसोल" : "Live Anti-Masking AI Triage Simulator"}
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              {isHi
-                ? "स्लाइडर्स को हिलाकर देखें कि कैसे हमारा एआई मॉडल सैन्य कठोरता के कारण तनाव छिपाने (मास्किंग) वाले जवानों के वास्तविक खतरे को समय रहते पहचानता है।"
-                : "Interact with the sliders below to test how our explainable LightGBM AI detects fatigue patterns—especially when personnel downplay distress due to military toughness ethos."}
-            </p>
+
 
             {/* Quick Presets */}
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
@@ -594,9 +586,7 @@ export default function LandingPage() {
             <h3 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
               Instant 1-Click Persona Portals
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              Experience the complete defense hierarchy. Click any persona to automatically authenticate and open their designated terminal.
-            </p>
+
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -721,11 +711,7 @@ export default function LandingPage() {
             <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
               {isHi ? "3 सरल चरणों में समय पर मानवीय सहायता" : "From Early Warning to Proactive Welfare"}
             </h3>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-              {isHi
-                ? "प्रणाली जवानों के आत्म-सम्मान और पूर्ण गोपनीयता की रक्षा करते हुए समयबद्ध सहायता सुनिश्चित करती है।"
-                : "A dignified continuum that transforms reactive breakdown into proactive, non-stigmatizing welfare."}
-            </p>
+
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -811,11 +797,7 @@ export default function LandingPage() {
             <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
               {isHi ? "सैन्य एवं पुलिस संस्कृति के अनुकूल" : "Engineered for Armed Forces & Police Culture"}
             </h3>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-              {isHi
-                ? "कठिन भौगोलिक क्षेत्रों और निरंतर अभियानों में तैनात जवानों की वास्तविक जरूरतों के आधार पर विकसित।"
-                : "Built around the operational realities of high-altitude frontiers, counter-insurgency grids, and high-density shifts."}
-            </p>
+
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -881,11 +863,7 @@ export default function LandingPage() {
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {isHi ? "सशक्त, स्वस्थ एवं तत्पर सुरक्षा बल" : "Personnel Wellbeing is Mission Readiness"}
           </h2>
-          <p className="text-slate-600 dark:text-slate-400 text-sm max-w-xl mx-auto">
-            {isHi
-              ? "सशस्त्र बलों एवं पुलिस कर्मियों के निरंतर मानवीय कल्याण एवं सामरिक तत्परता को समर्पित।"
-              : "Dedicated to the proactive health, resilience, and operational readiness of India's defenders."}
-          </p>
+
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/login"
