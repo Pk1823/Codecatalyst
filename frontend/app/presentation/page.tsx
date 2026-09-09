@@ -44,6 +44,8 @@ import {
 } from "lucide-react";
 import { useAuth, useTheme, ForceType } from "@/components/providers";
 import { UserRole } from "@/types/auth";
+import { AuthService } from "@/services/auth.service";
+import { WebsiteQRCode } from "@/components/common/website-qr-code";
 import { FORCES_METADATA } from "@/lib/force-metadata";
 
 export default function PresentationPage() {
@@ -1210,6 +1212,11 @@ export default function PresentationPage() {
                 </a>
               </div>
             </div>
+          </div>
+
+          {/* Dynamic Website QR Code Mobile Portal Access Card */}
+          <div className="pt-8">
+            <WebsiteQRCode variant="footer" />
           </div>
 
           {/* Bottom Dossier & Classification Bar */}

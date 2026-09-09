@@ -38,6 +38,7 @@ import { useAuth, useTheme, ForceType } from "@/components/providers";
 import { UserRole } from "@/types/auth";
 import { FORCES_METADATA } from "@/lib/force-metadata";
 import { AuthService } from "@/services/auth.service";
+import { WebsiteQRCode } from "@/components/common/website-qr-code";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -807,6 +808,11 @@ export default function LandingPage() {
                 {isHi ? "गोपनीयता नीति" : "Privacy & DPDP"}
               </Link>
             </nav>
+          </div>
+
+          {/* Website QR Code Mobile Portal Access Card */}
+          <div className="pt-2">
+            <WebsiteQRCode variant="footer" />
           </div>
 
           {/* 24x7 Helplines Strip */}
