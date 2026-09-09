@@ -55,7 +55,6 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [forceMenuOpen, setForceMenuOpen] = useState(false);
-  const [roleMenuOpen, setRoleMenuOpen] = useState(false);
   const [guideOpen, setGuideOpen] = useState(false);
   const [guideTab, setGuideTab] = useState<"overview" | "colors" | "roles" | "privacy">("overview");
   const [datasetModalOpen, setDatasetModalOpen] = useState(false);
@@ -150,7 +149,6 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
   };
 
   const roleBadge = getRoleBadge(role as UserRole);
-  const RoleIcon = roleBadge.icon;
 
   const handleForceSwitch = (newForce: ForceType) => {
     setForce(newForce);
@@ -233,115 +231,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
 
         {/* Right Side: Quick Controls, Role Switcher & User Profile */}
         <div className="flex items-center gap-1.5 sm:gap-2">
-          {/* Quick Role Switcher Dropdown Pill */}
-          <div className="relative">
-            <button
-              onClick={() => setRoleMenuOpen(!roleMenuOpen)}
-              className={cn(
-                "flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[11px] font-bold shadow-2xs transition-all hover:scale-[1.02] active:scale-[0.98]",
-                roleBadge.color
-              )}
-              title="Click to Switch Role View (Jawan, Welfare Officer, Commander, Admin)"
-            >
-              <RoleIcon className="h-3.5 w-3.5 shrink-0" />
-              <span className="hidden sm:inline">{roleBadge.label}</span>
-              <span className="sm:hidden">{roleBadge.label.split(" ")[0]}</span>
-              <ChevronDown className="h-3 w-3 opacity-75" />
-            </button>
 
-            {roleMenuOpen && (
-              <div
-                className="absolute right-0 sm:left-0 sm:right-auto mt-2 w-80 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-2.5 shadow-2xl z-50 animate-in fade-in zoom-in-95"
-                onMouseLeave={() => setRoleMenuOpen(false)}
-              >
-                <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-800 mb-1.5">
-                  <div className="flex items-center justify-between">
-                    <p className="text-[11px] font-bold text-slate-900 dark:text-white uppercase tracking-wider font-mono">
-                      {lang === "hi" ? "सक्रिय भूमिका बदलें" : "Switch Active Persona"}
-                    </p>
-                    <span className="text-[10px] text-blue-600 dark:text-blue-400 font-mono font-semibold">1-Click</span>
-                  </div>
-                  <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
-                    {lang === "hi" ? "अलग-अलग दृष्टिकोण से सिस्टम को समझें" : "Explore the system from any operational perspective"}
-                  </p>
-                </div>
-
-                <div className="space-y-1">
-                  {[
-                    {
-                      id: "WELFARE_OFFICER" as UserRole,
-                      title: "Welfare Officer",
-                      hiTitle: "कल्याण अधिकारी",
-                      icon: UserCheck,
-                      color: "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 border-blue-300 dark:border-blue-800",
-                      desc: "Triage fatigue, manage cases & assign interventions",
-                    },
-                    {
-                      id: "PERSONNEL" as UserRole,
-                      title: "Jawan / Soldier",
-                      hiTitle: "जवान (सैनिक)",
-                      icon: HeartPulse,
-                      color: "text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-800",
-                      desc: "Daily vitals check-in, self-test & confidential support",
-                    },
-                    {
-                      id: "COMMANDER" as UserRole,
-                      title: "Tactical Commander",
-                      hiTitle: "कमांडर",
-                      icon: Activity,
-                      color: "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 border-blue-300 dark:border-blue-800",
-                      desc: "Battalion readiness radar & troop fitness overview",
-                    },
-                    {
-                      id: "ADMIN" as UserRole,
-                      title: "System Administrator",
-                      hiTitle: "सिस्टम व्यवस्थापक",
-                      icon: Shield,
-                      color: "text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/40 border-purple-300 dark:border-purple-800",
-                      desc: "DPDP compliance, audit trails & system settings",
-                    },
-                  ].map((r) => {
-                    const RIcon = r.icon;
-                    const isSelected = role === r.id;
-                    return (
-                      <button
-                        key={r.id}
-                        onClick={() => {
-                          setRoleMenuOpen(false);
-                          handleRoleQuickSwitch(r.id);
-                        }}
-                        className={cn(
-                          "w-full text-left p-2 rounded-xl transition-all flex items-start gap-2.5 border",
-                          isSelected
-                            ? "bg-blue-50/50 dark:bg-blue-950/30 border-blue-300 dark:border-blue-800 ring-1 ring-blue-500/20"
-                            : "border-transparent hover:bg-slate-50 dark:hover:bg-slate-850 hover:border-slate-200 dark:hover:border-slate-800"
-                        )}
-                      >
-                        <div className={cn("p-1.5 rounded-lg border shrink-0 mt-0.5", r.color)}>
-                          <RIcon className="h-4 w-4" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between">
-                            <p className="text-xs font-bold text-slate-900 dark:text-white">
-                              {lang === "hi" ? r.hiTitle : r.title}
-                            </p>
-                            {isSelected && (
-                              <span className="text-[9px] font-mono font-bold text-blue-600 dark:text-blue-400 bg-blue-100/60 dark:bg-blue-900/60 px-1.5 py-0.2 rounded">
-                                ACTIVE
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
-                            {r.desc}
-                          </p>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-          </div>
 
           {/* Bilingual Language Switcher (EN / हिन्दी) */}
           <button
