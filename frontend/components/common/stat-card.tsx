@@ -34,7 +34,7 @@ export function StatCard({
   return (
     <div
       className={cn(
-        "rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0F172A]/90 p-4 sm:p-5 shadow-xs hover:shadow-sm hover:border-slate-300 dark:hover:border-slate-700/80 transition-all duration-200 flex flex-col justify-between",
+        "rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-[#0F172A]/90 p-4 sm:p-5 shadow-xs hover:shadow-md hover:-translate-y-0.5 hover:border-emerald-500/30 dark:hover:border-emerald-500/30 transition-all duration-200 ease-out flex flex-col justify-between cursor-default",
         className
       )}
     >

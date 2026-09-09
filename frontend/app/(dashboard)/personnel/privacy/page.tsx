@@ -83,13 +83,13 @@ export default function PersonnelPrivacyPage() {
             </div>
             <button
               onClick={() => handleToggle(setWellnessDataConsent, wellnessDataConsent, "Self-Assessment")}
-              className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors shrink-0 ml-4 ${
+              className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors duration-200 ease-in-out shrink-0 ml-4 cursor-pointer active:scale-95 ${
                 wellnessDataConsent ? "bg-emerald-500" : "bg-slate-700"
               }`}
               aria-label="Toggle wellness data consent"
             >
               <span
-                className={`inline-block h-3.5 w-3.5 transform rounded-full bg-[#090D16] transition-transform ${
+                className={`inline-block h-3.5 w-3.5 transform rounded-full bg-[#090D16] transition-transform duration-200 ease-in-out ${
                   wellnessDataConsent ? "translate-x-5" : "translate-x-1"
                 }`}
               />
@@ -108,13 +108,13 @@ export default function PersonnelPrivacyPage() {
             </div>
             <button
               onClick={() => handleToggle(setOptionalDataConsent, optionalDataConsent, "Smart-Band Data")}
-              className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors shrink-0 ml-4 ${
+              className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors duration-200 ease-in-out shrink-0 ml-4 cursor-pointer active:scale-95 ${
                 optionalDataConsent ? "bg-emerald-500" : "bg-slate-700"
               }`}
               aria-label="Toggle biometric data consent"
             >
               <span
-                className={`inline-block h-3.5 w-3.5 transform rounded-full bg-[#090D16] transition-transform ${
+                className={`inline-block h-3.5 w-3.5 transform rounded-full bg-[#090D16] transition-transform duration-200 ease-in-out ${
                   optionalDataConsent ? "translate-x-5" : "translate-x-1"
                 }`}
               />
@@ -133,13 +133,13 @@ export default function PersonnelPrivacyPage() {
             </div>
             <button
               onClick={() => handleToggle(setAnalyticsConsent, analyticsConsent, "Anonymized Analytics")}
-              className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors shrink-0 ml-4 ${
+              className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors duration-200 ease-in-out shrink-0 ml-4 cursor-pointer active:scale-95 ${
                 analyticsConsent ? "bg-emerald-500" : "bg-slate-700"
               }`}
               aria-label="Toggle analytics consent"
             >
               <span
-                className={`inline-block h-3.5 w-3.5 transform rounded-full bg-[#090D16] transition-transform ${
+                className={`inline-block h-3.5 w-3.5 transform rounded-full bg-[#090D16] transition-transform duration-200 ease-in-out ${
                   analyticsConsent ? "translate-x-5" : "translate-x-1"
                 }`}
               />

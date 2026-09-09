@@ -205,7 +205,7 @@ export default function WellnessAssessmentPage() {
           </div>
           <div className="h-1.5 w-full rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
             <div
-              className="h-full bg-emerald-500 rounded-full transition-all duration-300"
+              className="h-full bg-emerald-500 rounded-full transition-all duration-500 ease-out"
               style={{
                 width: `${(currentStep.stepNumber / WELLNESS_STEPS.length) * 100}%`,
               }}
@@ -236,7 +236,7 @@ export default function WellnessAssessmentPage() {
                   key={opt.value}
                   type="button"
                   onClick={() => handleSelectOption(opt.value)}
-                  className={`w-full p-3.5 rounded-xl border text-left transition-all flex items-start justify-between gap-3 ${
+                  className={`w-full p-3.5 rounded-xl border text-left transition-all duration-150 ease-out flex items-start justify-between gap-3 cursor-pointer active:scale-[0.99] ${
                     isSelected
                       ? "border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/40 shadow-xs"
                       : "border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-850"
