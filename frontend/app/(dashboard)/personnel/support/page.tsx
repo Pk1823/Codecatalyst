@@ -138,9 +138,9 @@ export default function RequestSupportPage() {
 
       <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-6 sm:p-8 shadow-md">
         <div className="mb-6">
-          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
             Request Welfare Support
-          </h2>
+          </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Submit a confidential request for workload adjustment, counseling, rest recovery, or family welfare.
           </p>
@@ -149,7 +149,7 @@ export default function RequestSupportPage() {
         {/* 1-Click Quick Templates */}
         <div className="mb-6 space-y-2 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/30">
           <label className="flex items-center gap-1.5 text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider font-mono">
-            <Sparkles className="h-3.5 w-3.5 text-amber-500" />
+            <Sparkles className="h-3.5 w-3.5 text-emerald-500" />
             <span>1-Click Quick Templates (Click to auto-fill)</span>
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">

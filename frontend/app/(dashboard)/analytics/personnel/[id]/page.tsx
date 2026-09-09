@@ -225,9 +225,9 @@ export default function IndividualRiskDetailPage({
             <RiskBadge level={livePrediction?.risk_band === "HIGH" ? "HIGH" : livePrediction?.risk_band === "MODERATE" ? "MODERATE" : "LOW"} size="md" />
           </div>
 
-          <h2 className="text-xl font-bold text-[#F8FAFC]">
+          <h1 className="text-xl font-bold text-[#F8FAFC]">
             {personnel?.name || "Uniformed Personnel"}
-          </h2>
+          </h1>
 
           <p className="text-xs text-slate-400">
             {riskData.rank} • {riskData.unit} • Deployed in {personnel?.deploymentLocation || "Forward Operational Area"}

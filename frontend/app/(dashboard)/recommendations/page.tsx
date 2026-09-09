@@ -90,15 +90,15 @@ export default function RecommendationsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-              Welfare Recommendations
-            </h2>
-            <span className="rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 text-xs font-mono font-medium px-2 py-0.5 border border-emerald-200 dark:border-emerald-900">
-              AI Decision Support
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+              AI Recommendations
+            </h1>
+            <span className="rounded bg-slate-100 dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 text-xs font-mono font-medium px-2 py-0.5 border border-slate-200 dark:border-slate-700">
+              Active Triage
             </span>
           </div>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Algorithmic proposals for duty rota adjustments, leave clearance drives, and battalion recovery cycles.
+            Proactive rota adjustments, leave drives, and recovery proposals.
           </p>
         </div>
 

@@ -203,14 +203,14 @@ export default function AnalyticsOverviewPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header & Live AI Engine Status */}
+      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-[#F8FAFC]">
-            Predictive Wellness & Risk Analytics
-          </h2>
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-[#F8FAFC]">
+            Risk Analytics & Telemetry
+          </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Machine-learning powered indicators identifying cumulative stress, fatigue, and duty pressure.
+            Machine learning indicators for stress, sleep deficit, and operational strain.
           </p>
         </div>
 

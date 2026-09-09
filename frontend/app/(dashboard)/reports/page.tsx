@@ -113,16 +113,16 @@ export default function ReportsPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200/80 dark:border-slate-800 pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-              Welfare Intelligence & Official Reports
-            </h2>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+              Welfare Reports
+            </h1>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700">
               <ShieldCheck className="h-3 w-3" />
-              DPDP 2023 Compliant
+              DPDP Compliant
             </span>
           </div>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Official executive briefings, non-punitive workload manifests, and predictive fatigue audits for CRPF & CAPF command.
+            Executive briefings, workload manifests, and predictive fatigue audits.
           </p>
         </div>
 

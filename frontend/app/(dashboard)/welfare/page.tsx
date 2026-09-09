@@ -65,25 +65,19 @@ export default function WelfareOfficerDashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Header & Operational Subtitle */}
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-              {isHi ? "कल्याण एवं चिकित्सा कमान केंद्र" : "Welfare & Psychological Support Hub"}
-            </h2>
-            <span className="rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-mono font-medium px-2 py-0.5 border border-emerald-500/20">
-              {meta.sampleOfficerName}
-            </span>
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+              {isHi ? "कल्याण कमान केंद्र" : "Welfare Command Center"}
+            </h1>
             <span className="rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-mono px-2 py-0.5 border border-slate-200 dark:border-slate-700">
-              {force} • {meta.sampleBattalion}
+              {meta.sampleOfficerName}
             </span>
           </div>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            {isHi
-              ? "पूर्वानुमानित तनाव पहचान, प्रारंभिक मामला प्रबंधन एवं रोटेशनल विश्राम समन्वय"
-              : "Predictive stress detection, early welfare case tracking, and rotational rest coordination"} •{" "}
-            <span className="font-medium text-slate-700 dark:text-slate-300">{meta.primaryTheatre}</span>
+            <span className="font-medium text-slate-700 dark:text-slate-300">{meta.sampleBattalion}</span> • {meta.primaryTheatre}
           </p>
         </div>
 

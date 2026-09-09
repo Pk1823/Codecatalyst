@@ -21,11 +21,11 @@ export default function AdminDashboardPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-bold tracking-tight text-white">
-          System Administration & Governance
-        </h2>
-        <p className="text-xs text-slate-400 mt-1">
-          Identity governance, role segregation enforcement, and telemetry cluster health.
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+          System Administration
+        </h1>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          Role governance, access policies, and telemetry health status.
         </p>
       </div>
 

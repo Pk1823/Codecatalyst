@@ -157,21 +157,16 @@ export default function PersonnelDashboard() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-[#F8FAFC]">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-[#F8FAFC]">
               {isHi ? "जय हिन्द" : "Welcome"},{" "}
               {user.name || meta.samplePersonnelName}
-            </h2>
-            <span className="rounded bg-emerald-50 dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 text-[10px] font-mono font-medium px-2 py-0.5 border border-emerald-200 dark:border-slate-700">
+            </h1>
+            <span className="rounded bg-slate-100 dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 text-xs font-mono font-semibold px-2 py-0.5 border border-slate-200 dark:border-slate-700">
               {user.serviceId || meta.sampleServiceId}
-            </span>
-            <span className="rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-mono font-medium px-2 py-0.5 border border-slate-200 dark:border-slate-700">
-              {user.force || force}
             </span>
           </div>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            {isHi ? "व्यक्तिगत कल्याण अवलोकन" : "Personal Wellbeing & Readiness Overview"} •{" "}
-            <span className="text-slate-700 dark:text-slate-300">{meta.sampleUnit}</span> (
-            {meta.sampleLocation})
+            <span className="text-slate-700 dark:text-slate-300 font-medium">{meta.sampleUnit}</span> • {meta.sampleLocation}
           </p>
         </div>
 

@@ -151,11 +151,11 @@ export default function WelfareCasesPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Welfare Cases
-          </h2>
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            Active Welfare Cases
+          </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Tracking confidential human officer reviews, support interventions, and rehabilitation progress.
+            Officer reviews, support interventions, and rehabilitation progress.
           </p>
         </div>
 

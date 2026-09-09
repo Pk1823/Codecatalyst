@@ -135,9 +135,9 @@ export default function CaseDetailPage({
             <StatusBadge status={welfareCase.status} />
           </div>
 
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
             {welfareCase.primaryConcern}
-          </h2>
+          </h1>
 
           <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-slate-400">
             <span>

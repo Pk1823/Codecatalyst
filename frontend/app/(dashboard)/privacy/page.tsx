@@ -16,15 +16,15 @@ export default function PrivacyCenterPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-xl font-bold tracking-tight text-white">
-              Privacy & Governance Center
-            </h2>
-            <span className="rounded bg-emerald-500/10 text-emerald-400 text-xs font-mono px-2 py-0.5 border border-emerald-500/20">
-              Privacy Controls Active
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+              Privacy & Governance
+            </h1>
+            <span className="rounded bg-slate-100 dark:bg-slate-800 text-emerald-400 text-xs font-mono px-2 py-0.5 border border-slate-200 dark:border-slate-700">
+              DPDP 2023 Active
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1">
-            Zero-stigmatization security safeguards, cryptographic pseudonymization, and role segregation.
+            Zero-stigma safeguards, cryptographic pseudonymization, and role segregation.
           </p>
         </div>
 

@@ -45,11 +45,11 @@ export default function SettingsPage() {
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-          Platform Settings & Appearance
-        </h2>
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+          Platform Settings
+        </h1>
         <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-          Customize display theme, notification dispatch parameters, and profile credentials.
+          Preferences, display theme, and profile credentials.
         </p>
       </div>
 

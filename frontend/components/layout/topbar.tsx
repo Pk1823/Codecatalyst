@@ -90,26 +90,26 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
   const getBreadcrumb = () => {
     const isHi = lang === "hi";
     if (pathname === "/") return { title: "MissionWell AI", section: isHi ? "सार्वजनिक पोर्टल" : "Public Portal" };
-    if (pathname === "/presentation") return { title: isHi ? "कार्यकारी प्रस्तुति डेक" : "Executive Presentation Deck", section: isHi ? "सिस्टम डॉक" : "Doctrine & Brief" };
-    if (pathname === "/personnel") return { title: isHi ? "जवान कल्याण पोर्टल" : "Personnel Wellbeing", section: isHi ? "स्व-सेवा" : "Self-Service" };
-    if (pathname === "/personnel/wellness") return { title: isHi ? "कल्याण स्व-मूल्यांकन" : "Wellness Assessment", section: isHi ? "जवान पोर्टल" : "Personnel Portal" };
-    if (pathname === "/personnel/support") return { title: isHi ? "गोपनीय सहायता अनुरोध" : "Request Welfare Support", section: isHi ? "जवान पोर्टल" : "Personnel Portal" };
-    if (pathname === "/personnel/privacy") return { title: isHi ? "व्यक्तिगत गोपनीयता नियंत्रण" : "Personal Privacy Controls", section: isHi ? "सुरक्षा नीति" : "Personnel Portal" };
-    if (pathname === "/welfare") return { title: isHi ? "कल्याण कमान केंद्र" : "Welfare Intelligence", section: isHi ? "अधिकारी कमान" : "Officer Command" };
-    if (pathname === "/welfare/cases") return { title: isHi ? "सक्रिय कल्याण मामले" : "Active Welfare Cases", section: isHi ? "मामला प्रबंधन" : "Case Management" };
-    if (pathname.startsWith("/welfare/cases/")) return { title: isHi ? "मामला विवरण एवं समयरेखा" : "Case Details & Timeline", section: isHi ? "कल्याण समीक्षा" : "Welfare Cases" };
-    if (pathname === "/analytics") return { title: isHi ? "पूर्वानुमानित जोखिम विश्लेषण" : "Risk Analytics", section: isHi ? "खुफिया डेटा" : "Predictive Intelligence" };
-    if (pathname.startsWith("/analytics/personnel/")) return { title: isHi ? "स्पष्टीकरणीय एआई विवरण" : "Explainable Risk Detail", section: isHi ? "जोखिम विश्लेषण" : "Risk Analytics" };
-    if (pathname === "/interventions") return { title: isHi ? "कल्याणकारी हस्तक्षेप" : "Intervention Management", section: isHi ? "सहायता कार्यक्रम" : "Support Programs" };
-    if (pathname === "/recommendations") return { title: isHi ? "एआई निर्णय सिफ़ारिशें" : "AI Recommendations", section: isHi ? "निर्णय समर्थन" : "Decision Support" };
-    if (pathname === "/commander") return { title: isHi ? "बल समग्र कल्याण अवलोकन" : "Force Wellness Overview", section: isHi ? "कमांडर डैशबोर्ड" : "Commander Dashboard" };
-    if (pathname === "/admin") return { title: isHi ? "प्रणाली प्रशासन" : "System Administration", section: isHi ? "शासन" : "Governance" };
-    if (pathname === "/alerts") return { title: isHi ? "चेतावनी केंद्र" : "Alert Center", section: isHi ? "अधिसूचनाएं" : "Notifications" };
-    if (pathname === "/reports") return { title: isHi ? "कल्याण रिपोर्ट जनरेटर" : "Reports Generator", section: isHi ? "खुफिया रिपोर्ट" : "Intelligence Reports" };
-    if (pathname === "/audit") return { title: isHi ? "अनुपालन एवं ऑडिट लॉग" : "Audit & Compliance Log", section: isHi ? "शून्य-विश्वास रिकॉर्ड" : "Zero-Trust Records" };
-    if (pathname === "/privacy") return { title: isHi ? "गोपनीयता एवं डीपीए केंद्र" : "Privacy Center", section: isHi ? "डीपीडीपी अधिनियम 2023" : "Security & Governance" };
-    if (pathname === "/settings") return { title: isHi ? "प्रणाली सेटिंग्स" : "System Settings", section: isHi ? "प्राथमिकताएं" : "Preferences" };
-    return { title: "MissionWell AI", section: "Welfare Intelligence" };
+    if (pathname === "/presentation") return { title: isHi ? "कार्यकारी प्रस्तुति डेक" : "Executive Presentation", section: isHi ? "सिस्टम डॉक" : "Doctrine" };
+    if (pathname === "/personnel") return { title: isHi ? "जवान पोर्टल" : "Personnel Portal", section: isHi ? "जवान" : "Personnel" };
+    if (pathname === "/personnel/wellness") return { title: isHi ? "कल्याण जांच" : "Wellness Assessment", section: isHi ? "स्व-सेवा" : "Self-Service" };
+    if (pathname === "/personnel/support") return { title: isHi ? "सहायता अनुरोध" : "Support Request", section: isHi ? "स्व-सेवा" : "Self-Service" };
+    if (pathname === "/personnel/privacy") return { title: isHi ? "गोपनीयता नियंत्रण" : "Privacy Controls", section: isHi ? "सुरक्षा नीति" : "Privacy" };
+    if (pathname === "/welfare") return { title: isHi ? "कल्याण कमान" : "Welfare Command", section: isHi ? "कमान" : "Command" };
+    if (pathname === "/welfare/cases") return { title: isHi ? "सक्रिय मामले" : "Active Cases", section: isHi ? "मामले" : "Cases" };
+    if (pathname.startsWith("/welfare/cases/")) return { title: isHi ? "मामला विवरण" : "Case Details", section: isHi ? "मामले" : "Cases" };
+    if (pathname === "/analytics") return { title: isHi ? "जोखिम विश्लेषण" : "Risk Analytics", section: isHi ? "डेटा" : "Analytics" };
+    if (pathname.startsWith("/analytics/personnel/")) return { title: isHi ? "जोखिम विवरण" : "Risk Detail", section: isHi ? "डेटा" : "Analytics" };
+    if (pathname === "/interventions") return { title: isHi ? "कल्याणकारी कदम" : "Interventions", section: isHi ? "सहायता" : "Support" };
+    if (pathname === "/recommendations") return { title: isHi ? "एआई सिफ़ारिशें" : "AI Recommendations", section: isHi ? "निर्णय" : "Decisions" };
+    if (pathname === "/commander") return { title: isHi ? "कमांडर कंसोल" : "Commander Center", section: isHi ? "कमांड" : "Command" };
+    if (pathname === "/admin") return { title: isHi ? "सिस्टम एडमिन" : "Administration", section: isHi ? "प्रशासन" : "Admin" };
+    if (pathname === "/alerts") return { title: isHi ? "चेतावनी केंद्र" : "Alerts", section: isHi ? "अधिसूचनाएं" : "Alerts" };
+    if (pathname === "/reports") return { title: isHi ? "रिपोर्ट्स" : "Reports", section: isHi ? "खुफिया" : "Reports" };
+    if (pathname === "/audit") return { title: isHi ? "ऑडिट लॉग" : "Audit Trail", section: isHi ? "रिकॉर्ड" : "Audit" };
+    if (pathname === "/privacy") return { title: isHi ? "गोपनीयता नीति" : "Privacy & Governance", section: isHi ? "सुरक्षा" : "Privacy" };
+    if (pathname === "/settings") return { title: isHi ? "सेटिंग्स" : "Settings", section: isHi ? "प्राथमिकताएं" : "Settings" };
+    return { title: "MissionWell AI", section: "Platform" };
   };
 
   const breadcrumb = getBreadcrumb();
@@ -223,17 +223,11 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
             <span className="hidden sm:inline">Back</span>
           </button>
 
-          {/* Dynamic Breadcrumb Hierarchy */}
-          <div className="flex flex-col ml-1">
-            <div className="flex items-center gap-1 sm:gap-1.5 text-xs">
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 hidden sm:inline">
-                {breadcrumb.section}
-              </span>
-              <span className="text-slate-300 dark:text-slate-700 hidden sm:inline">/</span>
-              <h1 className="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-white tracking-tight truncate max-w-[140px] sm:max-w-xs md:max-w-none">
-                {breadcrumb.title}
-              </h1>
-            </div>
+          {/* Clean Topbar Location */}
+          <div className="flex items-center ml-1">
+            <h1 className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 tracking-tight truncate max-w-[140px] sm:max-w-xs md:max-w-none">
+              {breadcrumb.title}
+            </h1>
           </div>
         </div>
 

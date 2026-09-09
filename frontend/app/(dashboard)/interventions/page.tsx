@@ -172,11 +172,11 @@ export default function InterventionsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
             Welfare Interventions
-          </h2>
+          </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Tracking proactive operational duty rotations, sleep decompression, and psychological support.
+            Active duty rotations, sleep decompression, and psychological support tracking.
           </p>
         </div>
 

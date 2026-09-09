@@ -40,19 +40,15 @@ export default function CommanderDashboardPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-[#F8FAFC]">
-              {isHi ? "बल समग्र कल्याण एवं तत्परता अवलोकन" : "Force Wellness & Readiness Command"}
-            </h2>
-            <span className="rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-mono font-medium px-2 py-0.5 border border-slate-200 dark:border-slate-700">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-[#F8FAFC]">
+              {isHi ? "कमांडर नियंत्रण केंद्र" : "Commander Readiness Center"}
+            </h1>
+            <span className="rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-mono font-medium px-2 py-0.5 border border-slate-200 dark:border-slate-700">
               {meta.sampleCommanderName}
-            </span>
-            <span className="rounded bg-emerald-50 dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 text-[10px] font-mono font-semibold px-2 py-0.5 border border-emerald-200 dark:border-slate-700">
-              {meta.sampleBattalion}
             </span>
           </div>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            {isHi ? "बटालियन एवं कंपनी-वार सामरिक कल्याण नियंत्रण कक्ष" : "Battalion & Company-Level Tactical Welfare Briefing"} •{" "}
-            <span className="font-mono text-slate-700 dark:text-slate-300">{meta.primaryTheatre}</span>
+            <span className="font-mono text-slate-700 dark:text-slate-300">{meta.sampleBattalion}</span> • {meta.primaryTheatre}
           </p>
         </div>
 

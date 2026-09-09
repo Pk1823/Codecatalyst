@@ -68,15 +68,15 @@ export default function AuditLogPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
               Audit & Compliance Trail
-            </h2>
-            <span className="rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 text-xs font-mono px-2 py-0.5 border border-emerald-200 dark:border-emerald-900">
+            </h1>
+            <span className="rounded bg-slate-100 dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 text-xs font-mono px-2 py-0.5 border border-slate-200 dark:border-slate-700">
               Immutable Ledger
             </span>
           </div>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Cryptographically recorded access ledger ensuring strict privacy compliance with DPDP Act 2023.
+            Cryptographic access logs and DPDP Act 2023 verification.
           </p>
         </div>
 
