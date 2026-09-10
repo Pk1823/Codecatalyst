@@ -92,7 +92,7 @@ export default function PersonnelDashboard() {
           selfReportedStress: quickStress,
           additionalNotes: "Quick Daily Vitals Check-in.",
         },
-        meta.sampleServiceId || "P-1024"
+        user?.personnelId || meta.sampleServiceId || "P-1024"
       );
 
       const newStatus = quickEnergy >= 4 ? (isHi ? "उत्कृष्ट" : "Good") : (isHi ? "ध्यान अपेक्षित" : "Attention");

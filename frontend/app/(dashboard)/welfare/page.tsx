@@ -17,7 +17,7 @@ import { StatCard } from "@/components/common/stat-card";
 import { RiskBadge } from "@/components/common/risk-badge";
 import { RiskDonutChart } from "@/components/charts/risk-donut-chart";
 import { StressTrendChart } from "@/components/charts/stress-trend-chart";
-import { MOCK_NOTIFICATIONS } from "@/lib/mock-data/notifications";
+import { WelfareAlertItem } from "@/types/notifications";
 import { useToast, useAuth } from "@/components/providers";
 import { FORCES_METADATA } from "@/lib/force-metadata";
 
@@ -28,25 +28,51 @@ export default function WelfareOfficerDashboard() {
   const meta = FORCES_METADATA[force] || FORCES_METADATA.CRPF;
   const isHi = lang === "hi";
 
-  const [alerts, setAlerts] = useState(MOCK_NOTIFICATIONS.filter((n) => n.category === "Welfare"));
+  const [alerts, setAlerts] = useState<WelfareAlertItem[]>([]);
 
-  React.useEffect(() => {
+  const loadAlerts = () => {
     try {
       const customStr = localStorage.getItem("missionwell_custom_alerts");
       if (customStr) {
         const customAlerts = JSON.parse(customStr);
-        setAlerts((prev) => [...customAlerts, ...prev]);
+        setAlerts(customAlerts.filter((a: any) => a.category === "Welfare" || !a.category));
+      } else {
+        setAlerts([]);
       }
     } catch (e) {
       console.error("Failed to parse custom alerts", e);
+      setAlerts([]);
     }
+  };
+
+  React.useEffect(() => {
+    loadAlerts();
+
+    const handleAlertsChanged = () => {
+      loadAlerts();
+    };
+
+    window.addEventListener("missionwell_alerts_changed", handleAlertsChanged);
+    return () => {
+      window.removeEventListener("missionwell_alerts_changed", handleAlertsChanged);
+    };
   }, []);
 
   const handleDismissAlert = (id: string) => {
-    setAlerts((prev) => prev.filter((a) => a.id !== id));
+    const updated = alerts.filter((a) => a.id !== id);
+    setAlerts(updated);
+    try {
+      const customStr = localStorage.getItem("missionwell_custom_alerts");
+      if (customStr) {
+        const customAlerts = JSON.parse(customStr);
+        const nextCustom = customAlerts.filter((a: any) => a.id !== id);
+        localStorage.setItem("missionwell_custom_alerts", JSON.stringify(nextCustom));
+        window.dispatchEvent(new Event("missionwell_alerts_changed"));
+      }
+    } catch {}
     toast({
-      title: "Alert Dismissed",
-      description: "Alert archived from active welfare queue.",
+      title: isHi ? "अलर्ट हटाया गया" : "Alert Dismissed",
+      description: isHi ? "अलर्ट सक्रिय कतार से हटा दिया गया।" : "Alert archived from active welfare queue.",
       type: "info",
     });
   };

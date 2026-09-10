@@ -15,7 +15,8 @@ import {
 import { WELLNESS_STEPS } from "@/lib/mock-data/wellness";
 import { WellnessRating, WellnessAssessmentInput, WellnessAssessmentResult } from "@/types/wellness";
 import { WellnessService } from "@/services/wellness.service";
-import { useToast } from "@/components/providers";
+import { useToast, useAuth } from "@/components/providers";
+import { FORCES_METADATA } from "@/lib/force-metadata";
 
 const assessmentSchema = z.object({
   consecutiveFieldDays: z.string().min(1, "Required"),
@@ -29,6 +30,8 @@ const assessmentSchema = z.object({
 
 export default function WellnessAssessmentPage() {
   const { toast } = useToast();
+  const { user, force } = useAuth();
+  const meta = FORCES_METADATA[force] || FORCES_METADATA.CRPF;
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [submittedResult, setSubmittedResult] = useState<WellnessAssessmentResult | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -72,7 +75,8 @@ export default function WellnessAssessmentPage() {
   const onSubmit = async (data: WellnessAssessmentInput) => {
     setIsSubmitting(true);
     try {
-      const result = await WellnessService.submitAssessment(data, "P-1024");
+      const targetId = user?.personnelId || meta.sampleServiceId || "P-1024";
+      const result = await WellnessService.submitAssessment(data, targetId);
       setSubmittedResult(result);
       toast({
         title: "Assessment Recorded",

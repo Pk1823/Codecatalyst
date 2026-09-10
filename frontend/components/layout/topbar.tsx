@@ -67,6 +67,33 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
     force?: string;
   } | null>(null);
 
+  const [unreadAlertCount, setUnreadAlertCount] = useState(0);
+
+  useEffect(() => {
+    const updateCount = () => {
+      try {
+        if (typeof window !== "undefined") {
+          const customStr = localStorage.getItem("missionwell_custom_alerts");
+          if (customStr) {
+            const alerts = JSON.parse(customStr);
+            const unread = alerts.filter((a: any) => !a.isRead).length;
+            setUnreadAlertCount(unread);
+          } else {
+            setUnreadAlertCount(0);
+          }
+        }
+      } catch (e) {
+        setUnreadAlertCount(0);
+      }
+    };
+
+    updateCount();
+    window.addEventListener("missionwell_alerts_changed", updateCount);
+    return () => {
+      window.removeEventListener("missionwell_alerts_changed", updateCount);
+    };
+  }, []);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const stored = sessionStorage.getItem("google_sso_welcome");
@@ -260,23 +287,11 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
             title="Welfare Alerts & Critical Triage Notifications"
           >
             <Bell className="h-4 w-4" />
-            {(() => {
-              let count = 3;
-              try {
-                if (typeof window !== "undefined") {
-                  const customStr = localStorage.getItem("missionwell_custom_alerts");
-                  if (customStr) {
-                    const alerts = JSON.parse(customStr);
-                    count += alerts.filter((a: any) => !a.isRead).length;
-                  }
-                }
-              } catch (e) {}
-              return count > 0 ? (
-                <span className="absolute top-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-rose-500 text-[8px] font-bold text-white font-mono shadow-xs">
-                  {count}
-                </span>
-              ) : null;
-            })()}
+            {unreadAlertCount > 0 && (
+              <span className="absolute top-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-rose-500 text-[8px] font-bold text-white font-mono shadow-xs">
+                {unreadAlertCount}
+              </span>
+            )}
           </Link>
 
           {/* Subtle separator */}
