@@ -64,8 +64,7 @@ MW/
 ├── docs/                         # Project Documentation
 │   ├── ARCHITECTURE.md           # This document
 │   ├── API_SPECIFICATION.md      # OpenAPI REST specification
-│   ├── DPDP_COMPLIANCE.md        # Privacy & data protection framework
-│   └── legacy-prototype/         # Archived static prototype (index2.html)
+│   └── DPDP_COMPLIANCE.md        # Privacy & data protection framework
 │
 ├── docker-compose.yml            # Multi-service orchestrator (postgres, ml-service, backend, frontend)
 ├── package.json                  # Root runner script
