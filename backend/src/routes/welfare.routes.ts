@@ -6,28 +6,28 @@ const router = Router();
 
 // Strict RBAC: Personnel is forbidden from accessing welfare casework
 router.get(
-  "/cases",
+  ["/cases", "/"],
   authenticate,
   authorizeRoles(["WELFARE_OFFICER", "ADMIN"]),
   WelfareController.getCases
 );
 
 router.post(
-  "/cases",
+  ["/cases", "/"],
   authenticate,
   authorizeRoles(["WELFARE_OFFICER", "ADMIN"]),
   WelfareController.createCase
 );
 
 router.get(
-  "/cases/:id",
+  ["/cases/:id", "/:id"],
   authenticate,
   authorizeRoles(["WELFARE_OFFICER", "ADMIN"]),
   WelfareController.getCaseById
 );
 
 router.patch(
-  "/cases/:id",
+  ["/cases/:id", "/:id"],
   authenticate,
   authorizeRoles(["WELFARE_OFFICER", "ADMIN"]),
   WelfareController.updateCase
@@ -41,5 +41,9 @@ router.post(
 );
 
 router.get("/recommendations", authenticate, WelfareController.getRecommendations);
+
+// Soldier peer check-in and Darbar audience request routes (accessible by PERSONNEL)
+router.post("/buddy-check", authenticate, WelfareController.submitBuddyCheck);
+router.post("/darbar", authenticate, WelfareController.submitDarbarRequest);
 
 export default router;

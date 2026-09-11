@@ -8,6 +8,7 @@ export interface TelemetryPayload {
   self_reported_stress: number;
   survey_latency_sec?: number;
   delta_rhr?: number;
+  masking_index?: number;
 }
 
 export interface FactorAttribution {
@@ -62,6 +63,9 @@ export class MLClient {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           subject_id: personnelId,
+          survey_latency_sec: telemetry.survey_latency_sec ?? 35.0,
+          delta_rhr: telemetry.delta_rhr ?? 0.0,
+          masking_index: telemetry.masking_index ?? 0.05,
           ...telemetry,
         }),
       });
@@ -71,8 +75,23 @@ export class MLClient {
         const data = rawData.evaluation || rawData;
         const rawGuidance = data.clinical_guidance || data.recommendations || [];
 
+        const highProb = data.confidence_scores?.high ?? 0;
+        const modProb = data.confidence_scores?.moderate ?? 0;
+        let calibratedScore = Math.round(
+          highProb * 100 ||
+          (data.risk_band === "HIGH" ? 78 : data.risk_band === "MODERATE" ? 54 : 22)
+        );
+
+        if (data.risk_band === "HIGH") {
+          calibratedScore = Math.max(68, Math.min(98, calibratedScore));
+        } else if (data.risk_band === "MODERATE") {
+          calibratedScore = Math.max(42, Math.min(64, Math.round((highProb * 100) + (modProb * 35)) || 54));
+        } else {
+          calibratedScore = Math.min(38, Math.max(12, calibratedScore || 20));
+        }
+
         return {
-          riskScore: data.risk_band === "HIGH" ? 82 : data.risk_band === "MODERATE" ? 55 : 25,
+          riskScore: calibratedScore,
           riskLevel: data.risk_band === "HIGH" ? "HIGH" : data.risk_band === "MODERATE" ? "MODERATE" : "LOW",
           alertPriority: data.alert_priority === "URGENT" ? "Critical" : data.alert_priority === "DISCREET_CHECK" ? "High" : "Medium",
           maskingDetected: data.masking_flag || false,

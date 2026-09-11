@@ -132,4 +132,115 @@ export class WelfareController {
       res.status(500).json({ error: "Failed to fetch recommendations" });
     }
   }
+
+  /**
+   * POST /api/welfare/buddy-check
+   * Log peer check-in from soldier mobile app
+   */
+  static async submitBuddyCheck(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      const { status } = req.body;
+      const soldierId = req.user?.personnelId || "P-1024";
+
+      const personnel = await prisma.personnel.findUnique({
+        where: { id: soldierId },
+      });
+
+      if (status === "NEEDS_REST" || status === "URGENT_SUPPORT") {
+        const existingCase = await prisma.welfareCase.findFirst({
+          where: { personnelId: soldierId, status: { not: "CLOSED" } },
+        });
+
+        if (existingCase) {
+          await prisma.caseNote.create({
+            data: {
+              caseId: existingCase.id,
+              authorId: req.user!.userId,
+              authorName: req.user!.name || "Buddy-Pair Watch",
+              text: `Buddy Check logged: Partner indicated '${status}'. Recommended duty relief.`,
+              isConfidential: true,
+            },
+          });
+          await prisma.welfareCase.update({
+            where: { id: existingCase.id },
+            data: { updatedAt: new Date(), notesCount: { increment: 1 } },
+          });
+        }
+
+        const welfareOfficers = await prisma.user.findMany({ where: { role: "WELFARE_OFFICER" } });
+        for (const officer of welfareOfficers) {
+          await prisma.notification.create({
+            data: {
+              userId: officer.id,
+              title: `Buddy Watch Alert: ${personnel?.name || soldierId}`,
+              message: `Buddy check reported status '${status}'. Recommend rest window rotation.`,
+              type: "alert",
+              category: "Welfare",
+              link: "/welfare/cases",
+            },
+          });
+        }
+      }
+
+      res.status(200).json({ success: true, status });
+    } catch {
+      res.status(500).json({ error: "Failed to log buddy check" });
+    }
+  }
+
+  /**
+   * POST /api/welfare/darbar
+   * Request CO/SM confidential audience
+   */
+  static async submitDarbarRequest(req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      const { targetOfficer, reasonCategory, notes } = req.body;
+      const soldierId = req.user?.personnelId || "P-1024";
+      const personnel = await prisma.personnel.findUnique({ where: { id: soldierId } });
+
+      const welfareOfficers = await prisma.user.findMany({ where: { role: "WELFARE_OFFICER" } });
+      for (const officer of welfareOfficers) {
+        await prisma.notification.create({
+          data: {
+            userId: officer.id,
+            title: `Darbar Audience Request: ${personnel?.name || soldierId}`,
+            message: `Requested audience with ${targetOfficer} regarding '${reasonCategory}'. Remarks: ${notes || "No notes provided"}`,
+            type: "alert",
+            category: "Welfare",
+            link: "/welfare/cases",
+          },
+        });
+      }
+
+      const existingCase = await prisma.welfareCase.findFirst({
+        where: { personnelId: soldierId, status: { not: "CLOSED" } },
+      });
+      if (existingCase) {
+        await prisma.caseNote.create({
+          data: {
+            caseId: existingCase.id,
+            authorId: req.user!.userId,
+            authorName: req.user!.name || "Direct Darbar Request",
+            text: `Confidential Darbar Requested with ${targetOfficer} for ${reasonCategory}. Notes: ${notes || "Pending slot confirmation."}`,
+            isConfidential: true,
+          },
+        });
+        await prisma.welfareCase.update({
+          where: { id: existingCase.id },
+          data: { updatedAt: new Date(), notesCount: { increment: 1 } },
+        });
+      }
+
+      res.status(201).json({
+        id: `DBR-${Date.now().toString().slice(-4)}`,
+        date: new Date().toISOString().split("T")[0],
+        targetOfficer,
+        reasonCategory,
+        status: "PENDING",
+        confidentialNotes: notes,
+      });
+    } catch {
+      res.status(500).json({ error: "Failed to record darbar request" });
+    }
+  }
 }

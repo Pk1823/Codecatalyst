@@ -21,7 +21,7 @@ export class WelfareService {
         caseNotes: { orderBy: { createdAt: "desc" }, take: 5 },
         supportActions: { orderBy: { createdAt: "desc" } },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: { updatedAt: "desc" },
     });
   }
 
@@ -38,8 +38,12 @@ export class WelfareService {
             workloadRecords: { orderBy: { periodStart: "desc" }, take: 1 },
             riskPredictions: {
               orderBy: { createdAt: "desc" },
-              take: 1,
+              take: 3,
               include: { factors: true },
+            },
+            recommendations: {
+              orderBy: { createdAt: "desc" },
+              take: 5,
             },
           },
         },
@@ -52,19 +56,20 @@ export class WelfareService {
 
   static async updateCase(id: string, session: SessionPayload, body: any, ipAddress?: string) {
     const { status, noteText, followUpDate, officerId } = body;
+    const effectiveNote = noteText || body.notes;
     const updateData: any = {};
     if (status) updateData.status = status;
     if (officerId) updateData.officerId = officerId;
     if (followUpDate) updateData.followUpDate = new Date(followUpDate);
-    if (status === "CLOSED") updateData.resolvedAt = new Date();
+    if (status === "CLOSED" || status === "Resolved") updateData.resolvedAt = new Date();
 
-    if (noteText && noteText.trim().length > 0) {
+    if (effectiveNote && typeof effectiveNote === "string" && effectiveNote.trim().length > 0) {
       await prisma.caseNote.create({
         data: {
           caseId: id,
-          authorId: session.userId,
-          authorName: session.name,
-          text: noteText.trim(),
+          authorId: session.userId || "user-doc-02",
+          authorName: session.name || "Welfare Officer",
+          text: effectiveNote.trim(),
           isConfidential: true,
         },
       });

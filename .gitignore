@@ -1,15 +1,18 @@
 # Dependencies
 node_modules/
 frontend/node_modules/
+mobile/node_modules/
 .pnp
 .pnp.js
 
-# Next.js
+# Next.js & Mobile Build
 .next/
 frontend/.next/
 out/
 build/
 dist/
+mobile/dist/
+mobile/.expo/
 
 # Python / AI Engine
 __pycache__/

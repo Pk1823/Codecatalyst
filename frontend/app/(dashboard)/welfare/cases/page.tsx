@@ -12,6 +12,7 @@ import {
   Download,
   CheckCircle2,
   Filter,
+  RefreshCw,
 } from "lucide-react";
 import { WelfareService } from "@/services/welfare.service";
 import { PersonnelService } from "@/services/personnel.service";
@@ -30,6 +31,7 @@ export default function WelfareCasesPage() {
   const [riskFilter, setRiskFilter] = useState<string>("ALL");
   const [unitFilter, setUnitFilter] = useState<string>("ALL");
   const [page, setPage] = useState(1);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const pageSize = 8;
 
   // New Case Modal State
@@ -39,20 +41,31 @@ export default function WelfareCasesPage() {
   const [newPriority, setNewPriority] = useState("High");
   const [newDesc, setNewDesc] = useState("");
 
-  useEffect(() => {
-    async function loadData() {
+  const loadData = React.useCallback(async (showToast = false) => {
+    try {
+      if (showToast) setIsRefreshing(true);
       const data = await WelfareService.getCases();
       setCases(data);
-      try {
-        const pRoster = await PersonnelService.getAllPersonnel();
-        setPersonnelList(pRoster);
-        if (pRoster.length > 0 && !newPersonnelId) {
-          setNewPersonnelId(pRoster[0].id);
-        }
-      } catch {}
+      if (showToast) {
+        toast({ title: "Cases Synchronized", description: "Loaded latest defense assessments.", type: "success" });
+      }
+    } catch {} finally {
+      if (showToast) setIsRefreshing(false);
     }
+  }, [toast]);
+
+  useEffect(() => {
     loadData();
-  }, []);
+    PersonnelService.getAllPersonnel().then((pRoster) => {
+      setPersonnelList(pRoster);
+      if (pRoster.length > 0 && !newPersonnelId) {
+        setNewPersonnelId(pRoster[0].id);
+      }
+    }).catch(() => {});
+
+    const interval = setInterval(() => loadData(false), 4000);
+    return () => clearInterval(interval);
+  }, [loadData, newPersonnelId]);
 
   const handleCreateCaseSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -151,12 +164,28 @@ export default function WelfareCasesPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Active Welfare Cases
-          </h1>
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+              Active Welfare Cases
+            </h1>
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Live Sync Active
+            </span>
+          </div>
         </div>
 
         <div className="flex items-center gap-2 self-start sm:self-auto">
+          <button
+            onClick={() => loadData(true)}
+            disabled={isRefreshing}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 px-3.5 py-2 text-xs font-semibold shadow-xs transition-colors"
+            title="Fetch latest assessments"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${isRefreshing ? "animate-spin text-emerald-500" : "text-slate-500"}`} />
+            <span>{isRefreshing ? "Syncing..." : "Sync Live"}</span>
+          </button>
+
           <button
             onClick={handleExportCSV}
             className="inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 px-4 py-2 text-xs font-semibold shadow-xs transition-colors"

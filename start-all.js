@@ -129,6 +129,7 @@ async function startAll() {
   console.log(" Frontend Portal : http://localhost:3000");
   console.log(` Backend API     : http://localhost:${backendPort}`);
   console.log(" ML Inference    : http://localhost:8000");
+  console.log(" Mobile Expo App : npm run dev:mobile (Metro Port 8081)");
   console.log(" Sign-In Page    : http://localhost:3000/login");
   console.log("=================================================================\n");
 }

@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
         caseNotes: { orderBy: { createdAt: "desc" }, take: 5 },
         supportActions: { orderBy: { createdAt: "desc" } },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: { updatedAt: "desc" },
     });
 
     return NextResponse.json({ cases });

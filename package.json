@@ -4,7 +4,8 @@
   "private": true,
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "mobile"
   ],
   "scripts": {
     "dev": "node start-all.js",
@@ -12,6 +13,7 @@
     "dev:all": "node start-all.js",
     "dev:frontend": "npm --prefix frontend run dev",
     "dev:backend": "npm --prefix backend run dev",
+    "dev:mobile": "npm --prefix mobile run start",
     "dev:ai": "python ai-engine/main.py",
     "build:frontend": "npm --prefix frontend run build",
     "build:backend": "npm --prefix backend run build",

@@ -14,9 +14,20 @@ export interface LogEventParams {
 export class AuditService {
   static async log(params: LogEventParams): Promise<void> {
     try {
+      let validActorId: string | null = null;
+      if (params.actorId) {
+        const userExists = await prisma.user.findUnique({
+          where: { id: params.actorId },
+          select: { id: true },
+        });
+        if (userExists) {
+          validActorId = userExists.id;
+        }
+      }
+
       await prisma.auditLog.create({
         data: {
-          actorId: params.actorId,
+          actorId: validActorId,
           actorName: params.actorName,
           actorRole: params.actorRole,
           action: params.action,

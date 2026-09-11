@@ -290,13 +290,23 @@ export class MLPredictor {
       priority: riskLevel === "HIGH" ? ("High" as const) : ("Moderate" as const),
     }));
 
-    const score = Math.round(
-      (evalData.confidence_scores?.high || 0) * 100 ||
+    const highProb = evalData.confidence_scores?.high ?? 0;
+    const modProb = evalData.confidence_scores?.moderate ?? 0;
+    let calibratedScore = Math.round(
+      highProb * 100 ||
       (riskLevel === "HIGH" ? 78 : riskLevel === "MODERATE" ? 54 : 22)
     );
 
+    if (riskLevel === "HIGH") {
+      calibratedScore = Math.max(68, Math.min(98, calibratedScore));
+    } else if (riskLevel === "MODERATE") {
+      calibratedScore = Math.max(42, Math.min(64, Math.round((highProb * 100) + (modProb * 35)) || 54));
+    } else {
+      calibratedScore = Math.min(38, Math.max(12, calibratedScore || 20));
+    }
+
     return {
-      riskScore: score,
+      riskScore: calibratedScore,
       riskLevel,
       alertPriority,
       maskingDetected: evalData.masking_flag || false,
@@ -304,8 +314,8 @@ export class MLPredictor {
       modelVersion: "v1.0.0-lgbm-fastapi",
       factors,
       recommendations,
-      earlyWarningTriggered: score >= 65 ? {
-        severity: score >= 80 ? "CRITICAL" : "HIGH",
+      earlyWarningTriggered: calibratedScore >= 65 ? {
+        severity: calibratedScore >= 80 ? "CRITICAL" : "HIGH",
         reason: "Elevated multivariate stress telemetry detected by ML service.",
         triggerCondition: "ML_PREDICTION_ELEVATED",
       } : null,

@@ -31,4 +31,48 @@ export class RiskController {
       res.status(500).json({ error: "Failed to fetch risk history" });
     }
   }
+
+  /**
+   * GET /api/risk/unit-heatmap
+   * Unit readiness metrics and sector stress heatmaps
+   */
+  static async getUnitHeatmap(_req: AuthenticatedRequest, res: Response): Promise<void> {
+    try {
+      const metrics = [
+        {
+          unitId: "114-coy-a",
+          unitName: "114 Bn - Alpha Company (Sukma Grid)",
+          totalPersonnel: 135,
+          optimalPercentage: 68,
+          moderatePercentage: 22,
+          highRiskPercentage: 10,
+          overallReadinessScore: 84,
+          pendingDarbarCount: 3,
+        },
+        {
+          unitId: "114-coy-b",
+          unitName: "114 Bn - Bravo Company (Dornapal Forward)",
+          totalPersonnel: 140,
+          optimalPercentage: 74,
+          moderatePercentage: 18,
+          highRiskPercentage: 8,
+          overallReadinessScore: 88,
+          pendingDarbarCount: 1,
+        },
+        {
+          unitId: "114-coy-c",
+          unitName: "114 Bn - Charlie Company (Konta Picket)",
+          totalPersonnel: 130,
+          optimalPercentage: 55,
+          moderatePercentage: 30,
+          highRiskPercentage: 15,
+          overallReadinessScore: 72,
+          pendingDarbarCount: 5,
+        },
+      ];
+      res.json({ metrics });
+    } catch {
+      res.status(500).json({ error: "Failed to fetch unit heatmap" });
+    }
+  }
 }

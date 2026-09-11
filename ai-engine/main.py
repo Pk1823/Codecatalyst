@@ -76,9 +76,9 @@ class PersonnelTelemetry(BaseModel):
     sleep_hrs_5d_avg: float = Field(..., ge=0.0, le=24.0, description="Average sleep hours per 24h over past 5 days")
     self_reported_energy: int = Field(..., ge=1, le=5, description="Subjective energy level (1: Exhausted, 5: High)")
     self_reported_stress: int = Field(..., ge=1, le=10, description="Subjective acute stress level (1: None, 10: Extreme)")
-    survey_latency_sec: float = Field(..., ge=0.0, description="Survey completion time in seconds")
-    delta_rhr: float = Field(..., description="Change in resting heart rate relative to baseline in bpm")
-    masking_index: float = Field(..., ge=0.0, le=1.0, description="Computed behavioral masking index (0.0 - 1.0)")
+    survey_latency_sec: float = Field(default=35.0, ge=0.0, description="Survey completion time in seconds")
+    delta_rhr: float = Field(default=0.0, description="Change in resting heart rate relative to baseline in bpm")
+    masking_index: float = Field(default=0.05, ge=0.0, le=1.0, description="Computed behavioral masking index (0.0 - 1.0)")
 
     model_config = {
         "json_schema_extra": {
