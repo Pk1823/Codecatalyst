@@ -149,48 +149,56 @@ export default function AssessmentScreen() {
             </View>
           )}
 
-          {/* SHAP Explainability Drivers */}
-          <View style={styles.shapSection}>
-            <View style={styles.shapHeader}>
-              <Sparkles size={16} color={colors.primary} />
-              <Text style={[styles.shapTitle, { color: colors.text }]}>
-                Key Stress Drivers (SHAP AI Explainability)
-              </Text>
-            </View>
-
-            {result.shapDrivers.map((driver, idx) => (
-              <View
-                key={idx}
-                style={[
-                  styles.driverCard,
-                  { backgroundColor: colors.surface, borderColor: colors.cardBorder },
-                ]}
-              >
-                <View style={styles.driverHeader}>
-                  <Text style={[styles.driverName, { color: colors.text }]}>{driver.feature}</Text>
-                  <Badge
-                    label={driver.impact.toUpperCase()}
-                    variant={driver.impact === "high" ? "danger" : "warning"}
-                    size="sm"
-                  />
-                </View>
-                <Text style={[styles.driverDesc, { color: colors.textMuted }]}>
-                  {driver.description}
+          {/* Key Stress Factors */}
+          {result.shapDrivers && result.shapDrivers.length > 0 && (
+            <View style={styles.shapSection}>
+              <View style={styles.shapHeader}>
+                <Sparkles size={15} color={colors.primary} />
+                <Text style={[styles.shapTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+                  Key Stress Factors
                 </Text>
               </View>
-            ))}
-          </View>
 
-          {/* Recommendations */}
-          <View style={styles.recommendationsBox}>
-            <Text style={[styles.recTitle, { color: colors.text }]}>Actionable Support Recommendations</Text>
-            {result.recommendations.map((rec, i) => (
-              <View key={i} style={styles.recItem}>
-                <Text style={[styles.recBullet, { color: colors.primary }]}>•</Text>
-                <Text style={[styles.recText, { color: colors.textMuted }]}>{rec}</Text>
+              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6, marginTop: 4 }}>
+                {result.shapDrivers.slice(0, 3).map((driver, idx) => (
+                  <View
+                    key={idx}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 6,
+                      backgroundColor: colors.surface,
+                      borderWidth: 1,
+                      borderColor: colors.cardBorder,
+                      borderRadius: 8,
+                      paddingVertical: 4,
+                      paddingHorizontal: 8,
+                    }}
+                  >
+                    <Text style={{ fontSize: 11, fontWeight: "700", color: colors.text }}>{driver.feature}</Text>
+                    <Badge
+                      label={driver.impact.toUpperCase()}
+                      variant={driver.impact === "high" ? "danger" : "warning"}
+                      size="sm"
+                    />
+                  </View>
+                ))}
               </View>
-            ))}
-          </View>
+            </View>
+          )}
+
+          {/* Actionable Recommendation */}
+          {result.recommendations && result.recommendations.length > 0 && (
+            <View style={styles.recommendationsBox}>
+              <Text style={[styles.recTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+                Recommended Care Action
+              </Text>
+              <View style={styles.recItem}>
+                <Text style={[styles.recBullet, { color: colors.primary }]}>•</Text>
+                <Text style={[styles.recText, { color: colors.textMuted }]}>{result.recommendations[0]}</Text>
+              </View>
+            </View>
+          )}
 
           <Button
             title="Return to Personnel Hub"

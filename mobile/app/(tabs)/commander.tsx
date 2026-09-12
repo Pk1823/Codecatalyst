@@ -44,32 +44,52 @@ export default function CommanderScreen() {
     <ScreenContainer>
       <Header
         title="Command Operations"
-        subtitle="Battalion Readiness & Operational Heatmaps"
+        subtitle="Battalion Readiness & Heatmaps"
       />
 
-      {/* Battalion Readiness Banner */}
+      {/* Battalion Readiness Tactical HUD */}
       <Card variant="elevated" style={styles.readinessCard}>
         <View style={styles.cardHeaderRow}>
           <View style={[styles.iconBox, { backgroundColor: "rgba(245, 158, 11, 0.15)" }]}>
-            <Crown size={24} color="#F59E0B" />
+            <Crown size={22} color="#F59E0B" />
           </View>
-          <Badge label="OPERATIONAL STATUS" variant="success" />
+          <View style={styles.livePill}>
+            <View style={styles.liveDot} />
+            <Text style={styles.liveText}>CO GRID LIVE</Text>
+          </View>
         </View>
 
-        <Text style={[styles.readinessTitle, { color: colors.text }]}>
-          Overall Force Readiness Index
-        </Text>
-        <Text style={[styles.readinessDesc, { color: colors.textMuted }]}>
-          Aggregated across all deployed companies in northern Counter-Insurgency grid. Individual medical privacy strictly shielded.
+        <Text style={[styles.readinessTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+          Battalion Force Readiness
         </Text>
 
         <View style={styles.scoreRow}>
-          <Text style={[styles.readinessScore, { color: colors.success }]}>84%</Text>
+          <Text style={[styles.readinessScore, { color: colors.success, fontFamily: "GoogleSans-Bold" }]}>
+            84%
+          </Text>
           <View style={styles.scoreMeta}>
-            <Text style={[styles.readinessStatus, { color: colors.text }]}>MISSION READY</Text>
-            <Text style={[styles.readinessSub, { color: colors.textMuted }]}>
-              405 Total Active Personnel Deployed
+            <Text style={[styles.readinessStatus, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+              MISSION READY
             </Text>
+            <Text style={[styles.readinessSub, { color: colors.textMuted }]}>
+              405 Jawans Deployed across 4 Coys
+            </Text>
+          </View>
+        </View>
+
+        {/* Tactical Metric Chips */}
+        <View style={styles.hudStatsGrid}>
+          <View style={[styles.hudStatItem, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
+            <Text style={[styles.hudStatVal, { color: colors.success, fontFamily: "GoogleSans-Bold" }]}>338</Text>
+            <Text style={[styles.hudStatLbl, { color: colors.textMuted }]}>Optimal (83%)</Text>
+          </View>
+          <View style={[styles.hudStatItem, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
+            <Text style={[styles.hudStatVal, { color: colors.warning, fontFamily: "GoogleSans-Bold" }]}>54</Text>
+            <Text style={[styles.hudStatLbl, { color: colors.textMuted }]}>Fatigued (13%)</Text>
+          </View>
+          <View style={[styles.hudStatItem, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
+            <Text style={[styles.hudStatVal, { color: colors.danger, fontFamily: "GoogleSans-Bold" }]}>13</Text>
+            <Text style={[styles.hudStatLbl, { color: colors.textMuted }]}>Strained (4%)</Text>
           </View>
         </View>
 
@@ -88,60 +108,72 @@ export default function CommanderScreen() {
         <View style={styles.cardHeaderRow}>
           <View style={styles.titleWithIcon}>
             <Activity size={18} color={colors.primary} />
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>
-              Company-Wise Stress Breakdown
+            <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+              Company Stress Breakdown
             </Text>
           </View>
           <Badge label="ANONYMIZED" variant="neutral" size="sm" />
         </View>
 
-        {unitMetrics.map((unit) => (
-          <View
-            key={unit.unitId}
-            style={[styles.unitItem, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}
-          >
-            <View style={styles.unitHeader}>
-              <Text style={[styles.unitName, { color: colors.text }]}>{unit.unitName}</Text>
-              <Text style={[styles.unitPersonnelCount, { color: colors.textMuted }]}>
-                {unit.totalPersonnel} Jawans
-              </Text>
-            </View>
+        {unitMetrics.map((unit) => {
+          const isHighRisk = unit.highRiskPercentage > 10;
+          return (
+            <View
+              key={unit.unitId}
+              style={[styles.unitItem, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}
+            >
+              <View style={styles.unitHeader}>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+                  <Text style={[styles.unitName, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+                    {unit.unitName}
+                  </Text>
+                  <Badge
+                    label={isHighRisk ? "WATCH" : "NORMAL"}
+                    variant={isHighRisk ? "warning" : "success"}
+                    size="sm"
+                  />
+                </View>
+                <Text style={[styles.unitPersonnelCount, { color: colors.textMuted }]}>
+                  {unit.totalPersonnel} Jawans
+                </Text>
+              </View>
 
-            {/* Segmented Stress Ratio Bar */}
-            <View style={styles.segmentedBar}>
-              <View
-                style={[
-                  styles.segment,
-                  { width: `${unit.optimalPercentage}%`, backgroundColor: colors.success },
-                ]}
-              />
-              <View
-                style={[
-                  styles.segment,
-                  { width: `${unit.moderatePercentage}%`, backgroundColor: colors.warning },
-                ]}
-              />
-              <View
-                style={[
-                  styles.segment,
-                  { width: `${unit.highRiskPercentage}%`, backgroundColor: colors.danger },
-                ]}
-              />
-            </View>
+              {/* Segmented Stress Ratio Bar */}
+              <View style={styles.segmentedBar}>
+                <View
+                  style={[
+                    styles.segment,
+                    { width: `${unit.optimalPercentage}%`, backgroundColor: colors.success },
+                  ]}
+                />
+                <View
+                  style={[
+                    styles.segment,
+                    { width: `${unit.moderatePercentage}%`, backgroundColor: colors.warning },
+                  ]}
+                />
+                <View
+                  style={[
+                    styles.segment,
+                    { width: `${unit.highRiskPercentage}%`, backgroundColor: colors.danger },
+                  ]}
+                />
+              </View>
 
-            <View style={styles.legendRow}>
-              <Text style={[styles.legendText, { color: colors.success }]}>
-                {unit.optimalPercentage}% Optimal
-              </Text>
-              <Text style={[styles.legendText, { color: colors.warning }]}>
-                {unit.moderatePercentage}% Fatigue
-              </Text>
-              <Text style={[styles.legendText, { color: colors.danger }]}>
-                {unit.highRiskPercentage}% Strained
-              </Text>
+              <View style={styles.legendRow}>
+                <Text style={[styles.legendText, { color: colors.success }]}>
+                  {unit.optimalPercentage}% Ready
+                </Text>
+                <Text style={[styles.legendText, { color: colors.warning }]}>
+                  {unit.moderatePercentage}% Fatigue
+                </Text>
+                <Text style={[styles.legendText, { color: colors.danger }]}>
+                  {unit.highRiskPercentage}% Strained
+                </Text>
+              </View>
             </View>
-          </View>
-        ))}
+          );
+        })}
       </Card>
 
       {/* Pending Darbar Audience Requests Queue */}
@@ -149,16 +181,12 @@ export default function CommanderScreen() {
         <View style={styles.cardHeaderRow}>
           <View style={styles.titleWithIcon}>
             <CalendarCheck size={18} color="#F59E0B" />
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
               Confidential Darbar Queue
             </Text>
           </View>
           <Badge label="CO AUDIENCE" variant="warning" size="sm" />
         </View>
-
-        <Text style={[styles.darbarDesc, { color: colors.textMuted }]}>
-          Direct audience appeals from Jawans requesting Commanding Officer review.
-        </Text>
 
         {darbarRequests.map((req) => (
           <View
@@ -167,7 +195,7 @@ export default function CommanderScreen() {
           >
             <View style={styles.darbarItemHeader}>
               <View>
-                <Text style={[styles.darbarReason, { color: colors.text }]}>
+                <Text style={[styles.darbarReason, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
                   {req.reasonCategory}
                 </Text>
                 <Text style={[styles.darbarRef, { color: colors.textMuted }]}>
@@ -181,13 +209,13 @@ export default function CommanderScreen() {
               />
             </View>
 
-            <Text style={[styles.darbarNotes, { color: colors.textMuted }]}>
+            <Text style={[styles.darbarNotes, { color: colors.textMuted }]} numberOfLines={2}>
               "{req.confidentialNotes}"
             </Text>
 
             {req.status === "PENDING" ? (
               <Button
-                title="Schedule 10:00 hrs Slot"
+                title="Confirm 10:00 hrs Slot"
                 size="sm"
                 onPress={() => handleApproveDarbar(req.id)}
                 icon={<Clock size={14} color="#FFFFFF" />}
@@ -197,7 +225,7 @@ export default function CommanderScreen() {
               <View style={styles.scheduledInfo}>
                 <CheckCircle2 size={14} color={colors.success} />
                 <Text style={[styles.scheduledText, { color: colors.success }]}>
-                  Slot Confirmed: {req.scheduledSlot}
+                  Confirmed: {req.scheduledSlot}
                 </Text>
               </View>
             )}
@@ -207,9 +235,9 @@ export default function CommanderScreen() {
 
       {/* DPDP Compliance Reassurance */}
       <View style={styles.statutoryFooter}>
-        <ShieldCheck size={16} color={colors.accent} />
+        <ShieldCheck size={15} color={colors.accent} />
         <Text style={[styles.statutoryText, { color: colors.textMuted }]}>
-          Commander View DPDP 2023 Shield: Self-reported mental health ratings and private doctor notes are blocked by cryptographic RBAC.
+          DPDP Act 2023 Shielded • Anonymized Telemetry • Zero Individual Medical Disclosures
         </Text>
       </View>
     </ScreenContainer>
@@ -234,15 +262,55 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  livePill: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+    backgroundColor: "rgba(16, 185, 129, 0.12)",
+    borderWidth: 1,
+    borderColor: "rgba(16, 185, 129, 0.35)",
+  },
+  liveDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: "#10B981",
+  },
+  liveText: {
+    fontSize: 9,
+    fontWeight: "900",
+    color: "#10B981",
+    letterSpacing: 0.6,
+  },
   readinessTitle: {
     fontSize: 17,
     fontWeight: "800",
     marginBottom: 4,
   },
-  readinessDesc: {
-    fontSize: 12,
-    lineHeight: 17,
-    marginBottom: 16,
+  hudStatsGrid: {
+    flexDirection: "row",
+    gap: 8,
+    marginBottom: 14,
+  },
+  hudStatItem: {
+    flex: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    alignItems: "center",
+  },
+  hudStatVal: {
+    fontSize: 16,
+    fontWeight: "900",
+  },
+  hudStatLbl: {
+    fontSize: 9.5,
+    fontWeight: "600",
+    marginTop: 2,
   },
   scoreRow: {
     flexDirection: "row",

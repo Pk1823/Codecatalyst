@@ -41,6 +41,17 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [isGoogleModalOpen, setIsGoogleModalOpen] = useState(false);
+  const [personaTab, setPersonaTab] = useState<"soldiers" | "officers">("soldiers");
+
+  const routeForUser = (u?: User) => {
+    if (u?.role === "WELFARE_OFFICER") {
+      router.replace("/welfare");
+    } else if (u?.role === "COMMANDER" || u?.role === "ADMIN") {
+      router.replace("/commander");
+    } else {
+      router.replace("/personnel");
+    }
+  };
 
   const handleCredentialsLogin = async () => {
     if (!serviceId.trim()) {
@@ -49,8 +60,8 @@ export default function LoginScreen() {
     }
     setErrorMsg("");
     try {
-      await login(serviceId, password);
-      router.replace("/personnel");
+      const u = await login(serviceId, password);
+      routeForUser(u);
     } catch (e: any) {
       setErrorMsg(e.message || "Login failed");
     }
@@ -58,8 +69,8 @@ export default function LoginScreen() {
 
   const handlePersonaLogin = async (key: keyof typeof EVALUATOR_PERSONAS) => {
     try {
-      await loginAsPersona(key);
-      router.replace("/personnel");
+      const u = await loginAsPersona(key);
+      routeForUser(u);
     } catch {
       Alert.alert("Error", "Could not sign in with this persona");
     }
@@ -67,8 +78,8 @@ export default function LoginScreen() {
 
   const handleGoogleSuccess = async (googleUser: User) => {
     setIsGoogleModalOpen(false);
-    await loginWithGoogle(googleUser);
-    router.replace("/personnel");
+    const u = await loginWithGoogle(googleUser);
+    routeForUser(u);
   };
 
   return (
@@ -194,75 +205,163 @@ export default function LoginScreen() {
         </View>
       </Card>
 
-      {/* 1-Tap Soldier Profiles */}
+      {/* 1-Tap Quick Evaluator Switcher */}
       <Card style={styles.evaluatorCard}>
         <View style={styles.evaluatorHeader}>
-          <Text style={[styles.evaluatorTitle, { color: colors.text }]}>
-            Quick Soldier Access (Jawan / NCO)
+          <Text style={[styles.evaluatorTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+            1-Tap Demo Switcher
           </Text>
-          <Badge label="SOLDIER ACCESS" variant="info" size="sm" />
+          <Badge label="EVALUATOR ACCESS" variant="info" size="sm" />
         </View>
-        <Text style={[styles.evaluatorSubtitle, { color: colors.textMuted }]}>
-          Instant voluntary self-assessment profile access
-        </Text>
 
-        {/* Soldier 1: Ct. Piyush Kumar */}
-        <TouchableOpacity
-          style={[styles.personaItem, { borderBottomColor: colors.border }]}
-          onPress={() => handlePersonaLogin("jawan")}
-        >
-          <View style={[styles.personaIcon, { backgroundColor: "rgba(59, 130, 246, 0.15)" }]}>
-            <UserCheck size={18} color="#3B82F6" />
-          </View>
-          <View style={styles.personaMeta}>
-            <Text style={[styles.personaName, { color: colors.text }]}>Ct. Piyush Kumar</Text>
-            <Text style={[styles.personaRole, { color: colors.textMuted }]}>
-              Constable (GD) • 114 Bn Alpha Coy (Sukma)
+        {/* Segmented Persona Mode */}
+        <View style={[styles.personaTabContainer, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
+          <TouchableOpacity
+            style={[styles.personaTabBtn, personaTab === "soldiers" && { backgroundColor: colors.primary }]}
+            onPress={() => setPersonaTab("soldiers")}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.personaTabBtnText, { color: personaTab === "soldiers" ? "#FFFFFF" : colors.textMuted }]}>
+              Jawans & NCOs
             </Text>
-          </View>
-          <ChevronRight size={18} color={colors.textMuted} />
-        </TouchableOpacity>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.personaTabBtn, personaTab === "officers" && { backgroundColor: colors.primary }]}
+            onPress={() => setPersonaTab("officers")}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.personaTabBtnText, { color: personaTab === "officers" ? "#FFFFFF" : colors.textMuted }]}>
+              Officers & Medical
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-        {/* Soldier 2: Hav. Rajesh Kumar */}
-        <TouchableOpacity
-          style={[styles.personaItem, { borderBottomColor: colors.border }]}
-          onPress={() => handlePersonaLogin("jawan2")}
-        >
-          <View style={[styles.personaIcon, { backgroundColor: "rgba(16, 185, 129, 0.15)" }]}>
-            <UserCheck size={18} color="#10B981" />
-          </View>
-          <View style={styles.personaMeta}>
-            <Text style={[styles.personaName, { color: colors.text }]}>Hav. Rajesh Kumar</Text>
-            <Text style={[styles.personaRole, { color: colors.textMuted }]}>
-              Havildar • 114 Bn Bravo Coy
-            </Text>
-          </View>
-          <ChevronRight size={18} color={colors.textMuted} />
-        </TouchableOpacity>
+        {personaTab === "soldiers" ? (
+          <>
+            {/* Soldier 1: Ct. Piyush Kumar */}
+            <TouchableOpacity
+              style={[styles.personaItem, { borderBottomColor: colors.border }]}
+              onPress={() => handlePersonaLogin("jawan")}
+            >
+              <View style={[styles.personaIcon, { backgroundColor: "rgba(59, 130, 246, 0.15)" }]}>
+                <UserCheck size={18} color="#3B82F6" />
+              </View>
+              <View style={styles.personaMeta}>
+                <Text style={[styles.personaName, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+                  Ct. Piyush Kumar
+                </Text>
+                <Text style={[styles.personaRole, { color: colors.textMuted }]}>
+                  Constable (GD) • Alpha Coy, Sukma
+                </Text>
+              </View>
+              <ChevronRight size={18} color={colors.textMuted} />
+            </TouchableOpacity>
 
-        {/* Soldier 3: ASI Gurpreet Singh */}
-        <TouchableOpacity
-          style={styles.personaItem}
-          onPress={() => handlePersonaLogin("jawan3")}
-        >
-          <View style={[styles.personaIcon, { backgroundColor: "rgba(245, 158, 11, 0.15)" }]}>
-            <UserCheck size={18} color="#F59E0B" />
-          </View>
-          <View style={styles.personaMeta}>
-            <Text style={[styles.personaName, { color: colors.text }]}>ASI Gurpreet Singh</Text>
-            <Text style={[styles.personaRole, { color: colors.textMuted }]}>
-              Assistant Sub-Inspector • 114 Bn HQ Coy
-            </Text>
-          </View>
-          <ChevronRight size={18} color={colors.textMuted} />
-        </TouchableOpacity>
+            {/* Soldier 2: Hav. Rajesh Kumar */}
+            <TouchableOpacity
+              style={[styles.personaItem, { borderBottomColor: colors.border }]}
+              onPress={() => handlePersonaLogin("jawan2")}
+            >
+              <View style={[styles.personaIcon, { backgroundColor: "rgba(16, 185, 129, 0.15)" }]}>
+                <UserCheck size={18} color="#10B981" />
+              </View>
+              <View style={styles.personaMeta}>
+                <Text style={[styles.personaName, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+                  Hav. Rajesh Kumar
+                </Text>
+                <Text style={[styles.personaRole, { color: colors.textMuted }]}>
+                  Havildar • Bravo Coy
+                </Text>
+              </View>
+              <ChevronRight size={18} color={colors.textMuted} />
+            </TouchableOpacity>
+
+            {/* Soldier 3: ASI Gurpreet Singh */}
+            <TouchableOpacity
+              style={styles.personaItem}
+              onPress={() => handlePersonaLogin("jawan3")}
+            >
+              <View style={[styles.personaIcon, { backgroundColor: "rgba(245, 158, 11, 0.15)" }]}>
+                <UserCheck size={18} color="#F59E0B" />
+              </View>
+              <View style={styles.personaMeta}>
+                <Text style={[styles.personaName, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+                  ASI Gurpreet Singh
+                </Text>
+                <Text style={[styles.personaRole, { color: colors.textMuted }]}>
+                  Assistant Sub-Inspector • HQ Coy
+                </Text>
+              </View>
+              <ChevronRight size={18} color={colors.textMuted} />
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>
+            {/* Officer 1: Dr. Aarti Sharma */}
+            <TouchableOpacity
+              style={[styles.personaItem, { borderBottomColor: colors.border }]}
+              onPress={() => handlePersonaLogin("doctor")}
+            >
+              <View style={[styles.personaIcon, { backgroundColor: "rgba(16, 185, 129, 0.15)" }]}>
+                <Stethoscope size={18} color="#10B981" />
+              </View>
+              <View style={styles.personaMeta}>
+                <Text style={[styles.personaName, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+                  Dr. Aarti Sharma
+                </Text>
+                <Text style={[styles.personaRole, { color: colors.textMuted }]}>
+                  Chief Medical Officer • Welfare Wing
+                </Text>
+              </View>
+              <ChevronRight size={18} color={colors.textMuted} />
+            </TouchableOpacity>
+
+            {/* Officer 2: Col. Rajesh Rathore */}
+            <TouchableOpacity
+              style={[styles.personaItem, { borderBottomColor: colors.border }]}
+              onPress={() => handlePersonaLogin("commander")}
+            >
+              <View style={[styles.personaIcon, { backgroundColor: "rgba(245, 158, 11, 0.15)" }]}>
+                <Crown size={18} color="#F59E0B" />
+              </View>
+              <View style={styles.personaMeta}>
+                <Text style={[styles.personaName, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+                  Col. Rajesh Rathore
+                </Text>
+                <Text style={[styles.personaRole, { color: colors.textMuted }]}>
+                  Commandant (CO) • 114 Battalion HQ
+                </Text>
+              </View>
+              <ChevronRight size={18} color={colors.textMuted} />
+            </TouchableOpacity>
+
+            {/* Officer 3: Vikram Malhotra */}
+            <TouchableOpacity
+              style={styles.personaItem}
+              onPress={() => handlePersonaLogin("admin")}
+            >
+              <View style={[styles.personaIcon, { backgroundColor: "rgba(59, 130, 246, 0.15)" }]}>
+                <ShieldCheck size={18} color="#3B82F6" />
+              </View>
+              <View style={styles.personaMeta}>
+                <Text style={[styles.personaName, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+                  Vikram Malhotra
+                </Text>
+                <Text style={[styles.personaRole, { color: colors.textMuted }]}>
+                  Director • Force Welfare, MHA
+                </Text>
+              </View>
+              <ChevronRight size={18} color={colors.textMuted} />
+            </TouchableOpacity>
+          </>
+        )}
       </Card>
 
       {/* Statutory DPDP Act Badge */}
       <View style={styles.dpdpSection}>
-        <ShieldCheck size={16} color={colors.accent} />
+        <ShieldCheck size={15} color={colors.accent} />
         <Text style={[styles.dpdpText, { color: colors.textMuted }]}>
-          Compliant with Digital Personal Data Protection (DPDP) Act 2023 • Non-Punitive Zero-Stigma Shield Active
+          DPDP Act 2023 Shield Active • Non-Punitive & End-to-End Encrypted
         </Text>
       </View>
 
@@ -407,6 +506,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+  },
+  personaTabContainer: {
+    flexDirection: "row",
+    borderRadius: 10,
+    borderWidth: 1,
+    padding: 3,
+    marginTop: 10,
+    marginBottom: 8,
+  },
+  personaTabBtn: {
+    flex: 1,
+    paddingVertical: 6,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  personaTabBtnText: {
+    fontSize: 11,
+    fontWeight: "700",
   },
   evaluatorTitle: {
     fontSize: 14,

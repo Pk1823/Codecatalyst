@@ -29,6 +29,7 @@ import {
   Sparkles,
   Zap,
   RotateCcw,
+  Stethoscope,
 } from "lucide-react-native";
 
 export default function PersonnelHomeScreen() {
@@ -278,34 +279,32 @@ export default function PersonnelHomeScreen() {
         );
       })()}
 
-      {/* Daily Readiness & Assessment CTA (Tactical HUD) */}
+      {/* Daily Readiness & Tactical HUD */}
       <Card variant="glass" style={styles.heroCard}>
         <View style={styles.cardHeaderRow}>
           <View style={[styles.heroIconBox, { backgroundColor: "rgba(59, 130, 246, 0.15)" }]}>
-            <HeartPulse size={24} color="#3B82F6" />
+            <HeartPulse size={22} color="#3B82F6" />
           </View>
           <View style={styles.heroTagGroup}>
             <Badge
-              label={latestAssessment ? latestAssessment.riskCategory.toUpperCase() : "VOLUNTARY & CONFIDENTIAL"}
+              label={latestAssessment ? latestAssessment.riskCategory.toUpperCase() : "OPTIMAL • FIT FOR DUTY"}
               variant={readinessVariant}
               size="sm"
             />
             <View style={styles.hudLiveChip}>
               <View style={[styles.hudLiveDot, { backgroundColor: readinessColor }]} />
-              <Text style={[styles.hudLiveText, { color: readinessColor }]}>
-                {latestAssessment ? "EVALUATION ACTIVE" : "ACTIVE SHIELD"}
-              </Text>
+              <Text style={[styles.hudLiveText, { color: readinessColor }]}>LIVE</Text>
             </View>
           </View>
         </View>
 
         <Text style={[styles.heroTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
-          {latestAssessment ? "Operational Readiness Status" : "Daily Operational Self-Assessment"}
+          {latestAssessment ? "Operational Readiness" : "Daily Readiness Check"}
         </Text>
         <Text style={[styles.heroDesc, { color: colors.textMuted }]}>
           {latestAssessment
-            ? `Latest confidential evaluation synced on ${latestAssessment.date} (Ref: ${latestAssessment.id}). Non-punitive biometric telemetry.`
-            : "Confidential AI evaluates operational stress, patrol fatigue & sleep debt without middle-command stigma. Takes only 60 seconds."}
+            ? `Confidential clinical telemetry • Ref: ${latestAssessment.id}`
+            : "60-second confidential assessment to monitor sleep, workload & recovery."}
         </Text>
 
         {/* Tactical Readiness Metric Bar */}
@@ -324,27 +323,90 @@ export default function PersonnelHomeScreen() {
 
           <View style={styles.hudMiniStatsCol}>
             <View style={styles.hudMiniStatRow}>
-              <Text style={[styles.hudMiniStatKey, { color: colors.textMuted }]}>Sleep Cycle</Text>
+              <Text style={[styles.hudMiniStatKey, { color: colors.textMuted }]}>Sleep</Text>
               <Text style={[styles.hudMiniStatVal, { color: colors.text }]}>{sleepCycleDisplay}</Text>
             </View>
             <View style={styles.hudMiniStatRow}>
-              <Text style={[styles.hudMiniStatKey, { color: colors.textMuted }]}>Patrol Load</Text>
+              <Text style={[styles.hudMiniStatKey, { color: colors.textMuted }]}>Duty Load</Text>
               <Text style={[styles.hudMiniStatVal, { color: colors.primary }]}>{patrolLoadDisplay}</Text>
             </View>
             <View style={styles.hudMiniStatRow}>
-              <Text style={[styles.hudMiniStatKey, { color: colors.textMuted }]}>Cognitive Load</Text>
+              <Text style={[styles.hudMiniStatKey, { color: colors.textMuted }]}>Fatigue Risk</Text>
               <Text style={[styles.hudMiniStatVal, { color: readinessColor }]}>{cognitiveLoadDisplay}</Text>
             </View>
           </View>
         </View>
 
         <Button
-          title={latestAssessment ? "Retake Assessment (6 Steps) →" : "Start Assessment (6 Steps) →"}
+          title={latestAssessment ? "Retake Check-in (60s) →" : "Start Daily Check-in (60s) →"}
           onPress={() => router.push("/assessment")}
           icon={<ArrowRight size={16} color="#FFFFFF" />}
           style={styles.heroActionBtn}
         />
       </Card>
+
+      {/* 4-Item Tactical Quick Action Hub */}
+      <View style={styles.quickActionGrid}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => router.push("/assessment")}
+          style={[styles.quickActionTile, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}
+        >
+          <View style={[styles.quickActionIconBox, { backgroundColor: "rgba(59, 130, 246, 0.15)" }]}>
+            <HeartPulse size={20} color="#3B82F6" />
+          </View>
+          <Text style={[styles.quickActionTitle, { color: colors.text }]}>Daily Check</Text>
+          <Text style={[styles.quickActionDesc, { color: colors.textMuted }]}>6 questions</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => handleBuddyPing("OK")}
+          style={[
+            styles.quickActionTile,
+            {
+              backgroundColor: buddyCheckDone ? "rgba(16, 185, 129, 0.12)" : colors.surface,
+              borderColor: buddyCheckDone ? colors.success : colors.cardBorder,
+            },
+          ]}
+        >
+          <View style={[styles.quickActionIconBox, { backgroundColor: "rgba(16, 185, 129, 0.15)" }]}>
+            <Users2 size={20} color="#10B981" />
+          </View>
+          <Text style={[styles.quickActionTitle, { color: colors.text }]}>
+            {buddyCheckDone ? "Buddy Safe ✓" : "Buddy Watch"}
+          </Text>
+          <Text style={[styles.quickActionDesc, { color: colors.textMuted }]}>
+            {buddyCheckDone ? "Logged safe" : "साथी सुरक्षा"}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => router.push("/(tabs)/alerts" as any)}
+          style={[styles.quickActionTile, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}
+        >
+          <View style={[styles.quickActionIconBox, { backgroundColor: "rgba(245, 158, 11, 0.15)" }]}>
+            <Stethoscope size={20} color="#F59E0B" />
+          </View>
+          <Text style={[styles.quickActionTitle, { color: colors.text }]}>Doctor Visit</Text>
+          <Text style={[styles.quickActionDesc, { color: colors.textMuted }]}>
+            {doctorVisitAlert ? "Scheduled" : "Clinic Status"}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => setIsHelplineOpen(true)}
+          style={[styles.quickActionTile, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}
+        >
+          <View style={[styles.quickActionIconBox, { backgroundColor: "rgba(239, 68, 68, 0.15)" }]}>
+            <PhoneCall size={20} color="#EF4444" />
+          </View>
+          <Text style={[styles.quickActionTitle, { color: colors.text }]}>24/7 Helpline</Text>
+          <Text style={[styles.quickActionDesc, { color: colors.textMuted }]}>CRPF 14411</Text>
+        </TouchableOpacity>
+      </View>
 
       {/* Latest Predictive AI Assessment & Explainability Card */}
       {latestAssessment && (
@@ -356,10 +418,10 @@ export default function PersonnelHomeScreen() {
             <View style={{ flex: 1 }}>
               <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                 <Text style={[styles.evalTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
-                  Latest AI Evaluation
+                  AI Wellness Analysis
                 </Text>
                 <Badge
-                  label={latestAssessment.isOffline ? "LOCAL AI" : "SYNCED LIVE"}
+                  label={latestAssessment.isOffline ? "OFFLINE AI" : "SYNCED"}
                   variant={latestAssessment.isOffline ? "warning" : "success"}
                   size="sm"
                 />
@@ -370,61 +432,44 @@ export default function PersonnelHomeScreen() {
             </View>
           </View>
 
-          {latestAssessment.isMaskingDetected && (
-            <View style={[styles.maskingAlert, { backgroundColor: "rgba(245, 158, 11, 0.15)", borderColor: colors.warning }]}>
-              <Zap size={16} color={colors.warning} />
-              <Text style={[styles.maskingText, { color: colors.warning }]}>
-                Anti-Masking Telemetry: Rapid survey response flagged. Model calibrated with continuous shift telemetry.
-              </Text>
-            </View>
-          )}
-
           {/* Calibrated Risk Gauge */}
           <RiskGauge score={latestAssessment.riskScore} category={latestAssessment.riskCategory} />
 
-          {/* Fatigue Breakdown Escalation Window */}
-          {latestAssessment.predictedDaysToBreakdown && (
-            <View style={[styles.breakdownBox, { backgroundColor: "rgba(239, 68, 68, 0.12)", borderColor: colors.danger }]}>
-              <Text style={[styles.breakdownTitle, { color: colors.danger }]}>
-                Fatigue Escalation Window: ~{latestAssessment.predictedDaysToBreakdown} Days
-              </Text>
-              <Text style={[styles.breakdownDesc, { color: colors.text }]}>
-                Early indicators suggest cognitive exhaustion if sleep debt is not cleared in upcoming rotation.
-              </Text>
-            </View>
-          )}
-
-          {/* Key Stress Drivers (SHAP AI Explainability) */}
+          {/* Top Contributing Factors */}
           {latestAssessment.shapDrivers && latestAssessment.shapDrivers.length > 0 && (
             <View style={styles.shapSection}>
               <View style={styles.shapHeader}>
-                <Sparkles size={16} color={colors.primary} />
+                <Sparkles size={15} color={colors.primary} />
                 <Text style={[styles.shapTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
-                  Key Stress Drivers (SHAP AI Explainability)
+                  Key Stress Factors
                 </Text>
               </View>
 
-              {latestAssessment.shapDrivers.map((driver, idx) => (
-                <View
-                  key={idx}
-                  style={[
-                    styles.driverCard,
-                    { backgroundColor: colors.surface, borderColor: colors.cardBorder },
-                  ]}
-                >
-                  <View style={styles.driverHeader}>
-                    <Text style={[styles.driverName, { color: colors.text }]}>{driver.feature}</Text>
+              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6, marginTop: 4 }}>
+                {latestAssessment.shapDrivers.slice(0, 3).map((driver, idx) => (
+                  <View
+                    key={idx}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 6,
+                      backgroundColor: colors.surface,
+                      borderWidth: 1,
+                      borderColor: colors.cardBorder,
+                      borderRadius: 8,
+                      paddingVertical: 4,
+                      paddingHorizontal: 8,
+                    }}
+                  >
+                    <Text style={{ fontSize: 11, fontWeight: "700", color: colors.text }}>{driver.feature}</Text>
                     <Badge
                       label={driver.impact.toUpperCase()}
                       variant={driver.impact === "high" ? "danger" : "warning"}
                       size="sm"
                     />
                   </View>
-                  <Text style={[styles.driverDesc, { color: colors.textMuted }]}>
-                    {driver.description}
-                  </Text>
-                </View>
-              ))}
+                ))}
+              </View>
             </View>
           )}
 
@@ -432,14 +477,12 @@ export default function PersonnelHomeScreen() {
           {latestAssessment.recommendations && latestAssessment.recommendations.length > 0 && (
             <View style={styles.recommendationsBox}>
               <Text style={[styles.recTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
-                Actionable Support Recommendations
+                Recommended Care Action
               </Text>
-              {latestAssessment.recommendations.map((rec, i) => (
-                <View key={i} style={styles.recItem}>
-                  <Text style={[styles.recBullet, { color: colors.primary }]}>•</Text>
-                  <Text style={[styles.recText, { color: colors.textMuted }]}>{rec}</Text>
-                </View>
-              ))}
+              <View style={styles.recItem}>
+                <Text style={[styles.recBullet, { color: colors.primary }]}>•</Text>
+                <Text style={[styles.recText, { color: colors.textMuted }]}>{latestAssessment.recommendations[0]}</Text>
+              </View>
             </View>
           )}
         </Card>
@@ -536,31 +579,29 @@ export default function PersonnelHomeScreen() {
         </View>
       </Card>
 
-      {/* Buddy-Pair System (बडी-पेयर) */}
+      {/* Buddy-Pair Watch */}
       <Card style={styles.sectionCard}>
         <View style={styles.cardHeaderRow}>
           <View style={styles.sectionTitleRow}>
             <Users2 size={18} color="#10B981" />
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>Buddy-Pair Watch (बडी-पेयर)</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+              Buddy-Pair Watch (बडी-पेयर)
+            </Text>
           </View>
-          <Badge label="MUTUAL CARE" variant="success" size="sm" />
+          <Badge label="PEER CARE" variant="success" size="sm" />
         </View>
 
         <View style={[styles.buddyInfoBox, { backgroundColor: colors.surface }]}>
           <View>
-            <Text style={[styles.buddyName, { color: colors.text }]}>
-              {buddyStatus?.buddyRank} {buddyStatus?.buddyName}
+            <Text style={[styles.buddyName, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+              {buddyStatus?.buddyRank || "Ct."} {buddyStatus?.buddyName || "Rajesh Kumar"}
             </Text>
             <Text style={[styles.buddyMeta, { color: colors.textMuted }]}>
-              {buddyStatus?.buddyServiceId} • Checked: {buddyStatus?.lastCheckTime}
+              {buddyStatus?.buddyServiceId || "CRPF-GD-2022-08912"} • Last active 2h ago
             </Text>
           </View>
-          <Badge label="LINKED" variant="neutral" size="sm" />
+          <Badge label="ACTIVE" variant="neutral" size="sm" />
         </View>
-
-        <Text style={[styles.promptText, { color: colors.textMuted }]}>
-          How is your partner coping with current tactical deployment?
-        </Text>
 
         <View style={styles.buddyButtonsRow}>
           <TouchableOpacity
@@ -574,7 +615,9 @@ export default function PersonnelHomeScreen() {
             onPress={() => handleBuddyPing("OK")}
           >
             <CheckCircle2 size={16} color={colors.success} />
-            <Text style={[styles.buddyBtnText, { color: colors.text }]}>Safe & Ready (सुरक्षित)</Text>
+            <Text style={[styles.buddyBtnText, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+              {buddyCheckDone ? "Logged Safe ✓" : "Safe & Ready (सुरक्षित)"}
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -585,7 +628,9 @@ export default function PersonnelHomeScreen() {
             onPress={() => handleBuddyPing("NEEDS_REST")}
           >
             <AlertTriangle size={16} color={colors.warning} />
-            <Text style={[styles.buddyBtnText, { color: colors.text }]}>Needs Rest (विश्राम)</Text>
+            <Text style={[styles.buddyBtnText, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+              Needs Rest (विश्राम)
+            </Text>
           </TouchableOpacity>
         </View>
       </Card>
@@ -595,13 +640,15 @@ export default function PersonnelHomeScreen() {
         <View style={styles.cardHeaderRow}>
           <View style={styles.sectionTitleRow}>
             <CalendarClock size={18} color="#F59E0B" />
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>Confidential Darbar Audience</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+              Confidential CO / SM Darbar
+            </Text>
           </View>
           <Badge label="DIRECT ACCESS" variant="warning" size="sm" />
         </View>
 
         <Text style={[styles.sectionDesc, { color: colors.textMuted }]}>
-          Request a direct audience with the Battalion Commanding Officer or Subedar Major for personal or family issues without middle administrative filtering.
+          Direct confidential audience with Battalion Commander for personal/family matters. Zero middle-tier filtering.
         </Text>
 
         <Button
@@ -899,6 +946,37 @@ const styles = StyleSheet.create({
   },
   darbarBtn: {
     marginTop: 4,
+  },
+  quickActionGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    marginBottom: 16,
+  },
+  quickActionTile: {
+    width: "48%",
+    flexGrow: 1,
+    padding: 12,
+    borderRadius: 14,
+    borderWidth: 1,
+    alignItems: "flex-start",
+  },
+  quickActionIconBox: {
+    width: 38,
+    height: 38,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 8,
+  },
+  quickActionTitle: {
+    fontSize: 13,
+    fontWeight: "800",
+    marginBottom: 2,
+  },
+  quickActionDesc: {
+    fontSize: 11,
+    fontWeight: "500",
   },
   quickAccessRow: {
     flexDirection: "row",

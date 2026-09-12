@@ -44,41 +44,45 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="personnel"
         options={{
-          title: "Self Assessment",
+          title: "Assessment",
           tabBarIcon: ({ color, size }) => <UserCheck size={size - 2} color={color} />,
         }}
       />
 
-      {/* 2. Welfare Authority (Operated on Web Portal) */}
+      {/* 2. Welfare Authority (Shown for Welfare Officers/Admin) */}
       <Tabs.Screen
         name="welfare"
         options={{
-          href: null,
+          title: "Welfare",
+          tabBarIcon: ({ color, size }) => <Stethoscope size={size - 2} color={color} />,
+          href: role === "WELFARE_OFFICER" || role === "ADMIN" ? undefined : null,
         }}
       />
 
-      {/* 3. Commander Authority (Operated on Web Portal) */}
+      {/* 3. Commander Authority (Shown for Commanders/Admin) */}
       <Tabs.Screen
         name="commander"
         options={{
-          href: null,
+          title: "Command",
+          tabBarIcon: ({ color, size }) => <Crown size={size - 2} color={color} />,
+          href: role === "COMMANDER" || role === "ADMIN" ? undefined : null,
         }}
       />
 
-      {/* 4. Soldier Personal Alerts */}
+      {/* 4. Tactical Alerts */}
       <Tabs.Screen
         name="alerts"
         options={{
-          title: "My Alerts",
+          title: "Alerts",
           tabBarIcon: ({ color, size }) => <Bell size={size - 2} color={color} />,
         }}
       />
 
-      {/* 5. Soldier Settings & Force Config */}
+      {/* 5. Force Config & Settings */}
       <Tabs.Screen
         name="settings"
         options={{
-          title: "Profile & Force",
+          title: "Settings",
           tabBarIcon: ({ color, size }) => <Sliders size={size - 2} color={color} />,
         }}
       />

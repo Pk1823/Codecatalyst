@@ -6,10 +6,10 @@ interface AuthContextValue {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (serviceId: string, pass: string) => Promise<void>;
+  login: (serviceId: string, pass: string) => Promise<User | undefined>;
   signup: (data: SignupData) => Promise<User>;
-  loginAsPersona: (key: keyof typeof EVALUATOR_PERSONAS) => Promise<void>;
-  loginWithGoogle: (googleUser: User) => Promise<void>;
+  loginAsPersona: (key: keyof typeof EVALUATOR_PERSONAS) => Promise<User>;
+  loginWithGoogle: (googleUser: User) => Promise<User>;
   logout: () => Promise<void>;
 }
 
@@ -33,12 +33,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     initAuth();
   }, []);
 
-  const login = async (serviceId: string, pass: string) => {
+  const login = async (serviceId: string, pass: string): Promise<User | undefined> => {
     setIsLoading(true);
     try {
       const res = await AuthService.loginWithCredentials(serviceId, pass);
       if (res.user) {
         setUser(res.user);
+        return res.user;
       }
     } finally {
       setIsLoading(false);
@@ -59,21 +60,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const loginAsPersona = async (key: keyof typeof EVALUATOR_PERSONAS) => {
+  const loginAsPersona = async (key: keyof typeof EVALUATOR_PERSONAS): Promise<User> => {
     setIsLoading(true);
     try {
       const persona = await AuthService.loginAsPersona(key);
       setUser(persona);
+      return persona;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const loginWithGoogle = async (googleUser: User) => {
+  const loginWithGoogle = async (googleUser: User): Promise<User> => {
     setIsLoading(true);
     try {
       const u = await AuthService.loginWithGoogleUser(googleUser);
       setUser(u);
+      return u;
     } finally {
       setIsLoading(false);
     }
