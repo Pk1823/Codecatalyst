@@ -13,6 +13,10 @@ import {
   CheckCircle2,
   Filter,
   RefreshCw,
+  Stethoscope,
+  BellRing,
+  Calendar,
+  MapPin,
 } from "lucide-react";
 import { WelfareService } from "@/services/welfare.service";
 import { PersonnelService } from "@/services/personnel.service";
@@ -40,6 +44,80 @@ export default function WelfareCasesPage() {
   const [newSupportType, setNewSupportType] = useState("Workload Adjustment");
   const [newPriority, setNewPriority] = useState("High");
   const [newDesc, setNewDesc] = useState("");
+
+  // Doctor Assignment modal state for list items
+  const [selectedCaseForDoctor, setSelectedCaseForDoctor] = useState<WelfareCase | null>(null);
+  const [doctorModalOpen, setDoctorModalOpen] = useState(false);
+  const [doctorName, setDoctorName] = useState("Dr. Aarti Sharma (Chief Medical Officer)");
+  const [visitLevel, setVisitLevel] = useState("Level 2 - Priority (Within 24 Hours)");
+  const [visitTiming, setVisitTiming] = useState("Tomorrow, 10:00 hrs");
+  const [visitLocation, setVisitLocation] = useState("Base Medical Inspection Room");
+  const [clinicalNotes, setClinicalNotes] = useState("Review self-assessment sleep debt, cognitive fatigue, and conduct vitals check.");
+  const [isAssigningDoctor, setIsAssigningDoctor] = useState(false);
+
+  const handleOpenDoctorModal = (c: WelfareCase) => {
+    setSelectedCaseForDoctor(c);
+    if (c.riskLevel === "HIGH") {
+      setVisitLevel("Level 1 - Emergency (Immediate / Within 2-4 Hours)");
+      setVisitTiming("Today, within 2-4 hrs");
+    } else if (c.riskLevel === "LOW") {
+      setVisitLevel("Level 3 - Routine Welfare (Within 48-72 Hours)");
+      setVisitTiming("In 2-3 Days, 10:00 hrs");
+    } else {
+      setVisitLevel("Level 2 - Priority (Within 24 Hours)");
+      setVisitTiming("Tomorrow, 10:00 hrs");
+    }
+    setClinicalNotes(`Review case: ${c.primaryConcern}. Conduct confidential health evaluation.`);
+    setDoctorModalOpen(true);
+  };
+
+  const handleConfirmDoctorAssign = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedCaseForDoctor || !doctorName.trim()) return;
+
+    setIsAssigningDoctor(true);
+    try {
+      const pId = selectedCaseForDoctor.personnelId;
+      await WelfareService.assignDoctorVisit(selectedCaseForDoctor.id, {
+        doctorName,
+        visitLocation,
+        visitLevel,
+        scheduledDate: visitTiming,
+        clinicalPurpose: clinicalNotes,
+      });
+
+      await fetch("/api/support-actions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          caseId: selectedCaseForDoctor.id,
+          personnelId: pId,
+          actionType: "Medical Referral",
+          doctorName,
+          visitLocation,
+          visitLevel,
+          scheduledDate: visitTiming,
+          description: clinicalNotes,
+        }),
+      });
+
+      setDoctorModalOpen(false);
+      toast({
+        title: "🩺 Medical Officer Assigned!",
+        description: `Notification dispatched to ${pId} on Mobile App: "[${visitLevel.split(" - ")[0]}] Dr. ${doctorName.replace(/^Dr\.?\s*/i, "")} will visit you".`,
+        type: "success",
+      });
+      loadData(false);
+    } catch {
+      toast({
+        title: "Assignment Error",
+        description: "Failed to record doctor assignment.",
+        type: "error",
+      });
+    } finally {
+      setIsAssigningDoctor(false);
+    }
+  };
 
   const loadData = React.useCallback(async (showToast = false) => {
     try {
@@ -337,13 +415,23 @@ export default function WelfareCasesPage() {
                     </select>
                   </td>
                   <td className="py-3.5 px-4 text-right">
-                    <Link
-                      href={`/welfare/cases/${c.id}`}
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline"
-                    >
-                      <span>Open Detail</span>
-                      <ChevronRight className="h-3.5 w-3.5" />
-                    </Link>
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => handleOpenDoctorModal(c)}
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-[11px] font-bold shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98] border border-emerald-400/30"
+                        title="Assign Doctor to this case"
+                      >
+                        <Stethoscope className="h-3.5 w-3.5" />
+                        <span>Assign Dr</span>
+                      </button>
+                      <Link
+                        href={`/welfare/cases/${c.id}`}
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline"
+                      >
+                        <span>Review</span>
+                        <ChevronRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -495,6 +583,155 @@ export default function WelfareCasesPage() {
                   className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-xs transition-colors"
                 >
                   Create Case
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Assign Doctor Visit */}
+      {doctorModalOpen && selectedCaseForDoctor && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs animate-in fade-in"
+          onClick={() => setDoctorModalOpen(false)}
+        >
+          <div
+            className="w-full max-w-lg rounded-2xl bg-white dark:bg-[#0F172A] border border-emerald-500/30 dark:border-emerald-500/20 p-6 shadow-2xl space-y-4 animate-in zoom-in-95"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex items-center gap-2.5">
+                <div className="h-9 w-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                  <Stethoscope className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                    Assign Doctor Visit
+                  </h3>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Case: <strong className="text-emerald-600 dark:text-emerald-400 font-mono">{selectedCaseForDoctor.id}</strong> • Personnel: <strong className="font-mono">{selectedCaseForDoctor.personnelId}</strong>
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setDoctorModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 flex items-start gap-3">
+              <BellRing className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+              <div className="text-xs text-emerald-900 dark:text-emerald-200 leading-relaxed">
+                <strong>Real-Time Mobile App Alert:</strong> When confirmed, <strong>{selectedCaseForDoctor.personnelId}</strong> will receive an immediate in-app notification: <em>&quot;Dr. {doctorName.replace(/^Dr\.?\s*/i, "")} will visit you&quot;</em>.
+              </div>
+            </div>
+
+            <form onSubmit={handleConfirmDoctorAssign} className="space-y-4 text-xs">
+              <div>
+                <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Designated Medical Officer / Doctor
+                </label>
+                <select
+                  value={doctorName}
+                  onChange={(e) => setDoctorName(e.target.value)}
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500 font-semibold"
+                >
+                  <option value="Dr. Aarti Sharma (Chief Medical Officer)">Dr. Aarti Sharma (Chief Medical Officer)</option>
+                  <option value="Dr. Rajesh Kumar (Senior Psychiatrist)">Dr. Rajesh Kumar (Senior Psychiatrist)</option>
+                  <option value="Dr. Ananya Iyer (Clinical Psychologist)">Dr. Ananya Iyer (Clinical Psychologist)</option>
+                  <option value="Dr. Vikram Singh (Medical Officer)">Dr. Vikram Singh (Medical Officer)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Visiting Priority & Triage Level
+                </label>
+                <select
+                  value={visitLevel}
+                  onChange={(e) => setVisitLevel(e.target.value)}
+                  className={`w-full rounded-xl border p-2.5 text-xs font-semibold focus:outline-hidden ${
+                    visitLevel.includes("Level 1")
+                      ? "border-red-400 bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300"
+                      : visitLevel.includes("Level 2")
+                      ? "border-amber-400 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300"
+                      : "border-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300"
+                  }`}
+                >
+                  <option value="Level 1 - Emergency (Immediate / Within 2-4 Hours)">🔴 Level 1 - Emergency / Immediate (Within 2-4 Hours)</option>
+                  <option value="Level 2 - Priority (Within 24 Hours)">🟡 Level 2 - Priority / Urgent (Within 24 Hours)</option>
+                  <option value="Level 3 - Routine Welfare (Within 48-72 Hours)">🟢 Level 3 - Routine Welfare Consultation (Within 48-72 Hours)</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
+                    Scheduled Timing
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Tomorrow, 10:00 hrs"
+                      value={visitTiming}
+                      onChange={(e) => setVisitTiming(e.target.value)}
+                      className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-2.5 pl-8 text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500 font-mono"
+                    />
+                    <Calendar className="h-3.5 w-3.5 absolute left-2.5 top-3 text-slate-400" />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
+                    Location
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Base Inspection Room"
+                      value={visitLocation}
+                      onChange={(e) => setVisitLocation(e.target.value)}
+                      className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-2.5 pl-8 text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500 font-mono"
+                    />
+                    <MapPin className="h-3.5 w-3.5 absolute left-2.5 top-3 text-slate-400" />
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Clinical Purpose & Follow-Up Notes
+                </label>
+                <textarea
+                  rows={2}
+                  required
+                  placeholder="Notes for doctor visit..."
+                  value={clinicalNotes}
+                  onChange={(e) => setClinicalNotes(e.target.value)}
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-2.5 text-slate-900 dark:text-white focus:outline-hidden focus:border-emerald-500"
+                />
+              </div>
+
+              <div className="pt-2 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setDoctorModalOpen(false)}
+                  className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 font-semibold"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isAssigningDoctor}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-bold shadow-md shadow-emerald-900/20 transition-all disabled:opacity-50"
+                >
+                  <Stethoscope className="h-3.5 w-3.5" />
+                  <span>{isAssigningDoctor ? "Dispatching..." : "Assign & Dispatch Notification"}</span>
                 </button>
               </div>
             </form>

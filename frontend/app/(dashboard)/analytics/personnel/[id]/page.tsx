@@ -17,6 +17,11 @@ import {
   Sliders,
   AlertTriangle,
   Zap,
+  Stethoscope,
+  BellRing,
+  Calendar,
+  MapPin,
+  X,
 } from "lucide-react";
 import { RiskBadge } from "@/components/common/risk-badge";
 import { RiskService } from "@/services/risk.service";
@@ -57,6 +62,15 @@ export default function IndividualRiskDetailPage({
   const [noteText, setNoteText] = useState("");
   const [showNoteInput, setShowNoteInput] = useState(false);
 
+  // Doctor Assignment modal state
+  const [doctorModalOpen, setDoctorModalOpen] = useState(false);
+  const [doctorName, setDoctorName] = useState("Dr. Aarti Sharma (Chief Medical Officer)");
+  const [visitLevel, setVisitLevel] = useState("Level 2 - Priority (Within 24 Hours)");
+  const [visitTiming, setVisitTiming] = useState("Tomorrow, 10:00 hrs");
+  const [visitLocation, setVisitLocation] = useState("Base Medical Inspection Room");
+  const [clinicalNotes, setClinicalNotes] = useState("Review self-assessment sleep debt, cognitive fatigue, and conduct vitals check.");
+  const [isAssigningDoctor, setIsAssigningDoctor] = useState(false);
+
   useEffect(() => {
     async function loadData() {
       setLoading(true);
@@ -64,6 +78,19 @@ export default function IndividualRiskDetailPage({
       const p = await PersonnelService.getPersonnelById(resolvedParams.id);
       setRiskData(risk);
       setPersonnel(p);
+
+      if (risk) {
+        if (risk.riskScore > 60 || risk.riskLevel === "HIGH") {
+          setVisitLevel("Level 1 - Emergency (Immediate / Within 2-4 Hours)");
+          setVisitTiming("Today, within 2-4 hrs");
+        } else if (risk.riskLevel === "LOW") {
+          setVisitLevel("Level 3 - Routine Welfare (Within 48-72 Hours)");
+          setVisitTiming("In 2-3 Days, 10:00 hrs");
+        } else {
+          setVisitLevel("Level 2 - Priority (Within 24 Hours)");
+          setVisitTiming("Tomorrow, 10:00 hrs");
+        }
+      }
 
       // Run initial live prediction from AI Engine
       if (risk) {
@@ -172,12 +199,53 @@ export default function IndividualRiskDetailPage({
     }
   };
 
-  const handleAssignOfficer = () => {
-    toast({
-      title: "Welfare Officer Assigned",
-      description: "Dr. Aarti Sharma has been designated as primary welfare coordinator.",
-      type: "success",
-    });
+  const handleConfirmDoctorAssign = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!doctorName.trim()) return;
+
+    setIsAssigningDoctor(true);
+    try {
+      const pId = riskData?.personnelId || resolvedParams.id || "P-1024";
+
+      // 1. Service call: updates local storage, custom cases & dispatches real-time broadcast
+      await WelfareService.assignDoctorVisit(pId, {
+        doctorName,
+        visitLocation,
+        visitLevel,
+        scheduledDate: visitTiming,
+        clinicalPurpose: clinicalNotes,
+      });
+
+      // 2. Direct backend call to ensure database Notification record is created
+      await fetch("/api/support-actions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          personnelId: pId,
+          actionType: "Medical Referral",
+          doctorName,
+          visitLocation,
+          visitLevel,
+          scheduledDate: visitTiming,
+          description: clinicalNotes,
+        }),
+      });
+
+      setDoctorModalOpen(false);
+      toast({
+        title: "🩺 Medical Officer Assigned!",
+        description: `Notification dispatched to ${pId} on Mobile App: "[${visitLevel.split(" - ")[0]}] Dr. ${doctorName.replace(/^Dr\.?\s*/i, "")} will visit you".`,
+        type: "success",
+      });
+    } catch {
+      toast({
+        title: "Assignment Error",
+        description: "Failed to record doctor assignment.",
+        type: "error",
+      });
+    } finally {
+      setIsAssigningDoctor(false);
+    }
   };
 
   const handleScheduleFollowup = () => {
@@ -234,22 +302,38 @@ export default function IndividualRiskDetailPage({
           </p>
         </div>
 
-        {/* AI Welfare Risk Indicator Score Display */}
-        <div className="rounded-lg border border-slate-800 bg-[#090D16] p-4 text-center min-w-[190px] shrink-0">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">
-            AI Risk Evaluation
-          </span>
-          <div className="mt-1 flex items-baseline justify-center gap-1">
-            <span className="text-3xl font-mono font-bold text-blue-400">
-              {livePrediction?.risk_band || riskData.riskLevel}
+        {/* AI Welfare Risk Indicator Score Display & Actions */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
+          <div className="rounded-lg border border-slate-800 bg-[#090D16] p-4 text-center min-w-[170px] shrink-0">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">
+              AI Risk Evaluation
+            </span>
+            <div className="mt-1 flex items-baseline justify-center gap-1">
+              <span className="text-3xl font-mono font-bold text-blue-400">
+                {livePrediction?.risk_band || riskData.riskLevel}
+              </span>
+            </div>
+            <div className="mt-1 text-[11px] font-mono font-medium text-slate-300">
+              Priority: {livePrediction?.alert_priority || "ROUTINE"}
+            </div>
+            <span className="text-[10px] text-slate-500 font-mono block mt-1">
+              LGBM: {livePrediction ? `${Math.round(Math.max(livePrediction.confidence_scores.high, livePrediction.confidence_scores.moderate, livePrediction.confidence_scores.low) * 100)}%` : "78.4%"}
             </span>
           </div>
-          <div className="mt-1 text-[11px] font-mono font-medium text-slate-300">
-            Priority: {livePrediction?.alert_priority || "ROUTINE"}
-          </div>
-          <span className="text-[10px] text-slate-500 font-mono block mt-1">
-            LGBM Confidence: {livePrediction ? `${Math.round(Math.max(livePrediction.confidence_scores.high, livePrediction.confidence_scores.moderate, livePrediction.confidence_scores.low) * 100)}%` : "78.4%"}
-          </span>
+
+          <button
+            onClick={() => setDoctorModalOpen(true)}
+            className="flex flex-col items-center justify-center gap-1.5 px-4 py-4 rounded-xl bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-bold shadow-lg shadow-emerald-950/40 transition-all hover:scale-[1.02] active:scale-[0.98] border border-emerald-400/30 min-w-[160px]"
+          >
+            <div className="flex items-center gap-1.5">
+              <Stethoscope className="h-4 w-4" />
+              <span className="text-xs">Assign Doctor</span>
+            </div>
+            <span className="text-[10px] font-normal text-emerald-100 flex items-center gap-1">
+              <BellRing className="h-3 w-3 text-amber-200 animate-pulse" />
+              Notify App
+            </span>
+          </button>
         </div>
       </div>
 
@@ -442,11 +526,12 @@ export default function IndividualRiskDetailPage({
         {/* Action Buttons Toolbar */}
         <div className="pt-2 flex flex-wrap items-center gap-2.5">
           <button
-            onClick={handleAssignOfficer}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-[#090D16] text-xs font-bold transition-colors"
+            onClick={() => setDoctorModalOpen(true)}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-xs font-bold transition-all shadow-md shadow-emerald-950/30 border border-emerald-400/30 hover:scale-[1.02] active:scale-[0.98]"
           >
-            <UserCheck className="h-3.5 w-3.5" />
-            <span>Assign Welfare Officer</span>
+            <Stethoscope className="h-4 w-4" />
+            <span>Assign Doctor Visit</span>
+            <BellRing className="h-3 w-3 text-amber-200 animate-pulse" />
           </button>
 
           <button
@@ -504,6 +589,155 @@ export default function IndividualRiskDetailPage({
           </div>
         )}
       </div>
+
+      {/* Modal: Assign Doctor Visit */}
+      {doctorModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs animate-in fade-in"
+          onClick={() => setDoctorModalOpen(false)}
+        >
+          <div
+            className="w-full max-w-lg rounded-2xl bg-[#0F172A] border border-emerald-500/30 p-6 shadow-2xl space-y-4 animate-in zoom-in-95"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-2.5">
+                <div className="h-9 w-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                  <Stethoscope className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">
+                    Assign Medical Officer / Doctor Visit
+                  </h3>
+                  <p className="text-[11px] text-slate-400">
+                    Personnel: <strong className="text-emerald-400 font-mono">{riskData.personnelId}</strong> ({personnel?.name || "Uniformed Personnel"})
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setDoctorModalOpen(false)}
+                className="text-slate-400 hover:text-white transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-800/60 flex items-start gap-3">
+              <BellRing className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+              <div className="text-xs text-emerald-200 leading-relaxed">
+                <strong>Real-Time Mobile App Alert:</strong> When confirmed, <strong>{personnel?.name || riskData.personnelId}</strong> will receive an immediate in-app notification: <em>&quot;Dr. {doctorName.replace(/^Dr\.?\s*/i, "")} will visit you&quot;</em>.
+              </div>
+            </div>
+
+            <form onSubmit={handleConfirmDoctorAssign} className="space-y-4 text-xs">
+              <div>
+                <label className="block font-medium text-slate-300 mb-1">
+                  Designated Medical Officer / Doctor
+                </label>
+                <select
+                  value={doctorName}
+                  onChange={(e) => setDoctorName(e.target.value)}
+                  className="w-full rounded-xl border border-slate-700 bg-slate-900 p-2.5 text-white focus:outline-none focus:border-emerald-500 font-semibold"
+                >
+                  <option value="Dr. Aarti Sharma (Chief Medical Officer)">Dr. Aarti Sharma (Chief Medical Officer)</option>
+                  <option value="Dr. Rajesh Kumar (Senior Psychiatrist)">Dr. Rajesh Kumar (Senior Psychiatrist)</option>
+                  <option value="Dr. Ananya Iyer (Clinical Psychologist)">Dr. Ananya Iyer (Clinical Psychologist)</option>
+                  <option value="Dr. Vikram Singh (Medical Officer)">Dr. Vikram Singh (Medical Officer)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block font-medium text-slate-300 mb-1">
+                  Visiting Priority & Triage Level
+                </label>
+                <select
+                  value={visitLevel}
+                  onChange={(e) => setVisitLevel(e.target.value)}
+                  className={`w-full rounded-xl border p-2.5 text-xs font-semibold focus:outline-none ${
+                    visitLevel.includes("Level 1")
+                      ? "border-red-500 bg-red-950/40 text-red-300"
+                      : visitLevel.includes("Level 2")
+                      ? "border-amber-500 bg-amber-950/40 text-amber-300"
+                      : "border-emerald-500 bg-emerald-950/40 text-emerald-300"
+                  }`}
+                >
+                  <option value="Level 1 - Emergency (Immediate / Within 2-4 Hours)">🔴 Level 1 - Emergency / Immediate (Within 2-4 Hours)</option>
+                  <option value="Level 2 - Priority (Within 24 Hours)">🟡 Level 2 - Priority / Urgent (Within 24 Hours)</option>
+                  <option value="Level 3 - Routine Welfare (Within 48-72 Hours)">🟢 Level 3 - Routine Welfare Consultation (Within 48-72 Hours)</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-medium text-slate-300 mb-1">
+                    Scheduled Timing
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Tomorrow, 10:00 hrs"
+                      value={visitTiming}
+                      onChange={(e) => setVisitTiming(e.target.value)}
+                      className="w-full rounded-xl border border-slate-700 bg-slate-900 p-2.5 pl-8 text-white focus:outline-none focus:border-emerald-500 font-mono"
+                    />
+                    <Calendar className="h-3.5 w-3.5 absolute left-2.5 top-3 text-slate-400" />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block font-medium text-slate-300 mb-1">
+                    Location
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Base Inspection Room"
+                      value={visitLocation}
+                      onChange={(e) => setVisitLocation(e.target.value)}
+                      className="w-full rounded-xl border border-slate-700 bg-slate-900 p-2.5 pl-8 text-white focus:outline-none focus:border-emerald-500 font-mono"
+                    />
+                    <MapPin className="h-3.5 w-3.5 absolute left-2.5 top-3 text-slate-400" />
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-medium text-slate-300 mb-1">
+                  Clinical Purpose & Follow-Up Notes
+                </label>
+                <textarea
+                  rows={2}
+                  required
+                  placeholder="Notes for doctor visit..."
+                  value={clinicalNotes}
+                  onChange={(e) => setClinicalNotes(e.target.value)}
+                  className="w-full rounded-xl border border-slate-700 bg-slate-900 p-2.5 text-white focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+
+              <div className="pt-2 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setDoctorModalOpen(false)}
+                  className="px-4 py-2 rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-800 font-semibold"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isAssigningDoctor}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-bold shadow-md shadow-emerald-900/20 transition-all disabled:opacity-50"
+                >
+                  <Stethoscope className="h-3.5 w-3.5" />
+                  <span>{isAssigningDoctor ? "Dispatching..." : "Assign & Dispatch Notification"}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

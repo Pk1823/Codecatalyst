@@ -493,9 +493,9 @@ export class WellnessService {
               a.indicatorStatus ||
               (rawRisk <= 30 ? "Optimal" : rawRisk <= 69 ? "Moderate Fatigue" : "Critical Breakdown Risk"),
             shapDrivers: [
-              { feature: "Duty Hours 5d", impact: "high", description: "Cumulative duty shift load" },
-              { feature: "Self Reported Stress", impact: "moderate", description: "Voluntary stress evaluation signal" },
-              { feature: "Sleep Hours Avg", impact: "moderate", description: "Restorative sleep pattern" },
+              { feature: "Duty Hours 5d", value: 52, impact: "high", description: "Cumulative duty shift load" },
+              { feature: "Self Reported Stress", value: 6, impact: "moderate", description: "Voluntary stress evaluation signal" },
+              { feature: "Sleep Hours Avg", value: 4.5, impact: "moderate", description: "Restorative sleep pattern" },
             ],
             recommendations: [a.recommendation || "Rest rotation and pacing advised."],
             isOffline: false,

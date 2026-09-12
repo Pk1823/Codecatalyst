@@ -302,6 +302,95 @@ export class WelfareService {
     return updated;
   }
 
+  static async assignDoctorVisit(
+    caseId: string,
+    doctorDetails: {
+      doctorName: string;
+      doctorRank?: string;
+      visitLocation?: string;
+      scheduledDate?: string;
+      clinicalPurpose?: string;
+      visitLevel?: string;
+    }
+  ): Promise<WelfareCase | null> {
+    const {
+      doctorName,
+      doctorRank,
+      visitLocation,
+      scheduledDate,
+      clinicalPurpose,
+      visitLevel = "Level 2 - Priority (Within 24 Hours)",
+    } = doctorDetails;
+    const cleanDoctor = doctorName.replace(/^Dr\.?\s*/i, "");
+    const dateFormatted = scheduledDate
+      ? new Date(scheduledDate).toLocaleString("en-IN", {
+          day: "numeric",
+          month: "short",
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : "Tomorrow at 10:00 hrs";
+    const location = visitLocation || "Base Medical Inspection Room";
+
+    const levelMatch = visitLevel.match(/Level\s*\d/i);
+    const shortLevel = levelMatch ? levelMatch[0].toUpperCase() : "LEVEL 2";
+
+    const title = `🩺 [${shortLevel}] Dr. ${cleanDoctor} will visit you`;
+    const description = `Triage: ${visitLevel}. Dr. ${cleanDoctor} has been assigned to visit you on ${dateFormatted} at ${location}. Clinical Purpose: ${clinicalPurpose || "Routine welfare check-in & assessment review."}`;
+
+    const allCases = await this.getCases();
+    const targetCase = allCases.find((c) => c.id.toLowerCase() === caseId.toLowerCase() || c.personnelId.toLowerCase() === caseId.toLowerCase());
+    const personnelId = targetCase?.personnelId || (caseId.startsWith("P-") ? caseId : "P-1024");
+    const validCaseId = targetCase?.id || caseId;
+
+    if (typeof window !== "undefined") {
+      fetch("/api/support-actions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          caseId: validCaseId,
+          personnelId,
+          actionType: "Medical Referral",
+          doctorName,
+          doctorRank,
+          visitLocation: location,
+          visitLevel,
+          scheduledDate,
+          title,
+          description,
+        }),
+      }).catch(() => {});
+
+      try {
+        const notifData = {
+          id: `notif-${Date.now()}`,
+          title,
+          message: description,
+          doctorName,
+          visitLevel,
+          shortLevel,
+          location,
+          scheduledDate: dateFormatted,
+          timestamp: new Date().toISOString(),
+        };
+        const existing = JSON.parse(localStorage.getItem("missionwell_doctor_visits") || "[]");
+        existing.unshift(notifData);
+        localStorage.setItem("missionwell_doctor_visits", JSON.stringify(existing));
+        window.dispatchEvent(new CustomEvent("missionwell_doctor_assigned", { detail: notifData }));
+      } catch {}
+    }
+
+    return this.addIntervention(validCaseId, {
+      personnelId,
+      type: "Medical Referral",
+      title,
+      description,
+      status: "Active",
+      scheduledDate: scheduledDate || new Date().toISOString().split("T")[0],
+      officerName: doctorName,
+    });
+  }
+
   static async createSupportRequestCase(input: {
     personnelId: string;
     supportType: string;

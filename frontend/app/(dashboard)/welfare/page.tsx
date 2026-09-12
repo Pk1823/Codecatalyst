@@ -9,7 +9,6 @@ import {
   FolderHeart,
   HandHelping,
   ArrowRight,
-  UserCheck,
   X,
   FileText,
   RefreshCw,
@@ -99,14 +98,6 @@ export default function WelfareOfficerDashboard() {
       title: isHi ? "अलर्ट हटाया गया" : "Alert Dismissed",
       description: isHi ? "अलर्ट सक्रिय कतार से हटा दिया गया।" : "Alert archived from active welfare queue.",
       type: "info",
-    });
-  };
-
-  const handleAssignOfficer = () => {
-    toast({
-      title: "Officer Assigned",
-      description: `${meta.sampleOfficerName} assigned as primary welfare officer.`,
-      type: "success",
     });
   };
 
@@ -252,15 +243,8 @@ export default function WelfareOfficerDashboard() {
                     }}
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium transition-colors shadow-xs"
                   >
-                    <span>Review</span>
+                    <span>Review Case</span>
                     <ArrowRight className="h-3.5 w-3.5" />
-                  </button>
-                  <button
-                    onClick={() => handleAssignOfficer()}
-                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-200 text-xs font-medium transition-colors"
-                  >
-                    <UserCheck className="h-3.5 w-3.5" />
-                    <span>Assign</span>
                   </button>
                   <button
                     onClick={() => handleDismissAlert(alert.id)}

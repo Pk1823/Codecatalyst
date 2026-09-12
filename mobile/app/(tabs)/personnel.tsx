@@ -12,6 +12,7 @@ import { RiskGauge } from "../../components/ui/RiskGauge";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
 import { WellnessService } from "../../services/wellness";
+import { NotificationService, MobileNotification } from "../../services/notifications";
 import { BuddyCheckStatus, WellnessAssessmentResult } from "../../types";
 import {
   HeartPulse,
@@ -41,12 +42,15 @@ export default function PersonnelHomeScreen() {
   const [darbarRequested, setDarbarRequested] = useState(false);
   const [isHelplineOpen, setIsHelplineOpen] = useState(false);
   const [trendRange, setTrendRange] = useState<"7D" | "30D">("7D");
+  const [doctorVisitAlert, setDoctorVisitAlert] = useState<MobileNotification | null>(null);
+  const [isDocBannerDismissed, setIsDocBannerDismissed] = useState(false);
 
   useEffect(() => {
     WellnessService.getBuddyStatus().then(setBuddyStatus);
 
+    const soldierId = user?.personnelId || (user?.id?.startsWith("P-") ? user.id : "P-1024");
+
     const loadAssessment = () => {
-      const soldierId = user?.personnelId || (user?.id?.startsWith("P-") ? user.id : "P-1024");
       WellnessService.getLatestAssessment(soldierId).then((res) => {
         if (res) {
           setLatestAssessment(res);
@@ -59,6 +63,32 @@ export default function PersonnelHomeScreen() {
     const unsubscribe = WellnessService.subscribeAssessment((newAssessment) => {
       setLatestAssessment(newAssessment);
     });
+
+    const checkNotifications = (items: MobileNotification[]) => {
+      const docVisit = items.find((i) => i.isDoctorVisit || i.icon === "medical");
+      if (docVisit) {
+        setDoctorVisitAlert((prev) => {
+          if (!prev || prev.id !== docVisit.id) {
+            setTimeout(() => {
+              Alert.alert(
+                "🩺 Medical Officer Scheduled",
+                `${docVisit.title}\n\n${docVisit.description}`,
+                [
+                  { text: "View Details", onPress: () => router.push("/(tabs)/alerts" as any) },
+                  { text: "Acknowledged" },
+                ]
+              );
+            }, 300);
+          }
+          return docVisit;
+        });
+      } else {
+        setDoctorVisitAlert(null);
+      }
+    };
+
+    NotificationService.getNotifications(soldierId).then(checkNotifications);
+    const unsubNotifs = NotificationService.subscribe(checkNotifications, soldierId);
 
     const handleWebEvent = (e: any) => {
       if (e?.detail) {
@@ -75,6 +105,7 @@ export default function PersonnelHomeScreen() {
 
     return () => {
       unsubscribe();
+      unsubNotifs();
       if (typeof window !== "undefined") {
         window.removeEventListener("missionwell_assessment_updated", handleWebEvent);
         window.removeEventListener("focus", loadAssessment);
@@ -145,6 +176,107 @@ export default function PersonnelHomeScreen() {
 
       {/* Army Forward Post / Offline Tactical Status Banner */}
       <TacticalOfflineBanner />
+
+      {/* Medical Officer Visit Notification Banner */}
+      {doctorVisitAlert && !isDocBannerDismissed && (() => {
+        const isOptimalReadiness = readinessScore >= 80;
+        const isLvl1 = doctorVisitAlert.visitLevel?.includes("1");
+
+        // When soldier is at 85% Optimal readiness, prior acute Level 1 breakdown alert is superseded
+        if (isOptimalReadiness && isLvl1) {
+          return null;
+        }
+
+        const isLvl3 = doctorVisitAlert.visitLevel?.includes("3");
+        const accentColor = isLvl1 ? "#EF4444" : isLvl3 ? "#10B981" : "#F59E0B";
+        const badgeLabel = isLvl1 ? "🔴 LEVEL 1: IMMEDIATE" : isLvl3 ? "🟢 LEVEL 3: ROUTINE" : "🟡 LEVEL 2: PRIORITY";
+        const badgeVariant = isLvl1 ? "danger" : isLvl3 ? "success" : "warning";
+
+        return (
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={() => router.push("/(tabs)/alerts" as any)}
+            style={{
+              marginBottom: 14,
+              borderRadius: 14,
+              backgroundColor: isLvl1
+                ? "rgba(239, 68, 68, 0.12)"
+                : isLvl3
+                ? "rgba(16, 185, 129, 0.12)"
+                : "rgba(245, 158, 11, 0.12)",
+              borderColor: accentColor,
+              borderWidth: 1.5,
+              padding: 14,
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 8, flex: 1 }}>
+                <View
+                  style={{
+                    width: 28,
+                    height: 28,
+                    borderRadius: 8,
+                    backgroundColor: isLvl1
+                      ? "rgba(239, 68, 68, 0.25)"
+                      : isLvl3
+                      ? "rgba(16, 185, 129, 0.25)"
+                      : "rgba(245, 158, 11, 0.25)",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <HeartPulse size={16} color={accentColor} />
+                </View>
+                <Text
+                  style={{
+                    fontSize: 13,
+                    fontWeight: "800",
+                    color: isLvl1 ? "#DC2626" : isLvl3 ? "#059669" : "#D97706",
+                    flex: 1,
+                  }}
+                >
+                  {doctorVisitAlert.title}
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+                <Badge label={badgeLabel} variant={badgeVariant as any} size="sm" />
+                <TouchableOpacity
+                  onPress={(e) => {
+                    e.stopPropagation?.();
+                    setIsDocBannerDismissed(true);
+                    NotificationService.clearDoctorVisits();
+                  }}
+                  style={{ padding: 4, borderRadius: 6, backgroundColor: "rgba(0,0,0,0.1)" }}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                >
+                  <Text style={{ fontSize: 11, fontWeight: "800", color: colors.textMuted }}>✕</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <Text style={{ fontSize: 12, color: colors.text, lineHeight: 17, marginBottom: 8 }}>
+              {doctorVisitAlert.description}
+            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                borderTopWidth: 1,
+                borderTopColor: "rgba(148, 163, 184, 0.2)",
+                paddingTop: 6,
+              }}
+            >
+              <Text style={{ fontSize: 10, color: colors.textMuted, fontStyle: "italic" }}>
+                Tap to view full tactical alert
+              </Text>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                <Text style={{ fontSize: 11, fontWeight: "700", color: accentColor }}>View Details</Text>
+                <ArrowRight size={12} color={accentColor} />
+              </View>
+            </View>
+          </TouchableOpacity>
+        );
+      })()}
 
       {/* Daily Readiness & Assessment CTA (Tactical HUD) */}
       <Card variant="glass" style={styles.heroCard}>

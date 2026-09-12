@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { ScreenContainer } from "../../components/ui/ScreenContainer";
 import { Header } from "../../components/ui/Header";
 import { Card } from "../../components/ui/Card";
 import { Badge } from "../../components/ui/Badge";
 import { useTheme } from "../../contexts/ThemeContext";
+import { useAuth } from "../../contexts/AuthContext";
+import { NotificationService, MobileNotification } from "../../services/notifications";
 import {
   AlertTriangle,
   CalendarCheck,
@@ -13,45 +15,21 @@ import {
   ShieldCheck,
 } from "lucide-react-native";
 
-interface AlertItem {
-  id: string;
-  title: string;
-  description: string;
-  time: string;
-  priority: "HIGH" | "MEDIUM" | "INFO";
-  icon: "warning" | "darbar" | "buddy";
-}
-
-const INITIAL_ALERTS: AlertItem[] = [
-  {
-    id: "ALT-101",
-    title: "Buddy-Pair Check Required",
-    description: "Scheduled 18:00 hrs mutual welfare check with Ct. Surinder Singh pending.",
-    time: "15 mins ago",
-    priority: "HIGH",
-    icon: "buddy",
-  },
-  {
-    id: "ALT-102",
-    title: "CO Darbar Slot Confirmed",
-    description: "Audience with Commanding Officer scheduled for tomorrow at 10:00 hrs at Battalion HQ.",
-    time: "2 hours ago",
-    priority: "MEDIUM",
-    icon: "darbar",
-  },
-  {
-    id: "ALT-103",
-    title: "Sleep Stand-Down Routine",
-    description: "48-hour continuous area domination cycle completed. 8-hour mandatory recovery window active.",
-    time: "5 hours ago",
-    priority: "INFO",
-    icon: "warning",
-  },
-];
-
 export default function AlertsScreen() {
   const { colors } = useTheme();
-  const [alerts, setAlerts] = useState<AlertItem[]>(INITIAL_ALERTS);
+  const { user } = useAuth();
+  const [alerts, setAlerts] = useState<MobileNotification[]>([]);
+
+  useEffect(() => {
+    const soldierId = user?.personnelId || "P-1024";
+    NotificationService.getNotifications(soldierId).then(setAlerts);
+
+    const unsubscribe = NotificationService.subscribe((updated) => {
+      setAlerts(updated);
+    }, soldierId);
+
+    return () => unsubscribe();
+  }, [user]);
 
   const handleClear = () => {
     setAlerts([]);
@@ -85,47 +63,123 @@ export default function AlertsScreen() {
           </Text>
         </Card>
       ) : (
-        alerts.map((item) => (
-          <Card key={item.id} style={styles.alertCard}>
-            <View style={styles.alertHeader}>
-              <View style={styles.iconTitleRow}>
-                <View
-                  style={[
-                    styles.alertIconBox,
-                    {
-                      backgroundColor:
-                        item.priority === "HIGH"
+        alerts.map((item) => {
+          const isDoc = item.isDoctorVisit || item.icon === "medical";
+          return (
+            <Card
+              key={item.id}
+              style={[
+                styles.alertCard,
+                isDoc && {
+                  borderColor: "#10B981",
+                  borderWidth: 1.5,
+                  backgroundColor: "rgba(16, 185, 129, 0.05)",
+                },
+              ]}
+            >
+              <View style={styles.alertHeader}>
+                <View style={styles.iconTitleRow}>
+                  <View
+                    style={[
+                      styles.alertIconBox,
+                      {
+                        backgroundColor: isDoc
+                          ? item.visitLevel?.includes("1")
+                            ? "rgba(239, 68, 68, 0.2)"
+                            : item.visitLevel?.includes("3")
+                            ? "rgba(16, 185, 129, 0.2)"
+                            : "rgba(245, 158, 11, 0.2)"
+                          : item.priority === "HIGH"
                           ? "rgba(239, 68, 68, 0.15)"
                           : item.priority === "MEDIUM"
                           ? "rgba(245, 158, 11, 0.15)"
                           : "rgba(59, 130, 246, 0.15)",
-                    },
-                  ]}
-                >
-                  {item.icon === "buddy" ? (
-                    <HeartHandshake size={16} color={item.priority === "HIGH" ? colors.danger : colors.primary} />
-                  ) : item.icon === "darbar" ? (
-                    <CalendarCheck size={16} color={colors.warning} />
-                  ) : (
-                    <AlertTriangle size={16} color={colors.info} />
-                  )}
+                      },
+                    ]}
+                  >
+                    {isDoc ? (
+                      <HeartHandshake
+                        size={18}
+                        color={
+                          item.visitLevel?.includes("1")
+                            ? "#EF4444"
+                            : item.visitLevel?.includes("3")
+                            ? "#10B981"
+                            : "#F59E0B"
+                        }
+                      />
+                    ) : item.icon === "buddy" ? (
+                      <HeartHandshake size={16} color={item.priority === "HIGH" ? colors.danger : colors.primary} />
+                    ) : item.icon === "darbar" ? (
+                      <CalendarCheck size={16} color={colors.warning} />
+                    ) : (
+                      <AlertTriangle size={16} color={colors.info} />
+                    )}
+                  </View>
+                  <View style={styles.titleMeta}>
+                    <Text
+                      style={[
+                        styles.alertTitle,
+                        {
+                          color: isDoc
+                            ? item.visitLevel?.includes("1")
+                              ? "#DC2626"
+                              : item.visitLevel?.includes("3")
+                              ? "#059669"
+                              : "#D97706"
+                            : colors.text,
+                        },
+                      ]}
+                    >
+                      {item.title}
+                    </Text>
+                    <Text style={[styles.alertTime, { color: colors.textMuted }]}>{item.time}</Text>
+                  </View>
                 </View>
-                <View style={styles.titleMeta}>
-                  <Text style={[styles.alertTitle, { color: colors.text }]}>{item.title}</Text>
-                  <Text style={[styles.alertTime, { color: colors.textMuted }]}>{item.time}</Text>
-                </View>
+                <Badge
+                  label={
+                    isDoc
+                      ? item.visitLevel?.includes("1")
+                        ? "🔴 LVL 1: IMMEDIATE"
+                        : item.visitLevel?.includes("3")
+                        ? "🟢 LVL 3: ROUTINE"
+                        : "🟡 LVL 2: PRIORITY"
+                      : item.priority
+                  }
+                  variant={
+                    isDoc
+                      ? item.visitLevel?.includes("1")
+                        ? "danger"
+                        : item.visitLevel?.includes("3")
+                        ? "success"
+                        : "warning"
+                      : item.priority === "HIGH"
+                      ? "danger"
+                      : item.priority === "MEDIUM"
+                      ? "warning"
+                      : "info"
+                  }
+                  size="sm"
+                />
               </View>
-              <Badge
-                label={item.priority}
-                variant={item.priority === "HIGH" ? "danger" : item.priority === "MEDIUM" ? "warning" : "info"}
-                size="sm"
-              />
-            </View>
-            <Text style={[styles.alertDesc, { color: colors.textMuted }]}>
-              {item.description}
-            </Text>
-          </Card>
-        ))
+              <Text style={[styles.alertDesc, { color: colors.textMuted }]}>
+                {item.description}
+              </Text>
+              {isDoc && (
+                <View style={styles.docFooter}>
+                  <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                    <Text style={styles.docFooterText}>
+                      ⚡ Triage: {item.visitLevel || "Level 2 (Priority)"}
+                    </Text>
+                    <Text style={{ fontSize: 10, color: colors.textMuted, fontStyle: "italic" }}>
+                      Welfare Assessment Follow-Up
+                    </Text>
+                  </View>
+                </View>
+              )}
+            </Card>
+          );
+        })
       )}
     </ScreenContainer>
   );
@@ -205,5 +259,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 4,
     lineHeight: 16,
+  },
+  docFooter: {
+    marginTop: 10,
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: "rgba(16, 185, 129, 0.2)",
+  },
+  docFooterText: {
+    fontSize: 11,
+    color: "#059669",
+    fontWeight: "600",
   },
 });
