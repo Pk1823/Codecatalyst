@@ -12,7 +12,7 @@ import { Download, Smartphone, QrCode, X, ExternalLink, ShieldCheck } from "luci
 import { useTheme } from "../../contexts/ThemeContext";
 
 export const APK_DOWNLOAD_URL =
-  "https://expo.dev/accounts/vikasgangwars-team/projects/vikas/builds/b2fea7a1-0e68-42aa-9621-ac60ebdfce88";
+  "https://expo.dev/artifacts/eas/zg-bAN5GhyFVZov0DcQ3kS8EnngV2Cf-QddtQuBCYI0.apk";
 
 export function DownloadAppBanner({ style }: { style?: any } = {}) {
   const { colors } = useTheme();

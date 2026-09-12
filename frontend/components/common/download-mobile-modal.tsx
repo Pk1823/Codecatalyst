@@ -13,9 +13,8 @@ import {
   Copy,
   Check,
 } from "lucide-react";
-
-export const APK_DOWNLOAD_URL =
-  "https://expo.dev/accounts/vikasgangwars-team/projects/vikas/builds/b2fea7a1-0e68-42aa-9621-ac60ebdfce88";
+import { APK_DOWNLOAD_URL } from "@/lib/download-constants";
+export { APK_DOWNLOAD_URL };
 
 interface DownloadMobileModalProps {
   isOpen: boolean;
