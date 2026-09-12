@@ -28,8 +28,8 @@ export const getHostIp = (): string => {
     }
   }
 
-  // Active Mac LAN IP on local Wi-Fi / network
-  return "172.16.26.187";
+  // Active LAN IP on local Wi-Fi / network
+  return "192.168.1.30";
 };
 
 // Generates prioritized candidate API base URLs
@@ -43,32 +43,32 @@ export const getCandidateBaseUrls = (): string[] => {
   // 1. On Web Browser: current page host is immediately reachable
   if (Platform.OS === "web" && typeof window !== "undefined" && window.location?.hostname) {
     const h = window.location.hostname;
-    urls.push(`http://${h}:5001/api`);
     urls.push(`http://${h}:3000/api`);
+    urls.push(`http://${h}:5001/api`);
   }
 
   const hostIp = getHostIp();
 
-  // 2. Detected Host / LAN IP (Port 5001 Express, Port 3000 Next.js Portal)
+  // 2. Detected Host / LAN IP (Port 3000 Next.js Portal, Port 5001 Express)
   if (hostIp) {
-    urls.push(`http://${hostIp}:5001/api`);
     urls.push(`http://${hostIp}:3000/api`);
+    urls.push(`http://${hostIp}:5001/api`);
   }
 
-  // 3. Direct Mac LAN IP (Reachable across local Wi-Fi from real devices)
-  urls.push("http://172.16.26.187:5001/api");
-  urls.push("http://172.16.26.187:3000/api");
+  // 3. Direct LAN IP (Reachable across local Wi-Fi from real devices)
+  urls.push("http://192.168.1.30:3000/api");
+  urls.push("http://192.168.1.30:5001/api");
 
   // 4. Localhost fallbacks
-  urls.push("http://localhost:5001/api");
   urls.push("http://localhost:3000/api");
-  urls.push("http://127.0.0.1:5001/api");
+  urls.push("http://localhost:5001/api");
   urls.push("http://127.0.0.1:3000/api");
+  urls.push("http://127.0.0.1:5001/api");
 
   // 5. Android Emulator
   if (Platform.OS === "android") {
-    urls.push("http://10.0.2.2:5001/api");
     urls.push("http://10.0.2.2:3000/api");
+    urls.push("http://10.0.2.2:5001/api");
   }
 
   return Array.from(new Set(urls));
@@ -85,7 +85,7 @@ export const getAiEngineUrl = (): string => {
   if (hostIp) {
     return `http://${hostIp}:8000`;
   }
-  return "http://172.16.26.187:8000";
+  return "http://192.168.1.30:8000";
 };
 
 let cachedWorkingBaseUrl: string | null = null;

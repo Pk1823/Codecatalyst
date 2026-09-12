@@ -32,6 +32,17 @@ export async function POST(req: NextRequest) {
       if (backendRes.ok) {
         const backendData = await backendRes.json();
         if (backendData.success && backendData.user) {
+          if (backendData.user.role === "PERSONNEL") {
+            return NextResponse.json(
+              {
+                error:
+                  "Personnel assessments are strictly conducted on the MissionWell Mobile App for biometric isolation and DPDP compliance. Web portal access is reserved for Welfare Officers, Commanders, and System Administrators.",
+                isPersonnelRestricted: true,
+              },
+              { status: 403 }
+            );
+          }
+
           const response = NextResponse.json({
             success: true,
             user: backendData.user,
@@ -75,6 +86,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { error: "Invalid credentials. User record not found in system." },
         { status: 401 }
+      );
+    }
+
+    // Strict Web Portal Role Check: Personnel must use the mobile application
+    if (user.role === "PERSONNEL") {
+      return NextResponse.json(
+        {
+          error:
+            "Personnel assessments are strictly conducted on the MissionWell Mobile App for biometric isolation and DPDP compliance. Web portal access is reserved for Welfare Officers, Commanders, and System Administrators.",
+          isPersonnelRestricted: true,
+        },
+        { status: 403 }
       );
     }
 

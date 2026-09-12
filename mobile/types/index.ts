@@ -60,6 +60,12 @@ export interface WellnessAssessmentResult {
   isMaskingDetected?: boolean;
   isOffline?: boolean;
   syncedAt?: string;
+  consecutiveFieldDays?: string;
+  dutyHours5d?: string;
+  nightShifts5d?: string;
+  sleepHrs5dAvg?: string;
+  selfReportedEnergy?: string;
+  selfReportedStress?: string;
 }
 
 export interface OfflineQueueItem {

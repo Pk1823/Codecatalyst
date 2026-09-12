@@ -17,6 +17,7 @@ import {
   CheckCircle2,
   X,
   PhoneCall,
+  Smartphone,
 } from "lucide-react";
 import { useAuth, useToast } from "@/components/providers";
 import { FORCES_METADATA } from "@/lib/force-metadata";
@@ -31,10 +32,6 @@ export default function PersonnelDashboard() {
   const isHi = lang === "hi";
 
   const [sainikRequestSent, setSainikRequestSent] = useState(false);
-  const [isQuickCheckinOpen, setIsQuickCheckinOpen] = useState(false);
-  const [quickEnergy, setQuickEnergy] = useState(4);
-  const [quickSleep, setQuickSleep] = useState("6-7 hours");
-  const [quickStress, setQuickStress] = useState("3-4");
 
   const [liveStats, setLiveStats] = useState({
     status: isHi ? "संतुलित" : "Optimal",
@@ -79,42 +76,6 @@ export default function PersonnelDashboard() {
     });
   };
 
-  const handleQuickCheckinSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await WellnessService.submitAssessment(
-        {
-          consecutiveFieldDays: "11-30",
-          dutyHours5d: "30-45 hours",
-          nightShifts5d: "1",
-          sleepHrs5dAvg: quickSleep,
-          selfReportedEnergy: String(quickEnergy),
-          selfReportedStress: quickStress,
-          additionalNotes: "Quick Daily Vitals Check-in.",
-        },
-        user?.personnelId || meta.sampleServiceId || "P-1024"
-      );
-
-      const newStatus = quickEnergy >= 4 ? (isHi ? "उत्कृष्ट" : "Good") : (isHi ? "ध्यान अपेक्षित" : "Attention");
-      const newStress = quickStress === "1-2" ? (isHi ? "कम" : "Low") : quickStress === "3-4" ? (isHi ? "मध्यम" : "Moderate") : (isHi ? "उच्च" : "Elevated");
-      setLiveStats({
-        status: newStatus,
-        stress: newStress,
-        fatigue: quickEnergy >= 4 ? (isHi ? "नियंत्रित" : "Low") : (isHi ? "मध्यम" : "Moderate"),
-        workload: isHi ? "संतुलित" : "Balanced",
-      });
-
-      setIsQuickCheckinOpen(false);
-      toast({
-        title: isHi ? "दैनिक स्थिति दर्ज हुई" : "Daily Vitals Logged",
-        description: isHi ? "आपकी स्थिति गोपनीय रूप से दर्ज कर ली गई है।" : "Vitals saved confidentially.",
-        type: "success",
-      });
-    } catch {
-      toast({ title: "Error recording vitals", type: "error" });
-    }
-  };
-
   const isAttention = liveStats.status.toLowerCase().includes("attention") || liveStats.status.toLowerCase().includes("elevated");
 
   return (
@@ -138,19 +99,12 @@ export default function PersonnelDashboard() {
 
         {/* Minimal Action Controls */}
         <div className="flex items-center gap-2.5">
-          <button
-            onClick={() => setIsQuickCheckinOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors"
-          >
-            <Sparkles className="h-3.5 w-3.5 text-blue-500" />
-            <span>{isHi ? "त्वरित चेक-इन" : "Quick Vitals"}</span>
-          </button>
           <Link
             href="/personnel/wellness"
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium rounded-lg bg-blue-600 hover:bg-blue-500 text-white shadow-xs transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-500 text-white shadow-xs transition-colors"
           >
-            <HeartPulse className="h-3.5 w-3.5" />
-            <span>{isHi ? "पूर्ण मूल्यांकन" : "Assessment"}</span>
+            <Smartphone className="h-3.5 w-3.5" />
+            <span>{isHi ? "मोबाइल ऐप पर मूल्यांकन" : "Mobile App Assessment"}</span>
           </Link>
           <Link
             href="/personnel/support"
@@ -161,6 +115,25 @@ export default function PersonnelDashboard() {
             <span className="hidden md:inline">{isHi ? "सहायता" : "Support"}</span>
           </Link>
         </div>
+      </div>
+
+      {/* Mobile Assessment Mandatory Protocol Notice */}
+      <div className="flex items-center gap-2.5 p-3 rounded-xl bg-blue-50/80 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/60 text-xs text-blue-800 dark:text-blue-300">
+        <Smartphone className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
+        <div className="flex-1 text-[11px] leading-relaxed">
+          <span className="font-bold">
+            {isHi ? "वैधानिक मूल्यांकन दिशानिर्देश:" : "Assessment Mobile Protocol:"}{" "}
+          </span>
+          {isHi
+            ? "डीपीडीपी अधिनियम 2023 व गैर-दंडात्मक सुरक्षा के तहत सैनिक कल्याण मूल्यांकन केवल मिशनवेल मोबाइल ऐप पर ही सबमिट किया जा सकता है।"
+            : "Under DPDP Act 2023 & Non-Punitive Defense Directives, personnel assessments are submitted exclusively via the MissionWell Mobile App."}
+        </div>
+        <Link
+          href="/personnel/wellness"
+          className="underline font-semibold text-blue-600 dark:text-blue-400 shrink-0 text-[11px]"
+        >
+          {isHi ? "क्यूआर कोड खोलें" : "View QR Code"}
+        </Link>
       </div>
 
       {/* 2. Simplified Stat Indicators (4 Minimal Cards) */}
@@ -374,109 +347,6 @@ export default function PersonnelDashboard() {
           </Link>
         </div>
       </div>
-
-      {/* 5. Minimal Quick Check-in Modal */}
-      {isQuickCheckinOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in"
-          onClick={() => setIsQuickCheckinOpen(false)}
-        >
-          <div
-            className="w-full max-w-sm rounded-xl bg-white dark:bg-[#0F172A] border border-slate-200 dark:border-slate-800 p-5 shadow-xl space-y-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-              <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-blue-500" />
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
-                  {isHi ? "त्वरित दैनिक चेक-इन" : "Quick Daily Vitals"}
-                </h3>
-              </div>
-              <button
-                onClick={() => setIsQuickCheckinOpen(false)}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-
-            <form onSubmit={handleQuickCheckinSubmit} className="space-y-3.5 text-xs">
-              <div>
-                <label className="block text-slate-600 dark:text-slate-300 font-medium mb-1.5">
-                  {isHi ? "ऊर्जा स्तर (Energy)" : "Energy Level"} ({quickEnergy}/5)
-                </label>
-                <div className="grid grid-cols-5 gap-1.5">
-                  {[1, 2, 3, 4, 5].map((lvl) => (
-                    <button
-                      key={lvl}
-                      type="button"
-                      onClick={() => setQuickEnergy(lvl)}
-                      className={`py-1.5 rounded-lg border text-center font-medium text-xs transition-colors ${
-                        quickEnergy === lvl
-                          ? "border-blue-500 bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-bold"
-                          : "border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
-                      }`}
-                    >
-                      {lvl}★
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-slate-600 dark:text-slate-300 font-medium mb-1">
-                  {isHi ? "नींद (Sleep Hours)" : "Sleep Hours"}
-                </label>
-                <select
-                  value={quickSleep}
-                  onChange={(e) => setQuickSleep(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:outline-hidden"
-                >
-                  <option value="> 7 hours">&gt; 7 hours (Optimal)</option>
-                  <option value="6-7 hours">6-7 hours (Good)</option>
-                  <option value="5-6 hours">5-6 hours (Moderate)</option>
-                  <option value="4-5 hours">4-5 hours (Disturbed)</option>
-                  <option value="< 4 hours">&lt; 4 hours (Low)</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-slate-600 dark:text-slate-300 font-medium mb-1">
-                  {isHi ? "तनाव (Stress)" : "Stress Level"}
-                </label>
-                <select
-                  value={quickStress}
-                  onChange={(e) => setQuickStress(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:outline-hidden"
-                >
-                  <option value="1-2">1-2 (Calm)</option>
-                  <option value="3-4">3-4 (Normal Duty)</option>
-                  <option value="5-6">5-6 (Elevated Watch)</option>
-                  <option value="7-8">7-8 (High Tension)</option>
-                  <option value="9-10">9-10 (Extreme Pressure)</option>
-                </select>
-              </div>
-
-              <div className="pt-2 flex justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
-                <button
-                  type="button"
-                  onClick={() => setIsQuickCheckinOpen(false)}
-                  className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium flex items-center gap-1 shadow-xs"
-                >
-                  <CheckCircle2 className="h-3.5 w-3.5" />
-                  <span>Save</span>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

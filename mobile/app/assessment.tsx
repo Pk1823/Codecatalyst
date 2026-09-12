@@ -194,7 +194,13 @@ export default function AssessmentScreen() {
 
           <Button
             title="Return to Personnel Hub"
-            onPress={() => router.back()}
+            onPress={() => {
+              if (router.canGoBack()) {
+                router.back();
+              } else {
+                router.replace("/(tabs)/personnel");
+              }
+            }}
             variant="secondary"
             icon={<RotateCcw size={16} color={colors.text} />}
             style={styles.returnBtn}

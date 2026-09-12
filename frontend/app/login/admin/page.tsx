@@ -605,14 +605,13 @@ export default function AdminLoginPage() {
             </div>
           )}
 
-          {/* Minimal Link to Personnel Portal */}
+          {/* Mobile Assessment Mandate Notice */}
           <div className="pt-2 border-t border-slate-800 text-center">
-            <Link
-              href="/login"
-              className="text-[11px] text-slate-400 hover:text-blue-400 transition-colors"
-            >
-              {isHi ? "सैनिक / जवान पोर्टल प्रवेश →" : "Personnel & Soldier Portal →"}
-            </Link>
+            <span className="text-[11px] text-slate-400">
+              {isHi
+                ? "सैनिक स्वास्थ्य मूल्यांकन केवल मोबाइल ऐप पर उपलब्ध है (DPDP 2023)"
+                : "Soldier assessments strictly conducted via Mobile App (DPDP Act 2023)"}
+            </span>
           </div>
 
         </div>

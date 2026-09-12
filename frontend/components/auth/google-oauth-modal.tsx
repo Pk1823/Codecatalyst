@@ -25,7 +25,7 @@ export interface GoogleAccount {
   rank: string;
   avatarBg: string;
   badge: string;
-  category?: "WELFARE" | "COMMAND" | "PERSONNEL" | "ADMIN";
+  category?: "WELFARE" | "COMMAND" | "ADMIN";
 }
 
 export const PRECONFIGURED_GOOGLE_ACCOUNTS: GoogleAccount[] = [
@@ -48,16 +48,6 @@ export const PRECONFIGURED_GOOGLE_ACCOUNTS: GoogleAccount[] = [
     avatarBg: "bg-blue-600",
     badge: "Unit Command & Readiness",
     category: "COMMAND",
-  },
-  {
-    name: "Ct. Piyush Kumar",
-    email: "ct.piyush.jawan@gmail.com",
-    role: "PERSONNEL",
-    force: "ITBP",
-    rank: "Constable (High Altitude)",
-    avatarBg: "bg-amber-600",
-    badge: "Field Personnel & Check-in",
-    category: "PERSONNEL",
   },
   {
     name: "Sh. Rajesh Patel",
@@ -104,7 +94,7 @@ export function GoogleOAuthModal({
 }: GoogleOAuthModalProps) {
   const [step, setStep] = useState<"chooser" | "consent">("chooser");
   const [selectedAccount, setSelectedAccount] = useState<GoogleAccount | null>(null);
-  const [categoryFilter, setCategoryFilter] = useState<"ALL" | "WELFARE" | "COMMAND" | "PERSONNEL" | "ADMIN">("ALL");
+  const [categoryFilter, setCategoryFilter] = useState<"ALL" | "WELFARE" | "COMMAND" | "ADMIN">("ALL");
   const [customEmail, setCustomEmail] = useState("");
   const [customName, setCustomName] = useState("");
   const [customRole, setCustomRole] = useState(initialRole);
@@ -296,10 +286,9 @@ export function GoogleOAuthModal({
                   {/* Category Filter Pills */}
                   <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
                     {[
-                      { id: "ALL" as const, label: "All (5)" },
+                      { id: "ALL" as const, label: "All (4)" },
                       { id: "WELFARE" as const, label: "Welfare (2)" },
                       { id: "COMMAND" as const, label: "Command (1)" },
-                      { id: "PERSONNEL" as const, label: "Personnel (1)" },
                       { id: "ADMIN" as const, label: "Admin (1)" },
                     ].map((tab) => {
                       const isSelected = categoryFilter === tab.id;
@@ -454,7 +443,6 @@ export function GoogleOAuthModal({
                       >
                         <option value="WELFARE_OFFICER">Welfare Officer (Doctor)</option>
                         <option value="COMMANDER">Tactical Commander</option>
-                        <option value="PERSONNEL">Personnel (Jawan)</option>
                         <option value="ADMIN">System Administrator</option>
                       </select>
                     </div>
@@ -472,7 +460,7 @@ export function GoogleOAuthModal({
                         rank: customRole === "COMMANDER" ? "Commandant" : "Medical Officer",
                         avatarBg: "bg-blue-600",
                         badge: "Custom Gmail Persona",
-                        category: (customRole as any) === "COMMANDER" ? "COMMAND" : (customRole as any) === "PERSONNEL" ? "PERSONNEL" : (customRole as any) === "ADMIN" ? "ADMIN" : "WELFARE",
+                        category: (customRole as any) === "COMMANDER" ? "COMMAND" : (customRole as any) === "ADMIN" ? "ADMIN" : "WELFARE",
                       })
                     }
                     className="w-full mt-2 py-2.5 px-4 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2"

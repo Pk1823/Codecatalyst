@@ -1,329 +1,147 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { QRCodeSVG } from "qrcode.react";
 import {
+  Smartphone,
   ShieldCheck,
-  CheckCircle2,
-  ArrowRight,
-  ArrowLeft,
-  HandHelping,
+  Lock,
+  ExternalLink,
+  ChevronLeft,
+  AlertCircle,
+  QrCode,
 } from "lucide-react";
-import { WELLNESS_STEPS } from "@/lib/mock-data/wellness";
-import { WellnessRating, WellnessAssessmentInput, WellnessAssessmentResult } from "@/types/wellness";
-import { WellnessService } from "@/services/wellness.service";
-import { useToast, useAuth } from "@/components/providers";
-import { FORCES_METADATA } from "@/lib/force-metadata";
-
-const assessmentSchema = z.object({
-  consecutiveFieldDays: z.string().min(1, "Required"),
-  dutyHours5d: z.string().min(1, "Required"),
-  nightShifts5d: z.string().min(1, "Required"),
-  sleepHrs5dAvg: z.string().min(1, "Required"),
-  selfReportedEnergy: z.string().min(1, "Required"),
-  selfReportedStress: z.string().min(1, "Required"),
-  additionalNotes: z.string().optional(),
-});
+import { useAuth } from "@/components/providers";
 
 export default function WellnessAssessmentPage() {
-  const { toast } = useToast();
-  const { user, force } = useAuth();
-  const meta = FORCES_METADATA[force] || FORCES_METADATA.CRPF;
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [submittedResult, setSubmittedResult] = useState<WellnessAssessmentResult | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const {
-    watch,
-    setValue,
-    handleSubmit,
-  } = useForm<WellnessAssessmentInput>({
-    resolver: zodResolver(assessmentSchema),
-    defaultValues: {
-      consecutiveFieldDays: "11-30",
-      dutyHours5d: "30-45 hours",
-      nightShifts5d: "0",
-      sleepHrs5dAvg: "6-7 hours",
-      selfReportedEnergy: "3",
-      selfReportedStress: "3-4",
-      additionalNotes: "",
-    },
-  });
-
-  const formValues = watch();
-  const currentStep = WELLNESS_STEPS[currentStepIndex];
-
-  const handleSelectOption = (value: string) => {
-    setValue(currentStep.id, value);
-  };
-
-  const nextStep = () => {
-    if (currentStepIndex < WELLNESS_STEPS.length - 1) {
-      setCurrentStepIndex((prev) => prev + 1);
-    }
-  };
-
-  const prevStep = () => {
-    if (currentStepIndex > 0) {
-      setCurrentStepIndex((prev) => prev - 1);
-    }
-  };
-
-  const onSubmit = async (data: WellnessAssessmentInput) => {
-    setIsSubmitting(true);
-    try {
-      const targetId = user?.personnelId || meta.sampleServiceId || "P-1024";
-      const result = await WellnessService.submitAssessment(data, targetId);
-      setSubmittedResult(result);
-      toast({
-        title: "Assessment Recorded",
-        description: "Your responses have been confidentially logged for welfare planning.",
-        type: "success",
-      });
-    } catch {
-      toast({
-        title: "Error submitting assessment",
-        type: "error",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // -------------------------------------------------------------
-  // RESULT SCREEN AFTER SUBMISSION
-  // -------------------------------------------------------------
-  if (submittedResult) {
-    return (
-      <div className="max-w-2xl mx-auto space-y-6 animate-in fade-in zoom-in-95 duration-200">
-        <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-6 sm:p-8 text-center space-y-6 shadow-xl">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900 shadow-sm">
-            <CheckCircle2 className="h-7 w-7" />
-          </div>
-
-          <div>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-blue-600 dark:text-blue-400 font-semibold">
-              Assessment Completed Confidentially
-            </span>
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">
-              Wellness Assessment Complete
-            </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-mono">
-              Reference: {submittedResult.id} • {submittedResult.date}
-            </p>
-          </div>
-
-          {/* Indicator Result Card */}
-          <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 p-5 text-left space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
-              <div>
-                <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                  Overall Status
-                </span>
-                <p className="text-base font-bold text-blue-600 dark:text-blue-400">
-                  {submittedResult.indicatorStatus}
-                </p>
-              </div>
-              <div className="text-right">
-                <span className="text-2xl sm:text-3xl font-mono font-bold text-slate-900 dark:text-white">
-                  {submittedResult.score} <span className="text-xs text-slate-400 font-normal">/ 100</span>
-                </span>
-              </div>
-            </div>
-
-            {/* Supporting Breakdown */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-              <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
-                <span className="text-slate-500 dark:text-slate-400 block text-[10px]">Stress Indicator</span>
-                <span className="font-semibold text-slate-900 dark:text-white">{submittedResult.stressLevel}</span>
-              </div>
-              <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
-                <span className="text-slate-500 dark:text-slate-400 block text-[10px]">Fatigue Level</span>
-                <span className="font-semibold text-slate-900 dark:text-white">{submittedResult.fatigueLevel}</span>
-              </div>
-              <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
-                <span className="text-slate-500 dark:text-slate-400 block text-[10px]">Workload</span>
-                <span className="font-semibold text-slate-900 dark:text-white">{submittedResult.workloadStatus}</span>
-              </div>
-              <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
-                <span className="text-slate-500 dark:text-slate-400 block text-[10px]">Recovery</span>
-                <span className="font-semibold text-slate-900 dark:text-white">{submittedResult.recoveryStatus}</span>
-              </div>
-            </div>
-
-            {/* Supportive Recommendation */}
-            <div className="p-3.5 rounded-lg bg-white dark:bg-slate-900 text-xs text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 space-y-1">
-              <span className="font-semibold text-slate-900 dark:text-white block">
-                Welfare Recommendation:
-              </span>
-              <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{submittedResult.recommendation}</p>
-            </div>
-          </div>
-
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              href="/personnel"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 text-xs font-semibold shadow-xs transition-colors"
-            >
-              <span>View My Dashboard</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-            <Link
-              href="/personnel/support"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-5 py-2.5 text-xs font-semibold shadow-xs transition-colors"
-            >
-              <HandHelping className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-              <span>Request Support</span>
-            </Link>
-          </div>
-
-          <p className="text-[11px] text-slate-500 dark:text-slate-400 max-w-md mx-auto">
-            Participation is voluntary. Your responses are protected under the MissionWell Dignity Safeguard Protocol and are not used for disciplinary evaluations or Annual Confidential Reports (ACR/APAR).
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  // -------------------------------------------------------------
-  // MULTI-STEP ASSESSMENT FORM
-  // -------------------------------------------------------------
-  const currentValue = formValues[currentStep.id];
+  const { lang } = useAuth();
+  const isHi = lang === "hi";
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      {/* Main Assessment Container */}
-      <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-6 sm:p-8 shadow-md">
-        {/* Progress Bar & Header */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between text-xs font-medium text-slate-500 dark:text-slate-400 mb-2">
-            <span>
-              Step {currentStep.stepNumber} of {WELLNESS_STEPS.length}
-            </span>
-            <span className="text-blue-600 dark:text-blue-400 font-mono font-semibold">
-              {Math.round((currentStep.stepNumber / WELLNESS_STEPS.length) * 100)}% Completed
-            </span>
+    <div className="max-w-3xl mx-auto space-y-6 py-4 sm:py-8">
+      {/* Back Navigation */}
+      <Link
+        href="/personnel"
+        className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors"
+      >
+        <ChevronLeft className="h-4 w-4" />
+        <span>{isHi ? "वापस डैशबोर्ड पर" : "Back to Overview"}</span>
+      </Link>
+
+      {/* Main Notice Card */}
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0B132B] p-6 sm:p-8 shadow-xl space-y-6">
+        
+        {/* Header with Badge */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
+          <div className="flex items-center gap-3.5">
+            <div className="h-12 w-12 rounded-xl bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700/40 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
+              <Smartphone className="h-6 w-6" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-slate-900 dark:text-white">
+                {isHi ? "सैनिक मूल्यांकन केवल मोबाइल ऐप पर" : "Soldier Assessment (Mobile App Only)"}
+              </h1>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                {isHi
+                  ? "गृह मंत्रालय एवं डीपीडीपी अधिनियम 2023 के तहत वेब मूल्यांकन प्रतिबंधित है"
+                  : "Web-based assessment submission is disabled under MHA & DPDP 2023 directives"}
+              </p>
+            </div>
           </div>
-          <div className="h-1.5 w-full rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-            <div
-              className="h-full bg-blue-500 rounded-full transition-all duration-500 ease-out"
-              style={{
-                width: `${(currentStep.stepNumber / WELLNESS_STEPS.length) * 100}%`,
-              }}
-            />
-          </div>
+
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs font-mono font-semibold text-emerald-700 dark:text-emerald-400 self-start sm:self-center">
+            <ShieldCheck className="h-3.5 w-3.5" />
+            DPDP Guard Active
+          </span>
         </div>
 
-        {/* Step Content */}
-        <div className="space-y-6">
-          <div>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-blue-600 dark:text-blue-400 font-semibold">
-              Dimension 0{currentStep.stepNumber} • {currentStep.title}
-            </span>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-1">
-              {currentStep.question}
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              {currentStep.description}
-            </p>
+        {/* Security & Confidentiality Explanation */}
+        <div className="p-4 rounded-xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/60 text-xs text-amber-800 dark:text-amber-300 leading-relaxed space-y-2">
+          <div className="flex items-center gap-2 font-bold">
+            <AlertCircle className="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+            <span>{isHi ? "वैधानिक सुरक्षा एवं गैर-दंडात्मक गोपनीयता प्रोटोकॉल:" : "Statutory Privacy & Non-Punitive Protocol:"}</span>
           </div>
+          <p className="text-[11px] text-amber-700 dark:text-amber-300/90 leading-normal">
+            {isHi
+              ? "कार्यस्थल अथवा शेयर्ड कंप्यूटरों पर सैनिक का मानसिक व शारीरिक स्वास्थ्य मूल्यांकन भरना पूर्णतः प्रतिबंधित है ताकि किसी भी सहकर्मी या कमांडर द्वारा स्क्रीन पर उत्तर न देखे जा सकें। मूल्यांकन केवल सैनिक के निजी फोन अथवा टैक्टिकल डिवाइस पर मिशनवेल मोबाइल ऐप के माध्यम से ही स्वीकार किया जाता है।"
+              : "To guarantee zero-stigmatization and safeguard personnel from workplace observation, self-assessments cannot be administered on open desktop browsers or shared workstations. All voluntary assessments must be submitted through the confidential MissionWell Mobile Application on your personal smartphone."}
+          </p>
+        </div>
 
-          {/* Options Radio List */}
-          <div className="space-y-2">
-            {currentStep.options.map((opt) => {
-              const isSelected = currentValue === opt.value;
-              return (
-                <button
-                  key={opt.value}
-                  type="button"
-                  onClick={() => handleSelectOption(opt.value)}
-                  className={`w-full p-3.5 rounded-xl border text-left transition-all duration-150 ease-out flex items-start justify-between gap-3 cursor-pointer active:scale-[0.99] ${
-                    isSelected
-                      ? "border-blue-500 bg-blue-50/80 dark:bg-blue-950/40 shadow-xs"
-                      : "border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-850"
-                  }`}
-                >
-                  <div className="space-y-0.5">
-                    <span className="text-xs font-semibold text-slate-900 dark:text-white">
-                      {opt.label}
-                    </span>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400">{opt.hint}</p>
-                  </div>
-                  <div
-                    className={`h-4 w-4 rounded-full border flex items-center justify-center shrink-0 mt-0.5 ${
-                      isSelected
-                        ? "border-blue-500 bg-blue-500 text-white"
-                        : "border-slate-300 dark:border-slate-700"
-                    }`}
-                  >
-                    {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Optional notes on final step */}
-          {currentStepIndex === WELLNESS_STEPS.length - 1 && (
-            <div className="pt-2">
-              <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
-                Confidential notes for Welfare Officer (optional)
-              </label>
-              <textarea
-                rows={2}
-                placeholder="Any special remarks regarding recent fatigue, family concerns, or rest..."
-                value={formValues.additionalNotes || ""}
-                onChange={(e) => setValue("additionalNotes", e.target.value)}
-                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:border-blue-500"
+        {/* Interactive QR Code Card */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center p-6 rounded-xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800">
+          
+          <div className="flex flex-col items-center justify-center space-y-3">
+            <div className="p-3.5 rounded-xl bg-white shadow-md border border-slate-200 text-slate-900">
+              <QRCodeSVG
+                value="http://192.168.1.30:8082/personnel"
+                size={160}
+                level="H"
+                fgColor="#0F172A"
+                bgColor="#FFFFFF"
               />
             </div>
-          )}
-
-          {/* Navigation Buttons */}
-          <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
-            <button
-              type="button"
-              onClick={prevStep}
-              disabled={currentStepIndex === 0}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-30 transition-colors"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              <span>Back</span>
-            </button>
-
-            {currentStepIndex < WELLNESS_STEPS.length - 1 ? (
-              <button
-                type="button"
-                onClick={nextStep}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-xs transition-colors"
-              >
-                <span>Continue</span>
-                <ArrowRight className="h-3.5 w-3.5" />
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={handleSubmit(onSubmit)}
-                disabled={isSubmitting}
-                className="inline-flex items-center gap-2 px-5 py-2 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-xs transition-colors disabled:opacity-40"
-              >
-                <CheckCircle2 className="h-3.5 w-3.5" />
-                <span>{isSubmitting ? "Submitting..." : "Submit Voluntary Assessment"}</span>
-              </button>
-            )}
+            <div className="text-center space-y-1">
+              <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+                {isHi ? "फोन कैमरे अथवा Expo Go से स्कैन करें" : "Scan to Launch Mobile App"}
+              </span>
+              <p className="text-[10px] font-mono text-slate-500 dark:text-slate-400">
+                exp://192.168.1.30:8082
+              </p>
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* Disciplinary Protection Guarantee */}
-      <div className="text-center text-[11px] text-slate-500 dark:text-slate-400 max-w-md mx-auto flex items-center justify-center gap-1.5">
-        <ShieldCheck className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-        <span>
-          Responses are protected under DPDP Act 2023 and are strictly excluded from Annual Confidential Reports (ACR).
-        </span>
+          <div className="space-y-4 text-xs text-slate-600 dark:text-slate-300">
+            <h3 className="font-bold text-slate-900 dark:text-white text-sm">
+              {isHi ? "मोबाइल ऐप पर मूल्यांकन के 3 सरल चरण:" : "3 Simple Steps on Mobile:"}
+            </h3>
+            
+            <ol className="space-y-2.5 list-decimal list-inside text-[11px] leading-relaxed">
+              <li>
+                <span className="font-medium text-slate-800 dark:text-slate-200">
+                  {isHi ? "मोबाइल ऐप खोलें" : "Open Mobile App"}:
+                </span>{" "}
+                {isHi ? "दिए गए क्यूआर कोड को अपने फोन से स्कैन करें।" : "Scan the QR code or open Expo Go."}
+              </li>
+              <li>
+                <span className="font-medium text-slate-800 dark:text-slate-200">
+                  {isHi ? "60-सेकंड त्वरित चेक-इन" : "60-Second Check-in"}:
+                </span>{" "}
+                {isHi ? "ड्यूटी के घंटे, नींद व थकान पर 6 त्वरित प्रश्नों के उत्तर दें।" : "Answer 6 rapid check-in questions on workload & rest."}
+              </li>
+              <li>
+                <span className="font-medium text-slate-800 dark:text-slate-200">
+                  {isHi ? "100% गोपनीय रिकॉर्ड" : "Encrypted Vault"}:
+                </span>{" "}
+                {isHi ? "डेटा सीधे सुरक्षित एन्क्रिप्शन के साथ वेलफेयर हब में सिंक होगा।" : "Your assessment records safely in the confidential welfare hub."}
+              </li>
+            </ol>
+
+            <div className="pt-2">
+              <a
+                href="http://localhost:8082/personnel"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 py-2.5 px-4 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-md transition-all"
+              >
+                <ExternalLink className="h-3.5 w-3.5" />
+                <span>{isHi ? "मोबाइल ऐप वेब प्रीव्यू खोलें (Port 8082)" : "Open Mobile Web Preview (Port 8082)"}</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Footer Guarantee */}
+        <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800 pt-4">
+          <div className="flex items-center gap-1.5">
+            <Lock className="h-3.5 w-3.5 text-blue-500" />
+            <span>{isHi ? "शून्य एसीआर/एपीएआर लिंकेज गारंटी" : "Zero APAR / ACR Career Linkage Guarantee"}</span>
+          </div>
+          <span>Ministry of Home Affairs • CAPF</span>
+        </div>
+
       </div>
     </div>
   );

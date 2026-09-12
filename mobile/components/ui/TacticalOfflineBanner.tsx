@@ -316,6 +316,9 @@ export const TacticalOfflineBanner: React.FC<BannerProps> = ({ compact = false }
 const styles = StyleSheet.create({
   wrapper: {
     marginBottom: 12,
+    width: "100%",
+    maxWidth: 440,
+    alignSelf: "center",
   },
   bannerCard: {
     flexDirection: "row",

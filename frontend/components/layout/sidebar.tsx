@@ -22,6 +22,7 @@ import {
   Activity,
   PhoneCall,
   Presentation,
+  Smartphone,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers";
@@ -42,7 +43,7 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
     if (role === "PERSONNEL") {
       return [
         { name: isHi ? "जवान कल्याण पोर्टल" : "My Wellbeing", sub: isHi ? "व्यक्तिगत डैशबोर्ड" : "Personal Hub", href: "/personnel", icon: LayoutDashboard },
-        { name: isHi ? "कल्याण स्व-मूल्यांकन" : "Wellness Check", sub: isHi ? "7-चरण जांच" : "7-Step Check", href: "/personnel/wellness", icon: HeartPulse },
+        { name: isHi ? "मोबाइल ऐप मूल्यांकन" : "Mobile App Check", sub: isHi ? "मोबाइल ऐप क्यूआर" : "App QR Access", href: "/personnel/wellness", icon: Smartphone },
         { name: isHi ? "कल्याण सहायता मांगें" : "Request Support", sub: isHi ? "गोपनीय अनुरोध" : "Confidential Intake", href: "/personnel/support", icon: HandHelping },
         { name: isHi ? "गोपनीयता नियंत्रण" : "My Privacy", sub: isHi ? "डीपीडीपी सहमति" : "Consent & DPDP", href: "/personnel/privacy", icon: ShieldCheck },
       ];

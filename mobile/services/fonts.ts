@@ -136,6 +136,66 @@ export function setupGlobalFonts() {
         [style*="JetBrainsMono-Regular"], .r-fontFamily-JetBrainsMono-Regular {
           font-family: 'JetBrains Mono', monospace !important;
           font-weight: 400 !important;
+        /* Responsive Mobile Viewport Frame for Desktop Browsers */
+        @media (min-width: 501px) {
+          html {
+            background-color: #060911 !important;
+            height: 100% !important;
+          }
+          body {
+            background-color: #060911 !important;
+            background: radial-gradient(circle at 50% 10%, #17233d 0%, #060911 85%) !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            min-height: 100vh !important;
+            margin: 0 !important;
+            padding: 16px 0 !important;
+            box-sizing: border-box !important;
+          }
+          #root {
+            width: 100% !important;
+            max-width: 430px !important;
+            height: 94vh !important;
+            max-height: 900px !important;
+            min-height: 680px !important;
+            margin: auto !important;
+            border-radius: 46px !important;
+            overflow: hidden !important;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85),
+                        0 0 0 8px #1e293b,
+                        0 0 0 10px #334155,
+                        0 0 35px rgba(37, 99, 235, 0.12) !important;
+            position: relative !important;
+            display: flex !important;
+            flex-direction: column !important;
+            background-color: #090D16 !important;
+          }
+          /* Realistic Dynamic Island / Notch Pill */
+          #root::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 105px;
+            height: 24px;
+            background-color: #000000;
+            border-radius: 20px;
+            z-index: 99999;
+            pointer-events: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+          }
+        }
+        @media (max-width: 500px) {
+          html, body, #root {
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+          }
         }
       `;
       document.head.appendChild(style);

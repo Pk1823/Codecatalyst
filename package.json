@@ -4,8 +4,7 @@
   "private": true,
   "workspaces": [
     "frontend",
-    "backend",
-    "mobile"
+    "backend"
   ],
   "scripts": {
     "dev": "node start-all.js",

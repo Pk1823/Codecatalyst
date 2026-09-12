@@ -307,6 +307,9 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 14,
     borderBottomWidth: 1,
+    width: "100%",
+    maxWidth: 440,
+    alignSelf: "center",
   },
   utilityBar: {
     flexDirection: "row",

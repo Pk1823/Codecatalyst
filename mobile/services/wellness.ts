@@ -186,8 +186,15 @@ export class WellnessService {
               recommendations: mob.recommendations || [],
               isMaskingDetected: mob.isMaskingDetected,
               isOffline: false,
+              consecutiveFieldDays: input.consecutiveFieldDays,
+              dutyHours5d: input.dutyHours5d,
+              nightShifts5d: input.nightShifts5d,
+              sleepHrs5dAvg: input.sleepHrs5dAvg,
+              selfReportedEnergy: input.selfReportedEnergy,
+              selfReportedStress: input.selfReportedStress,
             };
             await OfflineSyncService.saveLocalAssessment(onlineRes);
+            this.persistAndNotify(onlineRes);
             await this.notifyWelfareOfficerIfHighRisk(onlineRes, personnelId, input);
             return onlineRes;
           }
@@ -209,8 +216,15 @@ export class WellnessService {
               recommendations: (p.recommendations || []).map((r: any) => r.description || r.title),
               isMaskingDetected: p.maskingDetected,
               isOffline: false,
+              consecutiveFieldDays: input.consecutiveFieldDays,
+              dutyHours5d: input.dutyHours5d,
+              nightShifts5d: input.nightShifts5d,
+              sleepHrs5dAvg: input.sleepHrs5dAvg,
+              selfReportedEnergy: input.selfReportedEnergy,
+              selfReportedStress: input.selfReportedStress,
             };
             await OfflineSyncService.saveLocalAssessment(onlineRes);
+            this.persistAndNotify(onlineRes);
             await this.notifyWelfareOfficerIfHighRisk(onlineRes, personnelId, input);
             return onlineRes;
           }
@@ -285,11 +299,18 @@ export class WellnessService {
         "Voluntary confidential tele-counseling access with CMO Dr. Aarti Sharma.",
         "Priority consideration for scheduled rest rotation during upcoming convoy movement.",
       ],
+      consecutiveFieldDays: input.consecutiveFieldDays,
+      dutyHours5d: input.dutyHours5d,
+      nightShifts5d: input.nightShifts5d,
+      sleepHrs5dAvg: input.sleepHrs5dAvg,
+      selfReportedEnergy: input.selfReportedEnergy,
+      selfReportedStress: input.selfReportedStress,
     };
 
     // Save to local device store & queue in outbox for automatic sync when base reconnects
     await OfflineSyncService.saveLocalAssessment(offlineResult);
     await OfflineSyncService.enqueue("ASSESSMENT", surveyPayload);
+    this.persistAndNotify(offlineResult);
 
     // If evaluated at High Risk, dispatch immediate notification to website Welfare Officer
     await this.notifyWelfareOfficerIfHighRisk(offlineResult, personnelId, input);
@@ -410,5 +431,83 @@ export class WellnessService {
       await OfflineSyncService.enqueue("DARBAR_REQUEST", request);
       return fallbackRequest;
     }
+  }
+
+  private static assessmentListeners: Set<(assessment: WellnessAssessmentResult) => void> = new Set();
+
+  public static subscribeAssessment(listener: (assessment: WellnessAssessmentResult) => void): () => void {
+    this.assessmentListeners.add(listener);
+    return () => {
+      this.assessmentListeners.delete(listener);
+    };
+  }
+
+  private static persistAndNotify(assessment: WellnessAssessmentResult) {
+    if (typeof window !== "undefined" && window.localStorage) {
+      try {
+        localStorage.setItem("missionwell_last_assessment", JSON.stringify(assessment));
+        window.dispatchEvent(new CustomEvent("missionwell_assessment_updated", { detail: assessment }));
+      } catch {}
+    }
+
+    for (const listener of this.assessmentListeners) {
+      try {
+        listener(assessment);
+      } catch (err) {
+        console.warn("[WellnessService] Error in assessment listener:", err);
+      }
+    }
+  }
+
+  public static async getLatestAssessment(personnelId?: string): Promise<WellnessAssessmentResult | null> {
+    // 1. Check in-memory / local storage first
+    if (typeof window !== "undefined" && window.localStorage) {
+      try {
+        const stored = localStorage.getItem("missionwell_last_assessment");
+        if (stored) {
+          return JSON.parse(stored);
+        }
+      } catch {}
+    }
+
+    // 2. Check offline vault history
+    const local = await OfflineSyncService.getLocalAssessments();
+    if (local && local.length > 0) {
+      return local[0];
+    }
+
+    // 3. Try fetching latest from backend if online
+    try {
+      const isAirGap = await OfflineSyncService.isAirGapMode();
+      if (!isAirGap) {
+        const id = personnelId || "P-1024";
+        const res = await ApiClient.get<any>(`/wellness/history?personnelId=${encodeURIComponent(id)}`);
+        if (res && res.assessments && res.assessments.length > 0) {
+          const a = res.assessments[0];
+          const rawRisk = Math.round(100 - (a.score || 70));
+          const result: WellnessAssessmentResult = {
+            id: a.id,
+            date: a.createdAt ? a.createdAt.split("T")[0] : new Date().toISOString().split("T")[0],
+            riskScore: rawRisk,
+            riskCategory:
+              a.indicatorStatus ||
+              (rawRisk <= 30 ? "Optimal" : rawRisk <= 69 ? "Moderate Fatigue" : "Critical Breakdown Risk"),
+            shapDrivers: [
+              { feature: "Duty Hours 5d", impact: "high", description: "Cumulative duty shift load" },
+              { feature: "Self Reported Stress", impact: "moderate", description: "Voluntary stress evaluation signal" },
+              { feature: "Sleep Hours Avg", impact: "moderate", description: "Restorative sleep pattern" },
+            ],
+            recommendations: [a.recommendation || "Rest rotation and pacing advised."],
+            isOffline: false,
+          };
+          await OfflineSyncService.saveLocalAssessment(result);
+          return result;
+        }
+      }
+    } catch (e) {
+      console.warn("[WellnessService] Failed to fetch remote history:", e);
+    }
+
+    return null;
   }
 }

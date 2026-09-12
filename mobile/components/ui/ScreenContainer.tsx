@@ -60,6 +60,9 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     position: "relative",
+    width: "100%",
+    maxWidth: 440,
+    alignSelf: "center",
   },
   ambientContainer: {
     position: "absolute",

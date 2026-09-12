@@ -39,7 +39,18 @@ export async function POST(req: NextRequest) {
     const trimmedEmail = email.trim().toLowerCase();
     const trimmedName = name.trim();
     const assignedForce = force || "CRPF";
-    const assignedRole = (role || "PERSONNEL") as UserRole;
+    const assignedRole = (role || "WELFARE_OFFICER") as UserRole;
+
+    if (assignedRole === "PERSONNEL") {
+      return NextResponse.json(
+        {
+          error:
+            "Personnel registration and assessment is strictly confined to the MissionWell Mobile App. Web portal access is reserved for Welfare Officers, Commanders, and System Administrators.",
+          isPersonnelRestricted: true,
+        },
+        { status: 403 }
+      );
+    }
 
     // Check if email already exists
     const existingUser = await prisma.user.findUnique({

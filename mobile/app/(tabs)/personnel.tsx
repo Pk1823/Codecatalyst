@@ -8,10 +8,11 @@ import { Button } from "../../components/ui/Button";
 import { Badge } from "../../components/ui/Badge";
 import { HelplineModal } from "../../components/ui/HelplineModal";
 import { TacticalOfflineBanner } from "../../components/ui/TacticalOfflineBanner";
+import { RiskGauge } from "../../components/ui/RiskGauge";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
 import { WellnessService } from "../../services/wellness";
-import { BuddyCheckStatus } from "../../types";
+import { BuddyCheckStatus, WellnessAssessmentResult } from "../../types";
 import {
   HeartPulse,
   Users2,
@@ -24,6 +25,9 @@ import {
   FileText,
   ShieldCheck,
   TrendingUp,
+  Sparkles,
+  Zap,
+  RotateCcw,
 } from "lucide-react-native";
 
 export default function PersonnelHomeScreen() {
@@ -31,6 +35,7 @@ export default function PersonnelHomeScreen() {
   const { colors } = useTheme();
   const router = useRouter();
 
+  const [latestAssessment, setLatestAssessment] = useState<WellnessAssessmentResult | null>(null);
   const [buddyStatus, setBuddyStatus] = useState<BuddyCheckStatus | null>(null);
   const [buddyCheckDone, setBuddyCheckDone] = useState(false);
   const [darbarRequested, setDarbarRequested] = useState(false);
@@ -39,7 +44,73 @@ export default function PersonnelHomeScreen() {
 
   useEffect(() => {
     WellnessService.getBuddyStatus().then(setBuddyStatus);
-  }, []);
+
+    const loadAssessment = () => {
+      const soldierId = user?.personnelId || (user?.id?.startsWith("P-") ? user.id : "P-1024");
+      WellnessService.getLatestAssessment(soldierId).then((res) => {
+        if (res) {
+          setLatestAssessment(res);
+        }
+      });
+    };
+
+    loadAssessment();
+
+    const unsubscribe = WellnessService.subscribeAssessment((newAssessment) => {
+      setLatestAssessment(newAssessment);
+    });
+
+    const handleWebEvent = (e: any) => {
+      if (e?.detail) {
+        setLatestAssessment(e.detail);
+      } else {
+        loadAssessment();
+      }
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("missionwell_assessment_updated", handleWebEvent);
+      window.addEventListener("focus", loadAssessment);
+    }
+
+    return () => {
+      unsubscribe();
+      if (typeof window !== "undefined") {
+        window.removeEventListener("missionwell_assessment_updated", handleWebEvent);
+        window.removeEventListener("focus", loadAssessment);
+      }
+    };
+  }, [user]);
+
+  const readinessScore = latestAssessment
+    ? Math.max(10, 100 - latestAssessment.riskScore)
+    : 88;
+
+  const readinessColor =
+    !latestAssessment || latestAssessment.riskCategory === "Optimal"
+      ? colors.success
+      : latestAssessment.riskCategory === "Critical Breakdown Risk"
+      ? colors.danger
+      : colors.warning;
+
+  const readinessVariant: "success" | "warning" | "danger" | "info" =
+    !latestAssessment || latestAssessment.riskCategory === "Optimal"
+      ? "success"
+      : latestAssessment.riskCategory === "Critical Breakdown Risk"
+      ? "danger"
+      : "warning";
+
+  const sleepCycleDisplay = latestAssessment?.sleepHrs5dAvg
+    ? `${latestAssessment.sleepHrs5dAvg}`
+    : "7.2h (Good)";
+
+  const patrolLoadDisplay = latestAssessment?.dutyHours5d
+    ? `${latestAssessment.dutyHours5d}`
+    : "Normal Shift";
+
+  const cognitiveLoadDisplay = latestAssessment?.riskCategory
+    ? latestAssessment.riskCategory
+    : "Low Risk";
 
   const handleBuddyPing = async (status: "OK" | "NEEDS_REST") => {
     await WellnessService.submitBuddyCheck(status);
@@ -82,19 +153,27 @@ export default function PersonnelHomeScreen() {
             <HeartPulse size={24} color="#3B82F6" />
           </View>
           <View style={styles.heroTagGroup}>
-            <Badge label="VOLUNTARY & CONFIDENTIAL" variant="info" size="sm" />
+            <Badge
+              label={latestAssessment ? latestAssessment.riskCategory.toUpperCase() : "VOLUNTARY & CONFIDENTIAL"}
+              variant={readinessVariant}
+              size="sm"
+            />
             <View style={styles.hudLiveChip}>
-              <View style={styles.hudLiveDot} />
-              <Text style={styles.hudLiveText}>ACTIVE SHIELD</Text>
+              <View style={[styles.hudLiveDot, { backgroundColor: readinessColor }]} />
+              <Text style={[styles.hudLiveText, { color: readinessColor }]}>
+                {latestAssessment ? "EVALUATION ACTIVE" : "ACTIVE SHIELD"}
+              </Text>
             </View>
           </View>
         </View>
 
         <Text style={[styles.heroTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
-          Daily Operational Self-Assessment
+          {latestAssessment ? "Operational Readiness Status" : "Daily Operational Self-Assessment"}
         </Text>
         <Text style={[styles.heroDesc, { color: colors.textMuted }]}>
-          Confidential AI evaluates operational stress, patrol fatigue & sleep debt without middle-command stigma. Takes only 60 seconds.
+          {latestAssessment
+            ? `Latest confidential evaluation synced on ${latestAssessment.date} (Ref: ${latestAssessment.id}). Non-punitive biometric telemetry.`
+            : "Confidential AI evaluates operational stress, patrol fatigue & sleep debt without middle-command stigma. Takes only 60 seconds."}
         </Text>
 
         {/* Tactical Readiness Metric Bar */}
@@ -102,7 +181,9 @@ export default function PersonnelHomeScreen() {
           <View style={styles.hudScoreCol}>
             <Text style={[styles.hudScoreLabel, { color: colors.textMuted }]}>READINESS</Text>
             <View style={styles.hudScoreRow}>
-              <Text style={[styles.hudScoreNumber, { color: colors.success }]}>88</Text>
+              <Text style={[styles.hudScoreNumber, { color: readinessColor }]}>
+                {readinessScore}
+              </Text>
               <Text style={[styles.hudScoreUnit, { color: colors.textMuted }]}>%</Text>
             </View>
           </View>
@@ -112,26 +193,125 @@ export default function PersonnelHomeScreen() {
           <View style={styles.hudMiniStatsCol}>
             <View style={styles.hudMiniStatRow}>
               <Text style={[styles.hudMiniStatKey, { color: colors.textMuted }]}>Sleep Cycle</Text>
-              <Text style={[styles.hudMiniStatVal, { color: colors.text }]}>7.2h (Good)</Text>
+              <Text style={[styles.hudMiniStatVal, { color: colors.text }]}>{sleepCycleDisplay}</Text>
             </View>
             <View style={styles.hudMiniStatRow}>
               <Text style={[styles.hudMiniStatKey, { color: colors.textMuted }]}>Patrol Load</Text>
-              <Text style={[styles.hudMiniStatVal, { color: colors.primary }]}>Normal Shift</Text>
+              <Text style={[styles.hudMiniStatVal, { color: colors.primary }]}>{patrolLoadDisplay}</Text>
             </View>
             <View style={styles.hudMiniStatRow}>
               <Text style={[styles.hudMiniStatKey, { color: colors.textMuted }]}>Cognitive Load</Text>
-              <Text style={[styles.hudMiniStatVal, { color: colors.success }]}>Low Risk</Text>
+              <Text style={[styles.hudMiniStatVal, { color: readinessColor }]}>{cognitiveLoadDisplay}</Text>
             </View>
           </View>
         </View>
 
         <Button
-          title="Start Assessment (6 Steps) →"
+          title={latestAssessment ? "Retake Assessment (6 Steps) →" : "Start Assessment (6 Steps) →"}
           onPress={() => router.push("/assessment")}
           icon={<ArrowRight size={16} color="#FFFFFF" />}
           style={styles.heroActionBtn}
         />
       </Card>
+
+      {/* Latest Predictive AI Assessment & Explainability Card */}
+      {latestAssessment && (
+        <Card variant="elevated" style={styles.evalCard}>
+          <View style={styles.evalHeader}>
+            <View style={[styles.evalIconBox, { backgroundColor: "rgba(16, 185, 129, 0.15)" }]}>
+              <CheckCircle2 size={22} color="#10B981" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                <Text style={[styles.evalTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+                  Latest AI Evaluation
+                </Text>
+                <Badge
+                  label={latestAssessment.isOffline ? "LOCAL AI" : "SYNCED LIVE"}
+                  variant={latestAssessment.isOffline ? "warning" : "success"}
+                  size="sm"
+                />
+              </View>
+              <Text style={[styles.evalRef, { color: colors.textMuted }]}>
+                Ref: {latestAssessment.id} • {latestAssessment.date}
+              </Text>
+            </View>
+          </View>
+
+          {latestAssessment.isMaskingDetected && (
+            <View style={[styles.maskingAlert, { backgroundColor: "rgba(245, 158, 11, 0.15)", borderColor: colors.warning }]}>
+              <Zap size={16} color={colors.warning} />
+              <Text style={[styles.maskingText, { color: colors.warning }]}>
+                Anti-Masking Telemetry: Rapid survey response flagged. Model calibrated with continuous shift telemetry.
+              </Text>
+            </View>
+          )}
+
+          {/* Calibrated Risk Gauge */}
+          <RiskGauge score={latestAssessment.riskScore} category={latestAssessment.riskCategory} />
+
+          {/* Fatigue Breakdown Escalation Window */}
+          {latestAssessment.predictedDaysToBreakdown && (
+            <View style={[styles.breakdownBox, { backgroundColor: "rgba(239, 68, 68, 0.12)", borderColor: colors.danger }]}>
+              <Text style={[styles.breakdownTitle, { color: colors.danger }]}>
+                Fatigue Escalation Window: ~{latestAssessment.predictedDaysToBreakdown} Days
+              </Text>
+              <Text style={[styles.breakdownDesc, { color: colors.text }]}>
+                Early indicators suggest cognitive exhaustion if sleep debt is not cleared in upcoming rotation.
+              </Text>
+            </View>
+          )}
+
+          {/* Key Stress Drivers (SHAP AI Explainability) */}
+          {latestAssessment.shapDrivers && latestAssessment.shapDrivers.length > 0 && (
+            <View style={styles.shapSection}>
+              <View style={styles.shapHeader}>
+                <Sparkles size={16} color={colors.primary} />
+                <Text style={[styles.shapTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+                  Key Stress Drivers (SHAP AI Explainability)
+                </Text>
+              </View>
+
+              {latestAssessment.shapDrivers.map((driver, idx) => (
+                <View
+                  key={idx}
+                  style={[
+                    styles.driverCard,
+                    { backgroundColor: colors.surface, borderColor: colors.cardBorder },
+                  ]}
+                >
+                  <View style={styles.driverHeader}>
+                    <Text style={[styles.driverName, { color: colors.text }]}>{driver.feature}</Text>
+                    <Badge
+                      label={driver.impact.toUpperCase()}
+                      variant={driver.impact === "high" ? "danger" : "warning"}
+                      size="sm"
+                    />
+                  </View>
+                  <Text style={[styles.driverDesc, { color: colors.textMuted }]}>
+                    {driver.description}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          )}
+
+          {/* Actionable Support Recommendations */}
+          {latestAssessment.recommendations && latestAssessment.recommendations.length > 0 && (
+            <View style={styles.recommendationsBox}>
+              <Text style={[styles.recTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+                Actionable Support Recommendations
+              </Text>
+              {latestAssessment.recommendations.map((rec, i) => (
+                <View key={i} style={styles.recItem}>
+                  <Text style={[styles.recBullet, { color: colors.primary }]}>•</Text>
+                  <Text style={[styles.recText, { color: colors.textMuted }]}>{rec}</Text>
+                </View>
+              ))}
+            </View>
+          )}
+        </Card>
+      )}
 
       {/* Historical Wellness Trends & Visual Sparklines */}
       <Card variant="elevated" style={styles.sectionCard}>
@@ -180,7 +360,7 @@ export default function PersonnelHomeScreen() {
             { day: "Thu", val: 65, color: "#F59E0B" },
             { day: "Fri", val: 78, color: "#10B981" },
             { day: "Sat", val: 88, color: "#10B981" },
-            { day: "Today", val: 86, color: "#10B981", active: true },
+            { day: "Today", val: readinessScore, color: readinessColor, active: true },
           ].map((bar, i) => (
             <View key={i} style={styles.sparkCol}>
               <View style={styles.sparkBarTrack}>
@@ -204,16 +384,22 @@ export default function PersonnelHomeScreen() {
 
         <View style={[styles.trendStatsGrid, { backgroundColor: colors.surface }]}>
           <View style={styles.trendStat}>
-            <Text style={[styles.trendStatVal, { color: colors.success, fontFamily: "GoogleSans-Bold" }]}>86%</Text>
+            <Text style={[styles.trendStatVal, { color: readinessColor, fontFamily: "GoogleSans-Bold" }]}>
+              {readinessScore}%
+            </Text>
             <Text style={[styles.trendStatLbl, { color: colors.textMuted }]}>Avg Readiness</Text>
           </View>
           <View style={styles.trendStat}>
-            <Text style={[styles.trendStatVal, { color: colors.primary, fontFamily: "GoogleSans-Bold" }]}>7.2h</Text>
+            <Text style={[styles.trendStatVal, { color: colors.primary, fontFamily: "GoogleSans-Bold" }]}>
+              {sleepCycleDisplay.split(" ")[0]}
+            </Text>
             <Text style={[styles.trendStatLbl, { color: colors.textMuted }]}>Night Sleep</Text>
           </View>
           <View style={styles.trendStat}>
-            <Text style={[styles.trendStatVal, { color: colors.warning, fontFamily: "GoogleSans-Bold" }]}>22%</Text>
-            <Text style={[styles.trendStatLbl, { color: colors.textMuted }]}>Fatigue Index</Text>
+            <Text style={[styles.trendStatVal, { color: latestAssessment ? readinessColor : colors.warning, fontFamily: "GoogleSans-Bold" }]}>
+              {latestAssessment ? `${latestAssessment.riskScore}/100` : "22%"}
+            </Text>
+            <Text style={[styles.trendStatLbl, { color: colors.textMuted }]}>Fatigue Risk</Text>
           </View>
         </View>
       </Card>
@@ -611,5 +797,115 @@ const styles = StyleSheet.create({
     fontSize: 9,
     textAlign: "center",
     marginTop: 2,
+  },
+  evalCard: {
+    padding: 16,
+    marginBottom: 16,
+  },
+  evalHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+    gap: 10,
+  },
+  evalIconBox: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  evalTitle: {
+    fontSize: 16,
+    fontWeight: "800",
+  },
+  evalRef: {
+    fontSize: 11,
+    marginTop: 1,
+  },
+  maskingAlert: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    marginVertical: 10,
+    gap: 8,
+  },
+  maskingText: {
+    fontSize: 11,
+    fontWeight: "600",
+    flex: 1,
+  },
+  breakdownBox: {
+    padding: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    marginVertical: 10,
+  },
+  breakdownTitle: {
+    fontSize: 13,
+    fontWeight: "800",
+    marginBottom: 3,
+  },
+  breakdownDesc: {
+    fontSize: 11.5,
+    lineHeight: 16,
+  },
+  shapSection: {
+    marginTop: 14,
+  },
+  shapHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+    gap: 6,
+  },
+  shapTitle: {
+    fontSize: 13,
+    fontWeight: "800",
+  },
+  driverCard: {
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    marginBottom: 8,
+  },
+  driverHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 3,
+  },
+  driverName: {
+    fontSize: 12.5,
+    fontWeight: "700",
+  },
+  driverDesc: {
+    fontSize: 11,
+    lineHeight: 15,
+  },
+  recommendationsBox: {
+    marginTop: 14,
+  },
+  recTitle: {
+    fontSize: 13,
+    fontWeight: "800",
+    marginBottom: 6,
+  },
+  recItem: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginBottom: 5,
+  },
+  recBullet: {
+    fontSize: 14,
+    marginRight: 6,
+    lineHeight: 16,
+  },
+  recText: {
+    fontSize: 11.5,
+    flex: 1,
+    lineHeight: 16,
   },
 });

@@ -179,6 +179,17 @@ export async function POST(req: NextRequest) {
     const assignedForce = force || "CRPF";
     const assignedRole = (role || "WELFARE_OFFICER") as UserRole;
 
+    if (assignedRole === "PERSONNEL") {
+      return NextResponse.json(
+        {
+          error:
+            "Personnel assessments are strictly conducted on the MissionWell Mobile App for biometric isolation and DPDP compliance. Web portal access is reserved for Welfare Officers, Commanders, and System Administrators.",
+          isPersonnelRestricted: true,
+        },
+        { status: 403 }
+      );
+    }
+
     // Default avatar if none returned from Google
     if (!finalPicture && typeof finalEmail === "string" && finalEmail.endsWith("@gmail.com")) {
       finalPicture = `https://ui-avatars.com/api/?name=${encodeURIComponent(finalName || "Google User")}&background=0D8ABC&color=fff&size=128`;
@@ -231,6 +242,16 @@ export async function POST(req: NextRequest) {
     });
 
     if (user) {
+      if (user.role === "PERSONNEL") {
+        return NextResponse.json(
+          {
+            error:
+              "Personnel assessments are strictly conducted on the MissionWell Mobile App for biometric isolation and DPDP compliance. Web portal access is reserved for Welfare Officers, Commanders, and System Administrators.",
+            isPersonnelRestricted: true,
+          },
+          { status: 403 }
+        );
+      }
       // Update name and avatarUrl if fresh from Google (graceful fallback if DB is read-only)
       try {
         user = await prisma.user.update({

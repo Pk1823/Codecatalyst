@@ -357,12 +357,10 @@ export class AuthService {
     }
 
     if (role === "PERSONNEL") {
-      if (pathname.startsWith("/personnel")) {
-        return { allowed: true };
-      }
       return {
         allowed: false,
-        reason: "Access Restricted: Personnel can only access their personal self-care portal, voluntary assessments, and support requests.",
+        reason:
+          "Access Restricted under DPDP Mandate: Personnel assessments and check-ins are conducted exclusively on the MissionWell Mobile Application. The Web Portal is strictly reserved for Welfare Officers, Tactical Commanders, and System Administrators.",
       };
     }
 
