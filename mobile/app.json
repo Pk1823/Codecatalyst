@@ -3,7 +3,7 @@
     "name": "MissionWell AI",
     "slug": "vikas",
     "owner": "vikasgangwars-team",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "backgroundColor": "#090D16"
       },
-      "package": "gov.mha.missionwell"
+      "package": "gov.mha.missionwell",
+      "versionCode": 2
     },
     "web": {
       "bundler": "metro",

@@ -1,6 +1,5 @@
-import { API_BASE_URL } from "./api";
+import { ApiClient } from "./api";
 import { WelfareCase } from "../types";
-import * as SecureStore from "expo-secure-store";
 
 export const MOCK_WELFARE_CASES: WelfareCase[] = [
   {
@@ -163,39 +162,11 @@ function normalizeWelfareCase(c: any): WelfareCase {
 }
 
 export class WelfareService {
-  private static async getWelfareAuthToken(): Promise<string> {
-    try {
-      const currentToken = await SecureStore.getItemAsync("missionwell_token");
-      const currentUserStr = await SecureStore.getItemAsync("missionwell_user");
-      if (currentUserStr) {
-        const u = JSON.parse(currentUserStr);
-        if (u.role === "WELFARE_OFFICER" || u.role === "ADMIN") {
-          return currentToken || "persona-jwt-user-doc-02";
-        }
-      }
-      return currentToken || "persona-jwt-user-doc-02";
-    } catch {
-      return "persona-jwt-user-doc-02";
-    }
-  }
-
   public static async getCases(): Promise<WelfareCase[]> {
     try {
-      const officerToken = await this.getWelfareAuthToken();
-      const response = await fetch(`${API_BASE_URL}/welfare/cases`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${officerToken}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.cases && Array.isArray(data.cases) && data.cases.length > 0) {
-          const liveCases = data.cases.map(normalizeWelfareCase);
-          return liveCases;
-        }
+      const data = await ApiClient.get<{ cases?: any[] }>("/welfare/cases");
+      if (data.cases && Array.isArray(data.cases) && data.cases.length > 0) {
+        return data.cases.map(normalizeWelfareCase);
       }
       return MOCK_WELFARE_CASES;
     } catch {
@@ -205,22 +176,10 @@ export class WelfareService {
 
   public static async getCaseById(id: string): Promise<WelfareCase | undefined> {
     try {
-      const officerToken = await this.getWelfareAuthToken();
-      const response = await fetch(`${API_BASE_URL}/welfare/cases/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${officerToken}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.case) {
-          return normalizeWelfareCase(data.case);
-        }
+      const data = await ApiClient.get<{ case?: any }>(`/welfare/cases/${id}`);
+      if (data.case) {
+        return normalizeWelfareCase(data.case);
       }
-
       const all = await this.getCases();
       return all.find(
         (c) => c.id.toLowerCase() === id.toLowerCase() || c.personnelId.toLowerCase() === id.toLowerCase()
@@ -232,16 +191,8 @@ export class WelfareService {
 
   public static async updateCaseNotes(id: string, notes: string, status: string): Promise<boolean> {
     try {
-      const officerToken = await this.getWelfareAuthToken();
-      const response = await fetch(`${API_BASE_URL}/welfare/cases/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${officerToken}`,
-        },
-        body: JSON.stringify({ noteText: notes, notes, status }),
-      });
-      return response.ok;
+      await ApiClient.patch(`/welfare/cases/${id}`, { noteText: notes, notes, status });
+      return true;
     } catch {
       const target = MOCK_WELFARE_CASES.find((c) => c.id === id);
       if (target) {
@@ -257,16 +208,8 @@ export class WelfareService {
     action: { actionType: string; title: string; description: string; scheduledDate?: string }
   ): Promise<boolean> {
     try {
-      const officerToken = await this.getWelfareAuthToken();
-      const res = await fetch(`${API_BASE_URL}/welfare/support-actions`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${officerToken}`,
-        },
-        body: JSON.stringify({ caseId, ...action }),
-      });
-      return res.ok;
+      await ApiClient.post("/welfare/support-actions", { caseId, ...action });
+      return true;
     } catch {
       return false;
     }
@@ -280,21 +223,9 @@ export class WelfareService {
     riskScore?: number;
   }): Promise<WelfareCase | null> {
     try {
-      const officerToken = await this.getWelfareAuthToken();
-      const res = await fetch(`${API_BASE_URL}/welfare/cases`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${officerToken}`,
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (res.ok) {
-        const json = await res.json();
-        if (json.case) {
-          return normalizeWelfareCase(json.case);
-        }
+      const json = await ApiClient.post<{ case?: any }>("/welfare/cases", data);
+      if (json.case) {
+        return normalizeWelfareCase(json.case);
       }
       return null;
     } catch {

@@ -7,6 +7,7 @@ import {
   Linking,
   Modal,
   Image,
+  Platform,
 } from "react-native";
 import { Download, Smartphone, QrCode, X, ExternalLink, ShieldCheck } from "lucide-react-native";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -19,6 +20,21 @@ export function DownloadAppBanner({ style }: { style?: any } = {}) {
   const [showQrModal, setShowQrModal] = useState(false);
 
   const handleDownload = () => {
+    if (Platform.OS === "web" && typeof window !== "undefined") {
+      try {
+        const a = document.createElement("a");
+        a.href = APK_DOWNLOAD_URL;
+        a.setAttribute("download", "missionwell.apk");
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        return;
+      } catch {}
+      window.location.href = APK_DOWNLOAD_URL;
+      return;
+    }
     Linking.openURL(APK_DOWNLOAD_URL).catch(() => {});
   };
 
