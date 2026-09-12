@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "node scripts/prepare-prisma.js && next dev",
+    "build": "node scripts/prepare-prisma.js && prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "prisma generate"
+    "postinstall": "node scripts/prepare-prisma.js && prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",

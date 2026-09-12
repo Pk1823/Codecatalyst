@@ -1,4 +1,4 @@
-// MISSIONWELL AI — PostgreSQL Production Relational Database Schema
+// MISSIONWELL AI — Relational Database Schema
 // Predictive Personnel Stress and Welfare Monitoring System
 // Ministry of Home Affairs / CRPF, Police II Division
 
@@ -7,7 +7,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 

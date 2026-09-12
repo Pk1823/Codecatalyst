@@ -4,13 +4,13 @@
   "description": "MISSIONWELL AI - Core Backend API Service (Ministry of Home Affairs / CRPF, Police II Division)",
   "main": "dist/server.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
-    "build": "tsc",
+    "dev": "node scripts/prepare-prisma.js && tsx watch src/server.ts",
+    "build": "node scripts/prepare-prisma.js && prisma generate && tsc",
     "start": "node dist/server.js",
-    "db:push": "prisma db push",
+    "db:push": "node scripts/prepare-prisma.js && prisma db push",
     "db:seed": "tsx prisma/seed.ts",
-    "db:generate": "prisma generate",
-    "postinstall": "prisma generate"
+    "db:generate": "node scripts/prepare-prisma.js && prisma generate",
+    "postinstall": "node scripts/prepare-prisma.js && prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^6.4.1",

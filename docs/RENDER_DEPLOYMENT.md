@@ -82,10 +82,11 @@ If you prefer to configure each service manually in the Render dashboard:
 * **Name**: `missionwell-backend`
 * **Root Directory**: `backend`
 * **Runtime**: `Node`
-* **Build Command**: `npm install && npx prisma generate && npm run build`
+* **Build Command**: `npm install --include=dev --no-workspaces && npm run build`
 * **Start Command**: `node dist/server.js`
 * **Health Check Path**: `/health`
 * **Environment Variables**:
+  * `NODE_VERSION`: `20.18.0`
   * `NODE_ENV`: `production`
   * `DATABASE_URL`: `file:./dev.db`
   * `AUTH_SECRET`: `missionwell-defense-jwt-secret-key-super-secure-32chars`
@@ -99,11 +100,11 @@ If you prefer to configure each service manually in the Render dashboard:
 * **Name**: `missionwell-frontend`
 * **Root Directory**: `frontend`
 * **Runtime**: `Node`
-* **Build Command**: `npm install && npx prisma generate && npm run build`
+* **Build Command**: `npm install --include=dev --no-workspaces && npm run build`
 * **Start Command**: `npm start`
 * **Health Check Path**: `/`
 * **Environment Variables**:
-  * `NODE_ENV`: `production`
+  * `NODE_VERSION`: `20.18.0`
   * `DATABASE_URL`: `file:./dev.db`
   * `AUTH_SECRET`: `missionwell-defense-jwt-secret-key-super-secure-32chars`
   * `BACKEND_URL`: `https://missionwell-backend.onrender.com` *(use your backend service URL)*

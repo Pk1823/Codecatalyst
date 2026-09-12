@@ -4,9 +4,10 @@ WORKDIR /app
 
 COPY package*.json tsconfig.json ./
 COPY prisma ./prisma/
+COPY scripts ./scripts/
 
 RUN npm ci
-RUN npx prisma generate
+RUN node scripts/prepare-prisma.js && npx prisma generate
 
 COPY src ./src
 RUN npm run build
@@ -22,6 +23,7 @@ COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/scripts ./scripts
 
 EXPOSE 5000
 

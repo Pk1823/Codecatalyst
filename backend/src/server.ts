@@ -63,7 +63,7 @@ app.use("/api", apiRouter);
 app.use(notFoundHandler);
 app.use(globalErrorHandler);
 
-if (process.env.NODE_ENV !== "test") {
+if (process.env.NODE_ENV !== "test" && !process.env.VERCEL) {
   app.listen(Number(PORT), "0.0.0.0", () => {
     console.log(`====================================================`);
     console.log(`MISSIONWELL AI — Backend Service Running`);
