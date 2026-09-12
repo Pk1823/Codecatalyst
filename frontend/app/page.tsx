@@ -39,6 +39,7 @@ import { UserRole } from "@/types/auth";
 import { FORCES_METADATA } from "@/lib/force-metadata";
 import { AuthService } from "@/services/auth.service";
 import { WebsiteQRCode } from "@/components/common/website-qr-code";
+import { BrandIcon } from "@/components/common/brand-logo";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -140,9 +141,7 @@ export default function LandingPage() {
       <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-[#090D16]/90 backdrop-blur-xl shadow-xs transition-colors">
         <div className="max-w-7xl mx-auto flex h-20 items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-3.5 group">
-            <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/30 group-hover:scale-105 transition-all">
-              <Shield className="h-6 w-6 sm:h-7 sm:w-7" />
-            </div>
+            <BrandIcon size="md" animate={true} />
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <span className="font-extrabold text-xl sm:text-2xl tracking-tight text-slate-900 dark:text-white">
@@ -770,9 +769,7 @@ export default function LandingPage() {
             {/* Brand & Purpose */}
             <div className="space-y-1.5 max-w-md">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white shadow-xs">
-                  <Shield className="h-4 w-4" />
-                </div>
+                <BrandIcon size="sm" />
                 <span className="font-bold text-slate-900 dark:text-white text-base tracking-tight">
                   MissionWell <span className="text-blue-600 dark:text-blue-400 font-mono">AI</span>
                 </span>

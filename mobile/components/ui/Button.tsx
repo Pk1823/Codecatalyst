@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   ViewStyle,
   TextStyle,
+  Platform,
 } from "react-native";
 import { useTheme } from "../../contexts/ThemeContext";
 
@@ -32,7 +33,7 @@ export const Button: React.FC<ButtonProps> = ({
   textStyle,
   icon,
 }) => {
-  const { colors } = useTheme();
+  const { colors, isDark } = useTheme();
 
   const getBackgroundColor = () => {
     if (disabled) return colors.badgeBg;
@@ -54,21 +55,56 @@ export const Button: React.FC<ButtonProps> = ({
   const getBorderColor = () => {
     if (variant === "outline") return colors.primary;
     if (variant === "secondary") return colors.cardBorder;
+    if (variant === "primary" && isDark) return "rgba(255, 255, 255, 0.2)";
     return "transparent";
+  };
+
+  const getGlowStyle = () => {
+    if (disabled || variant === "outline") return {};
+    if (variant === "primary") {
+      return Platform.select({
+        web: {
+          boxShadow: "0 4px 14px rgba(37, 99, 235, 0.4)",
+        } as any,
+        default: {
+          shadowColor: "#2563EB",
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.4,
+          shadowRadius: 8,
+          elevation: 4,
+        },
+      });
+    }
+    if (variant === "danger") {
+      return Platform.select({
+        web: {
+          boxShadow: "0 4px 14px rgba(239, 68, 68, 0.4)",
+        } as any,
+        default: {
+          shadowColor: "#EF4444",
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.4,
+          shadowRadius: 8,
+          elevation: 4,
+        },
+      });
+    }
+    return {};
   };
 
   return (
     <TouchableOpacity
       onPress={onPress}
       disabled={disabled || loading}
-      activeOpacity={0.8}
+      activeOpacity={0.82}
       style={[
         styles.button,
         styles[size],
+        getGlowStyle(),
         {
           backgroundColor: getBackgroundColor(),
           borderColor: getBorderColor(),
-          borderWidth: variant === "outline" || variant === "secondary" ? 1 : 0,
+          borderWidth: variant === "outline" || variant === "secondary" || (variant === "primary" && isDark) ? 1 : 0,
         },
         style,
       ]}
@@ -104,18 +140,20 @@ const styles = StyleSheet.create({
   },
   sm: {
     paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingHorizontal: 14,
   },
   md: {
     paddingVertical: 12,
-    paddingHorizontal: 18,
+    paddingHorizontal: 20,
   },
   lg: {
     paddingVertical: 15,
-    paddingHorizontal: 22,
+    paddingHorizontal: 24,
   },
   text: {
-    fontWeight: "700",
+    fontWeight: "800",
+    fontFamily: "GoogleSans-Bold",
+    letterSpacing: 0.2,
   },
   text_sm: {
     fontSize: 12,

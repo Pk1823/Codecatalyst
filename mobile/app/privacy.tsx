@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { ScreenContainer } from "../components/ui/ScreenContainer";
@@ -316,6 +317,6 @@ const styles = StyleSheet.create({
   },
   auditHash: {
     fontSize: 9,
-    fontFamily: "monospace",
+    fontFamily: Platform.OS === "web" ? "'JetBrains Mono', monospace" : "JetBrainsMono-Regular",
   },
 });

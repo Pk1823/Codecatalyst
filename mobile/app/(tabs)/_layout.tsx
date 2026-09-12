@@ -33,6 +33,7 @@ export default function TabsLayout() {
         tabBarLabelStyle: {
           fontSize: 10,
           fontWeight: "700",
+          fontFamily: "GoogleSans-Bold",
         },
       }}
     >

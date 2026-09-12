@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ShieldCheck, Loader2 } from "lucide-react";
-import { ProjectServerIcon } from "@/components/common/server-icon";
+import { BrandIcon } from "@/components/common/brand-logo";
 import { AuthService } from "@/services/auth.service";
 
 function CallbackContent() {
@@ -115,7 +115,7 @@ function CallbackContent() {
 
       <div className="text-center relative z-10">
         <div className="relative inline-flex items-center justify-center mb-6">
-          <ProjectServerIcon size="xl" animate={true} showBadge={true} />
+          <BrandIcon size="xl" animate={true} />
         </div>
 
         <div className="flex items-center justify-center gap-2 mb-2">

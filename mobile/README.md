@@ -37,6 +37,43 @@ cd mobile && npm start
 
 ---
 
+## 🌐 Separate Standalone Deployment
+
+The mobile application can be deployed completely independently from the web portal through two primary pathways:
+
+### Option 1: Standalone Mobile Web / PWA Deployment (Vercel)
+A dedicated [`mobile/vercel.json`](file:///Users/akash/MissionWell-AI/Codecatalyst/mobile/vercel.json) configuration is included.
+1. **Via Vercel CLI**:
+   ```bash
+   cd mobile
+   npx vercel --prod
+   ```
+2. **Via Vercel Dashboard**:
+   - Create a New Project importing this repository.
+   - Set **Root Directory** to `mobile`.
+   - **Build Command**: `npx expo export -p web` (or `npm run build`).
+   - **Output Directory**: `dist`.
+   - Add environment variable `EXPO_PUBLIC_BACKEND_URL` pointing to your deployed backend.
+
+### Option 2: Standalone Native Android APK & iOS Build (EAS)
+A dedicated [`mobile/eas.json`](file:///Users/akash/MissionWell-AI/Codecatalyst/mobile/eas.json) configuration is provided for building installable packages:
+1. **Install EAS CLI**:
+   ```bash
+   npm install -g eas-cli
+   ```
+2. **Generate Standalone Android `.apk`** (direct download & install for soldiers/judges):
+   ```bash
+   cd mobile
+   eas build -p android --profile preview
+   ```
+3. **Production App Store / Google Play Bundle**:
+   ```bash
+   cd mobile
+   eas build --profile production
+   ```
+
+---
+
 ## 🛡️ Statutory Privacy (DPDP Act 2023)
 - Fully zero-stigmatization compliant.
 - Personnel self-assessments are strictly blocked from ACR/APAR appraisals.

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { User, UserRole } from "../types";
+import { User, UserRole, SignupData } from "../types";
 import { AuthService, EVALUATOR_PERSONAS } from "../services/auth";
 
 interface AuthContextValue {
@@ -7,6 +7,7 @@ interface AuthContextValue {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (serviceId: string, pass: string) => Promise<void>;
+  signup: (data: SignupData) => Promise<User>;
   loginAsPersona: (key: keyof typeof EVALUATOR_PERSONAS) => Promise<void>;
   loginWithGoogle: (googleUser: User) => Promise<void>;
   logout: () => Promise<void>;
@@ -22,10 +23,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const initAuth = async () => {
       try {
         const currentUser = await AuthService.getCurrentSession();
-        // If not logged in, default to Jawan persona for instant preview in mobile
-        setUser(currentUser || EVALUATOR_PERSONAS.jawan);
+        setUser(currentUser);
       } catch {
-        setUser(EVALUATOR_PERSONAS.jawan);
+        setUser(null);
       } finally {
         setIsLoading(false);
       }
@@ -40,6 +40,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (res.user) {
         setUser(res.user);
       }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const signup = async (data: SignupData): Promise<User> => {
+    setIsLoading(true);
+    try {
+      const res = await AuthService.register(data);
+      if (res.user) {
+        setUser(res.user);
+        return res.user;
+      }
+      throw new Error(res.error || "Registration failed");
     } finally {
       setIsLoading(false);
     }
@@ -77,6 +91,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isAuthenticated: !!user,
         isLoading,
         login,
+        signup,
         loginAsPersona,
         loginWithGoogle,
         logout,

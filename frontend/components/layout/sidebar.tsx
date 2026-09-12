@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers";
-import { ProjectServerIcon } from "@/components/common/server-icon";
+import { BrandIcon } from "@/components/common/brand-logo";
 
 interface SidebarProps {
   mobileOpen?: boolean;
@@ -110,7 +110,7 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
             onClick={onMobileClose}
             className="flex items-center gap-3 overflow-hidden group focus:outline-hidden"
           >
-            <ProjectServerIcon size="sm" animate={false} showBadge={true} />
+            <BrandIcon size="sm" animate={true} />
             {!collapsed && (
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">

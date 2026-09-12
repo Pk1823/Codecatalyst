@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "../../contexts/AuthContext";
@@ -76,29 +77,52 @@ export default function LoginScreen() {
       contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
     >
+      {/* Top Auth Mode Segmented Control */}
+      <View style={[styles.authSwitchContainer, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
+        <View style={[styles.authSwitchActiveTab, { backgroundColor: colors.primary }]}>
+          <Text style={styles.authSwitchActiveText}>Sign In</Text>
+        </View>
+        <TouchableOpacity
+          style={styles.authSwitchInactiveTab}
+          onPress={() => router.replace("/signup")}
+          activeOpacity={0.7}
+        >
+          <Text style={[styles.authSwitchInactiveText, { color: colors.textMuted }]}>Create Account</Text>
+        </TouchableOpacity>
+      </View>
+
       {/* Authentic MissionWell AI Defense Sentinel Logo */}
       <View style={styles.heroSection}>
-        <MissionWellIcon size="xl" />
+        <View style={styles.heroGlowBackdrop} />
+        <MissionWellIcon size="xl" showBadge={true} />
         <View style={styles.heroBrandTextRow}>
-          <Text style={[styles.brandTitle, { color: colors.text }]}>
-            MissionWell <Text style={{ color: "#3B82F6", fontFamily: "monospace" }}>AI</Text>
+          <Text style={[styles.brandTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+            MissionWell{" "}
+            <Text
+              style={{
+                color: "#3B82F6",
+                fontFamily: Platform.OS === "web" ? "'JetBrains Mono', monospace" : "JetBrainsMono-Bold",
+              }}
+            >
+              AI
+            </Text>
           </Text>
         </View>
-        <Text style={[styles.brandSubtitle, { color: colors.textMuted }]}>
+        <Text style={[styles.brandSubtitle, { color: colors.textMuted, fontFamily: "GoogleSans-Medium" }]}>
           {currentForce.hindiName} • {currentForce.name}
         </Text>
         <View style={[styles.mottoPill, { backgroundColor: `${currentForce.primaryColor}18`, borderColor: `${currentForce.primaryColor}40` }]}>
-          <Text style={[styles.mottoText, { color: currentForce.primaryColor }]}>
+          <Text style={[styles.mottoText, { color: currentForce.primaryColor, fontFamily: "GoogleSans-Medium" }]}>
             "{currentForce.hindiMotto}"
           </Text>
         </View>
       </View>
 
       {/* Main Credentials Card */}
-      <Card style={styles.loginCard} variant="elevated">
-        <Text style={[styles.cardTitle, { color: colors.text }]}>Official Service Sign-In</Text>
+      <Card style={styles.loginCard} variant="glass">
+        <Text style={[styles.cardTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>Sign In to MissionWell</Text>
         <Text style={[styles.cardDesc, { color: colors.textMuted }]}>
-          Central Armed Police Forces & Defense Personnel Access
+          Enter your Service ID or registered email to continue
         </Text>
 
         {errorMsg ? (
@@ -109,19 +133,19 @@ export default function LoginScreen() {
         ) : null}
 
         <View style={styles.inputGroup}>
-          <Text style={[styles.inputLabel, { color: colors.textMuted }]}>SERVICE / PNO IDENTIFIER</Text>
+          <Text style={[styles.inputLabel, { color: colors.textMuted }]}>SERVICE ID OR EMAIL</Text>
           <TextInput
             style={[styles.input, { backgroundColor: colors.inputBg, borderColor: colors.border, color: colors.text }]}
-            placeholder="e.g. CRPF-GD-2021-04128"
+            placeholder="e.g. CRPF-GD-2021-04128 or email"
             placeholderTextColor={colors.textMuted}
             value={serviceId}
             onChangeText={setServiceId}
-            autoCapitalize="characters"
+            autoCapitalize="none"
           />
         </View>
 
         <View style={styles.inputGroup}>
-          <Text style={[styles.inputLabel, { color: colors.textMuted }]}>TACTICAL ACCESS PIN</Text>
+          <Text style={[styles.inputLabel, { color: colors.textMuted }]}>PASSWORD</Text>
           <TextInput
             style={[styles.input, { backgroundColor: colors.inputBg, borderColor: colors.border, color: colors.text }]}
             placeholder="••••••••"
@@ -133,7 +157,7 @@ export default function LoginScreen() {
         </View>
 
         <Button
-          title="Authenticate & Enter"
+          title="Sign In →"
           onPress={handleCredentialsLogin}
           loading={isLoading}
           icon={<Lock size={16} color="#FFFFFF" />}
@@ -156,6 +180,18 @@ export default function LoginScreen() {
           </View>
           <Text style={[styles.googleBtnText, { color: colors.text }]}>Sign in with Google SSO</Text>
         </TouchableOpacity>
+
+        {/* Redirect to Sign Up */}
+        <View style={styles.signupRedirectRow}>
+          <Text style={[styles.signupRedirectText, { color: colors.textMuted }]}>
+            New personnel or officer?
+          </Text>
+          <TouchableOpacity onPress={() => router.push("/signup")} activeOpacity={0.7}>
+            <Text style={[styles.signupRedirectLink, { color: colors.primary }]}>
+              Register / Sign Up →
+            </Text>
+          </TouchableOpacity>
+        </View>
       </Card>
 
       {/* 1-Tap Soldier Profiles */}
@@ -235,6 +271,7 @@ export default function LoginScreen() {
         isOpen={isGoogleModalOpen}
         onClose={() => setIsGoogleModalOpen(false)}
         onSuccess={handleGoogleSuccess}
+        mode="signin"
       />
     </ScrollView>
   );
@@ -253,6 +290,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 24,
     gap: 6,
+    position: "relative",
+  },
+  heroGlowBackdrop: {
+    position: "absolute",
+    top: -10,
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    backgroundColor: "rgba(37, 99, 235, 0.16)",
+    ...Platform.select({
+      web: {
+        filter: "blur(40px)",
+      } as any,
+      default: {
+        opacity: 0.6,
+      },
+    }),
   },
   heroBrandTextRow: {
     marginTop: 8,
@@ -400,5 +454,49 @@ const styles = StyleSheet.create({
     textAlign: "center",
     flex: 1,
     lineHeight: 14,
+  },
+  authSwitchContainer: {
+    flexDirection: "row",
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 3,
+    marginBottom: 20,
+  },
+  authSwitchActiveTab: {
+    flex: 1,
+    paddingVertical: 8,
+    borderRadius: 9,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  authSwitchActiveText: {
+    color: "#FFFFFF",
+    fontSize: 12,
+    fontWeight: "800",
+  },
+  authSwitchInactiveTab: {
+    flex: 1,
+    paddingVertical: 8,
+    borderRadius: 9,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  authSwitchInactiveText: {
+    fontSize: 12,
+    fontWeight: "600",
+  },
+  signupRedirectRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    paddingTop: 12,
+  },
+  signupRedirectText: {
+    fontSize: 12,
+  },
+  signupRedirectLink: {
+    fontSize: 12,
+    fontWeight: "800",
   },
 });

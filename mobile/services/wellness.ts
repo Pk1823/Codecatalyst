@@ -5,6 +5,7 @@ import {
   BuddyCheckStatus,
   DarbarRequest,
 } from "../types";
+import { OfflineSyncService } from "./offlineSync";
 
 export const WELLNESS_SURVEY_QUESTIONS = [
   {
@@ -152,108 +153,74 @@ export class WellnessService {
       masking_index: isMaskingTendency ? 0.45 : 0.05,
     };
 
-    // Primary Integration: Call Express Backend REST API
-    try {
-      const res = await ApiClient.post<any>("/wellness/assessments", {
-        personnelId,
-        responses: input,
-        surveyLatencySeconds: latency,
-        consecutiveFieldDays: input.consecutiveFieldDays,
-        dutyHours5d: input.dutyHours5d,
-        nightShifts5d: input.nightShifts5d,
-        sleepHrs5dAvg: input.sleepHrs5dAvg,
-        selfReportedEnergy: input.selfReportedEnergy,
-        selfReportedStress: input.selfReportedStress,
-        additionalNotes: input.additionalNotes,
-      });
+    const surveyPayload = {
+      personnelId,
+      responses: input,
+      surveyLatencySeconds: latency,
+      consecutiveFieldDays: input.consecutiveFieldDays,
+      dutyHours5d: input.dutyHours5d,
+      nightShifts5d: input.nightShifts5d,
+      sleepHrs5dAvg: input.sleepHrs5dAvg,
+      selfReportedEnergy: input.selfReportedEnergy,
+      selfReportedStress: input.selfReportedStress,
+      additionalNotes: input.additionalNotes,
+    };
 
-      if (res) {
-        const mob = res.mobileResult;
-        if (mob) {
-          return {
-            id: mob.id || res.assessment?.id || `EVA-MBL-${Date.now().toString().slice(-6)}`,
-            date: mob.date || new Date().toISOString().split("T")[0],
-            riskScore: mob.riskScore,
-            riskCategory: mob.riskCategory,
-            predictedDaysToBreakdown: mob.predictedDaysToBreakdown,
-            shapDrivers: mob.shapDrivers || [],
-            recommendations: mob.recommendations || [],
-            isMaskingDetected: mob.isMaskingDetected,
-          };
+    const isAirGap = await OfflineSyncService.isAirGapMode();
+
+    // 2. If NOT in Air-Gap mode, attempt online call to Express REST API
+    if (!isAirGap) {
+      try {
+        const res = await ApiClient.post<any>("/wellness/assessments", surveyPayload);
+
+        if (res) {
+          const mob = res.mobileResult;
+          if (mob) {
+            const onlineRes: WellnessAssessmentResult = {
+              id: mob.id || res.assessment?.id || `EVA-MBL-${Date.now().toString().slice(-6)}`,
+              date: mob.date || new Date().toISOString().split("T")[0],
+              riskScore: mob.riskScore,
+              riskCategory: mob.riskCategory,
+              predictedDaysToBreakdown: mob.predictedDaysToBreakdown,
+              shapDrivers: mob.shapDrivers || [],
+              recommendations: mob.recommendations || [],
+              isMaskingDetected: mob.isMaskingDetected,
+              isOffline: false,
+            };
+            await OfflineSyncService.saveLocalAssessment(onlineRes);
+            await this.notifyWelfareOfficerIfHighRisk(onlineRes, personnelId, input);
+            return onlineRes;
+          }
+          if (res.prediction) {
+            const p = res.prediction;
+            const riskCat = p.riskLevel === "HIGH" ? "Critical Breakdown Risk" : p.riskLevel === "MODERATE" ? "Elevated Stress" : "Optimal";
+            const onlineRes: WellnessAssessmentResult = {
+              id: res.assessment?.id || `EVA-MBL-${Date.now().toString().slice(-6)}`,
+              date: res.assessment?.date || new Date().toISOString().split("T")[0],
+              riskScore: p.riskScore,
+              riskCategory: riskCat,
+              predictedDaysToBreakdown: p.riskScore > 65 ? 4 : p.riskScore > 45 ? 12 : undefined,
+              shapDrivers: (p.factors || []).map((f: any) => ({
+                feature: f.feature.replace(/_/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase()),
+                impact: (Math.abs(f.importance) >= 0.5 ? "high" : Math.abs(f.importance) >= 0.25 ? "moderate" : "low") as "high" | "moderate" | "low",
+                description: f.description,
+                value: f.value,
+              })),
+              recommendations: (p.recommendations || []).map((r: any) => r.description || r.title),
+              isMaskingDetected: p.maskingDetected,
+              isOffline: false,
+            };
+            await OfflineSyncService.saveLocalAssessment(onlineRes);
+            await this.notifyWelfareOfficerIfHighRisk(onlineRes, personnelId, input);
+            return onlineRes;
+          }
         }
-        if (res.prediction) {
-          const p = res.prediction;
-          const riskCat = p.riskLevel === "HIGH" ? "Critical Breakdown Risk" : p.riskLevel === "MODERATE" ? "Elevated Stress" : "Optimal";
-          return {
-            id: res.assessment?.id || `EVA-MBL-${Date.now().toString().slice(-6)}`,
-            date: res.assessment?.date || new Date().toISOString().split("T")[0],
-            riskScore: p.riskScore,
-            riskCategory: riskCat,
-            predictedDaysToBreakdown: p.riskScore > 65 ? 4 : p.riskScore > 45 ? 12 : undefined,
-            shapDrivers: (p.factors || []).map((f: any) => ({
-              feature: f.feature.replace(/_/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase()),
-              impact: (Math.abs(f.importance) >= 0.5 ? "high" : Math.abs(f.importance) >= 0.25 ? "moderate" : "low") as "high" | "moderate" | "low",
-              description: f.description,
-              value: f.value,
-            })),
-            recommendations: (p.recommendations || []).map((r: any) => r.description || r.title),
-            isMaskingDetected: p.maskingDetected,
-          };
-        }
+      } catch (err: any) {
+        console.warn("[WellnessService] Backend assessment failed, using on-device forward post evaluation:", err);
       }
-    } catch (err: any) {
-      console.warn("[WellnessService] Backend assessment failed, trying direct AI engine / fallback:", err);
     }
 
-    // Direct AI Engine Query (Port 8000)
-    try {
-      const aiResp = await fetch(`${AI_ENGINE_URL}/predict`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(telemetry),
-      });
-
-      if (aiResp.ok) {
-        const raw = await aiResp.json();
-        const evalData = raw.evaluation;
-        const highProb = evalData.confidence_scores?.high ?? 0;
-        const modProb = evalData.confidence_scores?.moderate ?? 0;
-        let calibratedScore = Math.round(
-          highProb * 100 ||
-          (evalData.risk_band === "HIGH" ? 78 : evalData.risk_band === "MODERATE" ? 54 : 22)
-        );
-
-        if (evalData.risk_band === "HIGH") {
-          calibratedScore = Math.max(68, Math.min(98, calibratedScore));
-        } else if (evalData.risk_band === "MODERATE") {
-          calibratedScore = Math.max(42, Math.min(64, Math.round((highProb * 100) + (modProb * 35)) || 54));
-        } else {
-          calibratedScore = Math.min(38, Math.max(12, calibratedScore || 20));
-        }
-
-        const riskCat = evalData.risk_band === "HIGH" ? "Critical Breakdown Risk" : evalData.risk_band === "MODERATE" ? "Elevated Stress" : "Optimal";
-
-        return {
-          id: `EVA-MBL-${Date.now().toString().slice(-6)}`,
-          date: new Date().toISOString().split("T")[0],
-          riskScore: calibratedScore,
-          riskCategory: riskCat,
-          predictedDaysToBreakdown: calibratedScore > 65 ? 4 : calibratedScore > 45 ? 12 : undefined,
-          isMaskingDetected: evalData.masking_flag,
-          shapDrivers: (evalData.top_drivers || []).map((d: any) => ({
-            feature: d.feature.replace(/_/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase()),
-            impact: (Math.abs(d.importance) >= 0.5 ? "high" : Math.abs(d.importance) >= 0.25 ? "moderate" : "low") as "high" | "moderate" | "low",
-            description: d.description,
-            value: d.value,
-          })),
-          recommendations: (evalData.clinical_guidance || []).map((g: any) => g.recommendation),
-        };
-      }
-    } catch {
-      // Offline fallback
-    }
-
-    // Deterministic mathematical fallback matching Web Portal Decision Logic
+    // 3. 100% On-Device Decision Intelligence Engine (Runs completely offline in high-altitude/border outposts)
     let rawScore = 15;
     if (consecDays > 90) rawScore += 26;
     else if (consecDays > 60) rawScore += 18;
@@ -284,13 +251,14 @@ export class WellnessService {
     else if (finalRiskScore >= 42) finalCategory = "Elevated Stress";
     else if (finalRiskScore >= 28) finalCategory = "Moderate Fatigue";
 
-    return {
-      id: `EVA-MBL-${Date.now().toString().slice(-6)}`,
+    const offlineResult: WellnessAssessmentResult = {
+      id: `OFFLINE-EVA-${Date.now().toString().slice(-6)}`,
       date: new Date().toISOString().split("T")[0],
       riskScore: finalRiskScore,
       riskCategory: finalCategory,
       predictedDaysToBreakdown: finalRiskScore > 65 ? 4 : finalRiskScore > 45 ? 12 : undefined,
       isMaskingDetected: isMasking,
+      isOffline: true,
       shapDrivers: [
         {
           feature: "Sleep Debt (5-Day Rest Deficit)",
@@ -318,6 +286,72 @@ export class WellnessService {
         "Priority consideration for scheduled rest rotation during upcoming convoy movement.",
       ],
     };
+
+    // Save to local device store & queue in outbox for automatic sync when base reconnects
+    await OfflineSyncService.saveLocalAssessment(offlineResult);
+    await OfflineSyncService.enqueue("ASSESSMENT", surveyPayload);
+
+    // If evaluated at High Risk, dispatch immediate notification to website Welfare Officer
+    await this.notifyWelfareOfficerIfHighRisk(offlineResult, personnelId, input);
+
+    return offlineResult;
+  }
+
+  private static async notifyWelfareOfficerIfHighRisk(
+    res: WellnessAssessmentResult,
+    personnelId: string,
+    input: WellnessAssessmentInput
+  ): Promise<void> {
+    const isHighRisk =
+      res.riskScore >= 60 ||
+      res.riskCategory === "Critical Breakdown Risk" ||
+      res.riskCategory === "Elevated Stress";
+
+    if (!isHighRisk) return;
+
+    try {
+      // 1. If in browser/hybrid environment, write to localStorage & dispatch real-time event
+      if (typeof window !== "undefined" && window.localStorage) {
+        const customStr = localStorage.getItem("missionwell_custom_alerts");
+        const customAlerts = customStr ? JSON.parse(customStr) : [];
+        const now = new Date();
+        const timeFormatted = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+        const newAlert = {
+          id: `alert-mbl-${Date.now()}`,
+          category: "Welfare",
+          title: `🚨 HIGH RISK: Soldier ${personnelId} Flagged for Triage`,
+          description: `Army personnel ${personnelId} evaluated at ${res.riskCategory} (${res.riskScore}/100). Severe operational fatigue, acute sleep deficit.`,
+          timestamp: timeFormatted,
+          createdAt: now.toISOString(),
+          priority: "Urgent",
+          isRead: false,
+          personnelId,
+          contributingIndicators: [
+            `Duty Hours: ${input.dutyHours5d}`,
+            `Sleep Avg: ${input.sleepHrs5dAvg}`,
+            `Field Days: ${input.consecutiveFieldDays}`,
+          ],
+          recommendedAction: res.recommendations[0] || "Rest rotation advised",
+        };
+
+        localStorage.setItem("missionwell_custom_alerts", JSON.stringify([newAlert, ...customAlerts]));
+        window.dispatchEvent(new Event("missionwell_alerts_changed"));
+      }
+
+      // 2. Post directly to /alerts to notify Welfare Officers on database
+      try {
+        await ApiClient.post("/alerts", {
+          personnelId,
+          severity: res.riskScore >= 75 ? "CRITICAL" : "HIGH",
+          reason: `Soldier ${personnelId} evaluated at ${res.riskCategory} (${res.riskScore}/100). Immediate welfare triage required.`,
+          triggerCondition: "MOBILE_HIGH_RISK_EVALUATION",
+          riskScore: res.riskScore,
+        });
+      } catch {}
+    } catch (e) {
+      console.warn("[WellnessService] Failed to dispatch welfare officer notification:", e);
+    }
   }
 
   public static async getBuddyStatus(): Promise<BuddyCheckStatus> {
@@ -332,11 +366,18 @@ export class WellnessService {
   }
 
   public static async submitBuddyCheck(status: "OK" | "NEEDS_REST" | "URGENT_SUPPORT"): Promise<boolean> {
+    const isAirGap = await OfflineSyncService.isAirGapMode();
+    if (isAirGap) {
+      await OfflineSyncService.enqueue("BUDDY_CHECK", { status, timestamp: new Date().toISOString() });
+      return true;
+    }
+
     try {
       await ApiClient.post("/welfare/buddy-check", { status });
       return true;
     } catch (err) {
-      console.warn("[WellnessService] Buddy check post failed:", err);
+      console.warn("[WellnessService] Online buddy check post failed, queued offline:", err);
+      await OfflineSyncService.enqueue("BUDDY_CHECK", { status, timestamp: new Date().toISOString() });
       return true;
     }
   }
@@ -346,19 +387,28 @@ export class WellnessService {
     reasonCategory: DarbarRequest["reasonCategory"];
     notes?: string;
   }): Promise<DarbarRequest> {
+    const fallbackRequest: DarbarRequest = {
+      id: `DBR-${Date.now().toString().slice(-4)}`,
+      date: new Date().toISOString().split("T")[0],
+      targetOfficer: request.targetOfficer,
+      reasonCategory: request.reasonCategory,
+      status: "PENDING",
+      confidentialNotes: request.notes,
+    };
+
+    const isAirGap = await OfflineSyncService.isAirGapMode();
+    if (isAirGap) {
+      await OfflineSyncService.enqueue("DARBAR_REQUEST", request);
+      return fallbackRequest;
+    }
+
     try {
       const res = await ApiClient.post<DarbarRequest>("/welfare/darbar", request);
       return res;
     } catch (err) {
-      console.warn("[WellnessService] Darbar request post failed:", err);
-      return {
-        id: `DBR-${Date.now().toString().slice(-4)}`,
-        date: new Date().toISOString().split("T")[0],
-        targetOfficer: request.targetOfficer,
-        reasonCategory: request.reasonCategory,
-        status: "PENDING",
-        confidentialNotes: request.notes,
-      };
+      console.warn("[WellnessService] Online Darbar post failed, queued offline:", err);
+      await OfflineSyncService.enqueue("DARBAR_REQUEST", request);
+      return fallbackRequest;
     }
   }
 }

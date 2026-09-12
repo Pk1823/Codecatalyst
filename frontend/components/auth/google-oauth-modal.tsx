@@ -15,7 +15,7 @@ import {
   ShieldCheck,
   Building2,
 } from "lucide-react";
-import { ProjectServerIcon } from "@/components/common/server-icon";
+import { BrandIcon } from "@/components/common/brand-logo";
 
 export interface GoogleAccount {
   name: string;
@@ -228,7 +228,7 @@ export function GoogleOAuthModal({
 
             {/* Official Project Server Node */}
             <div className="flex items-center gap-2">
-              <ProjectServerIcon size="xs" animate={true} />
+              <BrandIcon size="xs" />
               <div className="flex flex-col">
                 <span className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">
                   MissionWell Server Node
@@ -277,8 +277,8 @@ export function GoogleOAuthModal({
           {step === "chooser" && (
             <>
               <div className="text-center mb-6">
-                <div className="inline-flex p-2 rounded-2xl bg-slate-100 dark:bg-slate-800/80 mb-2.5 border border-slate-200/70 dark:border-slate-700">
-                  <ProjectServerIcon size="md" animate={true} />
+                <div className="inline-flex mb-2.5">
+                  <BrandIcon size="md" animate={true} />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
                   Choose an account
@@ -536,7 +536,7 @@ export function GoogleOAuthModal({
 
               {/* Requesting Application Header */}
               <div className="flex items-center gap-3 p-3 rounded-2xl bg-blue-50/60 dark:bg-blue-950/20 border border-blue-200/60 dark:border-blue-800/40">
-                <ProjectServerIcon size="sm" animate={true} showBadge={true} />
+                <BrandIcon size="sm" />
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5">
                     <h4 className="text-xs font-bold text-slate-900 dark:text-white">

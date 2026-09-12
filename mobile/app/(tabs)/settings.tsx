@@ -7,11 +7,13 @@ import { Card } from "../../components/ui/Card";
 import { Button } from "../../components/ui/Button";
 import { Badge } from "../../components/ui/Badge";
 import { HelplineModal } from "../../components/ui/HelplineModal";
+import { TacticalOfflineBanner } from "../../components/ui/TacticalOfflineBanner";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useForce } from "../../contexts/ForceContext";
 import { useAuth } from "../../contexts/AuthContext";
 import { ForceId } from "../../constants/forces";
 import { MissionWellLogo } from "../../components/ui/MissionWellLogo";
+import { GoogleOAuthModal } from "../../components/auth/GoogleOAuthModal";
 import {
   Shield,
   Moon,
@@ -35,10 +37,11 @@ import {
 export default function SettingsScreen() {
   const { colors, isDark, toggleTheme } = useTheme();
   const { currentForce, setForce, availableForces } = useForce();
-  const { user, logout } = useAuth();
+  const { user, logout, loginWithGoogle } = useAuth();
   const router = useRouter();
 
   const [isHelplineOpen, setIsHelplineOpen] = useState(false);
+  const [isGoogleModalOpen, setIsGoogleModalOpen] = useState(false);
 
   const handleLogout = async () => {
     await logout();
@@ -51,6 +54,9 @@ export default function SettingsScreen() {
         title="Settings & Force Config"
         subtitle="Customization, Security & Statutory DPDP Oversight"
       />
+
+      {/* Army Forward Post & Offline Defense Sync Banner */}
+      <TacticalOfflineBanner />
 
       {/* User Profile Card */}
       <Card variant="elevated" style={styles.sectionCard}>
@@ -66,6 +72,50 @@ export default function SettingsScreen() {
             <Badge label={user?.role || "PERSONNEL"} variant="info" size="sm" style={styles.roleBadge} />
           </View>
         </View>
+      </Card>
+
+      {/* Google Identity & Single Sign-On Account */}
+      <Card style={styles.sectionCard}>
+        <View style={styles.cardHeader}>
+          <View style={styles.titleWithIcon}>
+            <View style={styles.googleColorRow}>
+              <View style={[styles.googleColorDot, { backgroundColor: "#4285F4" }]} />
+              <View style={[styles.googleColorDot, { backgroundColor: "#EA4335" }]} />
+              <View style={[styles.googleColorDot, { backgroundColor: "#FBBC05" }]} />
+              <View style={[styles.googleColorDot, { backgroundColor: "#34A853" }]} />
+            </View>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+              Google Identity SSO
+            </Text>
+          </View>
+          <Badge
+            label={user?.email ? "CONNECTED" : "STANDBY"}
+            variant={user?.email ? "success" : "neutral"}
+            size="sm"
+          />
+        </View>
+
+        <Text style={[styles.sectionDesc, { color: colors.textMuted }]}>
+          {user?.email
+            ? `Active Google Session: ${user.email} (OpenID Connect Token Validated)`
+            : "Connect your official defense email via Google Workspace SSO for instant, audited access."}
+        </Text>
+
+        <TouchableOpacity
+          style={[styles.switchGoogleBtn, { borderColor: colors.cardBorder, backgroundColor: colors.surface }]}
+          onPress={() => setIsGoogleModalOpen(true)}
+          activeOpacity={0.7}
+        >
+          <View style={styles.switchGoogleBtnLeft}>
+            <View style={styles.googleIconCircle}>
+              <Text style={styles.googleIconCircleText}>G</Text>
+            </View>
+            <Text style={[styles.switchGoogleText, { color: colors.text }]}>
+              {user?.email ? "Switch / Re-authenticate Google Account" : "Sign In with Google SSO"}
+            </Text>
+          </View>
+          <ChevronRight size={16} color={colors.textMuted} />
+        </TouchableOpacity>
       </Card>
 
       {/* Multi-Branch Force Customization */}
@@ -202,6 +252,17 @@ export default function SettingsScreen() {
 
       {/* Emergency Helpline Modal */}
       <HelplineModal isOpen={isHelplineOpen} onClose={() => setIsHelplineOpen(false)} />
+
+      {/* Google OAuth SSO Modal */}
+      <GoogleOAuthModal
+        isOpen={isGoogleModalOpen}
+        onClose={() => setIsGoogleModalOpen(false)}
+        onSuccess={async (googleUser) => {
+          setIsGoogleModalOpen(false);
+          await loginWithGoogle(googleUser);
+        }}
+        mode="signin"
+      />
     </ScreenContainer>
   );
 }
@@ -352,5 +413,49 @@ const styles = StyleSheet.create({
   logoutBtn: {
     marginTop: 8,
     marginBottom: 20,
+  },
+  googleColorRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 3,
+  },
+  googleColorDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 3.5,
+  },
+  switchGoogleBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    marginTop: 10,
+  },
+  switchGoogleBtnLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    flex: 1,
+  },
+  googleIconCircle: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: "rgba(66, 133, 244, 0.12)",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "rgba(66, 133, 244, 0.25)",
+  },
+  googleIconCircleText: {
+    fontSize: 13,
+    fontWeight: "900",
+    color: "#4285F4",
+  },
+  switchGoogleText: {
+    fontSize: 12,
+    fontWeight: "700",
   },
 });

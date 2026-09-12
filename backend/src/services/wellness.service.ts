@@ -216,29 +216,56 @@ export class WellnessService {
       });
     }
 
-    // 6. Early Warning Trigger
-    if (prediction.earlyWarningTriggered) {
+    // 6. Handle Early Warning & High-Risk Triage Triggers for Welfare Officers
+    const isHighRisk =
+      prediction.riskLevel === "HIGH" ||
+      prediction.riskScore >= 60 ||
+      indicatorStatus === "Elevated Attention" ||
+      Boolean(prediction.earlyWarningTriggered);
+
+    if (isHighRisk) {
+      const severity =
+        prediction.riskScore >= 75 ||
+        (prediction.earlyWarningTriggered?.severity as string) === "Critical" ||
+        (prediction.earlyWarningTriggered?.severity as string) === "CRITICAL"
+          ? "CRITICAL"
+          : "HIGH";
+
+      const reason =
+        prediction.earlyWarningTriggered?.reason ||
+        `Army personnel evaluated at ${severity} BREAKDOWN RISK (${prediction.riskScore}/100). Severe operational fatigue, acute sleep deficit, and mission stress. Immediate welfare triage advised.`;
+
+      const triggerCondition =
+        prediction.earlyWarningTriggered?.triggerCondition ||
+        (prediction.riskScore >= 75
+          ? "MULTI_FACTOR_CRITICAL_ACCUMULATION"
+          : "HIGH_RISK_ASSESSMENT_EVALUATION");
+
       await prisma.earlyWarning.create({
         data: {
           personnelId: personnel.id,
           unitId: personnel.unitId,
-          severity: prediction.earlyWarningTriggered.severity,
-          reason: prediction.earlyWarningTriggered.reason,
-          triggerCondition: prediction.earlyWarningTriggered.triggerCondition,
+          severity,
+          reason,
+          triggerCondition,
           status: "NEW",
         },
       });
 
-      const welfareOfficers = await prisma.user.findMany({
-        where: { role: "WELFARE_OFFICER" },
+      let welfareOfficers = await prisma.user.findMany({
+        where: { role: { in: ["WELFARE_OFFICER", "COMMANDER", "ADMIN"] } },
       });
+
+      if (welfareOfficers.length === 0) {
+        welfareOfficers = await prisma.user.findMany({ take: 3 });
+      }
 
       for (const officer of welfareOfficers) {
         await prisma.notification.create({
           data: {
             userId: officer.id,
-            title: `Early Warning (${prediction.earlyWarningTriggered.severity}): ${personnel.name}`,
-            message: prediction.earlyWarningTriggered.reason,
+            title: `🚨 CRITICAL WELFARE ALERT: ${personnel.rank || "Soldier"} ${personnel.name} (${personnel.force || "Army"} - ${personnel.id})`,
+            message: `Army personnel flagged at ${severity} RISK (${prediction.riskScore}/100). Immediate welfare triage & clinical check recommended.`,
             type: "alert",
             category: "Welfare",
             link: "/alerts",

@@ -7,6 +7,7 @@ import { Card } from "../../components/ui/Card";
 import { Button } from "../../components/ui/Button";
 import { Badge } from "../../components/ui/Badge";
 import { HelplineModal } from "../../components/ui/HelplineModal";
+import { TacticalOfflineBanner } from "../../components/ui/TacticalOfflineBanner";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
 import { WellnessService } from "../../services/wellness";
@@ -71,34 +72,75 @@ export default function PersonnelHomeScreen() {
         subtitle={`Welcome, ${user?.name || "Jawan"} • ${user?.rank || "Constable"}`}
       />
 
-      {/* Daily Readiness & Assessment CTA */}
-      <Card variant="elevated" style={styles.heroCard}>
+      {/* Army Forward Post / Offline Tactical Status Banner */}
+      <TacticalOfflineBanner />
+
+      {/* Daily Readiness & Assessment CTA (Tactical HUD) */}
+      <Card variant="glass" style={styles.heroCard}>
         <View style={styles.cardHeaderRow}>
           <View style={[styles.heroIconBox, { backgroundColor: "rgba(59, 130, 246, 0.15)" }]}>
             <HeartPulse size={24} color="#3B82F6" />
           </View>
-          <Badge label="VOLUNTARY & CONFIDENTIAL" variant="info" />
+          <View style={styles.heroTagGroup}>
+            <Badge label="VOLUNTARY & CONFIDENTIAL" variant="info" size="sm" />
+            <View style={styles.hudLiveChip}>
+              <View style={styles.hudLiveDot} />
+              <Text style={styles.hudLiveText}>ACTIVE SHIELD</Text>
+            </View>
+          </View>
         </View>
-        <Text style={[styles.heroTitle, { color: colors.text }]}>
+
+        <Text style={[styles.heroTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
           Daily Operational Self-Assessment
         </Text>
         <Text style={[styles.heroDesc, { color: colors.textMuted }]}>
-          Take 60 seconds to record sleep debt, patrol fatigue, and cognitive load. Confidential data is evaluated by AI and reviewed by your Welfare Officer for timely support.
+          Confidential AI evaluates operational stress, patrol fatigue & sleep debt without middle-command stigma. Takes only 60 seconds.
         </Text>
+
+        {/* Tactical Readiness Metric Bar */}
+        <View style={[styles.hudMetricContainer, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
+          <View style={styles.hudScoreCol}>
+            <Text style={[styles.hudScoreLabel, { color: colors.textMuted }]}>READINESS</Text>
+            <View style={styles.hudScoreRow}>
+              <Text style={[styles.hudScoreNumber, { color: colors.success }]}>88</Text>
+              <Text style={[styles.hudScoreUnit, { color: colors.textMuted }]}>%</Text>
+            </View>
+          </View>
+
+          <View style={styles.hudMetricsDivider} />
+
+          <View style={styles.hudMiniStatsCol}>
+            <View style={styles.hudMiniStatRow}>
+              <Text style={[styles.hudMiniStatKey, { color: colors.textMuted }]}>Sleep Cycle</Text>
+              <Text style={[styles.hudMiniStatVal, { color: colors.text }]}>7.2h (Good)</Text>
+            </View>
+            <View style={styles.hudMiniStatRow}>
+              <Text style={[styles.hudMiniStatKey, { color: colors.textMuted }]}>Patrol Load</Text>
+              <Text style={[styles.hudMiniStatVal, { color: colors.primary }]}>Normal Shift</Text>
+            </View>
+            <View style={styles.hudMiniStatRow}>
+              <Text style={[styles.hudMiniStatKey, { color: colors.textMuted }]}>Cognitive Load</Text>
+              <Text style={[styles.hudMiniStatVal, { color: colors.success }]}>Low Risk</Text>
+            </View>
+          </View>
+        </View>
+
         <Button
-          title="Start Assessment (6 Steps)"
+          title="Start Assessment (6 Steps) →"
           onPress={() => router.push("/assessment")}
           icon={<ArrowRight size={16} color="#FFFFFF" />}
           style={styles.heroActionBtn}
         />
       </Card>
 
-      {/* Historical Wellness Trends */}
-      <Card style={styles.sectionCard}>
+      {/* Historical Wellness Trends & Visual Sparklines */}
+      <Card variant="elevated" style={styles.sectionCard}>
         <View style={styles.cardHeaderRow}>
           <View style={styles.sectionTitleRow}>
             <TrendingUp size={18} color={colors.primary} />
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>Self-Assessment & Fatigue Trends</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+              Self-Assessment & Fatigue Trends
+            </Text>
           </View>
           <View style={styles.trendPillRow}>
             {(["7D", "30D"] as const).map((r) => (
@@ -113,7 +155,15 @@ export default function PersonnelHomeScreen() {
                   },
                 ]}
               >
-                <Text style={[styles.trendPillText, { color: trendRange === r ? "#FFFFFF" : colors.textMuted }]}>
+                <Text
+                  style={[
+                    styles.trendPillText,
+                    {
+                      color: trendRange === r ? "#FFFFFF" : colors.textMuted,
+                      fontFamily: "GoogleSans-Bold",
+                    },
+                  ]}
+                >
                   {r}
                 </Text>
               </TouchableOpacity>
@@ -121,17 +171,48 @@ export default function PersonnelHomeScreen() {
           </View>
         </View>
 
+        {/* 7-Day Visual Telemetry Bars */}
+        <View style={[styles.sparklineContainer, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
+          {[
+            { day: "Mon", val: 68, color: "#10B981" },
+            { day: "Tue", val: 74, color: "#10B981" },
+            { day: "Wed", val: 82, color: "#3B82F6" },
+            { day: "Thu", val: 65, color: "#F59E0B" },
+            { day: "Fri", val: 78, color: "#10B981" },
+            { day: "Sat", val: 88, color: "#10B981" },
+            { day: "Today", val: 86, color: "#10B981", active: true },
+          ].map((bar, i) => (
+            <View key={i} style={styles.sparkCol}>
+              <View style={styles.sparkBarTrack}>
+                <View
+                  style={[
+                    styles.sparkBarFill,
+                    {
+                      height: `${bar.val}%`,
+                      backgroundColor: bar.color,
+                      opacity: bar.active ? 1 : 0.75,
+                    },
+                  ]}
+                />
+              </View>
+              <Text style={[styles.sparkDayLabel, { color: bar.active ? colors.primary : colors.textMuted }]}>
+                {bar.day}
+              </Text>
+            </View>
+          ))}
+        </View>
+
         <View style={[styles.trendStatsGrid, { backgroundColor: colors.surface }]}>
           <View style={styles.trendStat}>
-            <Text style={[styles.trendStatVal, { color: colors.success }]}>74%</Text>
-            <Text style={[styles.trendStatLbl, { color: colors.textMuted }]}>Avg Recovery</Text>
+            <Text style={[styles.trendStatVal, { color: colors.success, fontFamily: "GoogleSans-Bold" }]}>86%</Text>
+            <Text style={[styles.trendStatLbl, { color: colors.textMuted }]}>Avg Readiness</Text>
           </View>
           <View style={styles.trendStat}>
-            <Text style={[styles.trendStatVal, { color: colors.primary }]}>6.2h</Text>
+            <Text style={[styles.trendStatVal, { color: colors.primary, fontFamily: "GoogleSans-Bold" }]}>7.2h</Text>
             <Text style={[styles.trendStatLbl, { color: colors.textMuted }]}>Night Sleep</Text>
           </View>
           <View style={styles.trendStat}>
-            <Text style={[styles.trendStatVal, { color: colors.warning }]}>32%</Text>
+            <Text style={[styles.trendStatVal, { color: colors.warning, fontFamily: "GoogleSans-Bold" }]}>22%</Text>
             <Text style={[styles.trendStatLbl, { color: colors.textMuted }]}>Fatigue Index</Text>
           </View>
         </View>
@@ -278,6 +359,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  heroTagGroup: {
+    alignItems: "flex-end",
+    gap: 4,
+  },
+  hudLiveChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+    backgroundColor: "rgba(16, 185, 129, 0.12)",
+    borderWidth: 1,
+    borderColor: "rgba(16, 185, 129, 0.35)",
+  },
+  hudLiveDot: {
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
+    backgroundColor: "#10B981",
+  },
+  hudLiveText: {
+    fontSize: 8.5,
+    fontWeight: "900",
+    color: "#10B981",
+    letterSpacing: 0.6,
+  },
   heroTitle: {
     fontSize: 18,
     fontWeight: "800",
@@ -286,7 +394,98 @@ const styles = StyleSheet.create({
   heroDesc: {
     fontSize: 12,
     lineHeight: 18,
+    marginBottom: 14,
+  },
+  hudMetricContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 12,
+    borderRadius: 12,
+    borderWidth: 1,
     marginBottom: 16,
+  },
+  hudScoreCol: {
+    alignItems: "center",
+    paddingRight: 14,
+    minWidth: 72,
+  },
+  hudScoreLabel: {
+    fontSize: 9,
+    fontWeight: "800",
+    letterSpacing: 0.6,
+    marginBottom: 2,
+  },
+  hudScoreRow: {
+    flexDirection: "row",
+    alignItems: "baseline",
+  },
+  hudScoreNumber: {
+    fontSize: 30,
+    fontWeight: "900",
+    fontFamily: "GoogleSans-Bold",
+    letterSpacing: -1,
+  },
+  hudScoreUnit: {
+    fontSize: 13,
+    fontWeight: "700",
+    marginLeft: 2,
+  },
+  hudMetricsDivider: {
+    width: 1,
+    height: 44,
+    backgroundColor: "rgba(148, 163, 184, 0.2)",
+    marginRight: 14,
+  },
+  hudMiniStatsCol: {
+    flex: 1,
+    gap: 4,
+  },
+  hudMiniStatRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  hudMiniStatKey: {
+    fontSize: 11,
+    fontWeight: "600",
+  },
+  hudMiniStatVal: {
+    fontSize: 11,
+    fontWeight: "800",
+  },
+  sparklineContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
+    height: 90,
+    paddingHorizontal: 12,
+    paddingTop: 12,
+    paddingBottom: 8,
+    borderRadius: 10,
+    borderWidth: 1,
+    marginTop: 12,
+    marginBottom: 8,
+  },
+  sparkCol: {
+    alignItems: "center",
+    flex: 1,
+  },
+  sparkBarTrack: {
+    width: 14,
+    height: 52,
+    backgroundColor: "rgba(148, 163, 184, 0.12)",
+    borderRadius: 4,
+    justifyContent: "flex-end",
+    overflow: "hidden",
+  },
+  sparkBarFill: {
+    width: "100%",
+    borderRadius: 4,
+  },
+  sparkDayLabel: {
+    fontSize: 9.5,
+    fontWeight: "700",
+    marginTop: 4,
   },
   heroActionBtn: {
     width: "100%",

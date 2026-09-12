@@ -77,11 +77,13 @@ const styles = StyleSheet.create({
   scoreValue: {
     fontSize: 36,
     fontWeight: "900",
+    fontFamily: "GoogleSans-Bold",
     letterSpacing: -1,
   },
   scoreMax: {
     fontSize: 14,
     fontWeight: "600",
+    fontFamily: "GoogleSans-Medium",
     marginLeft: 3,
   },
   categoryBadge: {
@@ -93,6 +95,7 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: 11,
     fontWeight: "800",
+    fontFamily: "GoogleSans-Bold",
     letterSpacing: 0.5,
   },
   track: {

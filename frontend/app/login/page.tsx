@@ -20,7 +20,7 @@ import { useAuth, ForceType, useToast, useTheme } from "@/components/providers";
 import { UserRole } from "@/types/auth";
 import { AuthService } from "@/services/auth.service";
 import { GoogleOAuthModal } from "@/components/auth/google-oauth-modal";
-import { ProjectServerIcon } from "@/components/common/server-icon";
+import { BrandIcon } from "@/components/common/brand-logo";
 
 export default function PersonnelLoginPage() {
   const router = useRouter();
@@ -264,7 +264,7 @@ export default function PersonnelLoginPage() {
           {/* Header */}
           <div className="text-center space-y-1.5">
             <div className="flex justify-center mb-1">
-              <ProjectServerIcon size="md" animate={false} showBadge={false} />
+              <BrandIcon size="md" />
             </div>
             <h1 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
               {authMode === "signin"

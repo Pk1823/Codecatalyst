@@ -104,6 +104,13 @@ export const HelplineModal: React.FC<HelplineModalProps> = ({ isOpen, visible, o
           </View>
 
           <ScrollView style={styles.contentList} showsVerticalScrollIndicator={false}>
+            <View style={[styles.banner, { backgroundColor: "rgba(16, 185, 129, 0.12)", borderColor: "rgba(16, 185, 129, 0.35)", marginBottom: 8 }]}>
+              <ShieldCheck size={16} color="#10B981" />
+              <Text style={[styles.bannerText, { color: colors.text }]}>
+                100% Offline / Satellite Ready • All numbers cached on-device for direct dial from forward posts without internet.
+              </Text>
+            </View>
+
             <View style={[styles.banner, { backgroundColor: `${colors.info}15`, borderColor: colors.info }]}>
               <ShieldCheck size={16} color={colors.info} />
               <Text style={[styles.bannerText, { color: colors.text }]}>

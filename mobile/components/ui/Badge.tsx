@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 11,
     fontWeight: "700",
+    fontFamily: "GoogleSans-Bold",
     letterSpacing: 0.3,
   },
   text_sm: {

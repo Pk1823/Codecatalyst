@@ -9,6 +9,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -102,6 +103,7 @@ interface GoogleOAuthModalProps {
   onSuccess: (user: AppUser) => void;
   initialRole?: UserRole;
   initialForce?: string;
+  mode?: "signin" | "signup";
 }
 
 export const GoogleOAuthModal: React.FC<GoogleOAuthModalProps> = ({
@@ -110,6 +112,7 @@ export const GoogleOAuthModal: React.FC<GoogleOAuthModalProps> = ({
   onSuccess,
   initialRole = "WELFARE_OFFICER",
   initialForce = "CRPF",
+  mode = "signin",
 }) => {
   const { colors, isDark } = useTheme();
   const { currentForce, availableForces } = useForce();
@@ -248,9 +251,14 @@ export const GoogleOAuthModal: React.FC<GoogleOAuthModalProps> = ({
               <View style={styles.stepContainer}>
                 {/* Title & Prompt */}
                 <View style={styles.promptSection}>
-                  <Text style={[styles.chooserHeading, { color: colors.text }]}>Choose an account</Text>
+                  <Text style={[styles.chooserHeading, { color: colors.text }]}>
+                    {mode === "signup" ? "Create account with Google" : "Choose an account"}
+                  </Text>
                   <Text style={[styles.chooserSub, { color: colors.textMuted }]}>
-                    to continue to <Text style={{ fontWeight: "700", color: colors.text }}>MissionWell AI Platform</Text>
+                    {mode === "signup"
+                      ? "to register defense credentials on "
+                      : "to continue to "}
+                    <Text style={{ fontWeight: "700", color: colors.text }}>MissionWell AI Platform</Text>
                   </Text>
                 </View>
 
@@ -506,10 +514,14 @@ export const GoogleOAuthModal: React.FC<GoogleOAuthModalProps> = ({
                     {isLoading ? (
                       <View style={styles.loadingRow}>
                         <ActivityIndicator size="small" color="#FFFFFF" />
-                        <Text style={styles.allowBtnText}>Issuing JWT...</Text>
+                        <Text style={styles.allowBtnText}>
+                          {mode === "signup" ? "Provisioning JWT..." : "Issuing JWT..."}
+                        </Text>
                       </View>
                     ) : (
-                      <Text style={styles.allowBtnText}>Allow & Continue</Text>
+                      <Text style={styles.allowBtnText}>
+                        {mode === "signup" ? "Register & Enter" : "Allow & Continue"}
+                      </Text>
                     )}
                   </TouchableOpacity>
                 </View>
@@ -594,7 +606,7 @@ const styles = StyleSheet.create({
   serverNodeMeta: {
     fontSize: 9,
     color: "#3B82F6",
-    fontFamily: "monospace",
+    fontFamily: Platform.OS === "web" ? "'JetBrains Mono', monospace" : "JetBrainsMono-Bold",
     fontWeight: "700",
   },
   closeBtn: {

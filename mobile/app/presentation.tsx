@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useTheme } from "../contexts/ThemeContext";
@@ -533,7 +534,7 @@ const styles = StyleSheet.create({
   formulaCode: {
     fontSize: 12,
     fontWeight: "800",
-    fontFamily: "monospace",
+    fontFamily: Platform.OS === "web" ? "'JetBrains Mono', monospace" : "JetBrainsMono-Bold",
   },
   formulaDesc: {
     fontSize: 11,

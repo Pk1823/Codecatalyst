@@ -9,6 +9,7 @@ import {
   ScrollView,
   RefreshControl,
   Alert,
+  Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { ScreenContainer } from "../../components/ui/ScreenContainer";
@@ -552,7 +553,7 @@ const styles = StyleSheet.create({
   caseRef: {
     fontSize: 11,
     fontWeight: "700",
-    fontFamily: "monospace",
+    fontFamily: Platform.OS === "web" ? "'JetBrains Mono', monospace" : "JetBrainsMono-Bold",
   },
   serviceId: {
     fontSize: 11,

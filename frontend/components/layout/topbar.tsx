@@ -51,6 +51,7 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
   const { user, role, switchRole, logout, force, setForce, lang, toggleLang } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { toast } = useToast();
+  const isHi = lang === "hi";
 
   const [searchOpen, setSearchOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -68,31 +69,106 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
   } | null>(null);
 
   const [unreadAlertCount, setUnreadAlertCount] = useState(0);
+  const [alertsDropdownOpen, setAlertsDropdownOpen] = useState(false);
+  const [recentAlerts, setRecentAlerts] = useState<any[]>([]);
+  const seenAlertIdsRef = React.useRef<Set<string>>(new Set());
+  const initialLoadRef = React.useRef<boolean>(true);
 
   useEffect(() => {
-    const updateCount = () => {
+    let isMounted = true;
+
+    const fetchAlerts = async () => {
       try {
+        let dbAlerts: any[] = [];
+        try {
+          const res = await fetch("/api/alerts");
+          if (res.ok) {
+            const data = await res.json();
+            if (data.alerts && Array.isArray(data.alerts)) {
+              dbAlerts = data.alerts;
+            }
+          }
+        } catch {}
+
+        let customAlerts: any[] = [];
         if (typeof window !== "undefined") {
           const customStr = localStorage.getItem("missionwell_custom_alerts");
           if (customStr) {
-            const alerts = JSON.parse(customStr);
-            const unread = alerts.filter((a: any) => !a.isRead).length;
-            setUnreadAlertCount(unread);
-          } else {
-            setUnreadAlertCount(0);
+            try {
+              customAlerts = JSON.parse(customStr);
+            } catch {}
           }
         }
+
+        // Active unresolved DB alerts
+        const activeDb = dbAlerts.filter((a: any) => a.status !== "RESOLVED");
+        const formattedDb = activeDb.map((a: any) => {
+          const rank = a.personnel?.rank || "Personnel";
+          const name = a.personnel?.name || a.personnelId;
+          const forceName = a.personnel?.force || "Army";
+          return {
+            id: a.id,
+            title: `🚨 High Risk: ${rank} ${name} (${forceName} - ${a.personnelId})`,
+            description: a.reason,
+            severity: a.severity || "HIGH",
+            time: a.createdAt ? new Date(a.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "Recent",
+            personnelId: a.personnelId,
+            isCritical: a.severity === "CRITICAL" || a.severity === "HIGH",
+          };
+        });
+
+        const unreadCustom = customAlerts.filter((a: any) => !a.isRead);
+        const formattedCustom = unreadCustom.map((a: any) => ({
+          id: a.id,
+          title: a.title,
+          description: a.description,
+          severity: a.priority === "Urgent" ? "CRITICAL" : "HIGH",
+          time: a.timestamp || "Recent",
+          personnelId: a.personnelId,
+          isCritical: a.priority === "Urgent" || a.priority === "High",
+        }));
+
+        const combined = [...formattedDb];
+        for (const c of formattedCustom) {
+          if (!combined.some((item) => item.id === c.id)) {
+            combined.push(c);
+          }
+        }
+
+        if (isMounted) {
+          setRecentAlerts(combined.slice(0, 6));
+          setUnreadAlertCount(combined.length);
+
+          // Check for brand new High-Risk alerts to notify Welfare Officer via instant toast
+          for (const alert of combined) {
+            if (alert.isCritical && !seenAlertIdsRef.current.has(alert.id)) {
+              seenAlertIdsRef.current.add(alert.id);
+              if (!initialLoadRef.current) {
+                toast({
+                  title: "🚨 CRITICAL WELFARE ALERT",
+                  description: `${alert.title} — ${alert.description}`,
+                  type: "error",
+                });
+              }
+            }
+          }
+          initialLoadRef.current = false;
+        }
       } catch (e) {
-        setUnreadAlertCount(0);
+        if (isMounted) setUnreadAlertCount(0);
       }
     };
 
-    updateCount();
-    window.addEventListener("missionwell_alerts_changed", updateCount);
+    fetchAlerts();
+    const interval = setInterval(fetchAlerts, 4000);
+    window.addEventListener("missionwell_alerts_changed", fetchAlerts);
+
     return () => {
-      window.removeEventListener("missionwell_alerts_changed", updateCount);
+      isMounted = false;
+      clearInterval(interval);
+      window.removeEventListener("missionwell_alerts_changed", fetchAlerts);
     };
-  }, []);
+  }, [toast]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -280,19 +356,90 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
             {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
 
-          {/* Alert Notifications Bell with Unread Badge */}
-          <Link
-            href="/alerts"
-            className="relative rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition-colors"
-            title="Welfare Alerts & Critical Triage Notifications"
-          >
-            <Bell className="h-4 w-4" />
-            {unreadAlertCount > 0 && (
-              <span className="absolute top-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-rose-500 text-[8px] font-bold text-white font-mono shadow-xs">
-                {unreadAlertCount}
-              </span>
+          {/* Alert Notifications Bell with Unread Badge & Interactive Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setAlertsDropdownOpen(!alertsDropdownOpen)}
+              className="relative rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition-colors focus:outline-hidden"
+              title="Welfare Alerts & Critical Triage Notifications"
+              aria-label="View welfare alerts"
+            >
+              <Bell className="h-4 w-4" />
+              {unreadAlertCount > 0 && (
+                <span className="absolute top-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-rose-600 text-[8px] font-bold text-white font-mono shadow-xs animate-pulse">
+                  {unreadAlertCount}
+                </span>
+              )}
+            </button>
+
+            {alertsDropdownOpen && (
+              <div
+                className="absolute right-0 mt-2 w-80 sm:w-96 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] p-3 shadow-2xl z-50 animate-in fade-in zoom-in-95"
+                onMouseLeave={() => setAlertsDropdownOpen(false)}
+              >
+                <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800 mb-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="flex h-2 w-2 rounded-full bg-rose-500 animate-ping" />
+                    <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+                      {isHi ? "सक्रिय कल्याण अलर्ट" : "Active Welfare Alerts"}
+                    </h4>
+                  </div>
+                  <span className="text-[10px] font-mono font-bold bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 px-1.5 py-0.5 rounded border border-rose-500/20">
+                    {unreadAlertCount} {isHi ? "लंबित" : "Pending"}
+                  </span>
+                </div>
+
+                {recentAlerts.length === 0 ? (
+                  <div className="py-6 text-center text-xs text-slate-500 dark:text-slate-400">
+                    {isHi ? "कोई नया अलर्ट नहीं" : "No active high-risk alerts at this time"}
+                  </div>
+                ) : (
+                  <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
+                    {recentAlerts.map((alert) => (
+                      <div
+                        key={alert.id}
+                        className="p-2.5 rounded-lg border border-rose-200/60 dark:border-rose-900/40 bg-rose-50/40 dark:bg-rose-950/20 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <p className="text-xs font-bold text-rose-600 dark:text-rose-400 leading-tight">
+                            {alert.title}
+                          </p>
+                          <span className="text-[9px] font-mono text-slate-500 shrink-0">{alert.time}</span>
+                        </div>
+                        <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-1 line-clamp-2 leading-relaxed">
+                          {alert.description}
+                        </p>
+                        <div className="flex items-center justify-between mt-2 pt-1 border-t border-rose-200/30 dark:border-rose-900/20">
+                          <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-rose-500">
+                            {alert.severity} PRIORITY
+                          </span>
+                          <Link
+                            href={alert.personnelId ? `/analytics/personnel/${alert.personnelId}` : "/alerts"}
+                            onClick={() => setAlertsDropdownOpen(false)}
+                            className="text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+                          >
+                            <span>{isHi ? "ट्राइएज करें" : "Triage Now"}</span>
+                            <span>→</span>
+                          </Link>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-center">
+                  <Link
+                    href="/alerts"
+                    onClick={() => setAlertsDropdownOpen(false)}
+                    className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 transition-colors inline-flex items-center gap-1"
+                  >
+                    <span>{isHi ? "चेतावनी केंद्र में सभी अलर्ट देखें" : "View All in Alert Center"}</span>
+                    <span>→</span>
+                  </Link>
+                </div>
+              </div>
             )}
-          </Link>
+          </div>
 
           {/* Subtle separator */}
           <div className="h-4 w-px bg-slate-200 dark:bg-slate-800 mx-0.5 hidden sm:block" />

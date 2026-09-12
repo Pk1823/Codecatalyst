@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
   actionText: {
     fontSize: 11,
     fontWeight: "800",
-    fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
+    fontFamily: Platform.OS === "web" ? "'JetBrains Mono', monospace" : "JetBrainsMono-Bold",
   },
   metaRow: {
     flexDirection: "row",
@@ -322,6 +322,6 @@ const styles = StyleSheet.create({
   },
   hashVal: {
     fontSize: 10,
-    fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
+    fontFamily: Platform.OS === "web" ? "'JetBrains Mono', monospace" : "JetBrainsMono-Regular",
   },
 });

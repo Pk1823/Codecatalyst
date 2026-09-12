@@ -21,6 +21,17 @@ export interface AuthResponse {
   error?: string;
 }
 
+export interface SignupData {
+  name: string;
+  email: string;
+  password?: string;
+  role?: UserRole;
+  force?: string;
+  serviceId?: string;
+  rank?: string;
+  department?: string;
+}
+
 export interface WellnessAssessmentInput {
   consecutiveFieldDays: string;
   dutyHours5d: string;
@@ -47,6 +58,17 @@ export interface WellnessAssessmentResult {
   shapDrivers: SHAPDriver[];
   recommendations: string[];
   isMaskingDetected?: boolean;
+  isOffline?: boolean;
+  syncedAt?: string;
+}
+
+export interface OfflineQueueItem {
+  id: string;
+  type: "ASSESSMENT" | "BUDDY_CHECK" | "DARBAR_REQUEST";
+  payload: any;
+  timestamp: string;
+  status: "QUEUED" | "SYNCING" | "SYNCED" | "FAILED";
+  retryCount: number;
 }
 
 export interface BuddyCheckStatus {

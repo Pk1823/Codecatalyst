@@ -108,9 +108,20 @@ export default function AssessmentScreen() {
               <Text style={[styles.resultRef, { color: colors.textMuted }]}>
                 Ref: {result.id} • {result.date}
               </Text>
-              <Text style={{ fontSize: 11, color: colors.success, marginTop: 2, fontWeight: "600" }}>
-                ✓ Synced Live with Welfare Officer Command Center
-              </Text>
+              {result.isOffline ? (
+                <View style={{ marginTop: 3 }}>
+                  <Text style={{ fontSize: 11, color: "#F59E0B", fontWeight: "800", letterSpacing: 0.2 }}>
+                    ⚡ 100% On-Device AI Assessment • Forward Post Vault Active
+                  </Text>
+                  <Text style={{ fontSize: 10, color: colors.textMuted, marginTop: 1 }}>
+                    Encrypted locally & queued for automatic sync upon base return
+                  </Text>
+                </View>
+              ) : (
+                <Text style={{ fontSize: 11, color: colors.success, marginTop: 2, fontWeight: "600" }}>
+                  ✓ Synced Live with Welfare Officer Command Center
+                </Text>
+              )}
             </View>
           </View>
 

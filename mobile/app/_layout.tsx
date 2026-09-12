@@ -1,15 +1,54 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 import { ThemeProvider } from "../contexts/ThemeContext";
 import { ForceProvider } from "../contexts/ForceContext";
 import { AuthProvider } from "../contexts/AuthContext";
 import { LanguageProvider } from "../contexts/LanguageContext";
+import { setupGlobalFonts } from "../services/fonts";
 
 const queryClient = new QueryClient();
 
+// Setup font styles for web and defaults
+setupGlobalFonts();
+
+// Prevent splash screen auto-hiding while fonts are loading
+SplashScreen.preventAutoHideAsync().catch(() => {});
+
 export default function RootLayout() {
+  const [fontsLoaded, fontError] = useFonts({
+    "Google Sans": require("../assets/fonts/GoogleSans-Regular.ttf"),
+    "Google Sans Bold": require("../assets/fonts/GoogleSans-Bold.ttf"),
+    "GoogleSans": require("../assets/fonts/GoogleSans-Regular.ttf"),
+    "GoogleSans-Regular": require("../assets/fonts/GoogleSans-Regular.ttf"),
+    "GoogleSans-Medium": require("../assets/fonts/GoogleSans-Medium.ttf"),
+    "GoogleSans-SemiBold": require("../assets/fonts/GoogleSans-SemiBold.ttf"),
+    "GoogleSans-Bold": require("../assets/fonts/GoogleSans-Bold.ttf"),
+    "Google-Sans": require("../assets/fonts/GoogleSans-Regular.ttf"),
+    "Google-Sans-Bold": require("../assets/fonts/GoogleSans-Bold.ttf"),
+    "JetBrains Mono": require("../assets/fonts/JetBrainsMono-Regular.ttf"),
+    "JetBrains Mono Bold": require("../assets/fonts/JetBrainsMono-Bold.ttf"),
+    "JetBrainsMono": require("../assets/fonts/JetBrainsMono-Regular.ttf"),
+    "JetBrainsMono-Regular": require("../assets/fonts/JetBrainsMono-Regular.ttf"),
+    "JetBrainsMono-Bold": require("../assets/fonts/JetBrainsMono-Bold.ttf"),
+    "JetBrains-Mono": require("../assets/fonts/JetBrainsMono-Regular.ttf"),
+    "JetBrains-Mono-Bold": require("../assets/fonts/JetBrainsMono-Bold.ttf"),
+  });
+
+  useEffect(() => {
+    setupGlobalFonts();
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync().catch(() => {});
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
@@ -20,6 +59,7 @@ export default function RootLayout() {
                 <Stack screenOptions={{ headerShown: false }}>
                   <Stack.Screen name="index" />
                   <Stack.Screen name="(auth)/login" />
+                  <Stack.Screen name="(auth)/signup" />
                   <Stack.Screen name="(tabs)" />
                   <Stack.Screen name="assessment" />
                   <Stack.Screen name="welfare-case" />

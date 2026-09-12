@@ -29,26 +29,41 @@ export default function AlertCenterPage() {
       let customAlerts: WelfareAlertItem[] = [];
       const customStr = localStorage.getItem("missionwell_custom_alerts");
       if (customStr) {
-        customAlerts = JSON.parse(customStr);
+        try {
+          customAlerts = JSON.parse(customStr);
+        } catch {}
       }
 
-      // Also attempt to fetch real system early warnings if available
+      // Fetch real system early warnings from database
       try {
         const res = await fetch("/api/alerts");
         if (res.ok) {
           const data = await res.json();
           if (data.alerts && Array.isArray(data.alerts)) {
-            const apiAlerts: WelfareAlertItem[] = data.alerts.map((a: any) => ({
-              id: a.id,
-              category: "Welfare" as NotificationCategory,
-              title: `Early Warning: ${a.severity}`,
-              description: a.reason || `${a.personnel?.rank || ""} ${a.personnel?.name || a.personnelId} flagged with early stress indicators.`,
-              timestamp: a.createdAt ? new Date(a.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Recent",
-              priority: a.severity === "HIGH" ? "Urgent" : a.severity === "MEDIUM" ? "High" : "Medium",
-              isRead: a.status === "RESOLVED",
-              personnelId: a.personnelId,
-              contributingIndicators: a.triggerCondition ? [a.triggerCondition] : undefined,
-            }));
+            const apiAlerts: WelfareAlertItem[] = data.alerts.map((a: any) => {
+              const rank = a.personnel?.rank || "Personnel";
+              const name = a.personnel?.name || a.personnelId;
+              const force = a.personnel?.force || "Army";
+              const isHigh = a.severity === "CRITICAL" || a.severity === "HIGH";
+
+              return {
+                id: a.id,
+                category: "Welfare" as NotificationCategory,
+                title: isHigh
+                  ? `🚨 HIGH RISK: ${rank} ${name} (${force} - ${a.personnelId})`
+                  : `Early Warning: ${a.severity}`,
+                description:
+                  a.reason ||
+                  `${rank} ${name} flagged with compounding operational fatigue and stress indicators.`,
+                timestamp: a.createdAt
+                  ? new Date(a.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+                  : "Recent",
+                priority: a.severity === "CRITICAL" ? "Urgent" : a.severity === "HIGH" ? "Urgent" : "High",
+                isRead: a.status === "RESOLVED",
+                personnelId: a.personnelId,
+                contributingIndicators: a.triggerCondition ? [a.triggerCondition] : undefined,
+              };
+            });
 
             // Merge avoiding duplicates
             const combined = [...customAlerts];
@@ -78,22 +93,38 @@ export default function AlertCenterPage() {
   useEffect(() => {
     loadAlerts();
 
+    // 4-second live polling for immediate real-time incoming high-risk soldier assessments
+    const interval = setInterval(() => {
+      loadAlerts();
+    }, 4000);
+
     const handleAlertsChanged = () => {
       loadAlerts();
     };
 
     window.addEventListener("missionwell_alerts_changed", handleAlertsChanged);
     return () => {
+      clearInterval(interval);
       window.removeEventListener("missionwell_alerts_changed", handleAlertsChanged);
     };
   }, []);
 
-  const handleMarkAsRead = (id: string) => {
+  const handleMarkAsRead = async (id: string) => {
     const updated = notifications.map((n) => (n.id === id ? { ...n, isRead: true } : n));
     setNotifications(updated);
+
     try {
       localStorage.setItem("missionwell_custom_alerts", JSON.stringify(updated));
       window.dispatchEvent(new Event("missionwell_alerts_changed"));
+    } catch {}
+
+    // Update database status if it's a DB alert
+    try {
+      await fetch("/api/alerts", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status: "RESOLVED" }),
+      });
     } catch {}
 
     toast({
@@ -102,13 +133,25 @@ export default function AlertCenterPage() {
     });
   };
 
-  const handleMarkAllAsRead = () => {
+  const handleMarkAllAsRead = async () => {
     const updated = notifications.map((n) => ({ ...n, isRead: true }));
     setNotifications(updated);
+
     try {
       localStorage.setItem("missionwell_custom_alerts", JSON.stringify(updated));
       window.dispatchEvent(new Event("missionwell_alerts_changed"));
     } catch {}
+
+    // Mark all in database
+    for (const n of notifications) {
+      try {
+        await fetch("/api/alerts", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: n.id, status: "RESOLVED" }),
+        });
+      } catch {}
+    }
 
     toast({
       title: isHi ? "सभी अलर्ट पढ़े हुए चिह्नित किए गए" : "All alerts marked as read",
@@ -211,68 +254,79 @@ export default function AlertCenterPage() {
             </p>
           </div>
         ) : (
-          filtered.map((item) => (
-            <div
-              key={item.id}
-              className={`p-4 rounded-xl border transition-colors flex items-start justify-between gap-4 ${
-                item.isRead
-                  ? "border-slate-200/80 bg-slate-50/60 dark:border-slate-800 dark:bg-slate-900/40 opacity-75"
-                  : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/80 shadow-xs ring-1 ring-blue-500/20"
-              }`}
-            >
-              <div className="space-y-1.5 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <RiskBadge
-                    level={item.priority === "Urgent" ? "URGENT REVIEW" : item.priority === "High" ? "HIGH" : "MODERATE"}
-                    size="sm"
-                  />
-                  <span className="text-xs font-semibold text-slate-900 dark:text-white">
-                    {item.title}
-                  </span>
-                  <span className="text-[10px] rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-1.5 py-0.5 font-mono border border-slate-200/60 dark:border-slate-700/60">
-                    {item.category}
-                  </span>
-                  <span className="text-[11px] text-slate-500 font-mono">• {item.timestamp}</span>
+          filtered.map((item) => {
+            const isUrgent = item.priority === "Urgent" || item.title.includes("HIGH RISK");
+            return (
+              <div
+                key={item.id}
+                className={`p-4 rounded-xl border transition-colors flex flex-col sm:flex-row sm:items-start justify-between gap-4 ${
+                  item.isRead
+                    ? "border-slate-200/80 bg-slate-50/60 dark:border-slate-800 dark:bg-slate-900/40 opacity-75"
+                    : isUrgent
+                    ? "border-rose-300 dark:border-rose-900/80 bg-rose-50/50 dark:bg-rose-950/20 shadow-sm ring-1 ring-rose-500/30"
+                    : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/80 shadow-xs ring-1 ring-blue-500/20"
+                }`}
+              >
+                <div className="space-y-1.5 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <RiskBadge
+                      level={isUrgent ? "URGENT REVIEW" : item.priority === "High" ? "HIGH" : "MODERATE"}
+                      size="sm"
+                    />
+                    <span className={`text-xs font-bold ${isUrgent ? "text-rose-600 dark:text-rose-400" : "text-slate-900 dark:text-white"}`}>
+                      {item.title}
+                    </span>
+                    <span className="text-[10px] rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-1.5 py-0.5 font-mono border border-slate-200/60 dark:border-slate-700/60">
+                      {item.category}
+                    </span>
+                    <span className="text-[11px] text-slate-500 font-mono">• {item.timestamp}</span>
+                  </div>
+
+                  <p className="text-xs text-slate-700 dark:text-slate-200 leading-relaxed font-medium">{item.description}</p>
+
+                  {item.contributingIndicators && item.contributingIndicators.length > 0 && (
+                    <div className="flex flex-wrap gap-1 pt-1">
+                      {item.contributingIndicators.map((ci, i) => (
+                        <span
+                          key={i}
+                          className="text-[10px] rounded bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-slate-700 dark:text-slate-300 font-mono border border-slate-200/60 dark:border-slate-700/60"
+                        >
+                          {ci}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
-                <p className="text-xs text-slate-600 dark:text-slate-300">{item.description}</p>
-
-                {item.contributingIndicators && item.contributingIndicators.length > 0 && (
-                  <div className="flex flex-wrap gap-1 pt-1">
-                    {item.contributingIndicators.map((ci, i) => (
-                      <span
-                        key={i}
-                        className="text-[10px] rounded bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-slate-700 dark:text-slate-300 font-mono border border-slate-200/60 dark:border-slate-700/60"
-                      >
-                        {ci}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div className="flex items-center gap-2 shrink-0">
-                {item.personnelId && (
+                <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
                   <Link
-                    href={`/analytics/personnel/${item.personnelId}`}
-                    className="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-medium hover:bg-blue-500 flex items-center gap-1 transition-colors shadow-xs"
+                    href="/welfare/cases"
+                    className="px-2.5 py-1.5 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs font-semibold hover:bg-amber-500/25 transition-colors shadow-xs"
                   >
-                    <span>{isHi ? "समीक्षा" : "Review"}</span>
-                    <ArrowRight className="h-3 w-3" />
+                    <span>{isHi ? "मामले" : "Cases"}</span>
                   </Link>
-                )}
-                {!item.isRead && (
-                  <button
-                    onClick={() => handleMarkAsRead(item.id)}
-                    className="p-1.5 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 dark:hover:text-white dark:hover:bg-slate-800 transition-colors"
-                    title={isHi ? "पढ़ा हुआ मार्क करें" : "Mark as read"}
-                  >
-                    <Check className="h-3.5 w-3.5" />
-                  </button>
-                )}
+                  {item.personnelId && (
+                    <Link
+                      href={`/analytics/personnel/${item.personnelId}`}
+                      className="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-500 flex items-center gap-1 transition-colors shadow-xs"
+                    >
+                      <span>{isHi ? "समीक्षा" : "Review"}</span>
+                      <ArrowRight className="h-3 w-3" />
+                    </Link>
+                  )}
+                  {!item.isRead && (
+                    <button
+                      onClick={() => handleMarkAsRead(item.id)}
+                      className="p-1.5 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 dark:hover:text-white dark:hover:bg-slate-800 transition-colors"
+                      title={isHi ? "पढ़ा हुआ मार्क करें" : "Mark as read"}
+                    >
+                      <Check className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>
