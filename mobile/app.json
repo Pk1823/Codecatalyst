@@ -1,7 +1,8 @@
 {
   "expo": {
     "name": "MissionWell AI",
-    "slug": "missionwell-ai-mobile",
+    "slug": "vikas",
+    "owner": "vikasgangwars-team",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
