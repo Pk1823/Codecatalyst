@@ -43,32 +43,38 @@ export const getCandidateBaseUrls = (): string[] => {
   // 1. On Web Browser: current page host is immediately reachable
   if (Platform.OS === "web" && typeof window !== "undefined" && window.location?.hostname) {
     const h = window.location.hostname;
-    urls.push(`http://${h}:3000/api`);
-    urls.push(`http://${h}:5001/api`);
+    if (h !== "localhost" && h !== "127.0.0.1") {
+      urls.push(`https://${h}/api`);
+      urls.push(`http://${h}:3000/api`);
+      urls.push(`http://${h}:5001/api`);
+    }
   }
+
+  // 2. Production Render cloud backend (Always reachable over internet & mobile data)
+  urls.push("https://missionwell-backend-vcqn.onrender.com/api");
 
   const hostIp = getHostIp();
 
-  // 2. Detected Host / LAN IP (Port 3000 Next.js Portal, Port 5001 Express)
+  // 3. Detected Host / LAN IP (Port 3000 Next.js Portal, Port 5001 Express)
   if (hostIp) {
     urls.push(`http://${hostIp}:3000/api`);
     urls.push(`http://${hostIp}:5001/api`);
   }
 
-  // 3. Direct LAN IP (Reachable across local Wi-Fi from real devices)
+  // 4. Direct LAN IP (Reachable across local Wi-Fi from real devices)
   urls.push("http://192.168.1.30:3000/api");
   urls.push("http://192.168.1.30:5001/api");
 
-  // 4. Localhost fallbacks
-  urls.push("http://localhost:3000/api");
+  // 5. Localhost fallbacks
   urls.push("http://localhost:5001/api");
-  urls.push("http://127.0.0.1:3000/api");
+  urls.push("http://localhost:3000/api");
   urls.push("http://127.0.0.1:5001/api");
+  urls.push("http://127.0.0.1:3000/api");
 
-  // 5. Android Emulator
+  // 6. Android Emulator
   if (Platform.OS === "android") {
-    urls.push("http://10.0.2.2:3000/api");
     urls.push("http://10.0.2.2:5001/api");
+    urls.push("http://10.0.2.2:3000/api");
   }
 
   return Array.from(new Set(urls));
@@ -78,14 +84,8 @@ export const getAiEngineUrl = (): string => {
   if (process.env.EXPO_PUBLIC_AI_ENGINE_URL) {
     return process.env.EXPO_PUBLIC_AI_ENGINE_URL.replace(/\/$/, "");
   }
-  if (Platform.OS === "web" && typeof window !== "undefined" && window.location?.hostname) {
-    return `http://${window.location.hostname}:8000`;
-  }
-  const hostIp = getHostIp();
-  if (hostIp) {
-    return `http://${hostIp}:8000`;
-  }
-  return "http://192.168.1.30:8000";
+  // Production AI Engine on Render
+  return "https://missionwell-ai-engine.onrender.com";
 };
 
 let cachedWorkingBaseUrl: string | null = null;
@@ -124,10 +124,13 @@ export class ApiClient {
     let lastError: any = null;
 
     for (const baseUrl of ordered) {
-      const url = `${baseUrl}${path}`;
+      const cleanBase = baseUrl.replace(/\/$/, "");
+      const normalizedBaseUrl = cleanBase.endsWith("/api") ? cleanBase : `${cleanBase}/api`;
+      const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+      const url = `${normalizedBaseUrl}${normalizedPath}`;
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 2500); // 2.5s fast timeout per candidate
+        const timeoutId = setTimeout(() => controller.abort(), 3500); // 3.5s timeout per candidate
 
         const res = await fetch(url, {
           ...options,

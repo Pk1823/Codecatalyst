@@ -49,23 +49,21 @@ export default function TabsLayout() {
         }}
       />
 
-      {/* 2. Welfare Authority (Shown for Welfare Officers/Admin) */}
+      {/* 2. Welfare Authority */}
       <Tabs.Screen
         name="welfare"
         options={{
           title: "Welfare",
           tabBarIcon: ({ color, size }) => <Stethoscope size={size - 2} color={color} />,
-          href: role === "WELFARE_OFFICER" || role === "ADMIN" ? undefined : null,
         }}
       />
 
-      {/* 3. Commander Authority (Shown for Commanders/Admin) */}
+      {/* 3. Commander Authority */}
       <Tabs.Screen
         name="commander"
         options={{
           title: "Command",
           tabBarIcon: ({ color, size }) => <Crown size={size - 2} color={color} />,
-          href: role === "COMMANDER" || role === "ADMIN" ? undefined : null,
         }}
       />
 

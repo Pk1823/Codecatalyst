@@ -30,6 +30,7 @@ import {
 } from "lucide-react-native";
 import { EVALUATOR_PERSONAS } from "../../services/auth";
 import { User } from "../../types";
+import { DownloadAppBanner } from "../../components/ui/DownloadAppBanner";
 
 export default function LoginScreen() {
   const { login, loginAsPersona, loginWithGoogle, isLoading } = useAuth();
@@ -45,11 +46,11 @@ export default function LoginScreen() {
 
   const routeForUser = (u?: User) => {
     if (u?.role === "WELFARE_OFFICER") {
-      router.replace("/welfare");
+      router.replace("/(tabs)/welfare");
     } else if (u?.role === "COMMANDER" || u?.role === "ADMIN") {
-      router.replace("/commander");
+      router.replace("/(tabs)/commander");
     } else {
-      router.replace("/personnel");
+      router.replace("/(tabs)/personnel");
     }
   };
 
@@ -128,6 +129,9 @@ export default function LoginScreen() {
           </Text>
         </View>
       </View>
+
+      {/* Download Android Mobile App Banner */}
+      <DownloadAppBanner style={styles.downloadBanner} />
 
       {/* Main Credentials Card */}
       <Card style={styles.loginCard} variant="glass">
@@ -616,5 +620,8 @@ const styles = StyleSheet.create({
   signupRedirectLink: {
     fontSize: 12,
     fontWeight: "800",
+  },
+  downloadBanner: {
+    marginBottom: 16,
   },
 });

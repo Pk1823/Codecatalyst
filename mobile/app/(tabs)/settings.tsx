@@ -14,6 +14,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { ForceId } from "../../constants/forces";
 import { MissionWellLogo } from "../../components/ui/MissionWellLogo";
 import { GoogleOAuthModal } from "../../components/auth/GoogleOAuthModal";
+import { DownloadAppBanner } from "../../components/ui/DownloadAppBanner";
 import {
   Shield,
   Moon,
@@ -57,6 +58,9 @@ export default function SettingsScreen() {
 
       {/* Army Forward Post & Offline Defense Sync Banner */}
       <TacticalOfflineBanner />
+
+      {/* Standalone Android App Download */}
+      <DownloadAppBanner style={{ marginBottom: 16 }} />
 
       {/* User Profile Card */}
       <Card variant="elevated" style={styles.sectionCard}>

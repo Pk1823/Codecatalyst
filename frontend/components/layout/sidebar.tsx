@@ -23,10 +23,12 @@ import {
   PhoneCall,
   Presentation,
   Smartphone,
+  Download,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers";
 import { BrandIcon } from "@/components/common/brand-logo";
+import { DownloadMobileModal } from "@/components/common/download-mobile-modal";
 
 interface SidebarProps {
   mobileOpen?: boolean;
@@ -37,6 +39,7 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   const pathname = usePathname();
   const { role, force, lang } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
+  const [downloadModalOpen, setDownloadModalOpen] = useState(false);
   const isHi = lang === "hi";
 
   const getNavigationForRole = () => {
@@ -192,7 +195,18 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
       <div className="p-3 border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-[#090D16] space-y-2">
         {!collapsed ? (
           <>
-
+            <button
+              onClick={() => setDownloadModalOpen(true)}
+              className="w-full rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 p-2 text-[11px] text-emerald-700 dark:text-emerald-300 flex items-center justify-between hover:bg-emerald-100 dark:hover:bg-emerald-950/60 transition-colors shadow-xs"
+            >
+              <div className="flex items-center gap-2">
+                <Smartphone className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <span className="font-bold">Download Mobile App</span>
+              </div>
+              <span className="px-1.5 py-0.2 rounded bg-emerald-600 text-white font-mono text-[9px] font-bold">
+                APK
+              </span>
+            </button>
 
             <div className="rounded-lg bg-white dark:bg-[#0F172A] border border-slate-200 dark:border-slate-800 p-2.5 text-[10px] text-slate-700 dark:text-slate-300 flex items-center gap-2.5 shadow-xs">
               <PhoneCall className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
@@ -214,11 +228,20 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
             </div>
           </>
         ) : (
-          <div className="flex justify-center" title="AI Engine Active (78.4% Acc) • 24x7 Helpline 14416">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-            </span>
+          <div className="flex flex-col items-center gap-2">
+            <button
+              onClick={() => setDownloadModalOpen(true)}
+              className="p-2 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 rounded-lg transition-colors"
+              title="Download Mobile App (APK)"
+            >
+              <Smartphone className="h-4 w-4" />
+            </button>
+            <div className="flex justify-center" title="AI Engine Active (78.4% Acc) • 24x7 Helpline 14416">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+              </span>
+            </div>
           </div>
         )}
       </div>
@@ -249,6 +272,11 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
           </div>
         </div>
       )}
+
+      <DownloadMobileModal
+        isOpen={downloadModalOpen}
+        onClose={() => setDownloadModalOpen(false)}
+      />
     </>
   );
 }

@@ -40,6 +40,7 @@ import { AuthService } from "@/services/auth.service";
 import { GlobalSearchModal } from "@/components/search/global-search-modal";
 import { ServerStatusPill } from "@/components/common/server-status-pill";
 import { GoogleAccountDatasetModal } from "@/components/profile/google-account-dataset-modal";
+import { DownloadMobileButton } from "@/components/common/download-mobile-modal";
 
 interface TopbarProps {
   onMobileMenuToggle: () => void;
@@ -334,7 +335,8 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
 
         {/* Right Side: Quick Controls, Role Switcher & User Profile */}
         <div className="flex items-center gap-1.5 sm:gap-2">
-
+          {/* Download Mobile App Button */}
+          <DownloadMobileButton />
 
           {/* Bilingual Language Switcher (EN / हिन्दी) */}
           <button

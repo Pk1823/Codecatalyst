@@ -44,6 +44,7 @@ import { FORCES_METADATA } from "@/lib/force-metadata";
 import { AuthService } from "@/services/auth.service";
 import { WebsiteQRCode } from "@/components/common/website-qr-code";
 import { BrandIcon } from "@/components/common/brand-logo";
+import { DownloadMobileModal } from "@/components/common/download-mobile-modal";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -854,89 +855,11 @@ export default function LandingPage() {
         </div>
       </footer>
 
-      {/* Dedicated Soldier Mobile App Assessment Modal */}
-      {isMobileModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-md rounded-2xl border border-slate-700 bg-[#0B132B] p-6 sm:p-7 shadow-2xl text-slate-100 space-y-5">
-            {/* Close Button */}
-            <button
-              onClick={() => setIsMobileModalOpen(false)}
-              className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-              aria-label="Close"
-            >
-              <X className="h-5 w-5" />
-            </button>
-
-            {/* Modal Header */}
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0">
-                <Smartphone className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-white">
-                  {isHi ? "सैनिक मूल्यांकन केवल मोबाइल ऐप पर" : "Soldier Assessment (Mobile App Only)"}
-                </h3>
-                <span className="text-[11px] font-mono text-emerald-400 font-semibold">
-                  DPDP Act 2023 • Non-Punitive ACR Isolation
-                </span>
-              </div>
-            </div>
-
-            {/* Privacy Notice Card */}
-            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-slate-300 leading-relaxed space-y-1.5">
-              <div className="flex items-center gap-1.5 font-semibold text-amber-400 text-xs">
-                <Shield className="h-3.5 w-3.5" />
-                <span>{isHi ? "गोपनीयता नीति दिशानिर्देश:" : "Statutory Privacy Mandate:"}</span>
-              </div>
-              <p className="text-[11px] text-slate-400">
-                {isHi
-                  ? "गृह मंत्रालय एवं रक्षा प्रोटोकॉल के तहत सैनिकों का दैनिक तनाव मूल्यांकन केवल उनके व्यक्तिगत मोबाइल ऐप पर ही हो सकता है, ताकि कार्यस्थल पर सहकर्मियों या कमांड द्वारा कोई निगरानी न हो सके।"
-                  : "Under Ministry of Home Affairs & DPDP directives, personnel self-assessments are strictly isolated to soldiers' personal mobile devices to guarantee biometric confidentiality and prevent command-level stigma."}
-              </p>
-            </div>
-
-            {/* QR Code Canvas */}
-            <div className="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
-              <div className="p-3 rounded-xl bg-white shadow-md">
-                <QRCodeSVG
-                  value="http://192.168.1.30:8081"
-                  size={140}
-                  level="H"
-                  fgColor="#0F172A"
-                  bgColor="#FFFFFF"
-                />
-              </div>
-              <div className="text-center space-y-0.5">
-                <p className="text-xs font-semibold text-slate-200">
-                  {isHi ? "फोन कैमरे अथवा Expo Go से स्कैन करें" : "Scan with Phone Camera or Expo Go"}
-                </p>
-                <p className="text-[10px] font-mono text-slate-400">
-                  exp://192.168.1.30:8081
-                </p>
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className="flex flex-col gap-2 pt-1">
-              <a
-                href="http://localhost:8081/personnel"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-md transition-all"
-              >
-                <ExternalLink className="h-3.5 w-3.5" />
-                <span>{isHi ? "मोबाइल वेब ऐप प्रीव्यू खोलें (Port 8081)" : "Open Mobile Web App Preview (Port 8081)"}</span>
-              </a>
-              <button
-                onClick={() => setIsMobileModalOpen(false)}
-                className="w-full py-2 px-4 rounded-xl border border-slate-800 text-slate-400 hover:text-slate-200 text-xs font-medium transition-colors"
-              >
-                {isHi ? "बंद करें" : "Close"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Dedicated Soldier Mobile App Download Modal */}
+      <DownloadMobileModal
+        isOpen={isMobileModalOpen}
+        onClose={() => setIsMobileModalOpen(false)}
+      />
     </div>
   );
 }
