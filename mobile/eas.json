@@ -14,7 +14,7 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "https://codecatalyst-backend.onrender.com/api"
+        "EXPO_PUBLIC_BACKEND_URL": "https://missionwell-backend-vcqn.onrender.com/api"
       }
     },
     "production": {
@@ -25,7 +25,7 @@
         "simulator": false
       },
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "https://codecatalyst-backend.onrender.com/api"
+        "EXPO_PUBLIC_BACKEND_URL": "https://missionwell-backend-vcqn.onrender.com/api"
       }
     }
   },
