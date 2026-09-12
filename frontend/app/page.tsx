@@ -899,7 +899,7 @@ export default function LandingPage() {
             <div className="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
               <div className="p-3 rounded-xl bg-white shadow-md">
                 <QRCodeSVG
-                  value="http://192.168.1.30:8082"
+                  value="http://192.168.1.30:8081"
                   size={140}
                   level="H"
                   fgColor="#0F172A"
@@ -911,7 +911,7 @@ export default function LandingPage() {
                   {isHi ? "फोन कैमरे अथवा Expo Go से स्कैन करें" : "Scan with Phone Camera or Expo Go"}
                 </p>
                 <p className="text-[10px] font-mono text-slate-400">
-                  exp://192.168.1.30:8082
+                  exp://192.168.1.30:8081
                 </p>
               </div>
             </div>
@@ -919,13 +919,13 @@ export default function LandingPage() {
             {/* Actions */}
             <div className="flex flex-col gap-2 pt-1">
               <a
-                href="http://localhost:8082/personnel"
+                href="http://localhost:8081/personnel"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-md transition-all"
               >
                 <ExternalLink className="h-3.5 w-3.5" />
-                <span>{isHi ? "मोबाइल वेब ऐप प्रीव्यू खोलें (Port 8082)" : "Open Mobile Web App Preview (Port 8082)"}</span>
+                <span>{isHi ? "मोबाइल वेब ऐप प्रीव्यू खोलें (Port 8081)" : "Open Mobile Web App Preview (Port 8081)"}</span>
               </a>
               <button
                 onClick={() => setIsMobileModalOpen(false)}

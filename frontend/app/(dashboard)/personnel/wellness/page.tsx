@@ -87,7 +87,7 @@ export default function WellnessAssessmentPage() {
                 {isHi ? "फोन कैमरे अथवा Expo Go से स्कैन करें" : "Scan to Launch Mobile App"}
               </span>
               <p className="text-[10px] font-mono text-slate-500 dark:text-slate-400">
-                exp://192.168.1.30:8082
+                exp://192.168.1.30:8081
               </p>
             </div>
           </div>
@@ -120,13 +120,13 @@ export default function WellnessAssessmentPage() {
 
             <div className="pt-2">
               <a
-                href="http://localhost:8082/personnel"
+                href="http://localhost:8081/personnel"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 py-2.5 px-4 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-md transition-all"
               >
                 <ExternalLink className="h-3.5 w-3.5" />
-                <span>{isHi ? "मोबाइल ऐप वेब प्रीव्यू खोलें (Port 8082)" : "Open Mobile Web Preview (Port 8082)"}</span>
+                <span>{isHi ? "मोबाइल ऐप वेब प्रीव्यू खोलें (Port 8081)" : "Open Mobile Web Preview (Port 8081)"}</span>
               </a>
             </div>
           </div>
