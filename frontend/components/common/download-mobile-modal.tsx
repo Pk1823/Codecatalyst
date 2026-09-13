@@ -4,17 +4,20 @@ import React, { useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import {
   Smartphone,
-  Download,
-  QrCode,
   X,
   ExternalLink,
   ShieldCheck,
   CheckCircle2,
   Copy,
   Check,
+  Globe,
 } from "lucide-react";
-import { APK_DOWNLOAD_URL } from "@/lib/download-constants";
-export { APK_DOWNLOAD_URL };
+import {
+  FIREBASE_APP_URL,
+  PERSONNEL_ASSESSMENT_URL,
+  APK_DOWNLOAD_URL,
+} from "@/lib/download-constants";
+export { APK_DOWNLOAD_URL, FIREBASE_APP_URL, PERSONNEL_ASSESSMENT_URL };
 
 interface DownloadMobileModalProps {
   isOpen: boolean;
@@ -28,7 +31,7 @@ export function DownloadMobileModal({ isOpen, onClose }: DownloadMobileModalProp
 
   const handleCopy = () => {
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(APK_DOWNLOAD_URL);
+      navigator.clipboard.writeText(PERSONNEL_ASSESSMENT_URL);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -54,14 +57,15 @@ export function DownloadMobileModal({ isOpen, onClose }: DownloadMobileModalProp
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-base font-bold text-white">
-                Download MissionWell Android App
+                MissionWell Soldier App
               </h3>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 border border-emerald-500/40 text-emerald-400">
-                APK LIVE
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center gap-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                FIREBASE LIVE
               </span>
             </div>
             <p className="text-xs text-slate-400">
-              Direct install for CAPF Jawans, Welfare Officers & Tactical Commanders
+              Direct access for CAPF Jawans & Personnel (Zero installation needed)
             </p>
           </div>
         </div>
@@ -70,19 +74,19 @@ export function DownloadMobileModal({ isOpen, onClose }: DownloadMobileModalProp
         <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-300 leading-relaxed space-y-1.5">
           <div className="flex items-center gap-1.5 font-semibold text-emerald-400 text-xs">
             <ShieldCheck className="h-4 w-4" />
-            <span>Standalone Defense Build (Render Live Connected)</span>
+            <span>Cloud Edge Deployment (Firebase PWA)</span>
           </div>
           <p className="text-[11px] text-slate-400">
-            No Expo Go app required. This APK is compiled specifically for field deployment and connects directly to the live secure Render cloud backend.
+            Personnel can directly complete confidential self-assessments, buddy-pair check-ins, and welfare logs in any phone or desktop browser. No APK or app store download required.
           </p>
         </div>
 
-        {/* QR Code & Download Box */}
+        {/* QR Code & Direct Launch Box */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center p-4 rounded-xl bg-slate-900 border border-slate-800">
           <div className="flex flex-col items-center justify-center space-y-2">
             <div className="p-3 rounded-xl bg-white shadow-md">
               <QRCodeSVG
-                value={APK_DOWNLOAD_URL}
+                value={PERSONNEL_ASSESSMENT_URL}
                 size={140}
                 level="H"
                 fgColor="#0F172A"
@@ -90,7 +94,7 @@ export function DownloadMobileModal({ isOpen, onClose }: DownloadMobileModalProp
               />
             </div>
             <span className="text-[11px] font-mono text-slate-400 text-center">
-              Scan with phone camera to download APK directly
+              Scan with phone camera to open assessment directly
             </span>
           </div>
 
@@ -98,36 +102,37 @@ export function DownloadMobileModal({ isOpen, onClose }: DownloadMobileModalProp
             <div className="space-y-1">
               <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-medium">
                 <CheckCircle2 className="h-3.5 w-3.5" />
-                <span>Instant Android Installation</span>
+                <span>Instant Browser Launch (No APK)</span>
               </div>
               <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-medium">
                 <CheckCircle2 className="h-3.5 w-3.5" />
-                <span>Confidential DPDP Self-Check</span>
+                <span>Confidential DPDP Assessment</span>
               </div>
               <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-medium">
                 <CheckCircle2 className="h-3.5 w-3.5" />
-                <span>Offline Forward Post Sync</span>
+                <span>Real-time Secure Cloud Sync</span>
               </div>
             </div>
 
             <div className="flex flex-col gap-2">
               <a
-                href="/missionwell.apk"
-                download="missionwell.apk"
+                href={PERSONNEL_ASSESSMENT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-900/30 transition-all cursor-pointer"
               >
-                <Download className="h-4 w-4" />
-                <span>Download APK File (Direct) ↓</span>
+                <ExternalLink className="h-4 w-4" />
+                <span>Open Soldier Assessment (Live) ↗</span>
               </a>
 
               <a
-                href={APK_DOWNLOAD_URL}
+                href={FIREBASE_APP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg border border-emerald-500/40 bg-emerald-950/30 hover:bg-emerald-900/40 text-emerald-300 text-xs font-semibold transition-colors"
               >
-                <ExternalLink className="h-3.5 w-3.5" />
-                <span>Cloud CDN Mirror (Expo EAS)</span>
+                <Globe className="h-3.5 w-3.5" />
+                <span>Open Mobile App Home ↗</span>
               </a>
 
               <button
@@ -142,7 +147,7 @@ export function DownloadMobileModal({ isOpen, onClose }: DownloadMobileModalProp
                 ) : (
                   <>
                     <Copy className="h-3 w-3 text-slate-400" />
-                    <span>Copy APK Link</span>
+                    <span>Copy Assessment Link</span>
                   </>
                 )}
               </button>
@@ -150,16 +155,18 @@ export function DownloadMobileModal({ isOpen, onClose }: DownloadMobileModalProp
           </div>
         </div>
 
-        {/* Alternative Web App Preview */}
+        {/* Direct URL Footer */}
         <div className="flex items-center justify-between pt-1 border-t border-slate-800 text-xs text-slate-400">
-          <span>Prefer testing in browser?</span>
+          <span className="font-mono text-[11px] truncate text-slate-400">
+            missionwell-ai-capf.web.app/personnel
+          </span>
           <a
-            href="http://localhost:8081"
+            href={PERSONNEL_ASSESSMENT_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-blue-400 hover:text-blue-300 font-medium"
+            className="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 font-medium shrink-0 ml-2"
           >
-            <span>Open Web App Preview</span>
+            <span>Launch Web App</span>
             <ExternalLink className="h-3 w-3" />
           </a>
         </div>
@@ -176,12 +183,12 @@ export function DownloadMobileButton({ className = "" }: { className?: string })
       <button
         onClick={() => setOpen(true)}
         className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-600/15 hover:bg-emerald-600/25 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold transition-all shadow-xs ${className}`}
-        title="Download Android APK"
+        title="Open Soldier Assessment (Live on Firebase)"
       >
         <Smartphone className="h-4 w-4" />
-        <span>Download App</span>
-        <span className="hidden sm:inline px-1.5 py-0.2 rounded bg-emerald-500 text-white font-mono text-[9px] font-bold">
-          APK
+        <span>Soldier App</span>
+        <span className="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded bg-emerald-500 text-white font-mono text-[9px] font-bold">
+          LIVE
         </span>
       </button>
 

@@ -208,13 +208,16 @@ export default function LandingPage() {
             </button>
 
             {/* Soldier Mobile App Trigger */}
-            <button
-              onClick={() => setIsMobileModalOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold shadow-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            <a
+              href="https://missionwell-ai-capf.web.app/personnel"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/40 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold shadow-xs hover:bg-emerald-100 dark:hover:bg-emerald-950/70 transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
-              <Smartphone className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-              <span>{isHi ? "सैनिक मोबाइल ऐप" : "Soldier App"}</span>
-            </button>
+              <Smartphone className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+              <span>{isHi ? "सैनिक मूल्यांकन" : "Soldier App"}</span>
+              <span className="px-1 py-0.2 rounded bg-emerald-600 text-white font-mono text-[8px] font-bold uppercase">Live</span>
+            </a>
 
             {/* Officer & Command Login */}
             <Link
@@ -274,13 +277,16 @@ export default function LandingPage() {
               <span>{isHi ? "कमांड व अधिकारी पोर्टल" : "Command & Officer Portal"}</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
-            <button
-              onClick={() => setIsMobileModalOpen(true)}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 px-6 sm:px-7 py-3.5 text-sm font-semibold text-slate-100 shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all"
+            <a
+              href="https://missionwell-ai-capf.web.app/personnel"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-6 sm:px-7 py-3.5 text-sm font-semibold shadow-lg shadow-emerald-900/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
             >
-              <Smartphone className="h-4.5 w-4.5 text-emerald-400" />
-              <span>{isHi ? "सैनिक मूल्यांकन (मोबाइल ऐप)" : "Soldier Assessment (Mobile App)"}</span>
-            </button>
+              <Smartphone className="h-4.5 w-4.5 text-white" />
+              <span>{isHi ? "सैनिक मूल्यांकन शुरू करें (लाइव)" : "Take Soldier Assessment (Live) ↗"}</span>
+            </a>
+
             <a
               href="#simulator"
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 backdrop-blur-md hover:bg-slate-100 dark:hover:bg-slate-800 px-5 py-3.5 text-sm font-medium text-slate-800 dark:text-slate-200 transition-all shadow-xs"

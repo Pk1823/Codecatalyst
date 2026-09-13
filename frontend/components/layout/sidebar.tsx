@@ -197,14 +197,14 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
           <>
             <button
               onClick={() => setDownloadModalOpen(true)}
-              className="w-full rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 p-2 text-[11px] text-emerald-700 dark:text-emerald-300 flex items-center justify-between hover:bg-emerald-100 dark:hover:bg-emerald-950/60 transition-colors shadow-xs"
+              className="w-full rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 p-2 text-[11px] text-emerald-700 dark:text-emerald-300 flex items-center justify-between hover:bg-emerald-100 dark:hover:bg-emerald-950/60 transition-colors shadow-xs cursor-pointer"
             >
               <div className="flex items-center gap-2">
                 <Smartphone className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                <span className="font-bold">Download Mobile App</span>
+                <span className="font-bold">Soldier Assessment</span>
               </div>
-              <span className="px-1.5 py-0.2 rounded bg-emerald-600 text-white font-mono text-[9px] font-bold">
-                APK
+              <span className="px-1.5 py-0.2 rounded bg-emerald-600 text-white font-mono text-[9px] font-bold flex items-center gap-0.5">
+                LIVE
               </span>
             </button>
 
@@ -231,8 +231,8 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
           <div className="flex flex-col items-center gap-2">
             <button
               onClick={() => setDownloadModalOpen(true)}
-              className="p-2 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 rounded-lg transition-colors"
-              title="Download Mobile App (APK)"
+              className="p-2 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 rounded-lg transition-colors cursor-pointer"
+              title="Soldier Assessment (Live on Firebase)"
             >
               <Smartphone className="h-4 w-4" />
             </button>
