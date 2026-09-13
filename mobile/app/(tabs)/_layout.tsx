@@ -1,4 +1,5 @@
 import React from "react";
+import { Platform } from "react-native";
 import { Tabs } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useAuth } from "../../contexts/AuthContext";
@@ -24,19 +25,27 @@ export default function TabsLayout() {
           backgroundColor: colors.tabBarBg,
           borderTopColor: colors.tabBarBorder,
           borderTopWidth: 1,
-          height: 60,
-          paddingBottom: 8,
+          height: Platform.OS === "web" ? 64 : 60,
+          paddingBottom: Platform.OS === "web" ? 10 : 6,
           paddingTop: 6,
-          maxWidth: 440,
+          paddingHorizontal: 12,
           width: "100%",
+          maxWidth: 440,
           alignSelf: "center",
+        },
+        tabBarItemStyle: {
+          paddingHorizontal: 0,
+          marginHorizontal: 0,
+          justifyContent: "center",
+          alignItems: "center",
         },
         tabBarActiveTintColor: colors.tabBarActive,
         tabBarInactiveTintColor: colors.tabBarInactive,
         tabBarLabelStyle: {
-          fontSize: 10,
+          fontSize: 9.5,
           fontWeight: "700",
           fontFamily: "GoogleSans-Bold",
+          letterSpacing: -0.2,
         },
       }}
     >

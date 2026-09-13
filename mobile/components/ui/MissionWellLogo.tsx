@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, ViewStyle, Platform } from "react-native";
+import { View, Text, StyleSheet, ViewStyle, Image, ImageStyle, Platform } from "react-native";
 import Svg, {
   Defs,
   LinearGradient,
@@ -19,6 +19,7 @@ interface LogoProps {
   showText?: boolean;
   showSubtitle?: boolean;
   showForceBadge?: boolean;
+  useImage?: boolean;
   style?: ViewStyle;
 }
 
@@ -198,11 +199,54 @@ export const MissionWellIcon: React.FC<{
   );
 };
 
+export interface LogoImageProps {
+  size?: number | "xs" | "sm" | "md" | "lg" | "xl";
+  style?: ImageStyle;
+  containerStyle?: ViewStyle;
+}
+
+/**
+ * High-definition image-based MissionWell AI Logo.
+ * Uses resizeMode: "contain" and objectFit: "contain" to guarantee
+ * zero cropping, zero stretching, and perfect center alignment.
+ */
+export const MissionWellLogoImage: React.FC<LogoImageProps> = ({
+  size = "md",
+  style,
+  containerStyle,
+}) => {
+  const dim = typeof size === "number" ? size : dimMap[size] || 42;
+
+  return (
+    <View style={[styles.imageContainer, { width: dim, height: dim }, containerStyle]}>
+      <Image
+        source={require("../../assets/logo.png")}
+        style={[
+          styles.logoImage,
+          {
+            width: dim,
+            height: dim,
+            ...Platform.select({
+              web: {
+                objectFit: "contain" as any,
+              },
+            }),
+          },
+          style,
+        ]}
+        resizeMode="contain"
+        accessibilityLabel="MissionWell AI Logo"
+      />
+    </View>
+  );
+};
+
 export const MissionWellLogo: React.FC<LogoProps> = ({
   size = "md",
   showText = true,
   showSubtitle = true,
   showForceBadge = false,
+  useImage = false,
   style,
 }) => {
   const { colors } = useTheme();
@@ -215,7 +259,11 @@ export const MissionWellLogo: React.FC<LogoProps> = ({
 
   return (
     <View style={[styles.container, style]}>
-      <MissionWellIcon size={size} />
+      {useImage ? (
+        <MissionWellLogoImage size={size} />
+      ) : (
+        <MissionWellIcon size={size} />
+      )}
 
       {showText && (
         <View style={styles.textContainer}>
@@ -243,6 +291,9 @@ export const MissionWellLogo: React.FC<LogoProps> = ({
                 AI
               </Text>
             </Text>
+
+            {/* Blue Status Dot (exact web match) */}
+            <View style={styles.blueDot} />
 
             {showForceBadge && (
               <View
@@ -281,8 +332,8 @@ export const MissionWellLogo: React.FC<LogoProps> = ({
               ]}
             >
               {isHi
-                ? "सशस्त्र बल कल्याण खुफिया • गृह मंत्रालय"
-                : "Welfare Intelligence • Ministry of Home Affairs"}
+                ? "गृह मंत्रालय • सीएपीएफ महानिदेशालय"
+                : "Ministry of Home Affairs • CAPF Directorate"}
             </Text>
           )}
         </View>
@@ -347,6 +398,12 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     fontFamily: Platform.OS === "web" ? "'JetBrains Mono', monospace" : "JetBrainsMono-Bold",
   },
+  blueDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: "#3B82F6",
+  },
   badge: {
     paddingHorizontal: 7,
     paddingVertical: 1.5,
@@ -363,6 +420,14 @@ const styles = StyleSheet.create({
     letterSpacing: 0.4,
     textTransform: "uppercase",
     marginTop: 1.5,
+  },
+  imageContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
+  },
+  logoImage: {
+    resizeMode: "contain",
   },
 });
 

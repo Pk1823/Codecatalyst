@@ -1,3 +1,4 @@
+import "react-native-gesture-handler";
 import React, { useEffect } from "react";
 import { View, StyleSheet, Platform } from "react-native";
 import { Stack } from "expo-router";
@@ -17,7 +18,11 @@ const queryClient = new QueryClient();
 setupGlobalFonts();
 
 // Prevent splash screen auto-hiding while fonts are loading
-SplashScreen.preventAutoHideAsync().catch(() => {});
+try {
+  SplashScreen.preventAutoHideAsync().catch(() => {});
+} catch {
+  // Ignore native splash screen errors
+}
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({

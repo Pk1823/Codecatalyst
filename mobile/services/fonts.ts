@@ -155,12 +155,12 @@ export function setupGlobalFonts() {
           }
           #root {
             width: 100% !important;
-            max-width: 430px !important;
+            max-width: 436px !important;
             height: 94vh !important;
-            max-height: 900px !important;
+            max-height: 920px !important;
             min-height: 680px !important;
             margin: auto !important;
-            border-radius: 46px !important;
+            border-radius: 36px !important;
             overflow: hidden !important;
             box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85),
                         0 0 0 8px #1e293b,
@@ -179,12 +179,26 @@ export function setupGlobalFonts() {
             left: 50%;
             transform: translateX(-50%);
             width: 105px;
-            height: 24px;
+            height: 22px;
             background-color: #000000;
             border-radius: 20px;
             z-index: 99999;
             pointer-events: none;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+          }
+          /* Realistic Home Indicator Pill at bottom */
+          #root::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 125px;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.35);
+            border-radius: 4px;
+            z-index: 99999;
+            pointer-events: none;
           }
         }
         @media (max-width: 500px) {
@@ -202,64 +216,6 @@ export function setupGlobalFonts() {
     }
   }
 
-  // 2. React Native Component Rendering Engine: Patch Text.render
-  try {
-    const textTarget = Text as any;
-    if (textTarget && typeof textTarget.render === "function" && !textTarget.render.__mwPatched) {
-      const origTextRender = textTarget.render;
-      function patchedTextRender(this: any, props: any, ref: any) {
-        const fontName = resolveTypographyFont(props && props.style);
-        const enhancedProps = {
-          ...props,
-          style: [{ fontFamily: fontName }, props && props.style],
-        };
-        return origTextRender.call(this, enhancedProps, ref);
-      }
-      patchedTextRender.__mwPatched = true;
-      textTarget.render = patchedTextRender;
-    }
-  } catch {
-    // Ignore if environment prevents monkey patching
-  }
-
-  // 3. React Native Component Rendering Engine: Patch TextInput.render
-  try {
-    const inputTarget = TextInput as any;
-    if (inputTarget && typeof inputTarget.render === "function" && !inputTarget.render.__mwPatched) {
-      const origInputRender = inputTarget.render;
-      function patchedInputRender(this: any, props: any, ref: any) {
-        const fontName = resolveTypographyFont(props && props.style);
-        const enhancedProps = {
-          ...props,
-          style: [{ fontFamily: fontName }, props && props.style],
-        };
-        return origInputRender.call(this, enhancedProps, ref);
-      }
-      patchedInputRender.__mwPatched = true;
-      inputTarget.render = patchedInputRender;
-    }
-  } catch {
-    // Ignore if environment prevents monkey patching
-  }
-
-  // 4. DefaultProps Fallback for Native Components
-  try {
-    if ((Text as any).defaultProps == null) {
-      (Text as any).defaultProps = {};
-    }
-    (Text as any).defaultProps.style = {
-      fontFamily: "GoogleSans-Regular",
-      ...((Text as any).defaultProps.style || {}),
-    };
-
-    if ((TextInput as any).defaultProps == null) {
-      (TextInput as any).defaultProps = {};
-    }
-    (TextInput as any).defaultProps.style = {
-      fontFamily: "GoogleSans-Regular",
-      ...((TextInput as any).defaultProps.style || {}),
-    };
-  } catch {
-    // Ignore
-  }
+  // 2. Native platforms: rely on expo-font loaded families and style tokens.
+  // We avoid monkeypatching Text.render or defaultProps which break on React Native 0.74 / React 18 forwardRef components.
 }

@@ -79,6 +79,7 @@ export const Header: React.FC<HeaderProps> = ({ title, subtitle, showForceBadge 
                   AI
                 </Text>
               </Text>
+              <View style={styles.blueDot} />
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={() => setForceModalOpen(true)}
@@ -89,6 +90,9 @@ export const Header: React.FC<HeaderProps> = ({ title, subtitle, showForceBadge 
                 </Text>
               </TouchableOpacity>
             </View>
+            <Text style={[styles.headerSubtitleText, { color: colors.textMuted }]}>
+              {lang === "hi" ? "गृह मंत्रालय • सीएपीएफ महानिदेशालय" : "Ministry of Home Affairs • CAPF Directorate"}
+            </Text>
           </View>
         </View>
 
@@ -334,6 +338,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "900",
     letterSpacing: -0.3,
+  },
+  blueDot: {
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
+    backgroundColor: "#3B82F6",
+  },
+  headerSubtitleText: {
+    fontSize: 8.5,
+    fontWeight: "700",
+    letterSpacing: 0.4,
+    textTransform: "uppercase",
+    marginTop: 1.5,
   },
   forceTag: {
     flexDirection: "row",

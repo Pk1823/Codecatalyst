@@ -12,9 +12,9 @@ export default function IndexScreen() {
   useEffect(() => {
     if (!isLoading) {
       if (isAuthenticated && user) {
-        router.replace("/personnel");
+        router.replace("/(tabs)/personnel" as any);
       } else {
-        router.replace("/login");
+        router.replace("/(auth)/login" as any);
       }
     }
   }, [isAuthenticated, isLoading, user, router]);

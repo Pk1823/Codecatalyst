@@ -14,7 +14,8 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "https://missionwell-backend-vcqn.onrender.com/api"
+        "EXPO_PUBLIC_BACKEND_URL": "https://missionwell-backend-vcqn.onrender.com/api",
+        "EXPO_PUBLIC_AI_ENGINE_URL": "https://missionwell-ai-engine.onrender.com"
       }
     },
     "production": {
@@ -25,7 +26,8 @@
         "simulator": false
       },
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "https://missionwell-backend-vcqn.onrender.com/api"
+        "EXPO_PUBLIC_BACKEND_URL": "https://missionwell-backend-vcqn.onrender.com/api",
+        "EXPO_PUBLIC_AI_ENGINE_URL": "https://missionwell-ai-engine.onrender.com"
       }
     }
   },

@@ -5,13 +5,15 @@
 *Ministry of Home Affairs (Police II Division) • Central Armed Police Forces (CRPF, BSF, ITBP, CISF, SSB, AR)*
 
 [![Next.js 16](https://img.shields.io/badge/Next.js-16.3.4-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![React 19](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
+[![React Native](https://img.shields.io/badge/React_Native-0.74-61DAFB?style=for-the-badge&logo=react)](https://reactnative.dev/)
+[![Expo SDK 51](https://img.shields.io/badge/Expo-SDK_51-000020?style=for-the-badge&logo=expo)](https://expo.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Express.js](https://img.shields.io/badge/Express.js-4.21-lightgrey?style=for-the-badge&logo=express)](https://expressjs.com/)
 [![Prisma ORM](https://img.shields.io/badge/Prisma-6.4-2D3748?style=for-the-badge&logo=prisma)](https://www.prisma.io/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![LightGBM](https://img.shields.io/badge/Model-LightGBM_AI-brightgreen?style=for-the-badge)](https://lightgbm.readthedocs.io/)
-[![Google OAuth 2.0](https://img.shields.io/badge/Auth-Google_OAuth_2.0-4285F4?style=for-the-badge&logo=google)](https://developers.google.com/identity)
+[![Firebase Hosting](https://img.shields.io/badge/Firebase-Hosting-FFCA28?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
+[![Render Cloud](https://img.shields.io/badge/Render-Deployed-46E3B7?style=for-the-badge&logo=render)](https://render.com/)
 [![DPDP Act 2023](https://img.shields.io/badge/Compliance-DPDP_Act_2023-emerald?style=for-the-badge)](https://www.meity.gov.in/)
 [![Tests Passing](https://img.shields.io/badge/Tests-23%2F23_Passed-success?style=for-the-badge)](tests/run-tests.js)
 
@@ -27,6 +29,7 @@
 ## Table of Contents
 - [Executive Summary](#executive-summary)
 - [System Architecture](#system-architecture)
+- [Technology Stack (Full Defense Tech Stack)](#technology-stack-full-defense-tech-stack)
 - [Key Feature Highlights](#key-feature-highlights)
   - [1. Google OAuth 2.0 & Identity Chooser](#1-google-oauth-20--identity-chooser)
   - [2. Dual Appearance Engine (Light & Dark Themes)](#2-dual-appearance-engine-light--dark-themes)
@@ -85,6 +88,90 @@ Traditional armed forces welfare workflows are strictly reactive, waiting for ac
                         |  - Audit Log Trail   |    |  Port: 8000          |
                         +----------------------+    +----------------------+
 ```
+
+---
+
+## Technology Stack (Full Defense Tech Stack)
+
+MissionWell AI is built with an authentic, defense-grade, multi-tier distributed architecture engineered for high availability, zero latency, end-to-end encryption, and offline-first edge deployment across remote operational theaters.
+
+```
++========================================================================================================+
+|                                    MISSIONWELL AI DEFENSE TECH STACK                                   |
++========================================================================================================+
+| 📱 MOBILE APPLICATION       | React Native 0.74 • Expo SDK 51 • Expo Router v3 • Reanimated 3.10       |
+| 🖥️ COMMAND PORTAL (WEB)     | Next.js 16.3 (Turbopack) • React 19 • Tailwind CSS 3.4 • Lucide          |
+| ⚙️ BACKEND API ENGINE       | Node.js 20 LTS • Express 4.21 • TypeScript 5.x • Prisma ORM 6.4          |
+| 🧠 PREDICTIVE AI ENGINE     | Python 3.11 • FastAPI • LightGBM (Anti-Masking) • SHAP Explainability   |
+| 🛡️ PRIVACY & COMPLIANCE     | DPDP Act 2023 Shield • Zero ACR Career Prejudice • Argon2/Bcrypt/Jose     |
+| ☁️ CLOUD & DEVOPS INFRA     | Firebase Hosting • Render Cloud • Vercel • Docker • GitHub Actions CI/CD  |
++========================================================================================================+
+```
+
+### 1. Mobile & Edge Tier (Jawan & Field Personnel App)
+* **Core Framework**: **React Native 0.74.5** with **Expo SDK 51** (Cross-Platform Android APK & Web).
+* **Navigation**: **Expo Router v3** (File-based declarative routing, deep-linking, tab bars, modal stacks).
+* **UI & Aesthetics**:
+  * Military glassmorphic defense theme with tailored HSL color tokens (`#0B132B`, `#1C2541`, `#3B82F6`).
+  * Custom safe area insets and curved bezel alignment (100% viewport fit, zero edge cutoff).
+  * **Typography**: Google Sans (Regular, Medium, SemiBold, Bold) & JetBrains Mono (Bold) for tactical telemetry.
+* **Icons & Assets**: Lucide React Native, React Native SVG 15.2, custom defense crests with contain-mode scaling.
+* **Motion & Touch**: React Native Reanimated 3.10, React Native Gesture Handler 2.16, Expo Haptics.
+* **State & Data**: TanStack React Query v5, Expo SecureStore (Hardware-backed encrypted token vault).
+* **Packaging & Delivery**:
+  * **Android APK**: Expo Application Services (EAS Build) with standalone defense profile.
+  * **Web Static PWA**: `npx expo export -p web` (Static HTML/CSS/JS with full offline service worker support).
+  * **Firebase Hosting**: Native `firebase.json` with SPA routing rules and CDN edge caching.
+
+### 2. Command & Officer Web Portal
+* **Framework**: **Next.js 16.3.4** utilizing React Server Components (RSC) and Turbopack bundler.
+* **UI Library**: **React 19.0**.
+* **Styling**: **Tailwind CSS 3.4** with customized CSS variables, tactical military dark theme and high-contrast daylight theme.
+* **Identity & Authentication**:
+  * **Google OAuth 2.0 (RFC 6749)** with One-Tap identity chooser and Google Identity Services SDK.
+  * 1-Click evaluation personas for doctors, commanding officers, and system administrators.
+* **Data Visualization**: Dynamic unit-wise operational stress heatmaps, fatigue velocity gauges, and SHAP driver charts.
+* **Report Generation**: Printable HTML/PDF medical dossiers with Ministry of Home Affairs watermarks and formatted CSV exports.
+
+### 3. Backend REST API Microservice
+* **Runtime**: **Node.js 20.18.0 LTS**.
+* **Framework**: **Express.js 4.21** written in strict-mode **TypeScript 5.x**.
+* **Database & ORM**: **Prisma ORM 6.4** with automatic migrations and type-safe client.
+  * **Development**: SQLite (`dev.db`) for lightweight, zero-dependency local hackathon evaluation.
+  * **Production**: PostgreSQL with connection pooling.
+* **Security & Auth**:
+  * **Jose (JWT/JWS)** for cryptographic session management with stateless Bearer tokens and HttpOnly cookies.
+  * **Bcrypt** for military-grade password hashing (12 salt rounds).
+  * **CORS & Helmet** for hardened HTTP security headers.
+* **Audit Trail**: Immutable cryptographic audit logs recording every access to sensitive personnel health records.
+
+### 4. Machine Learning & Predictive AI Engine
+* **Runtime & Server**: **Python 3.11** with **FastAPI** and **Uvicorn** high-performance ASGI server.
+* **Classification Model**: **LightGBM (Light Gradient Boosting Machine)**:
+  * Trained to detect subtle burnout markers, behavioral changes, and combat fatigue.
+  * **Anti-Masking Algorithm**: Detects stoic underreporting ("I am fine" masking) common among disciplined soldiers.
+* **Explainable AI (XAI)**: **SHAP (SHapley Additive exPlanations)** with `TreeExplainer`:
+  * Computes exact mathematical feature contributions for every prediction.
+  * Highlights top actionable risk drivers (e.g., consecutive sleepless night shifts, extreme high-altitude exposure, prolonged leave denial).
+* **Data Science Stack**: Scikit-Learn, NumPy, Pandas, Joblib.
+
+### 5. Cloud Infrastructure, Hosting & DevOps
+* **Firebase Hosting**:
+  * Deployed via Google Firebase CDN (`firebase.json`, `mobile/dist`).
+  * Instant global SSL, SPA rewrites, and fast edge delivery.
+* **Cloud Platform (Render)**:
+  * Declared via infrastructure-as-code [`render.yaml`](render.yaml) blueprint:
+    * `missionwell-backend`: Node.js Express API.
+    * `missionwell-ai-engine`: Python FastAPI ML Service.
+    * `missionwell-frontend`: Next.js Web Portal.
+* **CI/CD Automation**:
+  * **GitHub Actions** ([`.github/workflows/firebase-hosting.yml`](.github/workflows/firebase-hosting.yml)) for automated build, lint, and deploy on push to `main`.
+* **Containerization**: Full **Docker & Docker Compose** orchestration ([`docker-compose.yml`](docker-compose.yml)).
+* **Live Evaluator Tunnel**: Integrated Cloudflare / Localtunnel HTTPS gateway for instantaneous external judge review.
+
+### 6. Statutory Compliance & Defense Privacy
+* **DPDP Act 2023 Shield**: Strict non-punitive privacy architecture. Commanders only receive anonymized, unit-level aggregate heatmaps; raw individual questionnaires and therapy notes are restricted to medical officers.
+* **Zero ACR/APAR Career Prejudice**: Cryptographic guarantee that seeking stress support will never impact military service records or promotions.
 
 ---
 

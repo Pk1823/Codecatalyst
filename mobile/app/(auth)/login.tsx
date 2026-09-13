@@ -13,6 +13,7 @@ import { useRouter } from "expo-router";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useForce } from "../../contexts/ForceContext";
+import { useLanguage } from "../../contexts/LanguageContext";
 import { Card } from "../../components/ui/Card";
 import { Button } from "../../components/ui/Button";
 import { Badge } from "../../components/ui/Badge";
@@ -36,6 +37,7 @@ export default function LoginScreen() {
   const { login, loginAsPersona, loginWithGoogle, isLoading } = useAuth();
   const { colors } = useTheme();
   const { currentForce } = useForce();
+  const { lang } = useLanguage();
   const router = useRouter();
 
   const [serviceId, setServiceId] = useState("");
@@ -108,30 +110,32 @@ export default function LoginScreen() {
         <View style={styles.heroGlowBackdrop} />
         <MissionWellIcon size="xl" showBadge={true} />
         <View style={styles.heroBrandTextRow}>
-          <Text style={[styles.brandTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
-            MissionWell{" "}
-            <Text
-              style={{
-                color: "#3B82F6",
-                fontFamily: Platform.OS === "web" ? "'JetBrains Mono', monospace" : "JetBrainsMono-Bold",
-              }}
-            >
-              AI
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 7 }}>
+            <Text style={[styles.brandTitle, { color: colors.text, fontFamily: "GoogleSans-Bold" }]}>
+              MissionWell{" "}
+              <Text
+                style={{
+                  color: "#3B82F6",
+                  fontFamily: Platform.OS === "web" ? "'JetBrains Mono', monospace" : "JetBrainsMono-Bold",
+                }}
+              >
+                AI
+              </Text>
             </Text>
-          </Text>
+            <View style={styles.heroBlueDot} />
+          </View>
         </View>
         <Text style={[styles.brandSubtitle, { color: colors.textMuted, fontFamily: "GoogleSans-Medium" }]}>
-          {currentForce.hindiName} • {currentForce.name}
+          {lang === "hi"
+            ? "गृह मंत्रालय • सीएपीएफ महानिदेशालय"
+            : "MINISTRY OF HOME AFFAIRS • CAPF DIRECTORATE"}
         </Text>
         <View style={[styles.mottoPill, { backgroundColor: `${currentForce.primaryColor}18`, borderColor: `${currentForce.primaryColor}40` }]}>
           <Text style={[styles.mottoText, { color: currentForce.primaryColor, fontFamily: "GoogleSans-Medium" }]}>
-            "{currentForce.hindiMotto}"
+            {currentForce.hindiName} • "{currentForce.hindiMotto}"
           </Text>
         </View>
       </View>
-
-      {/* Download Android Mobile App Banner */}
-      <DownloadAppBanner style={styles.downloadBanner} />
 
       {/* Main Credentials Card */}
       <Card style={styles.loginCard} variant="glass">
@@ -361,6 +365,9 @@ export default function LoginScreen() {
         )}
       </Card>
 
+      {/* Download Android Mobile App Banner (Placed at bottom like Web Portal) */}
+      <DownloadAppBanner style={styles.downloadBanner} />
+
       {/* Statutory DPDP Act Badge */}
       <View style={styles.dpdpSection}>
         <ShieldCheck size={15} color={colors.accent} />
@@ -413,6 +420,12 @@ const styles = StyleSheet.create({
   },
   heroBrandTextRow: {
     marginTop: 8,
+  },
+  heroBlueDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 3.5,
+    backgroundColor: "#3B82F6",
   },
   brandTitle: {
     fontSize: 26,
