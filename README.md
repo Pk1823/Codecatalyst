@@ -63,30 +63,53 @@ Traditional armed forces welfare workflows are strictly reactive, waiting for ac
 ## System Architecture
 
 ```
-                                  +---------------------------------------+
-                                  |         Next.js 16 Frontend           |
-                                  |  (React 19, Tailwind CSS, Lucide)     |
-                                  |  Port: 3000                           |
-                                  +-------------------+-------------------+
-                                                      |
-                             REST & Session Cookies   |   OAuth Redirect & Callbacks
-                                                      v
-                                  +---------------------------------------+
-                                  |         Node.js Express Backend       |
-                                  |  (TypeScript, Prisma ORM, Jose JWT)   |
-                                  |  Port: 5000                           |
-                                  +---------+-------------------+---------+
-                                            |                   |
-                        SQLite Database     |                   |  REST Telemetry
-                       (dev.db / Postgres)  |                   |  Inference Request
-                                            v                   v
-                        +----------------------+    +----------------------+
-                        |  Prisma Database     |    |  Python ML Engine    |
-                        |  - Users & Roles     |    |  (FastAPI, LightGBM) |
-                        |  - Assessments       |    |  - TreeExplainer     |
-                        |  - Clinical Cases    |    |  - SHAP Drivers      |
-                        |  - Audit Log Trail   |    |  Port: 8000          |
-                        +----------------------+    +----------------------+
++=============================================================================================================+
+|                                    MISSIONWELL AI DISTRIBUTED SYSTEM ARCHITECTURE                           |
++=============================================================================================================+
+
+   [ 📱 FIELD PERSONNEL & JAWANS ]                   [ 🖥️ COMMANDERS & MEDICAL OFFICERS ]
+      React Native 0.74 • Expo SDK 51                     Next.js 16.3 • React 19 • Tailwind CSS
+      - File-based Expo Router v3                         - Google OAuth 2.0 & RBAC Portal
+      - Tactical Glassmorphic Theme                       - Unit-Level Aggregated Stress Heatmaps
+      - Buddy-Pair Watch & CO Darbar                      - Printable MHA Official Medical Dossiers
+      - Port: 8081 (Dev) / Standalone APK                 - Port: 3000
+                 |                                                      |
+                 +--------------------------+---------------------------+
+                                            |
+                         HTTPS REST / TLS 1.3 Encryption / Session Tokens
+                         (DPDP Act 2023 Non-Punitive Compliance Shield)
+                                            |
+                                            v
+               +-------------------------------------------------------------+
+               |             NODE.JS EXPRESS REST API BACKEND                |
+               |          (TypeScript 5.x • Prisma ORM 6.4 • Port: 5000)     |
+               |  - Role-Based Access Control Guards (Personnel/Doctor/CO)   |
+               |  - Google OAuth 2.0 Token Verification & Identity Chooser   |
+               |  - Encrypted Password Vault (Bcrypt 12 Salt Rounds)         |
+               |  - Immutable Cryptographic Audit Logger                     |
+               +-----------------------------+-------------------------------+
+                                             |
+                   +-------------------------+-------------------------+
+                   |                                                   |
+                   v                                                   v
+   +-------------------------------+                   +-------------------------------+
+   |   PERSISTENCE DATA LAYER      |                   |    PREDICTIVE AI ENGINE       |
+   |   (Prisma ORM • SQLite/PG)    |                   |    (Python 3.11 • FastAPI)    |
+   |   - Users & Defense Roles     |                   |    - Port: 8000 (Uvicorn ASGI)|
+   |   - Personnel Assessments     |   Telemetry /     |    - LightGBM Anti-Masking    |
+   |   - Clinical Welfare Cases    |<----------------->|      Stress Classifier        |
+   |   - Buddy-Pair Watch Log      |   SHAP Drivers    |    - SHAP TreeExplainer       |
+   |   - MHA Access Audit Trail    |                   |      Feature Attribution      |
+   +-------------------------------+                   +-------------------------------+
+                   |                                                   |
++==================v===================================================v======================================+
+|                                    CLOUD & DEPLOYMENT TOPOLOGY                                               |
++=============================================================================================================+
+|  🔥 FIREBASE HOSTING      | Global CDN Edge deployment for Mobile Web PWA (firebase.json / dist)           |
+|  ☁️ RENDER CLOUD BLUEPRINT | Containerized auto-scaling backend & AI engine (render.yaml)                   |
+|  🌐 SECURE EVALUATOR GATE | Zero-setup HTTPS gateway for hackathon judge evaluation (Localtunnel / Cloudflare)|
+|  ⚙️ GITHUB ACTIONS CI/CD   | Automated lint, test, build, and deploy pipeline (.github/workflows)          |
++=============================================================================================================+
 ```
 
 ---
@@ -243,12 +266,47 @@ Dynamically adapts terminology, battalion organizational hierarchies, badges, an
 
 ```
 Codecatalyst/
-├── frontend/                     # Next.js 16 App Router (React 19, TypeScript, Tailwind CSS)
+├── mobile/                       # 📱 React Native 0.74 / Expo SDK 51 Mobile Application
+│   ├── app/                      # Expo Router v3 file-based screens & navigation
+│   │   ├── (auth)/               # Mobile authentication screens (login.tsx, signup.tsx)
+│   │   ├── (tabs)/               # Bottom tab navigation (Assessment, Welfare, Command, Alerts, Settings)
+│   │   │   ├── personnel.tsx     # Jawan voluntary wellness assessment & buddy check-in
+│   │   │   ├── welfare.tsx       # Medical & welfare officer case management & triage
+│   │   │   ├── commander.tsx     # Battalion commander aggregated readiness dashboard
+│   │   │   ├── alerts.tsx        # Tactical alert notifications & critical distress pings
+│   │   │   ├── settings.tsx      # Multi-branch customization (CRPF, BSF, ITBP, Army) & theme
+│   │   │   └── _layout.tsx       # Tab bar styling with safe area insets (0 edge clipping)
+│   │   ├── _layout.tsx           # Root gesture handler, font loader, and auth provider
+│   │   ├── simulator.tsx         # Real-time interactive AI stress simulation view
+│   │   ├── recommendations.tsx   # Evidence-based operational wellness interventions
+│   │   ├── audit.tsx             # Mobile DPDP Act 2023 compliance audit inspector
+│   │   └── presentation.tsx      # Mobile hackathon evaluation pitch deck & QA
+│   ├── components/               # Mobile tactical components & UI primitives
+│   │   ├── auth/                 # Google OAuth mobile modal dialog & account chooser
+│   │   └── ui/                   # MissionWellLogo, DownloadAppBanner, Card, Button, Badge
+│   ├── contexts/                 # React Contexts (Auth, Theme, Force, Language)
+│   │   ├── AuthContext.tsx       # Secure token vault & 1-click persona switcher
+│   │   ├── ThemeContext.tsx      # Dark/Light tactical appearance engine
+│   │   ├── ForceContext.tsx      # Multi-branch customization (CRPF, BSF, ITBP, Army)
+│   │   └── LanguageContext.tsx   # Bilingual localization (Hindi / English)
+│   ├── services/                 # Mobile API client, fonts loader, secure storage
+│   │   ├── api.ts                # REST client connecting to Render backend & AI engine
+│   │   ├── auth.ts               # Evaluator personas (Dr. Aarti Sharma, Col. Vikram Rathore, etc.)
+│   │   └── fonts.ts              # Custom Google Sans & JetBrains Mono typography loader
+│   ├── assets/                   # App icons, splash screens, adaptive icons, and defense crests
+│   ├── app.json                  # Expo project manifest, splash configuration, icons
+│   ├── eas.json                  # Expo Application Services Android APK build configuration
+│   ├── firebase.json             # Firebase Hosting configuration for mobile web PWA
+│   ├── vercel.json               # Vercel deployment configuration
+│   ├── babel.config.js           # Reanimated plugin & module resolvers
+│   └── package.json              # Mobile package dependencies & deployment scripts
+│
+├── frontend/                     # 🖥️ Next.js 16 Command Web Portal (React 19, TypeScript, Tailwind)
 │   ├── app/                      # App router pages & layouts
-│   │   ├── (dashboard)/          # Authenticated routes (welfare, commander, analytics, reports, etc.)
+│   │   ├── (dashboard)/          # Authenticated routes (welfare, commander, analytics, reports)
 │   │   ├── api/                  # Next.js API route proxies (auth, login, google, etc.)
 │   │   ├── auth/callback/        # Dedicated Google OAuth redirect callback page
-│   │   └── login/                # Multi-tab login portal (Credentials, Google SSO, Evaluator Personas)
+│   │   └── login/                # Multi-tab login portal (Credentials, Google SSO, Personas)
 │   ├── components/               # Reusable UI widgets, theme switchers, and layout bars
 │   │   └── auth/                 # Google OAuth account chooser & consent dialog
 │   ├── lib/                      # Database client, JWT crypto, password hashing, and force metadata
@@ -256,7 +314,7 @@ Codecatalyst/
 │   ├── types/                    # Strict TypeScript type definitions
 │   └── package.json              # Frontend package configuration
 │
-├── backend/                      # Node.js Express REST API backend
+├── backend/                      # ⚙️ Node.js Express REST API backend microservice
 │   ├── src/
 │   │   ├── controllers/          # Decoupled route controllers (auth, case, wellness, report, audit)
 │   │   ├── middleware/           # RBAC validation and JWT cookie guards
@@ -266,18 +324,30 @@ Codecatalyst/
 │   ├── prisma/                   # Database schema definitions and seed scripts
 │   └── package.json              # Backend package configuration
 │
-├── ai-engine/                    # Python FastAPI microservice (LightGBM Stress Engine)
-│   ├── data/                     # 5,000 synthetic defense stress records
-│   ├── models/                   # defense_stress_lgbm_model.joblib
+├── ai-engine/                    # 🧠 Python FastAPI microservice (LightGBM Stress Engine)
+│   ├── data/                     # 5,000 calibrated defense stress records
+│   ├── models/                   # defense_stress_lgbm_model.joblib & SHAP explainer
 │   ├── src/                      # Feature pipeline, inference predictor, SHAP TreeExplainer
 │   ├── main.py                   # FastAPI application (/predict, /model-info, /health)
 │   └── requirements.txt          # Python dependencies
 │
+├── .github/                      # 🚀 CI/CD Automation
+│   └── workflows/
+│       └── firebase-hosting.yml  # Automated GitHub Actions deployment to Firebase Hosting
+│
+├── scripts/                      # Automation and deployment scripts
+│   ├── deploy-firebase.js        # 1-command automated Firebase deployment runner
+│   ├── generate-app-assets.js    # 1024x1024 adaptive icon and splash generator
+│   └── fetch_kaggle_dataset.py   # Dataset ingestion utility
+│
 ├── tests/                        # Automated test suites
 │   └── run-tests.js              # 23-point end-to-end integration & security test runner
 │
+├── firebase.json                 # Monorepo root Firebase Hosting configuration
+├── render.yaml                   # Render Cloud Blueprint infrastructure-as-code
+├── docker-compose.yml            # Multi-container Docker orchestration
 ├── start-all.js                  # Tri-service local runner & orchestrator
-├── package.json                  # Root monorepo scripts
+├── package.json                  # Root monorepo scripts & workspaces
 └── README.md                     # Master platform documentation
 ```
 
@@ -343,6 +413,24 @@ npm install
 npm run dev
 ```
 * Application Portal: [http://localhost:3000](http://localhost:3000)
+
+#### 4. React Native Mobile App & Firebase Hosting (Port 8081)
+```bash
+# Run Mobile App in local browser/device
+cd mobile
+npm install
+npm run web
+
+# Build standalone Android APK
+npm run build:apk
+
+# Deploy Mobile Web App to Firebase Hosting
+cd ..
+npx -y firebase-tools@latest login
+npm run deploy:firebase
+```
+* Mobile Local Dev: [http://localhost:8081](http://localhost:8081)
+* Firebase Live Production URL: `https://<your-project-id>.web.app`
 
 ---
 
