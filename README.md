@@ -28,6 +28,7 @@
 
 ## Table of Contents
 - [Executive Summary](#executive-summary)
+- [Live Production Deployments](#-live-production-deployments)
 - [System Architecture](#system-architecture)
 - [Technology Stack (Full Defense Tech Stack)](#technology-stack-full-defense-tech-stack)
 - [Key Feature Highlights](#key-feature-highlights)
@@ -60,6 +61,20 @@ Traditional armed forces welfare workflows are strictly reactive, waiting for ac
 
 ---
 
+## 🌐 Live Production Deployments
+
+The complete MissionWell AI ecosystem is deployed across high-availability cloud infrastructure:
+
+| Component | Target Infrastructure | Live Production URL | Description |
+| :--- | :--- | :--- | :--- |
+| **🖥️ Command & Welfare Portal** | Render Cloud (Oregon) | [**https://missionwell-frontend.onrender.com**](https://missionwell-frontend.onrender.com) | Next.js 16.3 Commander & Welfare Officer Web Portal |
+| **📱 Live Soldier Assessment** | Firebase CDN Hosting | [**https://missionwell-ai-capf.web.app/personnel**](https://missionwell-ai-capf.web.app/personnel) | 60-Second Confidential Assessment (Zero App Download Required) |
+| **📱 Mobile Web App (PWA)** | Firebase CDN Hosting | [**https://missionwell-ai-capf.web.app**](https://missionwell-ai-capf.web.app) | Full React Native / Expo Mobile Companion PWA |
+| **⚙️ Backend REST API** | Render Cloud (Oregon) | [**https://missionwell-backend.onrender.com/health**](https://missionwell-backend.onrender.com/health) | Node.js Express 4.21 & Prisma ORM Engine |
+| **🧠 Predictive AI Microservice** | Render Cloud (Oregon) | [**https://missionwell-ai-engine.onrender.com/health**](https://missionwell-ai-engine.onrender.com/health) | FastAPI, LightGBM Anti-Masking Model & SHAP Explainer |
+
+---
+
 ## System Architecture
 
 ```
@@ -72,7 +87,7 @@ Traditional armed forces welfare workflows are strictly reactive, waiting for ac
       - File-based Expo Router v3                         - Google OAuth 2.0 & RBAC Portal
       - Tactical Glassmorphic Theme                       - Unit-Level Aggregated Stress Heatmaps
       - Buddy-Pair Watch & CO Darbar                      - Printable MHA Official Medical Dossiers
-      - Port: 8081 (Dev) / Standalone APK                 - Port: 3000
+      - Firebase PWA / Port: 8081 (Dev)                   - Port: 3000
                  |                                                      |
                  +--------------------------+---------------------------+
                                             |
@@ -132,7 +147,9 @@ MissionWell AI is built with an authentic, defense-grade, multi-tier distributed
 ```
 
 ### 1. Mobile & Edge Tier (Jawan & Field Personnel App)
-* **Core Framework**: **React Native 0.74.5** with **Expo SDK 51** (Cross-Platform Android APK & Web).
+* **Core Framework**: **React Native 0.74.5** with **Expo SDK 51** (Cross-Platform Mobile PWA & Native).
+* **Live Deployment**: Hosted on **Google Firebase CDN** at [**https://missionwell-ai-capf.web.app**](https://missionwell-ai-capf.web.app).
+* **Direct Personnel Assessment**: Immediate access at [**https://missionwell-ai-capf.web.app/personnel**](https://missionwell-ai-capf.web.app/personnel) (Zero app installation required).
 * **Navigation**: **Expo Router v3** (File-based declarative routing, deep-linking, tab bars, modal stacks).
 * **UI & Aesthetics**:
   * Military glassmorphic defense theme with tailored HSL color tokens (`#0B132B`, `#1C2541`, `#3B82F6`).
@@ -142,9 +159,8 @@ MissionWell AI is built with an authentic, defense-grade, multi-tier distributed
 * **Motion & Touch**: React Native Reanimated 3.10, React Native Gesture Handler 2.16, Expo Haptics.
 * **State & Data**: TanStack React Query v5, Expo SecureStore (Hardware-backed encrypted token vault).
 * **Packaging & Delivery**:
-  * **Android APK**: Expo Application Services (EAS Build) with standalone defense profile.
-  * **Web Static PWA**: `npx expo export -p web` (Static HTML/CSS/JS with full offline service worker support).
-  * **Firebase Hosting**: Native `firebase.json` with SPA routing rules and CDN edge caching.
+  * **Firebase Hosting PWA**: Native `firebase.json` with SPA routing rules, CDN edge caching, and service worker offline sync.
+  * **Standalone Android APK**: Expo Application Services (EAS Build) profile for air-gapped field deployments.
 
 ### 2. Command & Officer Web Portal
 * **Framework**: **Next.js 16.3.4** utilizing React Server Components (RSC) and Turbopack bundler.
@@ -419,10 +435,7 @@ npm run dev
 # Run Mobile App in local browser/device
 cd mobile
 npm install
-npm run web
-
-# Build standalone Android APK
-npm run build:apk
+npm run start # Press 'w' for web browser preview, 'a' for Android
 
 # Deploy Mobile Web App to Firebase Hosting
 cd ..
@@ -430,7 +443,8 @@ npx -y firebase-tools@latest login
 npm run deploy:firebase
 ```
 * Mobile Local Dev: [http://localhost:8081](http://localhost:8081)
-* Firebase Live Production URL: `https://<your-project-id>.web.app`
+* **Firebase Live Production URL**: [https://missionwell-ai-capf.web.app](https://missionwell-ai-capf.web.app)
+* **Live Soldier Assessment Portal**: [https://missionwell-ai-capf.web.app/personnel](https://missionwell-ai-capf.web.app/personnel)
 
 ---
 

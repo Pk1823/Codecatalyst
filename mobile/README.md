@@ -37,12 +37,29 @@ cd mobile && npm start
 
 ---
 
+## 🌐 Live Production Deployment
+
+* **Mobile Companion Web PWA**: [**https://missionwell-ai-capf.web.app**](https://missionwell-ai-capf.web.app)
+* **Direct Soldier Assessment**: [**https://missionwell-ai-capf.web.app/personnel**](https://missionwell-ai-capf.web.app/personnel)
+
+---
+
 ## 🌐 Separate Standalone Deployment
 
-The mobile application can be deployed completely independently from the web portal through two primary pathways:
+The mobile application can be deployed independently through the following pathways:
 
-### Option 1: Standalone Mobile Web / PWA Deployment (Vercel)
-A dedicated [`mobile/vercel.json`](file:///Users/akash/MissionWell-AI/Codecatalyst/mobile/vercel.json) configuration is included.
+### Option 1: Google Firebase Hosting (Live Production)
+Configured with native [`mobile/firebase.json`](firebase.json) for global CDN edge delivery:
+```bash
+# 1. Export Static Web App
+npx expo export -p web
+
+# 2. Deploy to Firebase
+npx -y firebase-tools@latest deploy --only hosting
+```
+
+### Option 2: Standalone Mobile Web / PWA Deployment (Vercel)
+A dedicated [`mobile/vercel.json`](vercel.json) configuration is included.
 1. **Via Vercel CLI**:
    ```bash
    cd mobile
@@ -55,8 +72,8 @@ A dedicated [`mobile/vercel.json`](file:///Users/akash/MissionWell-AI/Codecataly
    - **Output Directory**: `dist`.
    - Add environment variable `EXPO_PUBLIC_BACKEND_URL` pointing to your deployed backend.
 
-### Option 2: Standalone Native Android APK & iOS Build (EAS)
-A dedicated [`mobile/eas.json`](file:///Users/akash/MissionWell-AI/Codecatalyst/mobile/eas.json) configuration is provided for building installable packages:
+### Option 3: Standalone Native Android APK & iOS Build (EAS)
+A dedicated [`mobile/eas.json`](eas.json) configuration is provided for building installable packages:
 1. **Install EAS CLI**:
    ```bash
    npm install -g eas-cli
