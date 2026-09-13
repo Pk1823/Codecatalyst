@@ -13,6 +13,7 @@ build/
 dist/
 mobile/dist/
 mobile/.expo/
+.firebase/
 
 # Python / AI Engine
 __pycache__/
