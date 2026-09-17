@@ -31,10 +31,26 @@ jobs:
           EXPO_PUBLIC_BACKEND_URL: https://missionwell-backend-vcqn.onrender.com
           EXPO_PUBLIC_AI_ENGINE_URL: https://missionwell-ai-engine.onrender.com
 
-      - name: Deploy to Firebase Hosting
+      - name: Deploy to Firebase Hosting (Service Account)
+        if: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MISSIONWELL_AI_CAPF != '' || secrets.FIREBASE_SERVICE_ACCOUNT != '' }}
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MISSIONWELL_AI_CAPF || secrets.FIREBASE_SERVICE_ACCOUNT }}'
           channelId: live
-          projectId: '${{ secrets.FIREBASE_PROJECT_ID }}'
+          projectId: '${{ secrets.FIREBASE_PROJECT_ID || 'missionwell-ai-capf' }}'
+
+      - name: Deploy to Firebase Hosting (CI Token fallback)
+        if: ${{ (secrets.FIREBASE_SERVICE_ACCOUNT_MISSIONWELL_AI_CAPF == '' && secrets.FIREBASE_SERVICE_ACCOUNT == '') && secrets.FIREBASE_TOKEN != '' }}
+        run: |
+          npx firebase-tools deploy --only hosting --token "${{ secrets.FIREBASE_TOKEN }}" --project missionwell-ai-capf
+
+      - name: Check Missing Firebase Credentials
+        if: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MISSIONWELL_AI_CAPF == '' && secrets.FIREBASE_SERVICE_ACCOUNT == '' && secrets.FIREBASE_TOKEN == '' }}
+        run: |
+          echo "::warning::Firebase Deployment Secret is not yet configured in GitHub Repository Secrets."
+          echo "The web bundle built successfully in mobile/dist."
+          echo "To enable automated Firebase push deployment:"
+          echo "1. Go to GitHub -> Settings -> Secrets and variables -> Actions"
+          echo "2. Add secret FIREBASE_SERVICE_ACCOUNT or FIREBASE_TOKEN"
+          echo "3. Re-run this workflow."
