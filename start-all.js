@@ -109,7 +109,11 @@ async function startAll() {
     const child = spawn(s.cmd, s.args, {
       cwd: s.cwd,
       shell: false,
-      env: { ...process.env },
+      env: {
+        ...process.env,
+        PORT: String(s.port),
+        DATABASE_URL: process.env.DATABASE_URL || "file:./dev.db",
+      },
     });
 
     child.stdout.on("data", (data) => log(s.name, s.color, data));

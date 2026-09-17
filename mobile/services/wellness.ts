@@ -323,29 +323,38 @@ export class WellnessService {
     personnelId: string,
     input: WellnessAssessmentInput
   ): Promise<void> {
-    const isHighRisk =
-      res.riskScore >= 60 ||
-      res.riskCategory === "Critical Breakdown Risk" ||
-      res.riskCategory === "Elevated Stress";
-
-    if (!isHighRisk) return;
-
     try {
+      const isCritical = res.riskScore >= 75 || res.riskCategory === "Critical Breakdown Risk";
+      const isHigh = res.riskScore >= 55 || res.riskCategory === "Elevated Stress";
+      const isMod = res.riskScore >= 30 || res.riskCategory === "Moderate Fatigue";
+
+      const severity = isCritical ? "CRITICAL" : isHigh ? "HIGH" : isMod ? "MODERATE" : "LOW";
+      const now = new Date();
+
+      let alertTitle = `New AI Assessment: Low Concern`;
+      if (isCritical || isHigh) {
+        alertTitle = `🚨 HIGH RISK: Soldier ${personnelId} Flagged for Triage`;
+      } else if (isMod) {
+        alertTitle = `New AI Assessment: Moderate Attention`;
+      }
+
+      const description = isCritical || isHigh
+        ? `Army personnel ${personnelId} evaluated at ${res.riskCategory} (${res.riskScore}/100). Severe operational fatigue, acute sleep deficit.`
+        : `Personnel ${personnelId} submitted an assessment resulting in ${res.riskCategory} (${res.riskScore}/100).`;
+
       // 1. If in browser/hybrid environment, write to localStorage & dispatch real-time event
       if (typeof window !== "undefined" && window.localStorage) {
         const customStr = localStorage.getItem("missionwell_custom_alerts");
         const customAlerts = customStr ? JSON.parse(customStr) : [];
-        const now = new Date();
-        const timeFormatted = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
         const newAlert = {
           id: `alert-mbl-${Date.now()}`,
           category: "Welfare",
-          title: `🚨 HIGH RISK: Soldier ${personnelId} Flagged for Triage`,
-          description: `Army personnel ${personnelId} evaluated at ${res.riskCategory} (${res.riskScore}/100). Severe operational fatigue, acute sleep deficit.`,
-          timestamp: timeFormatted,
+          title: alertTitle,
+          description,
+          timestamp: "Just now",
           createdAt: now.toISOString(),
-          priority: "Urgent",
+          priority: isCritical || isHigh ? "Urgent" : isMod ? "High" : "Medium",
           isRead: false,
           personnelId,
           contributingIndicators: [
@@ -364,9 +373,13 @@ export class WellnessService {
       try {
         await ApiClient.post("/alerts", {
           personnelId,
-          severity: res.riskScore >= 75 ? "CRITICAL" : "HIGH",
-          reason: `Soldier ${personnelId} evaluated at ${res.riskCategory} (${res.riskScore}/100). Immediate welfare triage required.`,
-          triggerCondition: "MOBILE_HIGH_RISK_EVALUATION",
+          severity,
+          reason: description,
+          triggerCondition: [
+            `Duty Hours: ${input.dutyHours5d}`,
+            `Sleep Avg: ${input.sleepHrs5dAvg}`,
+            `Field Days: ${input.consecutiveFieldDays}`,
+          ].join(" • "),
           riskScore: res.riskScore,
         });
       } catch {}

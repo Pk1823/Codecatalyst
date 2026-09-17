@@ -19,6 +19,51 @@ export default function AlertCenterPage() {
   const { lang } = useAuth();
   const isHi = lang === "hi";
 
+  function formatAlertTimestamp(dateStr?: string | Date): string {
+    if (!dateStr) return "Just now";
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return String(dateStr);
+      const now = new Date();
+      const diffMs = now.getTime() - d.getTime();
+
+      if (diffMs >= 0 && diffMs < 60000) {
+        return "Just now";
+      }
+      if (diffMs >= 60000 && diffMs < 3600000) {
+        const mins = Math.floor(diffMs / 60000);
+        return `${mins}m ago`;
+      }
+
+      const timeStr = d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+      const isToday =
+        d.getDate() === now.getDate() &&
+        d.getMonth() === now.getMonth() &&
+        d.getFullYear() === now.getFullYear();
+
+      if (isToday) {
+        return `Today • ${timeStr}`;
+      }
+
+      const yesterday = new Date(now);
+      yesterday.setDate(now.getDate() - 1);
+      const isYesterday =
+        d.getDate() === yesterday.getDate() &&
+        d.getMonth() === yesterday.getMonth() &&
+        d.getFullYear() === yesterday.getFullYear();
+
+      if (isYesterday) {
+        return `Yesterday • ${timeStr}`;
+      }
+
+      const dateFormatted = d.toLocaleDateString([], { month: "short", day: "numeric" });
+      return `${dateFormatted} • ${timeStr}`;
+    } catch {
+      return "Recent";
+    }
+  }
+
   // Start with empty alerts - NO fake mock alerts by default
   const [notifications, setNotifications] = useState<WelfareAlertItem[]>([]);
   const [category, setCategory] = useState<NotificationCategory>("All");
@@ -44,24 +89,38 @@ export default function AlertCenterPage() {
               const rank = a.personnel?.rank || "Personnel";
               const name = a.personnel?.name || a.personnelId;
               const force = a.personnel?.force || "Army";
-              const isHigh = a.severity === "CRITICAL" || a.severity === "HIGH";
+              const isCritical = a.severity === "CRITICAL";
+              const isHigh = a.severity === "HIGH";
+              const isMod = a.severity === "MODERATE";
+
+              let title = a.title;
+              if (!title) {
+                if (isCritical || isHigh) {
+                  title = `🚨 HIGH RISK: ${rank} ${name} (${force} - ${a.personnelId})`;
+                } else if (isMod) {
+                  title = `New AI Assessment: Moderate Attention`;
+                } else {
+                  title = `New AI Assessment: Low Concern`;
+                }
+              }
 
               return {
                 id: a.id,
                 category: "Welfare" as NotificationCategory,
-                title: isHigh
-                  ? `🚨 HIGH RISK: ${rank} ${name} (${force} - ${a.personnelId})`
-                  : `Early Warning: ${a.severity}`,
+                title,
                 description:
                   a.reason ||
                   `${rank} ${name} flagged with compounding operational fatigue and stress indicators.`,
-                timestamp: a.createdAt
-                  ? new Date(a.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-                  : "Recent",
-                priority: a.severity === "CRITICAL" ? "Urgent" : a.severity === "HIGH" ? "Urgent" : "High",
+                timestamp: formatAlertTimestamp(a.createdAt),
+                createdAt: a.createdAt,
+                priority: isCritical || isHigh ? "Urgent" : isMod ? "High" : "Low",
                 isRead: a.status === "RESOLVED",
                 personnelId: a.personnelId,
-                contributingIndicators: a.triggerCondition ? [a.triggerCondition] : undefined,
+                contributingIndicators: a.triggerCondition
+                  ? a.triggerCondition.includes(" • ")
+                    ? a.triggerCondition.split(" • ")
+                    : [a.triggerCondition]
+                  : undefined,
               };
             });
 
@@ -72,6 +131,14 @@ export default function AlertCenterPage() {
                 combined.push(apiA);
               }
             }
+
+            // Always sort descending by createdAt (newest first)
+            combined.sort((a, b) => {
+              const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+              const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+              return timeB - timeA;
+            });
+
             setNotifications(combined);
             setIsLoading(false);
             return;
@@ -80,6 +147,13 @@ export default function AlertCenterPage() {
       } catch (err) {
         // Fallback to custom alerts only
       }
+
+      // Sort custom alerts descending by createdAt
+      customAlerts.sort((a, b) => {
+        const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return timeB - timeA;
+      });
 
       setNotifications(customAlerts);
     } catch (e) {

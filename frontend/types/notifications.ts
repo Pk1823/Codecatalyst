@@ -13,6 +13,7 @@ export interface WelfareAlertItem {
   caseId?: string;
   contributingIndicators?: string[];
   recommendedAction?: string;
+  createdAt?: string;
 }
 
 export interface AuditLogEntry {

@@ -117,13 +117,12 @@ export class WellnessService {
         const customStr = localStorage.getItem("missionwell_custom_alerts");
         const customAlerts = customStr ? JSON.parse(customStr) : [];
         const now = new Date();
-        const timeFormatted = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         const newAlert = {
           id: `alert-new-${Date.now()}`,
           category: "Welfare",
           title: `New AI Assessment: ${status}`,
           description: `Personnel ${personnelId} submitted an assessment resulting in ${stress} stress and ${fatigue} fatigue levels.`,
-          timestamp: `${timeFormatted}`,
+          timestamp: "Just now",
           createdAt: now.toISOString(),
           priority: stress === "Elevated" ? "Urgent" : (stress === "Moderate" ? "High" : "Medium"),
           isRead: false,
@@ -137,6 +136,20 @@ export class WellnessService {
         };
         localStorage.setItem("missionwell_custom_alerts", JSON.stringify([newAlert, ...customAlerts]));
         window.dispatchEvent(new Event("missionwell_alerts_changed"));
+
+        // Also post to /api/alerts to persist to database
+        try {
+          fetch("/api/alerts", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              personnelId,
+              severity: stress === "Elevated" ? "HIGH" : stress === "Moderate" ? "MODERATE" : "LOW",
+              reason: newAlert.description,
+              triggerCondition: newAlert.contributingIndicators.join(" • "),
+            }),
+          }).catch(() => {});
+        } catch {}
 
         // Create a Welfare Case too
         const customCasesStr = localStorage.getItem("missionwell_custom_cases");

@@ -11,6 +11,12 @@ router.get(
   AlertController.getAlerts
 );
 
+router.post(
+  "/alerts",
+  authenticate,
+  AlertController.createAlert
+);
+
 router.patch(
   "/alerts/:id",
   authenticate,

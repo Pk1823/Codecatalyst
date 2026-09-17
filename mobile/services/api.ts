@@ -40,18 +40,25 @@ export const getCandidateBaseUrls = (): string[] => {
     urls.push(process.env.EXPO_PUBLIC_BACKEND_URL.replace(/\/$/, ""));
   }
 
-  // 1. On Web Browser: current page host is immediately reachable
+  // 1. Production Render cloud endpoints (Where Welfare Portal & Database live)
+  urls.push("https://missionwell-frontend.onrender.com/api");
+  urls.push("https://missionwell-backend-vcqn.onrender.com/api");
+
+  // 2. On Web Browser: current page host is reachable if it's a real API server
   if (Platform.OS === "web" && typeof window !== "undefined" && window.location?.hostname) {
     const h = window.location.hostname;
-    if (h !== "localhost" && h !== "127.0.0.1") {
+    const isStaticHosting =
+      h.includes("web.app") ||
+      h.includes("firebaseapp.com") ||
+      h.includes("github.io") ||
+      (h.includes("vercel.app") && !h.includes("missionwell-frontend"));
+
+    if (h !== "localhost" && h !== "127.0.0.1" && !isStaticHosting) {
       urls.push(`https://${h}/api`);
       urls.push(`http://${h}:3000/api`);
       urls.push(`http://${h}:5001/api`);
     }
   }
-
-  // 2. Production Render cloud backend (Always reachable over internet & mobile data)
-  urls.push("https://missionwell-backend-vcqn.onrender.com/api");
 
   const hostIp = getHostIp();
 
@@ -66,15 +73,15 @@ export const getCandidateBaseUrls = (): string[] => {
   urls.push("http://192.168.1.30:5001/api");
 
   // 5. Localhost fallbacks
-  urls.push("http://localhost:5001/api");
   urls.push("http://localhost:3000/api");
-  urls.push("http://127.0.0.1:5001/api");
+  urls.push("http://localhost:5001/api");
   urls.push("http://127.0.0.1:3000/api");
+  urls.push("http://127.0.0.1:5001/api");
 
   // 6. Android Emulator
   if (Platform.OS === "android") {
-    urls.push("http://10.0.2.2:5001/api");
     urls.push("http://10.0.2.2:3000/api");
+    urls.push("http://10.0.2.2:5001/api");
   }
 
   return Array.from(new Set(urls));
@@ -130,7 +137,7 @@ export class ApiClient {
       const url = `${normalizedBaseUrl}${normalizedPath}`;
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3500); // 3.5s timeout per candidate
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
 
         const res = await fetch(url, {
           ...options,
@@ -139,11 +146,21 @@ export class ApiClient {
 
         clearTimeout(timeoutId);
 
-        if (res.ok || res.status === 400 || res.status === 401 || res.status === 403 || res.status === 404) {
+        const contentType = res.headers.get("content-type") || "";
+        const isJson = contentType.includes("application/json");
+
+        // Valid API responses must be JSON and not 404 (route not found on host)
+        if (res.ok && isJson) {
           cachedWorkingBaseUrl = baseUrl;
           return res;
         }
-        lastError = new Error(`Server at ${baseUrl} returned status ${res.status}`);
+
+        if ((res.status === 400 || res.status === 401 || res.status === 403) && isJson) {
+          cachedWorkingBaseUrl = baseUrl;
+          return res;
+        }
+
+        lastError = new Error(`Server at ${baseUrl} returned non-API response (${res.status}, ${contentType})`);
       } catch (err: any) {
         lastError = err;
         // Continue to next candidate

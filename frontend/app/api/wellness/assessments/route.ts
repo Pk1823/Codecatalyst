@@ -217,40 +217,53 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // 6. Handle Early Warning & High-Risk Triage Triggers for Welfare Officers
-    const isHighRisk =
+    // 6. Handle Early Warning & Assessment Feed Triggers for Welfare Officers
+    const isCritical =
+      prediction.riskScore >= 75 ||
+      prediction.earlyWarningTriggered?.severity === "CRITICAL";
+
+    const isHigh =
       prediction.riskLevel === "HIGH" ||
-      prediction.riskScore >= 60 ||
+      prediction.riskScore >= 55 ||
       indicatorStatus === "Elevated Attention" ||
       Boolean(prediction.earlyWarningTriggered);
 
-    if (isHighRisk) {
-      const severity =
-        prediction.riskScore >= 75 || prediction.earlyWarningTriggered?.severity === "CRITICAL"
-          ? "CRITICAL"
-          : "HIGH";
+    const isModerate =
+      prediction.riskLevel === "MODERATE" ||
+      prediction.riskScore >= 30 ||
+      indicatorStatus === "Moderate Attention";
 
-      const reason =
-        prediction.earlyWarningTriggered?.reason ||
-        `Army personnel evaluated at ${severity} BREAKDOWN RISK (${prediction.riskScore}/100). Severe operational fatigue, acute sleep deficit, and mission stress. Immediate welfare triage advised.`;
+    const severity = isCritical
+      ? "CRITICAL"
+      : isHigh
+      ? "HIGH"
+      : isModerate
+      ? "MODERATE"
+      : "LOW";
 
-      const triggerCondition =
-        prediction.earlyWarningTriggered?.triggerCondition ||
-        (prediction.riskScore >= 75
-          ? "MULTI_FACTOR_CRITICAL_ACCUMULATION"
-          : "HIGH_RISK_ASSESSMENT_EVALUATION");
+    const triggerCondition = [
+      `Duty Hours: ${raw.dutyHours5d || dutyHours + " hours"}`,
+      `Sleep Avg: ${raw.sleepHrs5dAvg || sleepHrs + " hours"}`,
+      `Field Days: ${raw.consecutiveFieldDays || consecDays}`
+    ].join(" • ");
 
-      await prisma.earlyWarning.create({
-        data: {
-          personnelId: personnel.id,
-          unitId: personnel.unitId,
-          severity,
-          reason,
-          triggerCondition,
-          status: "NEW",
-        },
-      });
+    const reason = isCritical || isHigh
+      ? (prediction.earlyWarningTriggered?.reason ||
+        `Army personnel evaluated at ${severity} BREAKDOWN RISK (${prediction.riskScore}/100). Severe operational fatigue, acute sleep deficit, and mission stress. Immediate welfare triage advised.`)
+      : `Personnel ${personnel.id} submitted an assessment resulting in ${stressLevel} stress and ${fatigueLevel} fatigue levels.`;
 
+    await prisma.earlyWarning.create({
+      data: {
+        personnelId: personnel.id,
+        unitId: personnel.unitId,
+        severity,
+        reason,
+        triggerCondition,
+        status: "NEW",
+      },
+    });
+
+    if (isHigh || isCritical) {
       // Find Welfare Officers, Commanders, and Admins to notify
       let welfareOfficers = await prisma.user.findMany({
         where: { role: { in: ["WELFARE_OFFICER", "COMMANDER", "ADMIN"] } },
@@ -413,8 +426,8 @@ export async function POST(req: NextRequest) {
         recommendations: prediction.recommendations,
       },
       mobileResult,
-      isHighRisk,
-      notificationDispatched: isHighRisk,
+      isHighRisk: isHigh || isCritical,
+      notificationDispatched: isHigh || isCritical,
     });
   } catch (error) {
     return handleAuthError(error);
