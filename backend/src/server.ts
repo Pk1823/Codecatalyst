@@ -45,13 +45,20 @@ if (process.env.NODE_ENV !== "production") {
   });
 }
 
-// Health Check
-app.get(["/health", "/api/health"], (req: Request, res: Response) => {
+// Root & Health Check
+app.get(["/", "/health", "/api/health"], (req: Request, res: Response) => {
   res.json({
     status: "healthy",
-    service: "MISSIONWELL AI - Backend API",
+    service: "MISSIONWELL AI - Core Backend API",
     organization: "Ministry of Home Affairs / CRPF, Police II Division",
     environment: process.env.NODE_ENV || "development",
+    portalUrl: "http://localhost:3000",
+    endpoints: {
+      frontendPortal: "http://localhost:3000",
+      alertsPage: "http://localhost:3000/alerts",
+      apiBase: "/api",
+      healthCheck: "/health",
+    },
     timestamp: new Date().toISOString(),
   });
 });
