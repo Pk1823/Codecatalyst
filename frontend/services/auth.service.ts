@@ -357,10 +357,20 @@ export class AuthService {
     }
 
     if (role === "PERSONNEL") {
+      if (
+        pathname.startsWith("/personnel") ||
+        pathname.startsWith("/welfare") ||
+        pathname.startsWith("/alerts") ||
+        pathname.startsWith("/settings") ||
+        pathname.startsWith("/profile") ||
+        pathname.startsWith("/privacy")
+      ) {
+        return { allowed: true };
+      }
       return {
         allowed: false,
         reason:
-          "Access Restricted under DPDP Mandate: Personnel assessments and check-ins are conducted exclusively on the MissionWell Mobile Application. The Web Portal is strictly reserved for Welfare Officers, Tactical Commanders, and System Administrators.",
+          "Role Privilege Boundary: Personnel access is dedicated to personal operational wellbeing, self-assessment, and confidential support requests. Unit-level clinical files and command dossiers are restricted to authorized Welfare Officers and Commanders.",
       };
     }
 

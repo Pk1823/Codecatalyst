@@ -103,8 +103,8 @@ export default function PersonnelDashboard() {
             href="/personnel/wellness"
             className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-500 text-white shadow-xs transition-colors"
           >
-            <Smartphone className="h-3.5 w-3.5" />
-            <span>{isHi ? "मोबाइल ऐप पर मूल्यांकन" : "Mobile App Assessment"}</span>
+            <HeartPulse className="h-3.5 w-3.5" />
+            <span>{isHi ? "स्व-मूल्यांकन भरें" : "Fill Wellness Assessment"}</span>
           </Link>
           <Link
             href="/personnel/support"
@@ -117,23 +117,33 @@ export default function PersonnelDashboard() {
         </div>
       </div>
 
-      {/* Mobile Assessment Mandatory Protocol Notice */}
-      <div className="flex items-center gap-2.5 p-3 rounded-xl bg-blue-50/80 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/60 text-xs text-blue-800 dark:text-blue-300">
-        <Smartphone className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
-        <div className="flex-1 text-[11px] leading-relaxed">
-          <span className="font-bold">
-            {isHi ? "वैधानिक मूल्यांकन दिशानिर्देश:" : "Assessment Mobile Protocol:"}{" "}
-          </span>
-          {isHi
-            ? "डीपीडीपी अधिनियम 2023 व गैर-दंडात्मक सुरक्षा के तहत सैनिक कल्याण मूल्यांकन केवल मिशनवेल मोबाइल ऐप पर ही सबमिट किया जा सकता है।"
-            : "Under DPDP Act 2023 & Non-Punitive Defense Directives, personnel assessments are submitted exclusively via the MissionWell Mobile App."}
+      {/* Direct Welfare Dashboard Synchronization Notice */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50/80 dark:from-blue-950/40 dark:to-indigo-950/30 border border-blue-200 dark:border-blue-800/60 text-xs text-blue-900 dark:text-blue-300">
+        <div className="flex items-center gap-2.5">
+          <HeartPulse className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
+          <div className="text-[11px] leading-relaxed">
+            <span className="font-bold">
+              {isHi ? "लाइव कल्याण समन्वय सक्रिय:" : "Live Welfare Sync Active:"}{" "}
+            </span>
+            {isHi
+              ? "यहाँ या मोबाइल ऐप पर भरा गया मूल्यांकन सीधे कल्याण अधिकारी डैशबोर्ड पर वास्तविक समय में पहुँचता है।"
+              : "Assessments submitted by personnel (via web or mobile app) automatically flow directly into the Welfare Officer Dashboard in real time."}
+          </div>
         </div>
-        <Link
-          href="/personnel/wellness"
-          className="underline font-semibold text-blue-600 dark:text-blue-400 shrink-0 text-[11px]"
-        >
-          {isHi ? "क्यूआर कोड खोलें" : "View QR Code"}
-        </Link>
+        <div className="flex items-center gap-2 shrink-0">
+          <Link
+            href="/personnel/wellness"
+            className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-[11px] transition-colors"
+          >
+            {isHi ? "मूल्यांकन फॉर्म भरें" : "Start Assessment"}
+          </Link>
+          <Link
+            href="/welfare"
+            className="px-2.5 py-1.5 rounded-lg border border-blue-300 dark:border-blue-700 bg-white dark:bg-slate-800 text-blue-700 dark:text-blue-300 font-semibold text-[11px] hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors"
+          >
+            {isHi ? "कल्याण डैशबोर्ड" : "Welfare View"}
+          </Link>
+        </div>
       </div>
 
       {/* 2. Simplified Stat Indicators (4 Minimal Cards) */}

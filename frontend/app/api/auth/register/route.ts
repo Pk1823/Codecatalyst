@@ -41,16 +41,6 @@ export async function POST(req: NextRequest) {
     const assignedForce = force || "CRPF";
     const assignedRole = (role || "WELFARE_OFFICER") as UserRole;
 
-    if (assignedRole === "PERSONNEL") {
-      return NextResponse.json(
-        {
-          error:
-            "Personnel registration is reserved exclusively for the MissionWell Mobile App. Web portal access is strictly for Welfare Officers, Commanders, and System Administrators.",
-          isPersonnelRestricted: true,
-        },
-        { status: 403 }
-      );
-    }
     let trimmedEmail = email.trim().toLowerCase();
     let finalServiceId = serviceId ? serviceId.trim() : "";
 

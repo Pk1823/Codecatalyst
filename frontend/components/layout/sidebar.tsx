@@ -46,8 +46,9 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
     if (role === "PERSONNEL") {
       return [
         { name: isHi ? "जवान कल्याण पोर्टल" : "My Wellbeing", sub: isHi ? "व्यक्तिगत डैशबोर्ड" : "Personal Hub", href: "/personnel", icon: LayoutDashboard },
-        { name: isHi ? "मोबाइल ऐप मूल्यांकन" : "Mobile App Check", sub: isHi ? "मोबाइल ऐप क्यूआर" : "App QR Access", href: "/personnel/wellness", icon: Smartphone },
+        { name: isHi ? "स्वास्थ्य स्व-मूल्यांकन" : "Wellness Assessment", sub: isHi ? "लाइव कल्याण सिंक" : "Live Welfare Sync", href: "/personnel/wellness", icon: HeartPulse },
         { name: isHi ? "कल्याण सहायता मांगें" : "Request Support", sub: isHi ? "गोपनीय अनुरोध" : "Confidential Intake", href: "/personnel/support", icon: HandHelping },
+        { name: isHi ? "कल्याण कमान केंद्र" : "Welfare Command", sub: isHi ? "केस डैशबोर्ड" : "Officer Dashboard", href: "/welfare", icon: FolderHeart },
         { name: isHi ? "गोपनीयता नियंत्रण" : "My Privacy", sub: isHi ? "डीपीडीपी सहमति" : "Consent & DPDP", href: "/personnel/privacy", icon: ShieldCheck },
       ];
     }

@@ -136,6 +136,35 @@ export class WelfareService {
     });
   }
 
+  static registerAssessmentWelfareCase(c: WelfareCase) {
+    if (typeof window === "undefined") return;
+    try {
+      const existing = getStoredCustomCases();
+      const updated = [c, ...existing.filter((x) => x.id !== c.id)];
+      saveCustomCases(updated);
+
+      // Also register top alert for Welfare Officer notification drawer & alerts page
+      const customStr = localStorage.getItem("missionwell_custom_alerts");
+      const customAlerts = customStr ? JSON.parse(customStr) : [];
+      const newAlert = {
+        id: `alert-case-${c.id}`,
+        category: "Welfare",
+        title: c.primaryConcern,
+        description: c.caseNotes?.[0]?.text || `New assessment evaluated. Status: ${c.status}.`,
+        priority: c.riskLevel === "HIGH" ? "Urgent" : "High",
+        personnelId: c.personnelId,
+        caseId: c.id,
+        timestamp: new Date().toISOString(),
+      };
+      localStorage.setItem("missionwell_custom_alerts", JSON.stringify([newAlert, ...customAlerts]));
+
+      window.dispatchEvent(new Event("missionwell_alerts_changed"));
+      window.dispatchEvent(new Event("missionwell_cases_changed"));
+    } catch (e) {
+      console.warn("Failed to register assessment welfare case", e);
+    }
+  }
+
   static async getCaseById(id: string): Promise<WelfareCase | null> {
     if (typeof window !== "undefined") {
       try {

@@ -12,6 +12,7 @@ import {
   X,
   FileText,
   RefreshCw,
+  HeartPulse,
 } from "lucide-react";
 import { StatCard } from "@/components/common/stat-card";
 import { RiskBadge } from "@/components/common/risk-badge";
@@ -74,10 +75,14 @@ export default function WelfareOfficerDashboard() {
     };
 
     window.addEventListener("missionwell_alerts_changed", handleAlertsChanged);
+    window.addEventListener("missionwell_cases_changed", handleAlertsChanged);
+    window.addEventListener("missionwell_assessment_updated", handleAlertsChanged);
     // Live real-time polling every 4 seconds
     const interval = setInterval(() => loadData(false), 4000);
     return () => {
       window.removeEventListener("missionwell_alerts_changed", handleAlertsChanged);
+      window.removeEventListener("missionwell_cases_changed", handleAlertsChanged);
+      window.removeEventListener("missionwell_assessment_updated", handleAlertsChanged);
       clearInterval(interval);
     };
   }, [loadData]);
@@ -125,6 +130,14 @@ export default function WelfareOfficerDashboard() {
         </div>
 
         <div className="flex items-center gap-2.5">
+          <Link
+            href="/personnel/wellness"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-blue-700 dark:text-blue-300 px-3 py-2 text-xs font-semibold shadow-xs transition-colors"
+            title="Fill new personnel assessment to see it sync here"
+          >
+            <HeartPulse className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+            <span className="hidden sm:inline">Fill Personnel Check-In</span>
+          </Link>
           <button
             onClick={() => loadData(true)}
             disabled={isRefreshing}

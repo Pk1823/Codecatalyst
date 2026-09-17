@@ -35,7 +35,7 @@ if (fs.existsSync(venvPython)) {
   }
 }
 
-const backendPort = parseInt(process.env.BACKEND_PORT || process.env.PORT || "5001", 10);
+const backendPort = parseInt(process.env.BACKEND_PORT || process.env.PORT || "5000", 10);
 
 const SERVICES = [
   {
@@ -108,12 +108,14 @@ async function startAll() {
     console.log(`\x1b[34m[LAUNCH]\x1b[0m Starting ${s.name} on http://localhost:${s.port}...`);
     const child = spawn(s.cmd, s.args, {
       cwd: s.cwd,
-      shell: false,
       env: {
         ...process.env,
         PORT: String(s.port),
         DATABASE_URL: process.env.DATABASE_URL || "file:./dev.db",
+        NEXT_PUBLIC_AI_ENGINE_URL: "http://localhost:8000",
+        BACKEND_URL: "http://localhost:5000",
       },
+      shell: false,
     });
 
     child.stdout.on("data", (data) => log(s.name, s.color, data));
