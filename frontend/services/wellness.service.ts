@@ -135,7 +135,17 @@ export class WellnessService {
           recommendedAction: recommendation
         };
         localStorage.setItem("missionwell_custom_alerts", JSON.stringify([newAlert, ...customAlerts]));
+        localStorage.setItem("missionwell_latest_alert_broadcast", JSON.stringify({ alert: newAlert, timestamp: Date.now() }));
         window.dispatchEvent(new Event("missionwell_alerts_changed"));
+
+        // Broadcast to all open portal tabs immediately
+        try {
+          if (typeof BroadcastChannel !== "undefined") {
+            const bc = new BroadcastChannel("missionwell_realtime_alerts");
+            bc.postMessage({ type: "NEW_ASSESSMENT_ALERT", alert: newAlert });
+            bc.close();
+          }
+        } catch {}
 
         // Also post to /api/alerts to persist to database
         try {

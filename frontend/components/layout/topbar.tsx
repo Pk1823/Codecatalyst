@@ -107,14 +107,35 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
           const rank = a.personnel?.rank || "Personnel";
           const name = a.personnel?.name || a.personnelId;
           const forceName = a.personnel?.force || "Army";
+          const isCritical = a.severity === "CRITICAL";
+          const isHigh = a.severity === "HIGH";
+          const isMod = a.severity === "MODERATE";
+
+          let title = a.title;
+          if (!title) {
+            if (isCritical || isHigh) {
+              title = `🚨 HIGH RISK: ${rank} ${name} (${forceName} - ${a.personnelId})`;
+            } else if (isMod) {
+              title = `⚠️ MODERATE ATTENTION: ${rank} ${name} (${forceName} - ${a.personnelId})`;
+            } else {
+              title = `📋 Assessment Logged: ${rank} ${name} (${forceName} - ${a.personnelId})`;
+            }
+          }
+
+          let indicators: string[] = [];
+          if (a.triggerCondition) {
+            indicators = a.triggerCondition.includes(" • ") ? a.triggerCondition.split(" • ") : [a.triggerCondition];
+          }
+
           return {
             id: a.id,
-            title: `🚨 High Risk: ${rank} ${name} (${forceName} - ${a.personnelId})`,
+            title,
             description: a.reason,
             severity: a.severity || "HIGH",
             time: a.createdAt ? new Date(a.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "Recent",
             personnelId: a.personnelId,
-            isCritical: a.severity === "CRITICAL" || a.severity === "HIGH",
+            isCritical: isCritical || isHigh,
+            indicators,
           };
         });
 
@@ -123,10 +144,11 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
           id: a.id,
           title: a.title,
           description: a.description,
-          severity: a.priority === "Urgent" ? "CRITICAL" : "HIGH",
+          severity: a.priority === "Urgent" ? "CRITICAL" : a.priority === "High" ? "HIGH" : "MODERATE",
           time: a.timestamp || "Recent",
           personnelId: a.personnelId,
           isCritical: a.priority === "Urgent" || a.priority === "High",
+          indicators: a.contributingIndicators || [],
         }));
 
         const combined = [...formattedDb];
@@ -140,15 +162,22 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
           setRecentAlerts(combined.slice(0, 6));
           setUnreadAlertCount(combined.length);
 
-          // Check for brand new High-Risk alerts to notify Welfare Officer via instant toast
+          // Check for any brand new incoming soldier assessments to notify Welfare Officer via instant rich toast
           for (const alert of combined) {
-            if (alert.isCritical && !seenAlertIdsRef.current.has(alert.id)) {
+            if (!seenAlertIdsRef.current.has(alert.id)) {
               seenAlertIdsRef.current.add(alert.id);
               if (!initialLoadRef.current) {
                 toast({
-                  title: "🚨 CRITICAL WELFARE ALERT",
+                  title: alert.severity === "CRITICAL"
+                    ? "🚨 CRITICAL WELFARE BREAKDOWN ALERT"
+                    : alert.severity === "HIGH"
+                    ? "🚨 HIGH RISK SOLDIER ALERT"
+                    : "⚠️ NEW SOLDIER ASSESSMENT SUBMITTED",
                   description: `${alert.title} — ${alert.description}`,
-                  type: "error",
+                  details: alert.indicators && alert.indicators.length > 0 ? alert.indicators : undefined,
+                  link: "/alerts",
+                  actionLabel: "Review in Alert Center →",
+                  type: alert.isCritical ? "error" : alert.severity === "MODERATE" ? "warning" : "info",
                 });
               }
             }
@@ -161,13 +190,38 @@ export function Topbar({ onMobileMenuToggle }: TopbarProps) {
     };
 
     fetchAlerts();
-    const interval = setInterval(fetchAlerts, 4000);
+    // 2-second real-time polling for instant alerts
+    const interval = setInterval(fetchAlerts, 2000);
     window.addEventListener("missionwell_alerts_changed", fetchAlerts);
+
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "missionwell_custom_alerts" || e.key === "missionwell_latest_alert_broadcast") {
+        fetchAlerts();
+      }
+    };
+    window.addEventListener("storage", handleStorage);
+
+    // Cross-tab real-time sync with BroadcastChannel
+    let bc: BroadcastChannel | null = null;
+    try {
+      if (typeof BroadcastChannel !== "undefined") {
+        bc = new BroadcastChannel("missionwell_realtime_alerts");
+        bc.onmessage = (event) => {
+          if (event.data?.type === "NEW_ASSESSMENT_ALERT") {
+            fetchAlerts();
+          }
+        };
+      }
+    } catch {}
 
     return () => {
       isMounted = false;
       clearInterval(interval);
       window.removeEventListener("missionwell_alerts_changed", fetchAlerts);
+      window.removeEventListener("storage", handleStorage);
+      if (bc) {
+        bc.close();
+      }
     };
   }, [toast]);
 

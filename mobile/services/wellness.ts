@@ -366,7 +366,17 @@ export class WellnessService {
         };
 
         localStorage.setItem("missionwell_custom_alerts", JSON.stringify([newAlert, ...customAlerts]));
+        localStorage.setItem("missionwell_latest_alert_broadcast", JSON.stringify({ alert: newAlert, timestamp: Date.now() }));
         window.dispatchEvent(new Event("missionwell_alerts_changed"));
+
+        // Cross-tab zero-latency broadcast
+        try {
+          if (typeof BroadcastChannel !== "undefined") {
+            const bc = new BroadcastChannel("missionwell_realtime_alerts");
+            bc.postMessage({ type: "NEW_ASSESSMENT_ALERT", alert: newAlert });
+            bc.close();
+          }
+        } catch {}
       }
 
       // 2. Post directly to /alerts to notify Welfare Officers on database

@@ -167,19 +167,44 @@ export default function AlertCenterPage() {
   useEffect(() => {
     loadAlerts();
 
-    // 4-second live polling for immediate real-time incoming high-risk soldier assessments
+    // 2-second live polling for immediate real-time incoming soldier assessments
     const interval = setInterval(() => {
       loadAlerts();
-    }, 4000);
+    }, 2000);
 
     const handleAlertsChanged = () => {
       loadAlerts();
     };
 
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "missionwell_custom_alerts" || e.key === "missionwell_latest_alert_broadcast") {
+        loadAlerts();
+      }
+    };
+
     window.addEventListener("missionwell_alerts_changed", handleAlertsChanged);
+    window.addEventListener("storage", handleStorage);
+
+    // Cross-tab real-time sync with BroadcastChannel
+    let bc: BroadcastChannel | null = null;
+    try {
+      if (typeof BroadcastChannel !== "undefined") {
+        bc = new BroadcastChannel("missionwell_realtime_alerts");
+        bc.onmessage = (event) => {
+          if (event.data?.type === "NEW_ASSESSMENT_ALERT") {
+            loadAlerts();
+          }
+        };
+      }
+    } catch {}
+
     return () => {
       clearInterval(interval);
       window.removeEventListener("missionwell_alerts_changed", handleAlertsChanged);
+      window.removeEventListener("storage", handleStorage);
+      if (bc) {
+        bc.close();
+      }
     };
   }, []);
 

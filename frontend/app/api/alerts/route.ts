@@ -26,28 +26,35 @@ export async function GET(req: NextRequest) {
       orderBy: { createdAt: "desc" },
     });
 
-    // Also attempt to fetch & merge from backend service if reachable
-    try {
-      const backendBase = (process.env.BACKEND_URL || "https://missionwell-backend-vcqn.onrender.com").trim().replace(/\/$/, "");
-      const backendAlertsUrl = backendBase.endsWith("/api") ? `${backendBase}/alerts` : `${backendBase}/api/alerts`;
-      const beRes = await fetch(backendAlertsUrl, {
-        headers: { Authorization: "Bearer persona-jwt-user-doc-02" },
-        signal: AbortSignal.timeout(2000),
-      });
-      if (beRes.ok) {
-        const beData = await beRes.json();
-        if (beData.alerts && Array.isArray(beData.alerts)) {
-          for (const beAlert of beData.alerts) {
-            if (!alerts.some((a) => a.id === beAlert.id)) {
-              alerts.push(beAlert as any);
+    // Merge alerts from available backend services (local express and cloud backend)
+    const backendCandidates = [
+      process.env.BACKEND_URL ? process.env.BACKEND_URL.trim().replace(/\/$/, "") : "http://localhost:5001",
+      "https://missionwell-backend-vcqn.onrender.com",
+    ].filter(Boolean);
+
+    for (const backendBase of Array.from(new Set(backendCandidates))) {
+      try {
+        const backendAlertsUrl = backendBase.endsWith("/api") ? `${backendBase}/alerts` : `${backendBase}/api/alerts`;
+        const beRes = await fetch(backendAlertsUrl, {
+          headers: { Authorization: "Bearer persona-jwt-user-doc-02" },
+          signal: AbortSignal.timeout(2000),
+        });
+        if (beRes.ok) {
+          const beData = await beRes.json();
+          if (beData.alerts && Array.isArray(beData.alerts)) {
+            for (const beAlert of beData.alerts) {
+              if (!alerts.some((a) => a.id === beAlert.id)) {
+                alerts.push(beAlert as any);
+              }
             }
           }
-          alerts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         }
+      } catch {
+        // Continue with next candidate
       }
-    } catch {
-      // Backend merge failed gracefully; continue with local prisma alerts
     }
+
+    alerts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return NextResponse.json({ alerts });
   } catch (error) {

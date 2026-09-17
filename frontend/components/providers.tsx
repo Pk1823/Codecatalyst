@@ -59,6 +59,9 @@ interface ToastMessage {
   id: string;
   title: string;
   description?: string;
+  details?: string[];
+  link?: string;
+  actionLabel?: string;
   type?: "info" | "success" | "warning" | "error";
 }
 
@@ -225,12 +228,34 @@ export function Providers({ children }: { children: React.ReactNode }) {
     setUser(AuthService.getCurrentUser());
   };
 
+  const playAlertChime = () => {
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+      osc.frequency.setValueAtTime(880.0, ctx.currentTime + 0.12); // A5
+      gain.gain.setValueAtTime(0.18, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.35);
+    } catch {}
+  };
+
   const toast = (msg: Omit<ToastMessage, "id">) => {
     const id = Math.random().toString(36).substring(2, 9);
+    if (msg.type === "error" || msg.type === "warning") {
+      playAlertChime();
+    }
     setToasts((prev) => [...prev, { ...msg, id }]);
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 4000);
+    }, 6000);
   };
 
   return (
@@ -255,37 +280,74 @@ export function Providers({ children }: { children: React.ReactNode }) {
               {/* Accessible Toast Container */}
               <div
                 aria-live="polite"
-                className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"
+                className="fixed bottom-4 right-4 z-50 flex flex-col gap-2.5 max-w-md w-full sm:w-96 pointer-events-none px-2 sm:px-0"
               >
                 {toasts.map((t) => (
                   <div
                     key={t.id}
-                    className="pointer-events-auto flex items-start gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 p-4 shadow-xl backdrop-blur-md transition-all animate-in fade-in slide-in-from-bottom-2"
+                    className={`pointer-events-auto flex flex-col gap-2 rounded-xl border p-4 shadow-2xl backdrop-blur-md transition-all animate-in fade-in slide-in-from-bottom-3 duration-200 ${
+                      t.type === "error"
+                        ? "border-rose-500/50 bg-rose-950/90 text-rose-50 shadow-rose-950/50"
+                        : t.type === "warning"
+                        ? "border-amber-500/50 bg-amber-950/90 text-amber-50 shadow-amber-950/50"
+                        : t.type === "success"
+                        ? "border-emerald-500/40 bg-emerald-950/90 text-emerald-50 shadow-emerald-950/50"
+                        : "border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-900 dark:text-slate-100 shadow-xl"
+                    }`}
                   >
-                    <div
-                      className={`h-2.5 w-2.5 rounded-full mt-1.5 shrink-0 ${
-                        t.type === "success"
-                          ? "bg-blue-500"
-                          : t.type === "warning"
-                          ? "bg-amber-500"
-                          : t.type === "error"
-                          ? "bg-rose-500"
-                          : "bg-blue-600"
-                      }`}
-                    />
-                    <div className="flex-1">
-                      <p className="text-xs font-bold text-slate-900 dark:text-slate-100">{t.title}</p>
-                      {t.description && (
-                        <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">{t.description}</p>
-                      )}
+                    <div className="flex items-start gap-2.5">
+                      <div
+                        className={`h-2.5 w-2.5 rounded-full mt-1.5 shrink-0 ${
+                          t.type === "success"
+                            ? "bg-emerald-400"
+                            : t.type === "warning"
+                            ? "bg-amber-400 animate-pulse"
+                            : t.type === "error"
+                            ? "bg-rose-400 animate-ping"
+                            : "bg-blue-500"
+                        }`}
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold leading-tight tracking-tight">{t.title}</p>
+                        {t.description && (
+                          <p className="text-[11px] opacity-90 mt-1 leading-normal break-words">{t.description}</p>
+                        )}
+                      </div>
+                      <button
+                        onClick={() => setToasts((prev) => prev.filter((x) => x.id !== t.id))}
+                        className="text-slate-400 hover:text-white text-xs p-1 rounded-sm cursor-pointer"
+                        aria-label="Close notification"
+                      >
+                        ✕
+                      </button>
                     </div>
-                    <button
-                      onClick={() => setToasts((prev) => prev.filter((x) => x.id !== t.id))}
-                      className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs px-1"
-                      aria-label="Close notification"
-                    >
-                      ✕
-                    </button>
+
+                    {/* Contributing Telemetry Details Badges */}
+                    {t.details && t.details.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 pt-1 border-t border-white/10 mt-1">
+                        {t.details.map((badge, idx) => (
+                          <span
+                            key={idx}
+                            className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-white/10 text-white border border-white/15"
+                          >
+                            {badge}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Action Button */}
+                    {t.link && (
+                      <div className="flex justify-end pt-1">
+                        <a
+                          href={t.link}
+                          onClick={() => setToasts((prev) => prev.filter((x) => x.id !== t.id))}
+                          className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded bg-white text-slate-900 hover:bg-slate-100 shadow-xs cursor-pointer transition-transform active:scale-95"
+                        >
+                          <span>{t.actionLabel || "Review Alert →"}</span>
+                        </a>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
